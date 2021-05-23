@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="listener"
+            type="com.mesutemre.kutuphanem.listener.KitapturDeleteClickListener" />
+        <variable
+            name="kitaptur"
+            type="com.mesutemre.kutuphanem.model.KitapturModel" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/kitapTurCw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        app:cardCornerRadius="10dp"
+        app:contentPadding="3dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/kitapTurSilImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@id/kitapTurAdText"
+                android:clickable="true"
+                android:layout_alignParentEnd="true"
+                android:onClick="@{(v) -> listener.onKitapturDeleteClicked(v,kitaptur)}"
+                android:src="@drawable/ic_baseline_delete_24" />
+
+            <TextView
+                android:id="@+id/kitapTurAdText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@{kitaptur.aciklama}"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>

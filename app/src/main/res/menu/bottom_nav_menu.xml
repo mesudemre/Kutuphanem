@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/anasayfaFragment"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:menuCategory="secondary"
+        app:showAsAction="ifRoom"
+        android:title="@string/anasayfaItem"/>
+
+    <item
+        android:id="@+id/kitapListeFragment"
+        android:menuCategory="secondary"
+        android:icon="@drawable/ic_baseline_view_list_24"
+        app:showAsAction="ifRoom"
+        android:title="@string/listeItem"/>
+
+    <item
+        android:id="@+id/kitapEklemeItem"
+        app:showAsAction="never"
+        android:title=""/>
+
+    <item
+        android:id="@+id/parametreFragment"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:menuCategory="secondary"
+        app:showAsAction="ifRoom"
+        android:title="@string/parametreItem"/>
+
+    <item
+        android:id="@+id/profilIslemFragment"
+        android:icon="@drawable/ic_baseline_person_24"
+        app:showAsAction="ifRoom"
+        android:menuCategory="secondary"
+        android:title="@string/profilimItem"/>
+
+</menu>

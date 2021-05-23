@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/kutuphanem_navbottom_graph"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/anasayfaFragment">
+
+    <fragment
+        android:id="@+id/anasayfaFragment"
+        tools:layout="@layout/anasayfa_fragment"
+        android:name="com.mesutemre.kutuphanem.fragments.AnasayfaFragment"
+        android:label="AnasayfaFragment" >
+        <action
+            android:id="@+id/action_anasayfaFragment_to_kitapListeFragment"
+            app:destination="@id/kitapListeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/kitapListeFragment"
+        tools:layout="@layout/kitap_liste_fragment"
+        android:name="com.mesutemre.kutuphanem.fragments.KitapListeFragment"
+        android:label="KitapListeFragment" >
+        <action
+            android:id="@+id/action_kitapListeFragment_to_parametreFragment"
+            app:destination="@id/parametreFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/parametreFragment"
+        tools:layout="@layout/parametre_fragment"
+        android:name="com.mesutemre.kutuphanem.fragments.ParametreFragment"
+        android:label="ParametreFragment" >
+        <action
+            android:id="@+id/action_parametreFragment_to_profilIslemFragment"
+            app:destination="@id/profilIslemFragment" />
+        <action
+            android:id="@+id/action_parametreFragment_to_parametreEklemeFragment"
+            app:destination="@id/parametreEklemeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profilIslemFragment"
+        tools:layout="@layout/profil_islem_fragment"
+        android:name="com.mesutemre.kutuphanem.fragments.ProfilIslemFragment"
+        android:label="ProfilIslemFragment" />
+    <fragment
+        android:id="@+id/parametreEklemeFragment"
+        android:name="com.mesutemre.kutuphanem.fragments.ParametreEklemeFragment"
+        android:label="ParametreEklemeFragment" >
+        <argument
+            android:name="paramTur"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_parametreEklemeFragment_to_parametreFragment"
+            app:destination="@id/parametreFragment" />
+    </fragment>
+</navigation>

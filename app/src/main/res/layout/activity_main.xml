@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <fragment
+        android:id="@+id/bottomFragmentId"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/floatingActionButton3"
+        app:navGraph="@navigation/kutuphanem_navbottom_graph"
+        app:defaultNavHost="true"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="@color/lacivert"
+        android:baselineAlignBottom="true"
+        android:clickable="true"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:srcCompat="@drawable/ic_baseline_add_24"
+        app:tint="@color/white" />
+
+    <com.mesutemre.kutuphanem.customcomponents.CurvedBottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:itemTextAppearanceActive="@style/BottomNavigationItemActive"
+        app:itemTextAppearanceInactive="@style/BottomNavigationItemInActive"
+        app:menu="@menu/bottom_nav_menu">
+
+    </com.mesutemre.kutuphanem.customcomponents.CurvedBottomNavigationView>
+
+</RelativeLayout>

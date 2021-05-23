@@ -1,0 +1,74 @@
+<resources>
+    <string name="app_name">Kütüphanem</string>
+    <string name="evet">Evet</string>
+    <string name="hayir">Hayır</string>
+    <string name="kaydet">Kaydet</string>
+    <string name="geri">Geri</string>
+    <string name="selectTarih">Tarih Seçiniz</string>
+    <string name="ayarlaLabel">Tamam</string>
+    <string name="tarihAyarla">Ayarla</string>
+    <string name="iptalLabel">İptal</string>
+
+    <!--Bottom Navigation Menu -->
+    <string name="anasayfaItem">Anasayfa</string>
+    <string name="listeItem">Liste</string>
+    <string name="parametreItem">Parametre</string>
+    <string name="profilimItem">Profilim</string>
+
+    <!--layout_login.xml -->
+    <string name="girisLabel">Giriş</string>
+    <string name="login_password_hint">Şifreniz</string>
+    <string name="login_email_hint">Kullanıcı Adınız</string>
+    <string name="girisButtonLabel">Giriş</string>
+
+    <!--LoginActivity -->
+    <string name="bosKullaniciAdiHata">Kullanıcı adı boş geçilemez!</string>
+    <string name="bosSifreHata">Şifre boş geçilemez!</string>
+    <string name="hataliLogin">Kullanıcı adı ya da şifre hatalı</string>
+
+    <!--ParametreFragment -->
+    <string name="yayinEviLabel">Yayınevi</string>
+    <string name="kitapTurLabel">Kitap Tür</string>
+
+    <!--ParametreYayineviFragment -->
+    <string name="yayinEviListeHataLabel">Yayınevi listesi yüklenemedi!</string>
+    <string name="yayinEviSilmekIstiyormusunuz">adlı yayınevini silmek istiyor musunuz?</string>
+    <string name="yayinEviSilmeHata">Yayınevi silinirken hata meydana geldi!</string>
+
+    <!--ParametreKitapturFragment -->
+    <string name="kitapTurListeHata">Kitap türü listesi yüklenemedi!</string>
+    <string name="kitapTurSilmekIstiyormusunuz">adlı kitap türünü silmek istiyor musunuz?</string>
+    <string name="kitapTurSilmeHata">Kitap türü silinirken hata meydana geldi!</string>
+
+    <!--ParametreEklemeFragment -->
+    <string name="parametreAciklamaHint">Açıklama</string>
+    <string name="parametreParamKitaptur">Kitap Türü Parametresi Ekleme</string>
+    <string name="parametreParamYayinevi">Yayınevi Parametresi Ekleme</string>
+    <string name="parametreAciklamaHata">Açıklama boş geçilemez!</string>
+    <string name="parametreEklemeHata">Parametre eklenirken hata meydana geldi!</string>
+
+    <!--KitapListeFragment -->
+    <string name="kitapListeError">Kitap listesi getirilemedi!Tekrar deneyiniz...</string>
+
+    <!--ProfilIslemFragment -->
+    <string name="profilKullaniciAdiLabel">Kullanıcı adınız</string>
+    <string name="profilGuncellemeLabel">Profil Güncelleme</string>
+    <string name="profilAdLabel">Adınız</string>
+    <string name="profilSoyadLabel">Soyadınız</string>
+    <string name="profilEpostaLabel">E-Postanız</string>
+    <string name="profilDogumtarihLabel">Doğum Tarihiniz</string>
+    <string name="profilSayfaHata">Profil bilgileriniz getirilemedi!</string>
+    <string name="ilgiAlanlarinizLegendTitle">İlgi Alanlarınız</string>
+    <string name="ilgiAlanHata">İlgi alanlarınız geitirilemedi!</string>
+    <string name="profilGuncelleButtonLabel">Güncelle</string>
+    <string name="cikisButtonLabel">Çıkış</string>
+    <string name="guncelleAlertMessage">Üyelik bilgileriniz güncellenecektir. Devam etmek istiyor musunuz?</string>
+    <string name="exitFromApplicationMessage">Uygulamadan çıkış yapmak istiyor musunuz?</string>
+    <string name="profilPhotoTitle">Profil Fotoğrafı</string>
+    <string name="adValidationErr">Lütfen adınızı boş geçmeyiniz!</string>
+
+    <!--profil_image_degistir_menu.xml -->
+    <string name="itemPhotoCamera">Kamera</string>
+    <string name="itemPhotoLocalStorage">Galeri</string>
+    <string name="itemRemoveImage">Resmi Kaldır</string>
+</resources>
