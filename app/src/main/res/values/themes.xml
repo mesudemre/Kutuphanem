@@ -98,4 +98,10 @@
     <style name="LogoutButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:backgroundTint">@color/kirmizi</item>
     </style>
+    <style name="KutuphanemCheckBoxStyle" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
+        <item name="android:buttonTint">@color/lacivert</item>
+    </style>
+    <style name="KutuphanemRadioButtonStyle" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
+        <item name="android:buttonTint">@color/lacivert</item>
+    </style>
 </resources>

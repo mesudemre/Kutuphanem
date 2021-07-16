@@ -13,7 +13,6 @@
             android:background="@color/whiteTextColor"
             app:tabMaxWidth="0dp"
             app:tabGravity="fill"
-            app:tabBackground="@drawable/parametre_tab_background"
             app:tabTextColor="@color/cardview_dark_background"
             app:tabSelectedTextColor="@color/lacivert"
             app:tabTextAppearance="@style/ParametreTabLayoutTextStyle"

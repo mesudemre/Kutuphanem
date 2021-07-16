@@ -38,7 +38,17 @@ data class Kullanici(
     @SerializedName("eposta")
     @ColumnInfo(name = "eposta")
     @Expose
-    var eposta:String
+    var eposta:String,
+
+    @SerializedName("cinsiyet")
+    @ColumnInfo(name = "cinsiyet")
+    @Expose
+    var cinsiyet:CinsiyetModel,
+
+    @SerializedName("haberdarmi")
+    @ColumnInfo(name = "haberdarmi")
+    @Expose
+    var haberdarmi:Boolean,
 ){
     @Ignore
     @SerializedName("ilgiAlanlari")

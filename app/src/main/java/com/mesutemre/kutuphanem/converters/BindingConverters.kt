@@ -1,6 +1,8 @@
 package com.mesutemre.kutuphanem.converters
 
 import androidx.databinding.InverseMethod
+import com.mesutemre.kutuphanem.R
+import com.mesutemre.kutuphanem.model.CinsiyetModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -22,4 +24,23 @@ object BindingConverters {
         }
         return null;
     }
+
+    @InverseMethod("toCinsiyetSelected")
+    @JvmStatic fun selectedCinsiyet(value:CinsiyetModel?):Int{
+        if(value?.value.equals("ERKEK")){
+            return R.id.erkekCinsiyetRadioButtonId;
+        }else{
+            return R.id.kadinCinsiyetRadioButtonId;
+        }
+    }
+
+    @JvmStatic fun toCinsiyetSelected(id:Int):CinsiyetModel?{
+        if(id == R.id.erkekCinsiyetRadioButtonId){
+            return CinsiyetModel("ERKEK","Bay");
+        }else{
+            return CinsiyetModel("KADIN","Bayan");
+        }
+
+    }
+
 }

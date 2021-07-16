@@ -66,6 +66,15 @@
     <string name="exitFromApplicationMessage">Uygulamadan çıkış yapmak istiyor musunuz?</string>
     <string name="profilPhotoTitle">Profil Fotoğrafı</string>
     <string name="adValidationErr">Lütfen adınızı boş geçmeyiniz!</string>
+    <string name="soyadValidationErr">Lütfen soyadınızı boş geçmeyiniz!</string>
+    <string name="epostaValidationErr">Lütfen e-postanızı boş geçmeyiniz!</string>
+    <string name="epostaFormatValidationErr">E-Posta formatı hatalı!</string>
+    <string name="gelismeHabderdarLabel">Son gelişmelerden haberdar olmak istiyor musunuz?</string>
+    <string name="cinsiyetErkek">Erkek</string>
+    <string name="cinsiyetKadin">Kadın</string>
+    <string name="cinsiyetErkekValue">ERKEK</string>
+    <string name="cinsiyetKadinValue">KADIN</string>
+    <string name="profilGuncellemeSunucuHata">Sunucu ile bağlantu kurulamadı!</string>
 
     <!--profil_image_degistir_menu.xml -->
     <string name="itemPhotoCamera">Kamera</string>

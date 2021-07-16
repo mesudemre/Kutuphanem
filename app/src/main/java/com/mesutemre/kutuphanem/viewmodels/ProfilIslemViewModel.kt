@@ -1,30 +1,32 @@
 package com.mesutemre.kutuphanem.viewmodels
 
 import android.app.Application
+import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.dao.KullaniciDao
 import com.mesutemre.kutuphanem.model.KitapturModel
 import com.mesutemre.kutuphanem.model.Kullanici
 import com.mesutemre.kutuphanem.model.KullaniciKitapTurModel
+import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.repositories.ParametreRepository
 import com.mesutemre.kutuphanem.service.IParametreService
 import com.mesutemre.kutuphanem.service.KullaniciService
-import com.mesutemre.kutuphanem.util.CustomSharedPreferences
-import com.mesutemre.kutuphanem.util.KULLANICI_ADI_KEY
-import com.mesutemre.kutuphanem.util.KULLANICI_DB_MEVCUT
-import com.mesutemre.kutuphanem.util.PARAM_KITAPTUR_DB_KEY
+import com.mesutemre.kutuphanem.util.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -53,6 +55,9 @@ class ProfilIslemViewModel @Inject constructor(application: Application,
     val kitapTurLoading = MutableLiveData<Boolean>();
     val kitapTurError = MutableLiveData<Boolean>();
 
+    val kullaniciGuncelleLoading = MutableLiveData<Boolean>();
+    val kullaniciGuncelleSonuc = MutableLiveData<ResponseStatusModel>();
+    val kullaniciGuncelleError = MutableLiveData<Boolean>();
 
     fun getKullaniciBilgi(){
         val kayitliState: String? = savedStateHandle.get<String>("state");
@@ -122,8 +127,6 @@ class ProfilIslemViewModel @Inject constructor(application: Application,
         }
     }
 
-
-
     private fun writeUserToDB(kullanici: Kullanici):Unit{
         launch {
             customSharedPreferences.putBooleanToSharedPreferences(KULLANICI_DB_MEVCUT,true);
@@ -169,6 +172,64 @@ class ProfilIslemViewModel @Inject constructor(application: Application,
                     override fun onError(e: Throwable) {
                         kitapTurLoading.value = false;
                         kitapTurError.value = true;
+                    }
+                }));
+    }
+
+    fun kullaniciBilgiUpdate(jsonStr:String,resimGuncellenecek:Boolean,selectedImageUri:Uri,username:String,context:Context){
+        viewModelScope.launch {
+            async {kullaniciBilgiGuncelle(jsonStr)};
+            async {
+                if(resimGuncellenecek){
+                    Log.d("merhaba","satır 184")
+                    kullaniciResimGuncelle(selectedImageUri,username,context);
+                }};
+            }
+        }
+
+    fun kullaniciBilgiGuncelle(jsonStr:String){
+            kullaniciGuncelleLoading.value = true;
+            disposible.add(
+                kullaniciService.kullaniciBilgiGuncelle(jsonStr)
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeWith(object : DisposableSingleObserver<ResponseStatusModel>(){
+                        override fun onSuccess(response: ResponseStatusModel) {
+                            kullaniciGuncelleError.value = false;
+                            kullaniciGuncelleLoading.value = false;
+                            kullaniciGuncelleSonuc.value = response;
+                            customSharedPreferences.removeFromSharedPreferences(KULLANICI_DB_MEVCUT);
+                        }
+                        override fun onError(e: Throwable) {
+                            kullaniciGuncelleError.value = true;
+                            kullaniciGuncelleLoading.value = false;
+                        }
+                    }));
+    }
+
+    fun kullaniciResimGuncelle(
+        selectedImageUri: Uri,
+        username: String,
+        context: Context
+    ){
+        kullaniciGuncelleLoading.value = true;
+        val usernameParam: RequestBody = RequestBody.create(MediaType.parse("text/plain"),username);
+        val originalFile: File =  org.apache.commons.io.FileUtils.getFile(getPath(context,selectedImageUri));
+        val fileParam:RequestBody = RequestBody.create(MediaType.parse(context!!.contentResolver.getType(selectedImageUri)),originalFile);
+        val file: MultipartBody.Part = MultipartBody.Part.createFormData("file",originalFile.name,fileParam);
+        disposible.add(
+            kullaniciService.kullaniciResimGuncelle(file,usernameParam)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<ResponseStatusModel>(){
+                    override fun onSuccess(response: ResponseStatusModel) {
+                        kullaniciGuncelleError.value = false;
+                        kullaniciGuncelleLoading.value = false;
+                        kullaniciGuncelleSonuc.value = response;
+                    }
+                    override fun onError(e: Throwable) {
+                        kullaniciGuncelleError.value = true;
+                        kullaniciGuncelleLoading.value = false;
                     }
                 }));
     }

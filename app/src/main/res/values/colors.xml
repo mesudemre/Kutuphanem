@@ -21,4 +21,6 @@
     <color name="primaryTextColor">#00a5ff</color>
     <color name="kirmizi">@color/design_default_color_error</color>
     <color name="lacivert">#191970</color>
+    <color name="fistikYesil">#2BA808</color>
+    <color name="acikTuruncu">#EA881F</color>
 </resources>

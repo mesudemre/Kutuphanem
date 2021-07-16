@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -16,6 +17,7 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.mesutemre.kutuphanem.R
+import com.mesutemre.kutuphanem.fragments.ProfilIslemFragment
 import com.mesutemre.kutuphanem.util.*
 import kotlinx.android.synthetic.main.resim_sec_bottom_sheet_dialog_fragment.*
 
@@ -29,6 +31,7 @@ class ResimSecBottomSheetDialogFragment(
     private var readExternalStorageIzin:Int = 0;
     private lateinit var camContext: Context;
     private lateinit var readExtContext: Context;
+    private var selectedImageUri:Uri = Uri.EMPTY;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
@@ -101,11 +104,16 @@ class ResimSecBottomSheetDialogFragment(
             val photo: Bitmap = data!!.getExtras()?.get("data") as Bitmap;
             profilImageView.getCircleImageFromBitmap(photo,profilImageView);
             profilImageEnd.getCircleImageFromBitmap(photo,profilImageEnd);
+            selectedImageUri = getImageUriFromBitmap(ctx,photo);
         }else if(requestCode == READ_EXTERNAL_STORAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK){
             val uri: Uri = data?.data!!;
             profilImageView.getCircleImageFromUri(uri,profilImageView);
             profilImageEnd.getCircleImageFromUri(uri,profilImageEnd);
+            selectedImageUri = uri;
         }
+        val fr = parentFragment as ProfilIslemFragment;
+        fr.setProfilResimChanged(true);
+        fr.setSelectedImageUri(selectedImageUri);
         dismiss();
     }
 }

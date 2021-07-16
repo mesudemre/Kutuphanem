@@ -3,7 +3,6 @@ package com.mesutemre.kutuphanem.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
@@ -13,6 +12,8 @@ import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.databinding.ItemKitapturBinding
 import com.mesutemre.kutuphanem.listener.KitapturDeleteClickListener
 import com.mesutemre.kutuphanem.model.KitapturModel
+import com.mesutemre.kutuphanem.model.SnackTypeEnum
+import com.mesutemre.kutuphanem.util.showSnackBar
 import com.mesutemre.kutuphanem.viewmodels.ParametreKitapturViewModel
 import org.json.JSONObject
 
@@ -63,9 +64,7 @@ class KitapTurAdapter(val kitapTurListe:ArrayList<KitapturModel>,
 
     private fun observeKitapturSil(view: View){
         viewModel.kitapTurSilResponse.observe(lifeCycleOwner,Observer{response->
-            Toast.makeText(view.context,
-                    response.statusMessage, Toast.LENGTH_LONG)
-                    .show();
+            showSnackBar(view,response.statusMessage, SnackTypeEnum.SUCCESS);
             if(token != null){
                 viewModel.kitapTurListeGetir(true);
             }
@@ -74,9 +73,7 @@ class KitapTurAdapter(val kitapTurListe:ArrayList<KitapturModel>,
         viewModel.kitapTurSilError.observe(lifeCycleOwner, Observer {error->
             error?.let {
                 if(it){
-                    Toast.makeText(view.context,
-                            view.context.resources.getString(R.string.kitapTurSilmeHata),Toast.LENGTH_LONG)
-                            .show();
+                    showSnackBar(view,view.context.resources.getString(R.string.kitapTurSilmeHata), SnackTypeEnum.SUCCESS);
                 }
             }
         });

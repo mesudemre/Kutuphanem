@@ -191,7 +191,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="20dp"
-                    android:emptyStringValidation="@{kullanici.ad}"
+                    android:clearStringValidation="@{kullanici.ad}"
                     app:boxStrokeColor="@color/primaryTextColor"
                     app:errorEnabled="true">
                     <com.google.android.material.textfield.TextInputEditText
@@ -211,6 +211,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="20dp"
+                    android:clearStringValidation="@{kullanici.soyad}"
                     app:boxStrokeColor="@color/primaryTextColor"
                     app:errorEnabled="true">
 
@@ -231,6 +232,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="20dp"
+                    android:clearStringValidation="@{kullanici.eposta}"
                     app:boxStrokeColor="@color/primaryTextColor"
                     app:errorEnabled="true">
 
@@ -267,6 +269,38 @@
                         android:onClick="@{(v) -> profilClickListener.openDatePicker(v,kullanici.dogumTarihi)}"
                         android:text="@={BindingConverters.dateToString(kullanici.dogumTarihi)}" />
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="20dp"
+                    style="@style/KutuphanemCheckBoxStyle"
+                    android:checked="@={kullanici.haberdarmi}"
+                    android:text="@string/gelismeHabderdarLabel"/>
+
+                <RadioGroup
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:checkedButton="@={BindingConverters.selectedCinsiyet(kullanici.cinsiyet)}"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="20dp">
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/erkekCinsiyetRadioButtonId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/KutuphanemRadioButtonStyle"
+                        android:text="@string/cinsiyetErkek"/>
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/kadinCinsiyetRadioButtonId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/KutuphanemRadioButtonStyle"
+                        android:text="@string/cinsiyetKadin"/>
+                </RadioGroup>
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="match_parent"

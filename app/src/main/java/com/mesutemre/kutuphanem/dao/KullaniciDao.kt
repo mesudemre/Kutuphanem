@@ -9,7 +9,7 @@ import com.mesutemre.kutuphanem.model.KullaniciKitapTurModel
 @Dao
 interface KullaniciDao {
 
-    @Query("SELECT username,ad,soyad,eposta,dogumTarihi,resim FROM kullanici WHERE username=:p_username")
+    @Query("SELECT username,ad,soyad,eposta,dogumTarihi,resim,cinsiyet,haberdarmi FROM kullanici WHERE username=:p_username")
     suspend fun getKullaniciBilgiByUsername(p_username:String):Kullanici;
 
     @Insert

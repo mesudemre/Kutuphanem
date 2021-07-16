@@ -1,20 +1,36 @@
 package com.mesutemre.kutuphanem.util
 
+import android.content.ContentUris
+import android.content.Context
+import android.database.Cursor
 import android.graphics.Bitmap
+import android.graphics.Typeface
 import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.provider.DocumentsContract
+import android.provider.MediaStore
+import android.text.SpannableStringBuilder
 import android.text.TextWatcher
+import android.text.style.ImageSpan
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
+import com.mesutemre.kutuphanem.model.SnackTypeEnum
 import kotlinx.android.synthetic.main.layout_login.*
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -27,6 +43,7 @@ const val PARAM_KITAPTUR_DB_KEY:String = "PARAM_KITAPTUR";
 const val KULLANICI_DB_MEVCUT:String = "KULLANICI_MEVCUT";
 const val CAMERA_REQUEST_CODE:Int = 1991;
 const val READ_EXTERNAL_STORAGE_REQUEST_CODE:Int=1992;
+const val WRITE_EXTERNAL_STORAGE_REQUEST_CODE:Int=2019;
 
 fun ImageView.getImageFromUrl(url:String?, iv: ImageView){
     val circularProgressDrawable = CircularProgressDrawable(iv.context);
@@ -34,12 +51,12 @@ fun ImageView.getImageFromUrl(url:String?, iv: ImageView){
     circularProgressDrawable.centerRadius = 40f
     circularProgressDrawable.start()
     val options = RequestOptions()
-            .placeholder(circularProgressDrawable)
-            .error(R.mipmap.kutuphanem_icon_round);
+        .placeholder(circularProgressDrawable)
+        .error(R.mipmap.kutuphanem_icon_round);
     Glide.with(context)
-            .setDefaultRequestOptions(options)
-            .load(url)
-            .into(this);
+        .setDefaultRequestOptions(options)
+        .load(url)
+        .into(this);
 }
 
 fun ImageView.getCircleImageFromUrl(url:String?, iv: ImageView){
@@ -49,6 +66,8 @@ fun ImageView.getCircleImageFromUrl(url:String?, iv: ImageView){
     circularProgressDrawable.start()
     val options = RequestOptions()
         .placeholder(circularProgressDrawable)
+        .diskCacheStrategy(DiskCacheStrategy.NONE)
+        .skipMemoryCache(true)
         .error(R.mipmap.kutuphanem_icon_round);
     Glide.with(context)
         .setDefaultRequestOptions(options)
@@ -100,7 +119,7 @@ fun downloadCirclerImage(view:ImageView,url:String?){
 
 @BindingAdapter(value = ["android:bitMapImageLoad"])
 fun loadCircleBitmapImageLoad(view:ImageView,photo:Bitmap?){
-   view.getCircleImageFromBitmap(photo,view);
+    view.getCircleImageFromBitmap(photo,view);
 }
 
 @BindingAdapter(value = ["android:circleImageLoad"])
@@ -113,8 +132,8 @@ fun writeDateStrValue(view:TextInputLayout,date:Date?){
     view.writeFormatDate(date,view);
 }
 
-@BindingAdapter(value = ["android:emptyStringValidation"])
-fun emptyStringValidation(view:TextInputLayout,value:String?){
+@BindingAdapter(value = ["android:clearStringValidation"])
+fun clearStringValidation(view:TextInputLayout,value:String?){
     view.editText!!.addTextChangedListener(TextInputErrorClearListener(view));
 }
 
@@ -125,6 +144,120 @@ fun View.setMotionVisibility(visibility: Int) {
         constraintSet.setVisibility(this.id, visibility)
         constraintSet.applyTo(motionLayout)
     }
+}
+
+fun showSnackBar(view:View,message:String,type: SnackTypeEnum){
+    var builder:SpannableStringBuilder  = SpannableStringBuilder();
+    val sb: Snackbar = Snackbar.make(view,message, Snackbar.LENGTH_SHORT);
+    val tv =sb.view.findViewById(com.google.android.material.R.id.snackbar_text) as TextView;
+    tv.textSize = 16f;
+    tv.typeface = ResourcesCompat.getFont(view.context,R.font.source_sans_pro);
+    tv.setTextColor(view.resources.getColor(R.color.whiteTextColor,null))
+
+    when(type){
+        SnackTypeEnum.SUCCESS->{
+            sb.setBackgroundTint(view.resources.getColor(R.color.fistikYesil,null));
+        }
+        SnackTypeEnum.WARNING->{
+            sb.setBackgroundTint(view.resources.getColor(R.color.acikTuruncu,null));
+        }
+        else->{
+            sb.setBackgroundTint(view.resources.getColor(R.color.kirmizi,null));
+        }
+
+    }
+    builder.append(message);
+
+    sb.setText(builder);
+    sb.show();
+}
+
+fun formatDate(date:Date,pattern:String):String{
+    val sdf:SimpleDateFormat = SimpleDateFormat(pattern);
+    return sdf.format(date);
+}
+
+fun getImageUriFromBitmap(c: Context, inImage:Bitmap):Uri{
+    var path:String = "";
+    try {
+        val bytes: ByteArrayOutputStream = ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        path = MediaStore.Images.Media.insertImage(c.getContentResolver(), inImage, "KUTUPHANEM_IMG_"+System.currentTimeMillis(),null);
+
+    }catch (e:Exception){
+        Log.e("Exception",e.localizedMessage);
+        e.printStackTrace();
+    }
+    return Uri.parse(path);
+}
+fun getPath(context:Context,uri:Uri):String?{
+    val isKitKatorAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+
+    // DocumentProvider
+    if (isKitKatorAbove && DocumentsContract.isDocumentUri(context, uri)) {
+        // ExternalStorageProvider
+        if (isExternalStorageDocument(uri)) {
+            val docId = DocumentsContract.getDocumentId(uri)
+            val split = docId.split(":".toRegex()).toTypedArray()
+            val type = split[0]
+            if ("primary".equals(type, ignoreCase = true)) {
+                return Environment.getExternalStorageDirectory().toString() + "/" + split[1]
+            }
+
+        } else if (isDownloadsDocument(uri)) {
+            val id = DocumentsContract.getDocumentId(uri)
+            val contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(id))
+            return getDataColumn(context, contentUri, null, null)
+        } else if (isMediaDocument(uri)) {
+            val docId = DocumentsContract.getDocumentId(uri)
+            val split = docId.split(":".toRegex()).toTypedArray()
+            val type = split[0]
+            var contentUri: Uri? = null
+            if ("image" == type) {
+                contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            } else if ("video" == type) {
+                contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+            } else if ("audio" == type) {
+                contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+            }
+            val selection = "_id=?"
+            val selectionArgs = arrayOf(split[1])
+            return getDataColumn(context, contentUri, selection, selectionArgs)
+        }
+    } else if ("content".equals(uri.scheme, ignoreCase = true)) {
+        return getDataColumn(context, uri, null, null)
+    } else if ("file".equals(uri.scheme, ignoreCase = true)) {
+        return uri.path
+    }
+    return null;
+}
+
+fun getDataColumn(context: Context, uri: Uri?, selection: String?, selectionArgs: Array<String>?): String? {
+    var cursor: Cursor? = null
+    val column = "_data"
+    val projection = arrayOf(column)
+    try {
+        cursor = uri?.let { context.getContentResolver().query(it, projection, selection, selectionArgs,null) }
+        if (cursor != null && cursor.moveToFirst()) {
+            val column_index: Int = cursor.getColumnIndexOrThrow(column)
+            return cursor.getString(column_index)
+        }
+    } finally {
+        if (cursor != null) cursor.close()
+    }
+    return null
+}
+
+private fun isExternalStorageDocument(uri:Uri):Boolean {
+    return "com.android.externalstorage.documents".equals(uri.getAuthority());
+}
+
+private fun isDownloadsDocument(uri:Uri):Boolean {
+    return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+}
+
+private fun isMediaDocument(uri:Uri):Boolean {
+    return "com.android.providers.media.documents".equals(uri.getAuthority());
 }
 
 

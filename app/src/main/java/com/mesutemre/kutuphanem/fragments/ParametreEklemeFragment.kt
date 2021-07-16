@@ -5,13 +5,16 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
+import com.mesutemre.kutuphanem.model.SnackTypeEnum
+import com.mesutemre.kutuphanem.util.showSnackBar
 import com.mesutemre.kutuphanem.viewmodels.ParametreEklemeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.parametre_ekleme_fragment.*
@@ -54,19 +57,22 @@ class ParametreEklemeFragment: Fragment() {
                 textInputParametreAciklama.error = it.context.resources.getString(R.string.parametreAciklamaHata);
                 return@setOnClickListener;
             }
+            val imm = ContextCompat.getSystemService(it.context, InputMethodManager::class.java);
+            imm?.hideSoftInputFromWindow(view.windowToken, 0);
             viewModel.parametreEkle(tur,aciklama);
-            observeLiveData();
+            observeLiveData(it);
         }
         textInputParametreAciklama.editText!!.addTextChangedListener(TextInputErrorClearListener(textInputParametreAciklama));
     }
 
-    private fun observeLiveData(){
+    private fun observeLiveData(view:View){
         viewModel.parametreEklemeResponse.observe(viewLifecycleOwner, Observer { response->
             response?.let {
                 parametreEklemeErrorTextView.visibility = View.GONE;
                 parametreEklemeProgressBar.visibility = View.GONE;
-                Toast.makeText(context,response.statusMessage,Toast.LENGTH_LONG).show();
+                showSnackBar(view,response.statusMessage, SnackTypeEnum.SUCCESS);
                 paramTurTextView.text = "";
+
             }
         });
         viewModel.parametreEklemeLoading.observe(viewLifecycleOwner, Observer {

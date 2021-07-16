@@ -1,5 +1,6 @@
 package com.mesutemre.kutuphanem.fragments
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,15 +20,14 @@ import com.mesutemre.kutuphanem.fragments.dialogs.ExitFromApplicationDialogFragm
 import com.mesutemre.kutuphanem.fragments.dialogs.GuncellemeAlertDialogFragment
 import com.mesutemre.kutuphanem.fragments.dialogs.ResimSecBottomSheetDialogFragment
 import com.mesutemre.kutuphanem.listener.ProfilIslemFragmentClickListener
-import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
 import com.mesutemre.kutuphanem.model.KitapturModel
 import com.mesutemre.kutuphanem.model.Kullanici
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
+import com.mesutemre.kutuphanem.util.formatDate
 import com.mesutemre.kutuphanem.util.getCircleImageFromUrl
 import com.mesutemre.kutuphanem.util.setMotionVisibility
 import com.mesutemre.kutuphanem.viewmodels.ProfilIslemViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.layout_login.*
 import kotlinx.android.synthetic.main.profil_islem_fragment.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -35,13 +35,15 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ProfilIslemFragment:Fragment(), ProfilIslemFragmentClickListener {
+class ProfilIslemFragment() :Fragment(), ProfilIslemFragmentClickListener {
 
     private val viewModel: ProfilIslemViewModel by viewModels();
     private lateinit var dataBinding:ProfilIslemFragmentBinding;
     private lateinit var profilImage:ImageView;
     private lateinit var profilImageEnd:ImageView;
     private lateinit var jsonIlgiAlanListe:List<KitapturModel>;
+    private var profilResimChanged:Boolean = false;
+    private var selectedImageUri: Uri = Uri.EMPTY;
 
     @Inject
     lateinit var customSharedPreferences: CustomSharedPreferences;
@@ -163,18 +165,36 @@ class ProfilIslemFragment:Fragment(), ProfilIslemFragmentClickListener {
     }
 
     override fun openProfilResimDegistirme(view: View,profilImage:View) {
-        ResimSecBottomSheetDialogFragment(
+        val profilResimChange = ResimSecBottomSheetDialogFragment(
             profilImage as ImageView,
             profilImageEnd,
-            view.context)
-            .show(this.childFragmentManager,"");
+            view.context);
+        var resimChangeBundle:Bundle = Bundle();
+        profilResimChange.arguments = resimChangeBundle;
+        profilResimChange.show(this.childFragmentManager,"");
     }
 
     override fun kullaniciGuncelle(view: View) {
         if(dataBinding.kullanici?.ad == null || dataBinding.kullanici?.ad?.length == 0){
             dataBinding.textInputProfilAd.error = view.context.getString(R.string.adValidationErr);
+            return;
         }
-        //dataBinding.textInputProfilAd.editText!!.addTextChangedListener(TextInputErrorClearListener(dataBinding.textInputProfilAd));
+        if(dataBinding.kullanici?.soyad == null || dataBinding.kullanici?.soyad?.length == 0){
+            dataBinding.textInputProfilSoyad.error = view.context.getString(R.string.soyadValidationErr);
+            return;
+        }
+        if(dataBinding.kullanici?.eposta == null || dataBinding.kullanici?.eposta?.length == 0){
+            dataBinding.textInputProfilEposta.error = view.context.getString(R.string.epostaValidationErr);
+            return ;
+        }
+
+        if(dataBinding.kullanici?.eposta != null && !dataBinding.kullanici?.eposta?.contains("@")!!){
+            dataBinding.textInputProfilEposta.error = view.context.getString(R.string.epostaFormatValidationErr);
+            return ;
+        }
+
+        val jsonObj:JSONObject = JSONObject();
+
         val ids = ilgiAlanChips.checkedChipIds;
         val iaArr:JSONArray = JSONArray();
         var iaJsonObj:JSONObject = JSONObject();
@@ -185,9 +205,29 @@ class ProfilIslemFragment:Fragment(), ProfilIslemFragmentClickListener {
             iaArr.put(iaJsonObj);
             iaJsonObj = JSONObject();
         }
-        Log.d("iaArr",iaArr.toString());
-        //TODO : Aşağıdaki fragmenta JSOn string gönderilecek.viewModel objesi gönderilecek.viewmodel objesi ile update işlemi yapılacak
-        GuncellemeAlertDialogFragment().show(requireFragmentManager(),null);
+
+        jsonObj.put("ilgiAlanlari",iaArr);
+        jsonObj.put("username",dataBinding.kullanici?.username);
+        jsonObj.put("ad",dataBinding.kullanici?.ad);
+        jsonObj.put("soyad",dataBinding.kullanici?.soyad);
+        jsonObj.put("eposta",dataBinding.kullanici?.eposta);
+        jsonObj.put("haberdarmi",dataBinding.kullanici?.haberdarmi);
+        jsonObj.put("dogumTarihi",
+            dataBinding.kullanici?.dogumTarihi?.let { formatDate(it,"yyyy-MM-dd") });
+        jsonObj.put("cinsiyet","E");
+        if(dataBinding.kullanici?.cinsiyet?.value.equals("KADIN")){
+            jsonObj.put("cinsiyet","K");
+        }
+
+        GuncellemeAlertDialogFragment(jsonObj.toString(),
+            viewModel,
+            viewLifecycleOwner,
+            profilProgressBar,
+            view,
+            detayLayoutId,
+            profilResimChanged,
+            selectedImageUri!!,
+            dataBinding.kullanici!!.username).show(requireFragmentManager(),null);
     }
 
     private fun getSelectedChipId(chipText:String):Int{
@@ -201,5 +241,13 @@ class ProfilIslemFragment:Fragment(), ProfilIslemFragmentClickListener {
 
     override fun logoutFromApplication(view: View) {
         ExitFromApplicationDialogFragment(customSharedPreferences,this).show(requireFragmentManager(),null);
+    }
+
+    fun setProfilResimChanged(profilResimChanged:Boolean){
+        this.profilResimChanged = profilResimChanged;
+    }
+
+    fun setSelectedImageUri(selectedImageUri:Uri){
+        this.selectedImageUri = selectedImageUri;
     }
 }

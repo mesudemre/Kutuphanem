@@ -1,5 +1,7 @@
 package com.mesutemre.kutuphanem
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +11,7 @@ import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import com.mesutemre.kutuphanem.customcomponents.CurvedBottomNavigationView
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
+import com.mesutemre.kutuphanem.util.WRITE_EXTERNAL_STORAGE_REQUEST_CODE
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
@@ -20,10 +23,15 @@ class MainActivity : AppCompatActivity() {
     lateinit var customSharedPreferences: CustomSharedPreferences;
 
     private lateinit var navBottomMenu:CurvedBottomNavigationView;
+    private var writeExternalStorageIzin:Int = 0;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        writeExternalStorageIzin = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if(writeExternalStorageIzin != PackageManager.PERMISSION_GRANTED){
+            requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
+        }
         this.initNavBottomMenu();
     }
 
