@@ -1,17 +1,21 @@
 package com.mesutemre.kutuphanem.util
 
 import android.content.Context
-import android.preference.PreferenceManager
+import android.content.SharedPreferences
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKeys
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.android.scopes.ActivityScoped
-import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class CustomSharedPreferences @Inject constructor(@ApplicationContext context:Context) {
 
-    val prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    val sharedPrefsFile = SHARED_PREF_FILE;
+    val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
+    val prefs:SharedPreferences = EncryptedSharedPreferences.create(sharedPrefsFile,masterKeyAlias,context,
+        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
 
     fun putStringToSharedPreferences(key:String,value:String){
         prefs.edit().putString(key, value).apply();

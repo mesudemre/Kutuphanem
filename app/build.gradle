@@ -78,4 +78,5 @@ dependencies {
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
     implementation group: 'commons-io', name: 'commons-io', version: '2.6'
+    implementation("androidx.security:security-crypto:1.0.0")
 }

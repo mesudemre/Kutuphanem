@@ -3,11 +3,11 @@ package com.mesutemre.kutuphanem.viewmodels
 import android.app.Application
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bumptech.glide.Glide
 import com.mesutemre.kutuphanem.dao.KullaniciDao
 import com.mesutemre.kutuphanem.model.KitapturModel
 import com.mesutemre.kutuphanem.model.Kullanici
@@ -181,8 +181,8 @@ class ProfilIslemViewModel @Inject constructor(application: Application,
             async {kullaniciBilgiGuncelle(jsonStr)};
             async {
                 if(resimGuncellenecek){
-                    Log.d("merhaba","satır 184")
                     kullaniciResimGuncelle(selectedImageUri,username,context);
+                    Glide.get(context).clearMemory();
                 }};
             }
         }

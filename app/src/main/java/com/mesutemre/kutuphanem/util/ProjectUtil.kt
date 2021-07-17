@@ -2,17 +2,13 @@ package com.mesutemre.kutuphanem.util
 
 import android.content.ContentUris
 import android.content.Context
-import android.database.Cursor
 import android.graphics.Bitmap
-import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.text.SpannableStringBuilder
-import android.text.TextWatcher
-import android.text.style.ImageSpan
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -29,10 +25,10 @@ import com.google.android.material.textfield.TextInputLayout
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
 import com.mesutemre.kutuphanem.model.SnackTypeEnum
-import kotlinx.android.synthetic.main.layout_login.*
-import java.io.ByteArrayOutputStream
+import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.jvm.Throws
 
 const val APP_TOKEN_KEY:String = "APP_TOKEN";
 const val KULLANICI_ADI_KEY:String = "KULLANICI_ADI";
@@ -44,6 +40,7 @@ const val KULLANICI_DB_MEVCUT:String = "KULLANICI_MEVCUT";
 const val CAMERA_REQUEST_CODE:Int = 1991;
 const val READ_EXTERNAL_STORAGE_REQUEST_CODE:Int=1992;
 const val WRITE_EXTERNAL_STORAGE_REQUEST_CODE:Int=2019;
+const val SHARED_PREF_FILE:String = "KUTUPHANEM_SP";
 
 fun ImageView.getImageFromUrl(url:String?, iv: ImageView){
     val circularProgressDrawable = CircularProgressDrawable(iv.context);
@@ -192,7 +189,6 @@ fun getImageUriFromBitmap(c: Context, inImage:Bitmap):Uri{
 }
 fun getPath(context:Context,uri:Uri):String?{
     val isKitKatorAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
-
     // DocumentProvider
     if (isKitKatorAbove && DocumentsContract.isDocumentUri(context, uri)) {
         // ExternalStorageProvider
@@ -207,7 +203,7 @@ fun getPath(context:Context,uri:Uri):String?{
         } else if (isDownloadsDocument(uri)) {
             val id = DocumentsContract.getDocumentId(uri)
             val contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(id))
-            return getDataColumn(context, contentUri, null, null)
+            return getStreamFile(context, contentUri)
         } else if (isMediaDocument(uri)) {
             val docId = DocumentsContract.getDocumentId(uri)
             val split = docId.split(":".toRegex()).toTypedArray()
@@ -220,33 +216,58 @@ fun getPath(context:Context,uri:Uri):String?{
             } else if ("audio" == type) {
                 contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
             }
-            val selection = "_id=?"
-            val selectionArgs = arrayOf(split[1])
-            return getDataColumn(context, contentUri, selection, selectionArgs)
+            return getStreamFile(context, contentUri!!)
         }
     } else if ("content".equals(uri.scheme, ignoreCase = true)) {
-        return getDataColumn(context, uri, null, null)
+        return getStreamFile(context, uri)
     } else if ("file".equals(uri.scheme, ignoreCase = true)) {
         return uri.path
     }
     return null;
 }
 
-fun getDataColumn(context: Context, uri: Uri?, selection: String?, selectionArgs: Array<String>?): String? {
-    var cursor: Cursor? = null
-    val column = "_data"
-    val projection = arrayOf(column)
-    try {
-        cursor = uri?.let { context.getContentResolver().query(it, projection, selection, selectionArgs,null) }
-        if (cursor != null && cursor.moveToFirst()) {
-            val column_index: Int = cursor.getColumnIndexOrThrow(column)
-            return cursor.getString(column_index)
-        }
-    } finally {
-        if (cursor != null) cursor.close()
-    }
-    return null
+fun getStreamFile(context: Context,uri:Uri):String?{
+    val inputStream = context.contentResolver.openInputStream(uri);
+    val createFile = createImageFile();
+    copyInputStreamToFile(inputStream!!, createFile);
+    return createFile.absolutePath;
 }
+
+fun copyInputStreamToFile(`in`: InputStream, file: File) {
+    var out: OutputStream? = null
+    try {
+        out = FileOutputStream(file)
+        val buf = ByteArray(1024)
+        var len: Int = 0
+        while (`in`.read(buf).apply { len = this } > 0) {
+            out.write(buf, 0, len)
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    } finally {
+        try {
+            out?.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        try {
+            `in`.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+}
+
+@Throws(IOException::class)
+private fun createImageFile(): File {
+    val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(Date())
+    val imageFileName = "kutsisIMG_" + timeStamp + "_"
+    val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+    return File.createTempFile(imageFileName, ".jpg", storageDir)
+}
+
 
 private fun isExternalStorageDocument(uri:Uri):Boolean {
     return "com.android.externalstorage.documents".equals(uri.getAuthority());
