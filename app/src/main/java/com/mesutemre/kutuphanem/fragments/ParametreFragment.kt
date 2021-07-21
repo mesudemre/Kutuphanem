@@ -8,19 +8,22 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.adapters.ParametreTabViewPagerAdapter
+import com.mesutemre.kutuphanem.databinding.ParametreFragmentBinding
 import kotlinx.android.synthetic.main.parametre_fragment.*
 
 class ParametreFragment:Fragment() {
 
     private val fragmentListe:ArrayList<Fragment> = ArrayList<Fragment>();
     private val fragmentBasliklar:ArrayList<String> = ArrayList<String>();
+    private var parametreBinding:ParametreFragmentBinding? = null;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.parametre_fragment, container, false);
+        parametreBinding = ParametreFragmentBinding.inflate(inflater);
+        return parametreBinding!!.root;
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -28,7 +31,7 @@ class ParametreFragment:Fragment() {
 
         addFragments();
         val fragmentAdapter = ParametreTabViewPagerAdapter(childFragmentManager,lifecycle,fragmentListe);
-        parametreViewPager.adapter = fragmentAdapter;
+        parametreBinding!!.parametreViewPager.adapter = fragmentAdapter;
 
         fragmentBasliklar.clear();
         fragmentBasliklar.add(resources.getString(R.string.yayinEviLabel));
@@ -45,4 +48,8 @@ class ParametreFragment:Fragment() {
         fragmentListe.add(ParametreKitapturFragment());
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView();
+        parametreBinding = null;
+    }
 }

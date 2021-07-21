@@ -1,9 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <RelativeLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/searchInputLayout"
+                android:layout_width="match_parent"
+                android:layout_marginRight="3dp"
+                android:layout_marginLeft="3dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                app:errorEnabled="true"
+                app:boxCornerRadiusBottomEnd="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:startIconDrawable="@drawable/ic_baseline_search_grey_24"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                    android:id="@+id/searchInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:hint="@string/searchHintText" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/vbsari">
+
+            <ImageView
+                android:id="@+id/yeniIconLeftId"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/yeni_icon" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/anasayfaHosgeldinMessageTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="2dp"
+                android:layout_toRightOf="@id/yeniIconLeftId"
+                android:fontFamily="@font/alegreya"
+                android:text="@string/yeniArayuzText"
+                android:textColor="@color/whiteTextColor"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/alegreya"
+                android:text="@string/dashKategoriText"
+                android:textColor="@color/transparent"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+        
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:background="@color/kategoriBackground"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/dashKategoriHataTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:visibility="gone"
+                android:text="@string/dashKategoriListeHata"
+                android:textColor="@color/design_default_color_error"
+                android:textSize="16sp" />
+
+            <ProgressBar
+                android:id="@+id/dashKategoriProgressBarId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ilgiAlanHataTextViewId"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                android:visibility="gone"
+                android:indeterminateDrawable="@drawable/wheel_progress_indeterminate_small" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/dashKategoriRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginTop="20dp"
+            android:background="@color/lacivert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/tanitimViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tanitimTabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_gravity="bottom"
+                android:background="@color/lacivert"
+                app:tabBackground="@drawable/tab_selector"
+                app:tabGravity="center"
+                app:tabIndicatorHeight="0dp" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/alegreya"
+                android:text="@string/encokYorumlananlarText"
+                android:textColor="@color/transparent"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+    </LinearLayout>
 </layout>

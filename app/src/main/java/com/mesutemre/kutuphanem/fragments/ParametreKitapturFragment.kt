@@ -11,6 +11,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.adapters.KitapTurAdapter
+import com.mesutemre.kutuphanem.databinding.ParametreKitapturFragmentBinding
 import com.mesutemre.kutuphanem.util.APP_TOKEN_KEY
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.viewmodels.ParametreKitapturViewModel
@@ -26,13 +27,15 @@ class ParametreKitapturFragment:Fragment() {
 
     private val viewModel: ParametreKitapturViewModel by viewModels();
     private lateinit var adapter:KitapTurAdapter;
+    private var parametreKitapturBinding:ParametreKitapturFragmentBinding? = null;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.parametre_kitaptur_fragment, container, false);
+        parametreKitapturBinding = ParametreKitapturFragmentBinding.inflate(inflater);
+        return parametreKitapturBinding!!.root;
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,17 +43,17 @@ class ParametreKitapturFragment:Fragment() {
         val token = customSharedPreferences.getStringFromSharedPreferences(APP_TOKEN_KEY);
         adapter = KitapTurAdapter(arrayListOf(),viewModel,viewLifecycleOwner,token);
         viewModel.kitapTurListeGetir(false);
-        kitapTurListeRw.layoutManager = LinearLayoutManager(context);
-        kitapTurListeRw.adapter = adapter;
+        parametreKitapturBinding!!.kitapTurListeRw.layoutManager = LinearLayoutManager(context);
+        parametreKitapturBinding!!.kitapTurListeRw.adapter = adapter;
 
         observeLiveData();
 
-        kitapTurSwipeRefreshLayout.setOnRefreshListener {
-            kitapTurProgressBar.visibility = View.VISIBLE;
-            kitapTurErrorTextId.visibility = View.GONE;
-            kitapTurListeRw.visibility = View.GONE;
+        parametreKitapturBinding!!.kitapTurSwipeRefreshLayout.setOnRefreshListener {
+            parametreKitapturBinding!!.kitapTurProgressBar.visibility = View.VISIBLE;
+            parametreKitapturBinding!!.kitapTurErrorTextId.visibility = View.GONE;
+            parametreKitapturBinding!!.kitapTurListeRw.visibility = View.GONE;
 
-            kitapTurSwipeRefreshLayout.isRefreshing = false;
+            parametreKitapturBinding!!.kitapTurSwipeRefreshLayout.isRefreshing = false;
             viewModel.kitapTurListeGetir(true);
         }
 
@@ -63,7 +66,7 @@ class ParametreKitapturFragment:Fragment() {
     private fun observeLiveData(){
         viewModel.kitapturListe.observe(viewLifecycleOwner, Observer { kitapTurListe->
             kitapTurListe?.let {
-                kitapTurListeRw.visibility = View.VISIBLE;
+                parametreKitapturBinding!!.kitapTurListeRw.visibility = View.VISIBLE;
                 adapter.updateKitapTurListe(kitapTurListe);
             }
         });
@@ -71,11 +74,11 @@ class ParametreKitapturFragment:Fragment() {
         viewModel.kitapTurError.observe(viewLifecycleOwner,Observer{error->
             error.let {
                 if(it){
-                    kitapTurProgressBar.visibility = View.GONE;
-                    kitapTurErrorTextId.visibility = View.VISIBLE;
-                    kitapTurListeRw.visibility = View.GONE;
+                    parametreKitapturBinding!!.kitapTurProgressBar.visibility = View.GONE;
+                    parametreKitapturBinding!!.kitapTurErrorTextId.visibility = View.VISIBLE;
+                    parametreKitapturBinding!!.kitapTurListeRw.visibility = View.GONE;
                 }else{
-                    kitapTurProgressBar.visibility = View.GONE;
+                    parametreKitapturBinding!!.kitapTurProgressBar.visibility = View.GONE;
                 }
             }
         });
@@ -83,13 +86,18 @@ class ParametreKitapturFragment:Fragment() {
         viewModel.kitapTurLoading.observe(viewLifecycleOwner, Observer { loading->
             loading.let {
                 if(it){
-                    kitapTurProgressBar.visibility = View.VISIBLE;
-                    kitapTurErrorTextId.visibility = View.GONE;
-                    kitapTurListeRw.visibility = View.GONE;
+                    parametreKitapturBinding!!.kitapTurProgressBar.visibility = View.VISIBLE;
+                    parametreKitapturBinding!!.kitapTurErrorTextId.visibility = View.GONE;
+                    parametreKitapturBinding!!.kitapTurListeRw.visibility = View.GONE;
                 }else{
-                    kitapTurProgressBar.visibility = View.GONE;
+                    parametreKitapturBinding!!.kitapTurProgressBar.visibility = View.GONE;
                 }
             }
         })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView();
+        parametreKitapturBinding = null;
     }
 }

@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.mesutemre.kutuphanem.R
+import com.mesutemre.kutuphanem.databinding.ParametreEklemeFragmentBinding
 import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
 import com.mesutemre.kutuphanem.model.SnackTypeEnum
 import com.mesutemre.kutuphanem.util.showSnackBar
@@ -25,13 +26,15 @@ class ParametreEklemeFragment: Fragment() {
     private var tur:String? = null;
 
     private val viewModel: ParametreEklemeViewModel by viewModels();
+    private var parametreEklemeBinding:ParametreEklemeFragmentBinding? = null;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.parametre_ekleme_fragment, container, false);
+        parametreEklemeBinding = ParametreEklemeFragmentBinding.inflate(inflater);
+        return parametreEklemeBinding!!.root;
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,21 +43,21 @@ class ParametreEklemeFragment: Fragment() {
         arguments?.let {
             tur = ParametreEklemeFragmentArgs.fromBundle(it).paramTur;
             if(tur.equals("kitaptur")){
-                paramTurTextView.text = context?.resources?.getString(R.string.parametreParamKitaptur);
+                parametreEklemeBinding!!.paramTurTextView.text = context?.resources?.getString(R.string.parametreParamKitaptur);
             }else{
-                paramTurTextView.text = context?.resources?.getString(R.string.parametreParamYayinevi);
+                parametreEklemeBinding!!.paramTurTextView.text = context?.resources?.getString(R.string.parametreParamYayinevi);
             }
         }
 
-        backLayoutId.setOnClickListener {
+        parametreEklemeBinding!!.backLayoutId.setOnClickListener {
             val action = ParametreEklemeFragmentDirections.actionParametreEklemeFragmentToParametreFragment();
             Navigation.findNavController(it).navigate(action);
         }
 
         parametreKaydetButton.setOnClickListener {
-            val aciklama = editTextParametreAciklama.text.toString().trim();
+            val aciklama = parametreEklemeBinding!!.editTextParametreAciklama.text.toString().trim();
             if(TextUtils.isEmpty(aciklama)){
-                textInputParametreAciklama.error = it.context.resources.getString(R.string.parametreAciklamaHata);
+                parametreEklemeBinding!!.textInputParametreAciklama.error = it.context.resources.getString(R.string.parametreAciklamaHata);
                 return@setOnClickListener;
             }
             val imm = ContextCompat.getSystemService(it.context, InputMethodManager::class.java);
@@ -62,36 +65,41 @@ class ParametreEklemeFragment: Fragment() {
             viewModel.parametreEkle(tur,aciklama);
             observeLiveData(it);
         }
-        textInputParametreAciklama.editText!!.addTextChangedListener(TextInputErrorClearListener(textInputParametreAciklama));
+        parametreEklemeBinding!!.textInputParametreAciklama.editText!!.addTextChangedListener(TextInputErrorClearListener(parametreEklemeBinding!!.textInputParametreAciklama));
     }
 
     private fun observeLiveData(view:View){
         viewModel.parametreEklemeResponse.observe(viewLifecycleOwner, Observer { response->
             response?.let {
-                parametreEklemeErrorTextView.visibility = View.GONE;
-                parametreEklemeProgressBar.visibility = View.GONE;
+                parametreEklemeBinding!!.parametreEklemeErrorTextView.visibility = View.GONE;
+                parametreEklemeBinding!!.parametreEklemeProgressBar.visibility = View.GONE;
                 showSnackBar(view,response.statusMessage, SnackTypeEnum.SUCCESS);
-                paramTurTextView.text = "";
+                parametreEklemeBinding!!.paramTurTextView.text = "";
 
             }
         });
         viewModel.parametreEklemeLoading.observe(viewLifecycleOwner, Observer {
-            parametreEklemeErrorTextView.visibility = View.GONE;
-            parametreKaydetButton.isEnabled = !it;
+            parametreEklemeBinding!!.parametreEklemeErrorTextView.visibility = View.GONE;
+            parametreEklemeBinding!!.parametreKaydetButton.isEnabled = !it;
             if (it){
-                parametreEklemeProgressBar.visibility = View.VISIBLE;
+                parametreEklemeBinding!!.parametreEklemeProgressBar.visibility = View.VISIBLE;
             }else{
-                parametreEklemeProgressBar.visibility = View.GONE;
+                parametreEklemeBinding!!.parametreEklemeProgressBar.visibility = View.GONE;
             }
         });
         viewModel.parametreEklemeError.observe(viewLifecycleOwner, Observer {
-            parametreEklemeProgressBar.visibility = View.GONE;
+            parametreEklemeBinding!!.parametreEklemeProgressBar.visibility = View.GONE;
             if(it){
-                parametreEklemeErrorTextView.visibility = View.VISIBLE;
+                parametreEklemeBinding!!.parametreEklemeErrorTextView.visibility = View.VISIBLE;
             }else{
-                parametreEklemeErrorTextView.visibility = View.GONE;
+                parametreEklemeBinding!!.parametreEklemeErrorTextView.visibility = View.GONE;
             }
         });
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView();
+        parametreEklemeBinding = null;
     }
 
 }

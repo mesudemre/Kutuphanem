@@ -23,4 +23,6 @@
     <color name="lacivert">#191970</color>
     <color name="fistikYesil">#2BA808</color>
     <color name="acikTuruncu">#EA881F</color>
+    <color name="kategoriBackground">#FAF1EB</color>
+    <color name="acikSari">#F5FAAA</color>
 </resources>

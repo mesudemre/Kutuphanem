@@ -80,4 +80,15 @@
     <string name="itemPhotoCamera">Kamera</string>
     <string name="itemPhotoLocalStorage">Galeri</string>
     <string name="itemRemoveImage">Resmi Kaldır</string>
+
+    <!--AnasayfaFragment -->
+    <string name="searchHintText">Kitap,Yazar Ara...</string>
+    <string name="dashKategoriText">Kategoriler</string>
+    <string name="dashKategoriListeHata">Kategori listesi yüklenemedi!</string>
+    <string name="yeniArayuzText">Yenilenen arayüzümüz ile karşınızdayız!</string>
+    <string name="encokYorumlananlarText">En Çok Yorumlanan İlk 5 Kitap</string>
+    <string name="yeniFirsatAciklamaText"></string>
+    <string name="tanitimText1">Uygulamamızın yeni versiyonu ile karşınızdayız!</string>
+    <string name="tanitimText2">Daha performanslı,daha güvenli ve daha çevik!</string>
+    <string name="tanitimText3">İstek ve önerilerinizi muhakkak bekliyoruz...</string>
 </resources>

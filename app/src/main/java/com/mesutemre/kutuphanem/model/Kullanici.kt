@@ -48,7 +48,7 @@ data class Kullanici(
     @SerializedName("haberdarmi")
     @ColumnInfo(name = "haberdarmi")
     @Expose
-    var haberdarmi:Boolean,
+    var haberdarmi:Boolean
 ){
     @Ignore
     @SerializedName("ilgiAlanlari")

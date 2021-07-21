@@ -2,6 +2,7 @@ package com.mesutemre.kutuphanem.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
@@ -18,4 +19,9 @@ data class KitapturModel(
     @SerializedName("aciklama")
     @Expose
     var aciklama:String?
-)
+){
+    @SerializedName("resim")
+    @Ignore
+    @Expose
+    var resim:String? = null
+}

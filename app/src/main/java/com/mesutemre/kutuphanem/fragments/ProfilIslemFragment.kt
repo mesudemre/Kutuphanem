@@ -2,7 +2,6 @@ package com.mesutemre.kutuphanem.fragments
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,7 +37,7 @@ import javax.inject.Inject
 class ProfilIslemFragment() :Fragment(), ProfilIslemFragmentClickListener {
 
     private val viewModel: ProfilIslemViewModel by viewModels();
-    private lateinit var dataBinding:ProfilIslemFragmentBinding;
+    private var dataBinding: ProfilIslemFragmentBinding? = null;
     private lateinit var profilImage:ImageView;
     private lateinit var profilImageEnd:ImageView;
     private lateinit var jsonIlgiAlanListe:List<KitapturModel>;
@@ -54,8 +53,8 @@ class ProfilIslemFragment() :Fragment(), ProfilIslemFragmentClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dataBinding = DataBindingUtil.inflate(inflater,R.layout.profil_islem_fragment,container,false);
-        dataBinding.profilClickListener = this;
-        return dataBinding.root;
+        dataBinding!!.profilClickListener = this;
+        return dataBinding!!.root;
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,9 +66,9 @@ class ProfilIslemFragment() :Fragment(), ProfilIslemFragmentClickListener {
     private fun observeLiveData(){
         viewModel.kullanici.observe(viewLifecycleOwner, Observer { kullanici->
             kullanici.let {
-                dataBinding.kullanici = kullanici;
-                profilImage = dataBinding.profilImage;
-                profilImageEnd = dataBinding.profilImageEnd;
+                dataBinding!!.kullanici = kullanici;
+                profilImage = dataBinding!!.profilImage;
+                profilImageEnd = dataBinding!!.profilImageEnd;
                 profilImage.getCircleImageFromUrl(kullanici.resim,profilImage);
                 profilImageEnd.getCircleImageFromUrl(kullanici.resim,profilImageEnd);
                 observeKitapTurListe(kullanici);
@@ -175,21 +174,21 @@ class ProfilIslemFragment() :Fragment(), ProfilIslemFragmentClickListener {
     }
 
     override fun kullaniciGuncelle(view: View) {
-        if(dataBinding.kullanici?.ad == null || dataBinding.kullanici?.ad?.length == 0){
-            dataBinding.textInputProfilAd.error = view.context.getString(R.string.adValidationErr);
+        if(dataBinding!!.kullanici?.ad == null || dataBinding!!.kullanici?.ad?.length == 0){
+            dataBinding!!.textInputProfilAd.error = view.context.getString(R.string.adValidationErr);
             return;
         }
-        if(dataBinding.kullanici?.soyad == null || dataBinding.kullanici?.soyad?.length == 0){
-            dataBinding.textInputProfilSoyad.error = view.context.getString(R.string.soyadValidationErr);
+        if(dataBinding!!.kullanici?.soyad == null || dataBinding!!.kullanici?.soyad?.length == 0){
+            dataBinding!!.textInputProfilSoyad.error = view.context.getString(R.string.soyadValidationErr);
             return;
         }
-        if(dataBinding.kullanici?.eposta == null || dataBinding.kullanici?.eposta?.length == 0){
-            dataBinding.textInputProfilEposta.error = view.context.getString(R.string.epostaValidationErr);
+        if(dataBinding!!.kullanici?.eposta == null || dataBinding!!.kullanici?.eposta?.length == 0){
+            dataBinding!!.textInputProfilEposta.error = view.context.getString(R.string.epostaValidationErr);
             return ;
         }
 
-        if(dataBinding.kullanici?.eposta != null && !dataBinding.kullanici?.eposta?.contains("@")!!){
-            dataBinding.textInputProfilEposta.error = view.context.getString(R.string.epostaFormatValidationErr);
+        if(dataBinding!!.kullanici?.eposta != null && !dataBinding!!.kullanici?.eposta?.contains("@")!!){
+            dataBinding!!.textInputProfilEposta.error = view.context.getString(R.string.epostaFormatValidationErr);
             return ;
         }
 
@@ -207,15 +206,15 @@ class ProfilIslemFragment() :Fragment(), ProfilIslemFragmentClickListener {
         }
 
         jsonObj.put("ilgiAlanlari",iaArr);
-        jsonObj.put("username",dataBinding.kullanici?.username);
-        jsonObj.put("ad",dataBinding.kullanici?.ad);
-        jsonObj.put("soyad",dataBinding.kullanici?.soyad);
-        jsonObj.put("eposta",dataBinding.kullanici?.eposta);
-        jsonObj.put("haberdarmi",dataBinding.kullanici?.haberdarmi);
+        jsonObj.put("username",dataBinding!!.kullanici?.username);
+        jsonObj.put("ad",dataBinding!!.kullanici?.ad);
+        jsonObj.put("soyad",dataBinding!!.kullanici?.soyad);
+        jsonObj.put("eposta",dataBinding!!.kullanici?.eposta);
+        jsonObj.put("haberdarmi",dataBinding!!.kullanici?.haberdarmi);
         jsonObj.put("dogumTarihi",
-            dataBinding.kullanici?.dogumTarihi?.let { formatDate(it,"yyyy-MM-dd") });
+            dataBinding!!.kullanici?.dogumTarihi?.let { formatDate(it,"yyyy-MM-dd") });
         jsonObj.put("cinsiyet","E");
-        if(dataBinding.kullanici?.cinsiyet?.value.equals("KADIN")){
+        if(dataBinding!!.kullanici?.cinsiyet?.value.equals("KADIN")){
             jsonObj.put("cinsiyet","K");
         }
 
@@ -227,7 +226,7 @@ class ProfilIslemFragment() :Fragment(), ProfilIslemFragmentClickListener {
             detayLayoutId,
             profilResimChanged,
             selectedImageUri!!,
-            dataBinding.kullanici!!.username).show(requireFragmentManager(),null);
+            dataBinding!!.kullanici!!.username).show(requireFragmentManager(),null);
     }
 
     private fun getSelectedChipId(chipText:String):Int{
@@ -249,5 +248,10 @@ class ProfilIslemFragment() :Fragment(), ProfilIslemFragmentClickListener {
 
     fun setSelectedImageUri(selectedImageUri:Uri){
         this.selectedImageUri = selectedImageUri;
+    }
+
+    override fun onDestroyView() {
+        super.onDestroy();
+        dataBinding = null;
     }
 }

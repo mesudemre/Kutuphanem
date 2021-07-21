@@ -11,6 +11,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.adapters.YayinEviAdapter
+import com.mesutemre.kutuphanem.databinding.ParametreYayineviFragmentBinding
 import com.mesutemre.kutuphanem.util.APP_TOKEN_KEY
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.viewmodels.ParametreYayineviViewModel
@@ -26,13 +27,16 @@ class ParametreYayineviFragment:Fragment() {
 
     private val viewModel:ParametreYayineviViewModel by viewModels();
     private lateinit var adapter:YayinEviAdapter;
+    private var parametreYayinEviBinding:ParametreYayineviFragmentBinding? = null;
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.parametre_yayinevi_fragment, container, false);
+        parametreYayinEviBinding = ParametreYayineviFragmentBinding.inflate(inflater);
+        return parametreYayinEviBinding!!.root;
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,22 +45,22 @@ class ParametreYayineviFragment:Fragment() {
         val token = customSharedPreferences.getStringFromSharedPreferences(APP_TOKEN_KEY);
         adapter = YayinEviAdapter(arrayListOf(),viewModel,viewLifecycleOwner,token);
         viewModel.yayinEviListeGetir(false);
-        yayinEviListeRw.layoutManager = LinearLayoutManager(context);
-        yayinEviListeRw.adapter = adapter;
+        parametreYayinEviBinding!!.yayinEviListeRw.layoutManager = LinearLayoutManager(context);
+        parametreYayinEviBinding!!.yayinEviListeRw.adapter = adapter;
 
         observeLiveData();
 
-        yayinEviSwipeRefreshLayout.setOnRefreshListener {
-            yayinEviListeRw.visibility = View.GONE;
-            yayinEviErrorTextId.visibility = View.GONE;
-            yayinEviProgressBar.visibility = View.VISIBLE;
+        parametreYayinEviBinding!!.yayinEviSwipeRefreshLayout.setOnRefreshListener {
+            parametreYayinEviBinding!!.yayinEviListeRw.visibility = View.GONE;
+            parametreYayinEviBinding!!.yayinEviErrorTextId.visibility = View.GONE;
+            parametreYayinEviBinding!!.yayinEviProgressBar.visibility = View.VISIBLE;
 
-            yayinEviSwipeRefreshLayout.isRefreshing = false;
+            parametreYayinEviBinding!!.yayinEviSwipeRefreshLayout.isRefreshing = false;
 
             viewModel.yayinEviListeGetir(true);
         }
 
-        yayinEviEkleFloatingActionButton.setOnClickListener {
+        parametreYayinEviBinding!!.yayinEviEkleFloatingActionButton.setOnClickListener {
             val action = ParametreFragmentDirections.actionParametreFragmentToParametreEklemeFragment("yayinevi");
             Navigation.findNavController(it).navigate(action);
         }
@@ -72,11 +76,11 @@ class ParametreYayineviFragment:Fragment() {
         viewModel.yayinEviError.observe(viewLifecycleOwner, Observer {error->
             error?.let {
                 if(it){
-                    yayinEviErrorTextId.visibility = View.VISIBLE;
-                    yayinEviListeRw.visibility = View.GONE;
+                    parametreYayinEviBinding!!.yayinEviErrorTextId.visibility = View.VISIBLE;
+                    parametreYayinEviBinding!!.yayinEviListeRw.visibility = View.GONE;
                 }else{
-                    yayinEviListeRw.visibility = View.VISIBLE;
-                    yayinEviErrorTextId.visibility = View.GONE;
+                    parametreYayinEviBinding!!.yayinEviListeRw.visibility = View.VISIBLE;
+                    parametreYayinEviBinding!!.yayinEviErrorTextId.visibility = View.GONE;
                 }
             }
         });
@@ -84,14 +88,19 @@ class ParametreYayineviFragment:Fragment() {
         viewModel.yayinEviLoading.observe(viewLifecycleOwner, Observer {loading->
             loading.let {
                 if(it){
-                    yayinEviProgressBar.visibility = View.VISIBLE;
-                    yayinEviListeRw.visibility = View.GONE;
-                    yayinEviErrorTextId.visibility = View.GONE;
+                    parametreYayinEviBinding!!.yayinEviProgressBar.visibility = View.VISIBLE;
+                    parametreYayinEviBinding!!. yayinEviListeRw.visibility = View.GONE;
+                    parametreYayinEviBinding!!.yayinEviErrorTextId.visibility = View.GONE;
                 }else{
-                    yayinEviProgressBar.visibility = View.GONE;
+                    parametreYayinEviBinding!!.yayinEviProgressBar.visibility = View.GONE;
                 }
             }
         })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView();
+        parametreYayinEviBinding = null;
     }
 
 }

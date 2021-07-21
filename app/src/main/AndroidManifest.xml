@@ -30,9 +30,9 @@
             android:theme="@style/NoActionBar" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/NoActionBar">
+            android:theme="@style/NoActionBar"
+            android:windowSoftInputMode="adjustPan">
         </activity>
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
