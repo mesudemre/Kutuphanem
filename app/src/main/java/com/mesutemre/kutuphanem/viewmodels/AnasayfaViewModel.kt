@@ -1,7 +1,6 @@
 package com.mesutemre.kutuphanem.viewmodels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -91,4 +90,9 @@ class AnasayfaViewModel @Inject constructor(application: Application,
         }
     }
 
+    override fun onCleared() {
+        super.onCleared();
+        disposible.clear();
+        job.cancel();
+    }
 }

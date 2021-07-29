@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var navBottomMenu:CurvedBottomNavigationView;
     private var writeExternalStorageIzin:Int = 0;
+    private lateinit var navHostFragment:NavHostFragment;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
@@ -33,6 +34,10 @@ class MainActivity : AppCompatActivity() {
             requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
         }
         this.initNavBottomMenu();
+
+        floatingActionButton3.setOnClickListener {
+            navHostFragment.navController.navigate(R.id.kitapEklemeFragment);
+        }
     }
 
     private fun initNavBottomMenu(){
@@ -46,9 +51,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpNavigation(){
-        val navHostFragment:NavHostFragment = supportFragmentManager.findFragmentById(R.id.bottomFragmentId) as NavHostFragment;
+        navHostFragment = supportFragmentManager.findFragmentById(R.id.bottomFragmentId) as NavHostFragment;
         navHostFragment.navController.addOnDestinationChangedListener { controller, destination, arguments ->
             if(destination.label.toString().equals("ParametreEklemeFragment")){
+                floatingActionButton3.visibility = View.GONE;
+                navBottomMenu.visibility = View.GONE;
+            }else if(destination.label.toString().equals("KitapEklemeFragment")){
                 floatingActionButton3.visibility = View.GONE;
                 navBottomMenu.visibility = View.GONE;
             }else{

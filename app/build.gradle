@@ -79,4 +79,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
     implementation group: 'commons-io', name: 'commons-io', version: '2.6'
     implementation("androidx.security:security-crypto:1.0.0")
+    implementation "androidx.camera:camera-camera2:$camerax_version"
+    implementation "androidx.camera:camera-lifecycle:$camerax_version"
+    implementation "androidx.camera:camera-view:1.0.0-alpha19"
+    implementation 'id.zelory:compressor:3.0.1'
 }

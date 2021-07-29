@@ -8,6 +8,7 @@
     <string name="ayarlaLabel">Tamam</string>
     <string name="tarihAyarla">Ayarla</string>
     <string name="iptalLabel">İptal</string>
+    <string name="takePhoto">Çek</string>
 
     <!--Bottom Navigation Menu -->
     <string name="anasayfaItem">Anasayfa</string>
@@ -74,7 +75,7 @@
     <string name="cinsiyetKadin">Kadın</string>
     <string name="cinsiyetErkekValue">ERKEK</string>
     <string name="cinsiyetKadinValue">KADIN</string>
-    <string name="profilGuncellemeSunucuHata">Sunucu ile bağlantu kurulamadı!</string>
+    <string name="profilGuncellemeSunucuHata">Sunucu ile bağlantı kurulamadı!</string>
 
     <!--profil_image_degistir_menu.xml -->
     <string name="itemPhotoCamera">Kamera</string>
@@ -91,4 +92,27 @@
     <string name="tanitimText1">Uygulamamızın yeni versiyonu ile karşınızdayız!</string>
     <string name="tanitimText2">Daha performanslı,daha güvenli ve daha çevik!</string>
     <string name="tanitimText3">İstek ve önerilerinizi muhakkak bekliyoruz...</string>
+
+    <!--KitapEklemeFragment -->
+    <string name="kitapEklemeTitle">Kitap Ekleme</string>
+    <string name="kitapAdHintText">Kitap Adı</string>
+    <string name="yazarAdHintText">Yazar Adı</string>
+    <string name="alinmaTarHintText">Alınma Tarihi</string>
+    <string name="kitapEklemeKitapTurListeHata">Kitap Türleri Getirilemedi!</string>
+    <string name="kitapEklemeYayineviListeHata">Yayınevleri Getirilemedi!</string>
+    <string name="aciklamaHintText">Kitap Hakkında</string>
+    <string name="kitapAdErrorText">Lütfen kitap adını giriniz!</string>
+    <string name="yazarAdErrorText">Lütfen yazar adını giriniz!</string>
+    <string name="alinmaTarErrorText">Lütfen alınma tarihini seçiniz!</string>
+    <string name="kitapAciklamaErrorText">Lütfen kitap açıklamasını giriniz!</string>
+    <string name="kitapResimErrorText">Lütfen kitap resmi ekleyiniz!</string>
+    <string name="kitapTurErrorText">Lütfen kitap türü seçiniz!</string>
+    <string name="yayinEviErrorText">Lütfen yayınevi seçiniz!</string>
+    <string name="kitapKayitProgressText">Kitap kaydı yapılıyor...</string>
+    <string name="kitapResimYukleProgressText">Kitap resmi yükleniyor...</string>
+    <string name="kitapKaydiBasarli">Kitap başarıyla kaydedildi</string>
+    <string name="kitapKaydiHataText">Kitap kaydı esnasında hata meydana geldi!</string>
+    <string name="kitapResmiYuklemeHata">Kitap resmi yüklenirken hata meydana geldi!</string>
+    <string name="kitapTurSecinizText">Kitap türü seçiniz</string>
+    <string name="yayinEviSecinizText">Yayınevi seçiniz</string>
 </resources>

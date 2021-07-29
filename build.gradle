@@ -12,6 +12,7 @@ buildscript {
     ext.pagingVersion="2.1.0"
     ext.rxandroidVersion="2.0.2"
     ext.hilt_version = '2.33-beta'
+    ext.camerax_version = '1.0.0-beta12'
 
     repositories {
         google()

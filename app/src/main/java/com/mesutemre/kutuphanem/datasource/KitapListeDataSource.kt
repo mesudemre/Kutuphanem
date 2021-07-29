@@ -23,7 +23,7 @@ class KitapListeDataSource(
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, KitapModel>) {
         val jsonObj: JSONObject = JSONObject();
         jsonObj.put("minKayitNum",0);
-        jsonObj.put("maxKayitNum",4);
+        jsonObj.put("maxKayitNum",5);
         disposible.add(
                 kitapService.getKitapListe(jsonObj.toString())
                         .subscribe({response->
@@ -43,9 +43,8 @@ class KitapListeDataSource(
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, KitapModel>) {
         val jsonObj: JSONObject = JSONObject();
-        jsonObj.put("minKayitNum",params.key*5);
-        jsonObj.put("maxKayitNum",4);
-
+        jsonObj.put("minKayitNum",(params.key-1)*5);
+        jsonObj.put("maxKayitNum",5);
         disposible.add(
                 kitapService.getKitapListe(jsonObj.toString())
                         .subscribe({response->

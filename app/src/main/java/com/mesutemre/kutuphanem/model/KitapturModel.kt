@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName
 
 @Entity
 data class KitapturModel(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "id")
     @SerializedName("id")
     @Expose
@@ -24,4 +24,8 @@ data class KitapturModel(
     @Ignore
     @Expose
     var resim:String? = null
+
+    override fun toString(): String {
+        return aciklama!!;
+    }
 }

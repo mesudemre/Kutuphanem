@@ -251,7 +251,7 @@ class ProfilIslemFragment() :Fragment(), ProfilIslemFragmentClickListener {
     }
 
     override fun onDestroyView() {
-        super.onDestroy();
+        super.onDestroyView()
         dataBinding = null;
     }
 }

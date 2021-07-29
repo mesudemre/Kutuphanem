@@ -52,4 +52,9 @@
             android:id="@+id/action_parametreEklemeFragment_to_parametreFragment"
             app:destination="@id/parametreFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/kitapEklemeFragment"
+        android:name="com.mesutemre.kutuphanem.fragments.KitapEklemeFragment"
+        android:label="KitapEklemeFragment" />
+
 </navigation>

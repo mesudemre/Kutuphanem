@@ -112,7 +112,6 @@ class AnasayfaFragment:Fragment() {
 
     private fun observeSearchKitap(){
         viewModel.kitapSearchResult.observe(viewLifecycleOwner, Observer { kitapListe->
-            Log.d("Size",""+kitapListe.size);
             kitapSearchResultAdapter.updateKitapSearchListe(kitapListe);
         });
 
@@ -138,19 +137,19 @@ class AnasayfaFragment:Fragment() {
 
         viewModel.dashKategoriListeLoading.observe(viewLifecycleOwner, Observer { loading->
             if(loading){
-                anasayfaBinding!!.dashKategoriProgressBarId.visibility = View.VISIBLE
-                anasayfaBinding!!.dashKategoriHataTextView.visibility = View.GONE
+                anasayfaBinding!!.dashKategoriProgressBarId.visibility = View.VISIBLE;
+                anasayfaBinding!!.dashKategoriHataTextView.visibility = View.GONE;
             }else{
-                anasayfaBinding!!.dashKategoriProgressBarId.visibility = View.GONE
+                anasayfaBinding!!.dashKategoriProgressBarId.visibility = View.GONE;
             }
         })
 
         viewModel.dashKategoriListeError.observe(viewLifecycleOwner,Observer{error->
             if(error){
-                anasayfaBinding!!.dashKategoriHataTextView.visibility = View.VISIBLE
-                anasayfaBinding!!.dashKategoriRecyclerView.visibility = View.GONE
+                anasayfaBinding!!.dashKategoriHataTextView.visibility = View.VISIBLE;
+                anasayfaBinding!!.dashKategoriRecyclerView.visibility = View.GONE;
             }else{
-                anasayfaBinding!!.dashKategoriHataTextView.visibility = View.GONE
+                anasayfaBinding!!.dashKategoriHataTextView.visibility = View.GONE;
             }
         })
     }

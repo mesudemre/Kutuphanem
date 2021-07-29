@@ -19,4 +19,8 @@ data class YayineviModel(
         @Expose
         var aciklama:String?
 ) {
+
+        override fun toString(): String {
+                return aciklama!!;
+        }
 }

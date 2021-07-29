@@ -268,7 +268,6 @@ private fun createImageFile(): File {
     return File.createTempFile(imageFileName, ".jpg", storageDir)
 }
 
-
 private fun isExternalStorageDocument(uri:Uri):Boolean {
     return "com.android.externalstorage.documents".equals(uri.getAuthority());
 }
