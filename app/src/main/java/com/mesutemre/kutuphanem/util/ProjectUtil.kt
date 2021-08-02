@@ -11,9 +11,11 @@ import android.provider.MediaStore
 import android.text.SpannableStringBuilder
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
@@ -21,6 +23,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
@@ -32,7 +35,7 @@ import kotlin.jvm.Throws
 
 const val APP_TOKEN_KEY:String = "APP_TOKEN";
 const val KULLANICI_ADI_KEY:String = "KULLANICI_ADI";
-const val API_URL:String = "http://192.168.1.106:8080/KutuphaneSistemiWS/";
+const val API_URL:String = "http://192.168.1.103:8080/KutuphaneSistemiWS/";
 const val KUTUPHANEM_DB_NAME = "kutuphanem";
 const val PARAM_YAYINEVI_DB_KEY:String = "PARAM_YAYINEVI";
 const val PARAM_KITAPTUR_DB_KEY:String = "PARAM_KITAPTUR";
@@ -280,5 +283,11 @@ private fun isMediaDocument(uri:Uri):Boolean {
     return "com.android.providers.media.documents".equals(uri.getAuthority());
 }
 
+fun TextInputEditText.hideKeyboard(et:TextInputEditText){
+    val imm = ContextCompat.getSystemService(et.context, InputMethodManager::class.java);
+    imm?.hideSoftInputFromWindow(et.windowToken, 0);
+}
 
-
+fun TextInputEditText.clearContent(et:TextInputEditText){
+    et.editableText.clear();
+}

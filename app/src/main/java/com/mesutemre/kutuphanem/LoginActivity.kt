@@ -15,6 +15,7 @@ import com.mesutemre.kutuphanem.model.AccountCredentials
 import com.mesutemre.kutuphanem.util.APP_TOKEN_KEY
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.KULLANICI_ADI_KEY
+import com.mesutemre.kutuphanem.util.hideKeyboard
 import com.mesutemre.kutuphanem.viewmodels.LoginActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_login.*
@@ -47,7 +48,7 @@ class LoginActivity : AppCompatActivity() {
                 textInputSifre.error= resources.getString(R.string.bosSifreHata);
                 return@setOnClickListener;
             }
-
+            editTextKullaniciAdi.hideKeyboard(editTextKullaniciAdi);
             val accountCredentials = AccountCredentials(kullaniciAdi,sifre);
             girisProgressBar.visibility = View.VISIBLE;
             viewModel.doLogin(accountCredentials);

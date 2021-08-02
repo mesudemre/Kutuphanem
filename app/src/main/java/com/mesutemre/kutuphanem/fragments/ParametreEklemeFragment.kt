@@ -15,6 +15,7 @@ import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.databinding.ParametreEklemeFragmentBinding
 import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
 import com.mesutemre.kutuphanem.model.SnackTypeEnum
+import com.mesutemre.kutuphanem.util.hideKeyboard
 import com.mesutemre.kutuphanem.util.showSnackBar
 import com.mesutemre.kutuphanem.viewmodels.ParametreEklemeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,12 +57,12 @@ class ParametreEklemeFragment: Fragment() {
 
         parametreKaydetButton.setOnClickListener {
             val aciklama = parametreEklemeBinding!!.editTextParametreAciklama.text.toString().trim();
+            parametreEklemeBinding!!.editTextParametreAciklama.hideKeyboard(parametreEklemeBinding!!.editTextParametreAciklama);
             if(TextUtils.isEmpty(aciklama)){
                 parametreEklemeBinding!!.textInputParametreAciklama.error = it.context.resources.getString(R.string.parametreAciklamaHata);
                 return@setOnClickListener;
             }
-            val imm = ContextCompat.getSystemService(it.context, InputMethodManager::class.java);
-            imm?.hideSoftInputFromWindow(view.windowToken, 0);
+
             viewModel.parametreEkle(tur,aciklama);
             observeLiveData(it);
         }

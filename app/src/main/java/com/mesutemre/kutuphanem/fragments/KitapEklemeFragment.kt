@@ -30,6 +30,7 @@ import com.mesutemre.kutuphanem.model.KitapturModel
 import com.mesutemre.kutuphanem.model.SnackTypeEnum
 import com.mesutemre.kutuphanem.model.YayineviModel
 import com.mesutemre.kutuphanem.util.CAMERA_REQUEST_CODE
+import com.mesutemre.kutuphanem.util.clearContent
 import com.mesutemre.kutuphanem.util.showSnackBar
 import com.mesutemre.kutuphanem.viewmodels.KitapEklemeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,6 +64,8 @@ class KitapEklemeFragment:Fragment() {
         }
         cameraExecutor = Executors.newSingleThreadExecutor()
         outputDirectory = getOutputDirectory()
+
+
     }
 
     override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
@@ -233,6 +236,7 @@ class KitapEklemeFragment:Fragment() {
         viewModel.kitapResimYukle.observe(viewLifecycleOwner, Observer { response->
            if(response.statusCode.equals("200")){
                showSnackBar(view,response.statusMessage,SnackTypeEnum.SUCCESS);
+               formTemizle();
            }else{
                showSnackBar(view,view.context.resources.getString(R.string.kitapResimErrorText),SnackTypeEnum.ERROR)
            }
@@ -242,7 +246,7 @@ class KitapEklemeFragment:Fragment() {
            if(it) {
                kitapEklemeBinding!!.kitapResimYukleProgressLayoutId.visibility = View.VISIBLE
                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                   WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                   WindowManager.LayoutParams.FLAG_DIM_BEHIND);
            }else{
                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                kitapEklemeBinding!!.kitapResimYukleProgressLayoutId.visibility = View.GONE
@@ -367,6 +371,19 @@ class KitapEklemeFragment:Fragment() {
         })
     }
 
+    private fun formTemizle(){
+        savedKitapUri = null;
+        kitapEklemeBinding!!.kitapImageCapId.setImageDrawable(kitapEklemeBinding!!.kitapImageCapId.context.getDrawable(R.drawable.ic_baseline_photo_camera_48));
+        kitapEklemeBinding!!.editTextKitapAd.clearContent(kitapEklemeBinding!!.editTextKitapAd);
+        kitapEklemeBinding!!.editTextYazarAd.clearContent(kitapEklemeBinding!!.editTextYazarAd);
+        kitapEklemeBinding!!.editTextAlinmaTar.clearContent(kitapEklemeBinding!!.editTextAlinmaTar);
+        kitapEklemeBinding!!.editTextKitapAciklama.clearContent(kitapEklemeBinding!!.editTextKitapAciklama);
+        selectedKitapTur = 0;
+        kitapEklemeBinding!!.kitapTurlerSpinnerId.setSelection(selectedKitapTur);
+        selectedYayinevi = 0;
+        kitapEklemeBinding!!.yayinEviSpinnerId.setSelection(selectedYayinevi);
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         cameraExecutor.shutdown()
@@ -394,5 +411,7 @@ class KitapEklemeFragment:Fragment() {
         }
         super.onSaveInstanceState(outState)
     }
+
+
 
 }
