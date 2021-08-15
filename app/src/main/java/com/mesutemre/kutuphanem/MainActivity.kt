@@ -59,6 +59,9 @@ class MainActivity : AppCompatActivity() {
             }else if(destination.label.toString().equals("KitapEklemeFragment")){
                 floatingActionButton3.visibility = View.GONE;
                 navBottomMenu.visibility = View.GONE;
+            }else if(destination.label.toString().equals("KitapDetayFragment")){
+                floatingActionButton3.visibility = View.GONE;
+                navBottomMenu.visibility = View.GONE;
             }else{
                 floatingActionButton3.visibility = View.VISIBLE;
                 navBottomMenu.visibility = View.VISIBLE;

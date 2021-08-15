@@ -17,11 +17,14 @@
     </data>
 
 
+
     <androidx.constraintlayout.motion.widget.MotionLayout
         android:id="@+id/profilBilgiLayoutCard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutDescription="@xml/profil_islem_fragment_xml_profilbilgilayoutcard_scene">
+
+
 
         <RelativeLayout
             android:id="@+id/profilEkranSurecId"
@@ -194,6 +197,7 @@
                     android:clearStringValidation="@{kullanici.ad}"
                     app:boxStrokeColor="@color/primaryTextColor"
                     app:errorEnabled="true">
+
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextProfilAd"
                         android:layout_width="match_parent"
@@ -271,53 +275,55 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.checkbox.MaterialCheckBox
+                    style="@style/KutuphanemCheckBoxStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="20dp"
-                    style="@style/KutuphanemCheckBoxStyle"
                     android:checked="@={kullanici.haberdarmi}"
-                    android:text="@string/gelismeHabderdarLabel"/>
+                    android:text="@string/gelismeHabderdarLabel" />
 
                 <RadioGroup
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:checkedButton="@={BindingConverters.selectedCinsiyet(kullanici.cinsiyet)}"
                     android:layout_marginTop="5dp"
-                    android:layout_marginRight="20dp">
+                    android:layout_marginRight="20dp"
+                    android:checkedButton="@={BindingConverters.selectedCinsiyet(kullanici.cinsiyet)}"
+                    android:orientation="horizontal">
+
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:id="@+id/erkekCinsiyetRadioButtonId"
+                        style="@style/KutuphanemRadioButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/KutuphanemRadioButtonStyle"
-                        android:text="@string/cinsiyetErkek"/>
+                        android:text="@string/cinsiyetErkek" />
+
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:id="@+id/kadinCinsiyetRadioButtonId"
+                        style="@style/KutuphanemRadioButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/KutuphanemRadioButtonStyle"
-                        android:text="@string/cinsiyetKadin"/>
+                        android:text="@string/cinsiyetKadin" />
                 </RadioGroup>
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
                     android:layout_marginLeft="20dp"
-                    android:text="@string/ilgiAlanlarinizLegendTitle"/>
+                    android:layout_marginTop="5dp"
+                    android:text="@string/ilgiAlanlarinizLegendTitle" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    app:strokeWidth="1dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="20dp"
                     app:cardElevation="2dp"
                     app:strokeColor="@color/transparent"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="20dp">
+                    app:strokeWidth="1dp">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -329,10 +335,10 @@
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
                             android:gravity="center"
-                            android:visibility="gone"
                             android:text="@string/ilgiAlanHata"
                             android:textColor="@color/kirmizi"
-                            android:textSize="14sp"/>
+                            android:textSize="14sp"
+                            android:visibility="gone" />
 
                         <ProgressBar
                             android:id="@+id/ilgiAlanProgressBarId"
@@ -341,41 +347,40 @@
                             android:layout_below="@+id/ilgiAlanHataTextViewId"
                             android:layout_centerInParent="true"
                             android:indeterminate="true"
-                            android:visibility="gone"
-                            android:indeterminateDrawable="@drawable/wheel_progress_indeterminate_small" />
+                            android:indeterminateDrawable="@drawable/wheel_progress_indeterminate_small"
+                            android:visibility="gone" />
 
                         <com.google.android.material.chip.ChipGroup
                             android:id="@+id/ilgiAlanChips"
-                            android:layout_marginTop="5dp"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-                        </com.google.android.material.chip.ChipGroup>
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"></com.google.android.material.chip.ChipGroup>
                     </RelativeLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.button.MaterialButton
+                    style="@style/PrimaryButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="20dp"
-                    style="@style/PrimaryButtonStyle"
                     android:onClick="@{(v) -> profilClickListener.kullaniciGuncelle(v)}"
                     android:text="@string/profilGuncelleButtonLabel"
-                    android:textColor="@color/whiteTextColor"/>
+                    android:textColor="@color/whiteTextColor" />
 
                 <com.google.android.material.button.MaterialButton
+                    style="@style/LogoutButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="20dp"
-                    style="@style/LogoutButtonStyle"
-                    app:icon="@drawable/ic_baseline_exit_to_app_24"
-                    android:text="@string/cikisButtonLabel"
                     android:onClick="@{(v) -> profilClickListener.logoutFromApplication(v)}"
-                    app:iconTint="@color/whiteTextColor"
-                    android:textColor="@color/whiteTextColor"/>
+                    android:text="@string/cikisButtonLabel"
+                    android:textColor="@color/whiteTextColor"
+                    app:icon="@drawable/ic_baseline_exit_to_app_24"
+                    app:iconTint="@color/whiteTextColor" />
 
             </LinearLayout>
 

@@ -77,12 +77,8 @@ object KutuphanemAppModule {
     @Provides
     fun provideKullaniciDao(database: KutuphanemDatabase) = database.getKullaniciDao();
 
-    /*@FragmentScoped
+    @Singleton
     @Provides
-    fun provideProfilIslemViewModel(application: Application,
-                                    kullaniciService: KullaniciService,
-                                    kullaniciDao: KullaniciDao,
-                                    customSharedPreferences: CustomSharedPreferences):ViewModelProvider.Factory{
-        return ProfilIslemViewModelFactory(application,kullaniciService,kullaniciDao,customSharedPreferences);
-    }*/
+    fun provideKitapDao(database: KutuphanemDatabase) = database.getKitapDao();
+
 }

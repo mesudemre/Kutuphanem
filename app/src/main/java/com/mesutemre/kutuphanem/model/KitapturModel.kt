@@ -6,6 +6,7 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 @Entity
 data class KitapturModel(
@@ -19,7 +20,7 @@ data class KitapturModel(
     @SerializedName("aciklama")
     @Expose
     var aciklama:String?
-){
+): Serializable {
     @SerializedName("resim")
     @Ignore
     @Expose

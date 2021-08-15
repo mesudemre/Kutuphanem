@@ -6,13 +6,13 @@ import android.os.Message
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.progressindicator.CircularDrawingDelegate
 import com.google.android.material.progressindicator.CircularIndeterminateAnimatorDelegate
@@ -35,9 +35,9 @@ class AnasayfaFragment:Fragment() {
 
     private var anasayfaBinding:AnasayfaFragmentBinding? = null
     private val viewModel:AnasayfaViewModel by viewModels()
-    private lateinit var dashKategoriAdapter: DashKategoriAdapter
-    private lateinit var tanitimPagerAdapter:TanitimTabViewPagerAdapter
-    private lateinit var kitapSearchResultAdapter: KitapSearchResultAdapter
+    private var dashKategoriAdapter: DashKategoriAdapter? = null;
+    private var tanitimPagerAdapter:TanitimTabViewPagerAdapter? = null;
+    private var kitapSearchResultAdapter: KitapSearchResultAdapter? = null;
     private lateinit var handler:Handler
 
     companion object{
@@ -73,11 +73,18 @@ class AnasayfaFragment:Fragment() {
 
         });
 
+        anasayfaBinding!!.searchInputEditText.setOnItemClickListener { parent, view, position, id ->
+            val selectedKitap = kitapSearchResultAdapter?.getItem(position);
+            anasayfaBinding!!.searchInputEditText.setText("");
+            val action = AnasayfaFragmentDirections.actionAnasayfaFragmentToKitapDetayFragment(selectedKitap!!);
+            Navigation.findNavController(anasayfaBinding!!.root).navigate(action);
+        }
+
         prepareProggressForSearch();
 
         handler = Handler(object:Handler.Callback{
             override fun handleMessage(message: Message): Boolean {
-                if(!TextUtils.isEmpty(anasayfaBinding!!.searchInputEditText.text) && anasayfaBinding!!.searchInputEditText.text.length>2){
+                if(anasayfaBinding != null && !TextUtils.isEmpty(anasayfaBinding!!.searchInputEditText.text) && anasayfaBinding!!.searchInputEditText.text.length>2){
                     viewModel.searchKitapYazar(anasayfaBinding!!.searchInputEditText.text.toString())
                     observeSearchKitap()
                 }
@@ -112,7 +119,7 @@ class AnasayfaFragment:Fragment() {
 
     private fun observeSearchKitap(){
         viewModel.kitapSearchResult.observe(viewLifecycleOwner, Observer { kitapListe->
-            kitapSearchResultAdapter.updateKitapSearchListe(kitapListe);
+            kitapSearchResultAdapter?.updateKitapSearchListe(kitapListe);
         });
 
         viewModel.kitapSearchLoading.observe(viewLifecycleOwner, Observer { it->
@@ -131,7 +138,7 @@ class AnasayfaFragment:Fragment() {
     private fun observeDashKategoriListe(){
         viewModel.dashKategoriListe.observe(viewLifecycleOwner, Observer { kitapTurListe->
             kitapTurListe?.let {
-                dashKategoriAdapter.updateKategorListe(kitapTurListe)
+                dashKategoriAdapter?.updateKategorListe(kitapTurListe)
             }
         })
 
@@ -173,7 +180,10 @@ class AnasayfaFragment:Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        this.anasayfaBinding = null
+        this.anasayfaBinding = null;
+        this.dashKategoriAdapter = null;
+        this.tanitimPagerAdapter = null;
+        this.kitapSearchResultAdapter = null;
     }
 
 }

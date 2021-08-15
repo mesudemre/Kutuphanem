@@ -26,7 +26,7 @@ class ParametreYayineviFragment:Fragment() {
     lateinit var customSharedPreferences: CustomSharedPreferences;
 
     private val viewModel:ParametreYayineviViewModel by viewModels();
-    private lateinit var adapter:YayinEviAdapter;
+    private var adapter:YayinEviAdapter? = null;
     private var parametreYayinEviBinding:ParametreYayineviFragmentBinding? = null;
 
 
@@ -69,7 +69,7 @@ class ParametreYayineviFragment:Fragment() {
     private fun observeLiveData(){
         viewModel.yayineviListe.observe(viewLifecycleOwner, Observer { yayineviListe->
             yayineviListe?.let {
-                adapter.updateYayineviListe(yayineviListe);
+                adapter?.updateYayineviListe(yayineviListe);
             }
         });
 
@@ -101,6 +101,6 @@ class ParametreYayineviFragment:Fragment() {
     override fun onDestroyView() {
         super.onDestroyView();
         parametreYayinEviBinding = null;
+        adapter = null;
     }
-
 }

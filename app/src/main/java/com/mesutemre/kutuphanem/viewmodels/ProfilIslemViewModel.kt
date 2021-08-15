@@ -215,7 +215,7 @@ class ProfilIslemViewModel @Inject constructor(application: Application,
         kullaniciGuncelleLoading.value = true;
         val usernameParam: RequestBody = RequestBody.create(MediaType.parse("text/plain"),username);
         val originalFile: File =  org.apache.commons.io.FileUtils.getFile(getPath(context,selectedImageUri));
-        val fileParam:RequestBody = RequestBody.create(MediaType.parse(context!!.contentResolver.getType(selectedImageUri)),originalFile);
+        val fileParam:RequestBody = RequestBody.create(MediaType.parse("image/jpeg"),originalFile);
         val file: MultipartBody.Part = MultipartBody.Part.createFormData("file",originalFile.name,fileParam);
         disposible.add(
             kullaniciService.kullaniciResimGuncelle(file,usernameParam)

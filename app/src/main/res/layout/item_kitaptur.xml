@@ -29,9 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignRight="@id/kitapTurAdText"
                 android:layout_alignParentEnd="true"
-                android:foreground="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
+                android:rippleEffect="@{true}"
                 android:onClick="@{(v) -> listener.onKitapturDeleteClicked(v,kitaptur)}"
                 android:src="@drawable/ic_baseline_delete_24" />
 

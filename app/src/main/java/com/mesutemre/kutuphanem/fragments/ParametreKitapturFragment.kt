@@ -26,7 +26,7 @@ class ParametreKitapturFragment:Fragment() {
     lateinit var customSharedPreferences: CustomSharedPreferences;
 
     private val viewModel: ParametreKitapturViewModel by viewModels();
-    private lateinit var adapter:KitapTurAdapter;
+    private var adapter:KitapTurAdapter? = null;
     private var parametreKitapturBinding:ParametreKitapturFragmentBinding? = null;
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,7 +67,7 @@ class ParametreKitapturFragment:Fragment() {
         viewModel.kitapturListe.observe(viewLifecycleOwner, Observer { kitapTurListe->
             kitapTurListe?.let {
                 parametreKitapturBinding!!.kitapTurListeRw.visibility = View.VISIBLE;
-                adapter.updateKitapTurListe(kitapTurListe);
+                adapter?.updateKitapTurListe(kitapTurListe);
             }
         });
 
@@ -99,5 +99,6 @@ class ParametreKitapturFragment:Fragment() {
     override fun onDestroyView() {
         super.onDestroyView();
         parametreKitapturBinding = null;
+        adapter = null;
     }
 }

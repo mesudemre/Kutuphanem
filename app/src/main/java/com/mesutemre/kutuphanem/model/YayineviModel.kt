@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 @Entity
 data class YayineviModel(
@@ -18,7 +19,7 @@ data class YayineviModel(
         @SerializedName("aciklama")
         @Expose
         var aciklama:String?
-) {
+) : Serializable {
 
         override fun toString(): String {
                 return aciklama!!;

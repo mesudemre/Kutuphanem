@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_anasayfaFragment_to_kitapListeFragment"
             app:destination="@id/kitapListeFragment" />
+        <action
+            android:id="@+id/action_anasayfaFragment_to_kitapDetayFragment"
+            app:destination="@id/kitapDetayFragment" />
     </fragment>
     <fragment
         android:id="@+id/kitapListeFragment"
@@ -22,6 +25,9 @@
         <action
             android:id="@+id/action_kitapListeFragment_to_parametreFragment"
             app:destination="@id/parametreFragment" />
+        <action
+            android:id="@+id/action_kitapListeFragment_to_kitapDetayFragment"
+            app:destination="@id/kitapDetayFragment" />
     </fragment>
     <fragment
         android:id="@+id/parametreFragment"
@@ -56,5 +62,13 @@
         android:id="@+id/kitapEklemeFragment"
         android:name="com.mesutemre.kutuphanem.fragments.KitapEklemeFragment"
         android:label="KitapEklemeFragment" />
+    <fragment
+        android:id="@+id/kitapDetayFragment"
+        android:name="com.mesutemre.kutuphanem.fragments.KitapDetayFragment"
+        android:label="KitapDetayFragment" >
+        <argument
+            android:name="kitapObj"
+            app:argType="com.mesutemre.kutuphanem.model.KitapModel"/>
+    </fragment>
 
 </navigation>

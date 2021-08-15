@@ -30,9 +30,7 @@
                 android:onClick="@{(v) -> listener.onYayineviDeleteClicked(v,yayinevi)}"
                 android:layout_alignParentEnd="true"
                 android:src="@drawable/ic_baseline_delete_24"
-                android:foreground="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"/>
+                android:rippleEffect="@{true}"/>
 
             <TextView
                 android:id="@+id/yayinEviAdText"

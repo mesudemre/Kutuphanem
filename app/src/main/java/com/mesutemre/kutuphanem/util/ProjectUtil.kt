@@ -2,7 +2,9 @@ package com.mesutemre.kutuphanem.util
 
 import android.content.ContentUris
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -10,6 +12,7 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.text.SpannableStringBuilder
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
@@ -28,14 +31,16 @@ import com.google.android.material.textfield.TextInputLayout
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
 import com.mesutemre.kutuphanem.model.SnackTypeEnum
+import kotlinx.android.synthetic.main.resim_sec_bottom_sheet_dialog_fragment.*
 import java.io.*
+import java.net.HttpURLConnection
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.jvm.Throws
 
 const val APP_TOKEN_KEY:String = "APP_TOKEN";
 const val KULLANICI_ADI_KEY:String = "KULLANICI_ADI";
-const val API_URL:String = "http://192.168.1.103:8080/KutuphaneSistemiWS/";
+const val API_URL:String = "http://192.168.1.104:8080/KutuphaneSistemiWS/";
 const val KUTUPHANEM_DB_NAME = "kutuphanem";
 const val PARAM_YAYINEVI_DB_KEY:String = "PARAM_YAYINEVI";
 const val PARAM_KITAPTUR_DB_KEY:String = "PARAM_KITAPTUR";
@@ -52,7 +57,7 @@ fun ImageView.getImageFromUrl(url:String?, iv: ImageView){
     circularProgressDrawable.start()
     val options = RequestOptions()
         .placeholder(circularProgressDrawable)
-        .error(R.mipmap.kutuphanem_icon_round);
+        .error(R.mipmap.ic_launcher);
     Glide.with(context)
         .setDefaultRequestOptions(options)
         .load(url)
@@ -68,7 +73,7 @@ fun ImageView.getCircleImageFromUrl(url:String?, iv: ImageView){
         .placeholder(circularProgressDrawable)
         .diskCacheStrategy(DiskCacheStrategy.NONE)
         .skipMemoryCache(true)
-        .error(R.mipmap.kutuphanem_icon_round);
+        .error(R.mipmap.ic_launcher);
     Glide.with(context)
         .setDefaultRequestOptions(options)
         .load(url)
@@ -233,6 +238,7 @@ fun getStreamFile(context: Context,uri:Uri):String?{
     val inputStream = context.contentResolver.openInputStream(uri);
     val createFile = createImageFile();
     copyInputStreamToFile(inputStream!!, createFile);
+    inputStream.close();
     return createFile.absolutePath;
 }
 
@@ -290,4 +296,79 @@ fun TextInputEditText.hideKeyboard(et:TextInputEditText){
 
 fun TextInputEditText.clearContent(et:TextInputEditText){
     et.editableText.clear();
+}
+
+@BindingAdapter(value = ["android:rippleEffect"])
+fun rippleEffect(view:View,value:Boolean){
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        val outValue = TypedValue();
+        view.context.theme.resolveAttribute(android.R.attr.selectableItemBackground,outValue,true);
+        view.foreground = view.context.getDrawable(outValue.resourceId);
+    }
+}
+
+fun getBitmapFromUrl(url:String): Bitmap? {
+    var input: InputStream? = null;
+    var bitMap:Bitmap? = null;
+    var connection: HttpURLConnection? = null;
+    try {
+        val url: URL = URL(url);
+        connection = url.openConnection() as HttpURLConnection;
+        connection.setDoInput(true);
+        connection.connect();
+        input = connection.inputStream;
+        bitMap = BitmapFactory.decodeStream(input);
+    }
+    catch (e: Exception) {
+        e.printStackTrace();
+    }
+    finally {
+        input?.close();
+        if(connection != null){
+            connection.disconnect();
+        }
+    }
+    return bitMap;
+}
+
+fun bitmapToFile(bitmap: Bitmap, fileNameToSave: String,requireContext: Context): File? {
+    var file: File? = null
+    return try {
+        file = File(createOutputDirectory(requireContext),fileNameToSave);
+
+        val bos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos) // YOU can also save it in JPEG
+        val bitmapdata = bos.toByteArray()
+
+        val fos = FileOutputStream(file)
+        fos.write(bitmapdata)
+        fos.flush()
+        fos.close()
+        file
+    } catch (e: Exception) {
+        e.printStackTrace()
+        file // it will return null
+    }
+}
+
+fun createOutputDirectory(context: Context): File {
+    val mediaDir = context.externalMediaDirs.firstOrNull()?.let {
+        File(it, context.resources.getString(R.string.app_name)).apply { mkdirs() }
+    }
+    return if (mediaDir != null && mediaDir.exists())
+        mediaDir else context.filesDir
+}
+
+fun checkDeviceHasCamera(ctx:Context):Boolean{
+    if(ctx.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)){
+        return true;
+    }
+    return false;
+}
+
+fun checkDeviceHasFronCamera(ctx:Context):Boolean{
+    if(ctx.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT)){
+        return true;
+    }
+    return false;
 }

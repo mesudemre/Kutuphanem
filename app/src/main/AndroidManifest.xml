@@ -19,6 +19,7 @@
         android:roundIcon="@mipmap/kutuphanem_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Kutuphanem"
+        android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
         <activity android:name=".SplashActivity" android:theme="@style/NoActionBar" >
@@ -38,6 +39,15 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
     </application>
 
 </manifest>

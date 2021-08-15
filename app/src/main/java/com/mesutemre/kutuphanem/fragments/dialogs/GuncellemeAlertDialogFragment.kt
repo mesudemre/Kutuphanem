@@ -3,7 +3,6 @@ package com.mesutemre.kutuphanem.fragments.dialogs
 import android.app.Dialog
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog

@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.kitap_liste_fragment.*
 @AndroidEntryPoint
 class KitapListeFragment:Fragment() {
 
-    private lateinit var adapter:KitapListeAdapter;
+    private var adapter:KitapListeAdapter? = null;
     private var kitapListeBinding:KitapListeFragmentBinding? = null
     private val viewModel: KitapListeViewModel by viewModels();
 
@@ -52,8 +52,8 @@ class KitapListeFragment:Fragment() {
         adapter = KitapListeAdapter{viewModel.retry()};
         kitapListeBinding!!.kitapListeRw.adapter = adapter;
         viewModel.kitapListe.observe(viewLifecycleOwner, Observer { kitapListe->
-            adapter.submitList(kitapListe);
-            adapter.notifyDataSetChanged();
+            adapter?.submitList(kitapListe);
+            adapter?.notifyDataSetChanged();
         });
     }
 
@@ -65,7 +65,7 @@ class KitapListeFragment:Fragment() {
             kitapListeBinding!!.kitapListeErrorTextId.visibility =
                     if(viewModel.listIsEmpty() && kitapState == KitapListeState.ERROR) View.VISIBLE else View.GONE;
             if(!viewModel.listIsEmpty()){
-                adapter.setState(KitapListeState.DONE);
+                adapter?.setState(KitapListeState.DONE);
             }
         });
     }
@@ -73,5 +73,6 @@ class KitapListeFragment:Fragment() {
     override fun onDestroyView() {
         super.onDestroyView();
         kitapListeBinding = null;
+        adapter = null;
     }
 }

@@ -1,8 +1,9 @@
 package com.mesutemre.kutuphanem.converters
 
-import androidx.databinding.InverseMethod
 import androidx.room.TypeConverter
 import com.mesutemre.kutuphanem.model.CinsiyetModel
+import com.mesutemre.kutuphanem.model.KitapturModel
+import com.mesutemre.kutuphanem.model.YayineviModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -32,13 +33,13 @@ class Converters {
 
         @TypeConverter
         @JvmStatic
-        public fun cinsiyetToString(value:CinsiyetModel):String?{
+        fun cinsiyetToString(value:CinsiyetModel):String?{
             return value.toString();
         }
 
         @TypeConverter
         @JvmStatic
-        public fun stringToCinsiyet(value: String):CinsiyetModel?{
+        fun stringToCinsiyet(value: String):CinsiyetModel?{
             var cinsiyetModel:CinsiyetModel = CinsiyetModel(null,null);
             if(value == "ERKEK"){
                 cinsiyetModel = CinsiyetModel("ERKEK","Bay");
@@ -47,8 +48,29 @@ class Converters {
             }
             return cinsiyetModel;
         }
+
+        @TypeConverter
+        @JvmStatic
+        fun kitapTurToString(value:KitapturModel):String?{
+            return value.toString();
+        }
+
+        @TypeConverter
+        @JvmStatic
+        fun stringToKitapTur(value: String):KitapturModel?{
+            return KitapturModel(0,value);
+        }
+
+        @TypeConverter
+        @JvmStatic
+        fun yayinEviToString(value:YayineviModel):String?{
+            return value.toString();
+        }
+
+        @TypeConverter
+        @JvmStatic
+        fun stringToYayinEvi(value: String):YayineviModel?{
+            return YayineviModel(0,value);
+        }
     }
-
-
-
 }

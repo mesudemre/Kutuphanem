@@ -26,4 +26,5 @@
     <color name="kategoriBackground">#F1F1F1</color>
     <color name="acikSari">#F5FAAA</color>
     <color name="imageShadow">#A6A4A3</color>
+    <color name="kitapDetayItemBackground">#EFEDED</color>
 </resources>

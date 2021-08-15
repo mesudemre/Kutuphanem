@@ -4,9 +4,28 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../layout/custom_preview.xml" value="0.12239583333333333" />
+        <entry key="app/src/main/res/drawable/detay_textview_background.xml" value="0.1265625" />
+        <entry key="app/src/main/res/drawable/ic_baseline_share_24.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_baseline_share_72.xml" value="0.12239583333333333" />
+        <entry key="app/src/main/res/drawable/ic_heart.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/kitap_detay_kitap_img_background.xml" value="0.1125" />
+        <entry key="app/src/main/res/drawable/like_heart.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/like_heart_checked_to_unchecked.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/like_heart_unchecked_to_checked.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/like_heart_vector.xml" value="0.1" />
         <entry key="app/src/main/res/layout/anasayfa_fragment.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/foo.xml" value="0.17391304347826086" />
+        <entry key="app/src/main/res/layout/fragment_kitap_detay.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_dash_kategori.xml" value="0.11927083333333334" />
+        <entry key="app/src/main/res/layout/item_kitap_search.xml" value="0.1308876811594203" />
+        <entry key="app/src/main/res/layout/item_kitaptur.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/item_yayinevi.xml" value="0.11927083333333334" />
         <entry key="app/src/main/res/layout/layout_login.xml" value="0.10729166666666666" />
         <entry key="app/src/main/res/layout/parametre_ekleme_fragment.xml" value="0.17844202898550723" />
+        <entry key="app/src/main/res/layout/parametre_kitaptur_fragment.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/profil_islem_fragment.xml" value="0.17391304347826086" />
+        <entry key="app/src/main/res/layout/resim_sec_bottom_sheet_dialog_fragment.xml" value="0.1" />
+        <entry key="app/src/main/res/xml/provider_paths.xml" value="0.1" />
       </map>
     </option>
   </component>

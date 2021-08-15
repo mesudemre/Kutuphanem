@@ -16,7 +16,7 @@ class KitapListeAdapter(private val retry: () -> Unit):
     companion object{
         val KitapListeDiffCallBack = object :DiffUtil.ItemCallback<KitapModel>(){
             override fun areItemsTheSame(oldItem: KitapModel, newItem: KitapModel): Boolean {
-                return oldItem.id==newItem.id;
+                return oldItem.kitapId==newItem.kitapId;
             }
 
             override fun areContentsTheSame(oldItem: KitapModel, newItem: KitapModel): Boolean {

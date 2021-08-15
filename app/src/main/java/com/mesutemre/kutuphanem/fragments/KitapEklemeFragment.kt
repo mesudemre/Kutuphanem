@@ -1,4 +1,4 @@
-package com.mesutemre.kutuphanem.fragments
+package com.mesutemre.kutuphanem.fragments;
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -31,6 +31,7 @@ import com.mesutemre.kutuphanem.model.SnackTypeEnum
 import com.mesutemre.kutuphanem.model.YayineviModel
 import com.mesutemre.kutuphanem.util.CAMERA_REQUEST_CODE
 import com.mesutemre.kutuphanem.util.clearContent
+import com.mesutemre.kutuphanem.util.createOutputDirectory
 import com.mesutemre.kutuphanem.util.showSnackBar
 import com.mesutemre.kutuphanem.viewmodels.KitapEklemeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,9 +64,7 @@ class KitapEklemeFragment:Fragment() {
             savedKitapUri = savedInstanceState.getParcelable("kitapImage")
         }
         cameraExecutor = Executors.newSingleThreadExecutor()
-        outputDirectory = getOutputDirectory()
-
-
+        outputDirectory = createOutputDirectory(requireContext());
     }
 
     override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
@@ -311,14 +310,6 @@ class KitapEklemeFragment:Fragment() {
             })
     }
 
-    private fun getOutputDirectory(): File {
-        val mediaDir = requireContext().externalMediaDirs.firstOrNull()?.let {
-            File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
-        }
-        return if (mediaDir != null && mediaDir.exists())
-            mediaDir else requireContext().filesDir
-    }
-
     private fun observeSpinnerList(){
         viewModel.kitapEklemeKitapTurListe.observe(viewLifecycleOwner,Observer{kitapTurListe->
             val adapter = ArrayAdapter(kitapEklemeBinding!!.kitapTurlerSpinnerId.context,
@@ -411,7 +402,4 @@ class KitapEklemeFragment:Fragment() {
         }
         super.onSaveInstanceState(outState)
     }
-
-
-
 }
