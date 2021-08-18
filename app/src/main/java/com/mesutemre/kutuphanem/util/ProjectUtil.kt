@@ -57,7 +57,7 @@ fun ImageView.getImageFromUrl(url:String?, iv: ImageView){
     circularProgressDrawable.start()
     val options = RequestOptions()
         .placeholder(circularProgressDrawable)
-        .error(R.mipmap.ic_launcher);
+        .error(R.mipmap.kutuphanem_icon_round);
     Glide.with(context)
         .setDefaultRequestOptions(options)
         .load(url)
@@ -73,7 +73,7 @@ fun ImageView.getCircleImageFromUrl(url:String?, iv: ImageView){
         .placeholder(circularProgressDrawable)
         .diskCacheStrategy(DiskCacheStrategy.NONE)
         .skipMemoryCache(true)
-        .error(R.mipmap.ic_launcher);
+        .error(R.mipmap.kutuphanem_icon_round);
     Glide.with(context)
         .setDefaultRequestOptions(options)
         .load(url)

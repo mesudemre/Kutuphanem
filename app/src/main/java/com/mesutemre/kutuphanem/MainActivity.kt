@@ -67,6 +67,7 @@ class MainActivity : AppCompatActivity() {
                 navBottomMenu.visibility = View.VISIBLE;
             }
         }
+        //navHostFragment.navController.backStack.clear();
         NavigationUI.setupWithNavController(navBottomMenu,navHostFragment.navController);
     }
 }

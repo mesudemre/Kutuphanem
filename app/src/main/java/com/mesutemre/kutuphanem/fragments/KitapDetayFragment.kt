@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.mesutemre.kutuphanem.R
+import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.databinding.FragmentKitapDetayBinding
 import com.mesutemre.kutuphanem.model.KitapModel
 import com.mesutemre.kutuphanem.util.formatDate
@@ -21,29 +22,23 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_kitap_detay.view.*
 
 @AndroidEntryPoint
-class KitapDetayFragment:Fragment() {
+class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
 
-    private var dataBinding:FragmentKitapDetayBinding? = null;
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentKitapDetayBinding
+        = FragmentKitapDetayBinding::inflate
+    override val layoutName: String = "fragment_kitap_detay.xml"
+
     private val args:KitapDetayFragmentArgs by navArgs();
     private lateinit var selectedKitap:KitapModel;
     private val viewModel: KitapDetayViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState);
+    override fun onCreateFragment(savedInstanceState: Bundle?) {
         selectedKitap = args.kitapObj;
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        dataBinding = FragmentKitapDetayBinding.inflate(inflater);
-        val view:View = dataBinding!!.root;
-
+    override fun onCreateViewFragment(view: View) {
+        super.onCreateViewFragment(view);
         initializeValues(view);
-
-        return view;
     }
 
     private fun initializeValues(view: View) {
@@ -65,39 +60,35 @@ class KitapDetayFragment:Fragment() {
                 return true;
             }
         });
-
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState);
-
-        dataBinding?.viewMoreImageId?.setOnClickListener {
-            dataBinding?.kitapDetayAciklamaTextId?.maxLines = Integer.MAX_VALUE;
-            dataBinding?.viewMoreImageIdLayout?.visibility = View.GONE;
-            dataBinding?.viewMoreImageId?.visibility = View.GONE;
-            dataBinding?.viewLessImageId?.visibility = View.VISIBLE;
+    override fun onStartFragment() {
+        binding.viewMoreImageId?.setOnClickListener {
+            binding.kitapDetayAciklamaTextId?.maxLines = Integer.MAX_VALUE;
+            binding.viewMoreImageIdLayout?.visibility = View.GONE;
+            binding.viewMoreImageId?.visibility = View.GONE;
+            binding.viewLessImageId?.visibility = View.VISIBLE;
 
             val anim = AnimationUtils.loadAnimation(it.context,R.anim.focus_to_y_animation);
-            dataBinding?.kitapDetayAciklamaTextId?.animation = anim;
-            dataBinding?.kitapDetayAciklamaTextId?.parent?.
-            requestChildFocus(dataBinding?.kitapDetayAciklamaTextId,dataBinding?.kitapDetayAciklamaTextId);
-
+            binding.kitapDetayAciklamaTextId?.animation = anim;
+            binding.kitapDetayAciklamaTextId?.parent?.
+            requestChildFocus(binding.kitapDetayAciklamaTextId,binding.kitapDetayAciklamaTextId);
         }
 
-        dataBinding?.viewLessImageId?.setOnClickListener {
-            dataBinding?.kitapDetayAciklamaTextId?.maxLines = 4;
-            dataBinding?.viewMoreImageIdLayout?.visibility = View.VISIBLE;
-            dataBinding?.viewMoreImageId?.visibility = View.VISIBLE;
-            dataBinding?.viewLessImageId?.visibility = View.GONE;
+        binding.viewLessImageId?.setOnClickListener {
+            binding.kitapDetayAciklamaTextId?.maxLines = 4;
+            binding.viewMoreImageIdLayout?.visibility = View.VISIBLE;
+            binding.viewMoreImageId?.visibility = View.VISIBLE;
+            binding.viewLessImageId?.visibility = View.GONE;
         }
 
-        dataBinding?.shareImageViewId?.setOnClickListener {
+        binding.shareImageViewId?.setOnClickListener {
             val shareIntent = Intent(Intent.ACTION_SEND);
             viewModel.prepareShareKitap(shareIntent,selectedKitap,requireContext());
             observeShareIntent(it);
         }
 
-        dataBinding!!.kitapArsivleImageViewId.setOnClickListener {
+        binding.kitapArsivleImageViewId.setOnClickListener {
             //Bu kısımda kitap room db ye kaydedilecektir...
             /* TODO
             1.Resim indirilip local de tutulacak ->Yukarıda ki metod ProjectUtil classına taşınacak
@@ -112,10 +103,5 @@ class KitapDetayFragment:Fragment() {
         viewModel.shareIntent.observe(viewLifecycleOwner,Observer{
             startActivity(Intent.createChooser(it, view.context.resources.getString(R.string.shareLabel)))
         });
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        dataBinding = null;
     }
 }
