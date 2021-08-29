@@ -10,6 +10,7 @@
     <string name="iptalLabel">İptal</string>
     <string name="takePhoto">Çek</string>
     <string name="shareLabel">Paylaş</string>
+    <string name="archiveLabel">Arşivle</string>
 
     <!--Bottom Navigation Menu -->
     <string name="anasayfaItem">Anasayfa</string>

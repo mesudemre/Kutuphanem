@@ -26,9 +26,7 @@ import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.databinding.KitapEklemeFragmentBinding
 import com.mesutemre.kutuphanem.fragments.dialogs.DogumTarihiDialogFragment
 import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
-import com.mesutemre.kutuphanem.model.KitapturModel
-import com.mesutemre.kutuphanem.model.SnackTypeEnum
-import com.mesutemre.kutuphanem.model.YayineviModel
+import com.mesutemre.kutuphanem.model.*
 import com.mesutemre.kutuphanem.util.CAMERA_REQUEST_CODE
 import com.mesutemre.kutuphanem.util.clearContent
 import com.mesutemre.kutuphanem.util.createOutputDirectory
@@ -140,7 +138,7 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
             val kitapAciklama = binding.textInputKitapAciklama.editText?.text.toString()
 
             if(savedKitapUri == null){
-                showSnackBar(it,it.context.getString(R.string.kitapResimErrorText),SnackTypeEnum.WARNING)
+                showSnackBar(it,it.context.getString(R.string.kitapResimErrorText), WARNING)
                 return@setOnClickListener
             }
 
@@ -165,12 +163,12 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
             }
 
             if(selectedKitapTur == 0){
-                showSnackBar(it,it.context.getString(R.string.kitapTurErrorText),SnackTypeEnum.WARNING)
+                showSnackBar(it,it.context.getString(R.string.kitapTurErrorText),WARNING)
                 return@setOnClickListener
             }
 
             if(selectedYayinevi == 0){
-                showSnackBar(it,it.context.getString(R.string.yayinEviErrorText),SnackTypeEnum.WARNING)
+                showSnackBar(it,it.context.getString(R.string.yayinEviErrorText),WARNING)
                 return@setOnClickListener
             }
 
@@ -201,9 +199,10 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
             binding.kitapKayitProgressLayoutId.visibility = View.GONE
             kitapKaydet.let {
                 if(kitapKaydet){
-                    showSnackBar(view,view.context.resources.getString(R.string.kitapKaydiBasarli),SnackTypeEnum.SUCCESS)
+                    showSnackBar(view,view.context.resources.getString(R.string.kitapKaydiBasarli),SUCCESS)
                 }else{
-                    showSnackBar(view,view.context.resources.getString(R.string.kitapKaydiHataText),SnackTypeEnum.ERROR)
+                    showSnackBar(view,view.context.resources.getString(R.string.kitapKaydiHataText),
+                        ERROR)
                 }
             }
         })
@@ -222,7 +221,7 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
         viewModel.kitapKaydetHata.observe(viewLifecycleOwner,Observer{it->
             binding.kitapKayitProgressLayoutId.visibility = View.GONE
             if(it){
-                showSnackBar(view,view.context.resources.getString(R.string.kitapKaydiHataText),SnackTypeEnum.ERROR)
+                showSnackBar(view,view.context.resources.getString(R.string.kitapKaydiHataText),ERROR)
             }
         })
     }
@@ -230,10 +229,10 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
     private fun observeKitapResimYukleme(view:View){
         viewModel.kitapResimYukle.observe(viewLifecycleOwner, Observer { response->
             if(response.statusCode.equals("200")){
-                showSnackBar(view,response.statusMessage,SnackTypeEnum.SUCCESS);
+                showSnackBar(view,response.statusMessage,SUCCESS);
                 formTemizle();
             }else{
-                showSnackBar(view,view.context.resources.getString(R.string.kitapResimErrorText),SnackTypeEnum.ERROR)
+                showSnackBar(view,view.context.resources.getString(R.string.kitapResimErrorText),ERROR)
             }
         })
 
@@ -250,7 +249,7 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
 
         viewModel.kitapResimYukleHata.observe(viewLifecycleOwner,Observer{it->
             if(it){
-                showSnackBar(view,view.context.resources.getString(R.string.kitapResmiYuklemeHata),SnackTypeEnum.ERROR)
+                showSnackBar(view,view.context.resources.getString(R.string.kitapResmiYuklemeHata),ERROR)
             }
         })
     }

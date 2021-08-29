@@ -1,13 +1,15 @@
 package com.mesutemre.kutuphanem.fragments
 
+import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.animation.AnimationUtils
-import androidx.fragment.app.Fragment
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
@@ -31,6 +33,7 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
     private val args:KitapDetayFragmentArgs by navArgs();
     private lateinit var selectedKitap:KitapModel;
     private val viewModel: KitapDetayViewModel by viewModels()
+    private var sharedImageUri: Uri? = null;
 
     override fun onCreateFragment(savedInstanceState: Bundle?) {
         selectedKitap = args.kitapObj;
@@ -83,9 +86,9 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
         }
 
         binding.shareImageViewId?.setOnClickListener {
-            val shareIntent = Intent(Intent.ACTION_SEND);
-            viewModel.prepareShareKitap(shareIntent,selectedKitap,requireContext());
-            observeShareIntent(it);
+            viewModel.prepareShareKitap(selectedKitap,requireContext());
+            observeShareUri();
+            shareObserve();
         }
 
         binding.kitapArsivleImageViewId.setOnClickListener {
@@ -99,9 +102,29 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
         }
     }
 
-    private fun observeShareIntent(view:View) {
-        viewModel.shareIntent.observe(viewLifecycleOwner,Observer{
-            startActivity(Intent.createChooser(it, view.context.resources.getString(R.string.shareLabel)))
+    private fun observeShareUri() {
+        viewModel.shareUri.observe(viewLifecycleOwner,Observer{
+            sharedImageUri = it;
         });
+    }
+
+    private fun shareObserve(){
+        viewModel.imageDownloaded.observe(viewLifecycleOwner,Observer{
+            if(it){
+                val shareIntent = Intent(Intent.ACTION_SEND);
+                shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                shareIntent.setType("image/png");
+                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                shareIntent.putExtra(Intent.EXTRA_TEXT,selectedKitap.kitapAd+" "+requireContext().resources.getString(R.string.paylasimKitapAdText));
+                shareIntent.putExtra(Intent.EXTRA_STREAM, sharedImageUri);
+                resultLauncher.launch(Intent.createChooser(shareIntent, requireContext().resources.getString(R.string.shareLabel)))
+                viewModel.imageDownloaded.value = false;
+            }
+        });
+    }
+
+    var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_CANCELED) {
+        }
     }
 }

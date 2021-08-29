@@ -60,7 +60,8 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
     private fun setFragmentInfo():Unit{
         val fragment = findNavController()?.currentDestination;
-        Log.d("Fragment",fragment?.label?.toString());
+        Log.d("Fragment", fragment?.label?.toString().toString());
         Log.d("Fragment Layout",layoutName);
     }
+
 }

@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.databinding.ItemYayineviBinding
 import com.mesutemre.kutuphanem.listener.YayineviDeleteClickListener
-import com.mesutemre.kutuphanem.model.SnackTypeEnum
+import com.mesutemre.kutuphanem.model.ERROR
+import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.model.YayineviModel
 import com.mesutemre.kutuphanem.util.showSnackBar
 import com.mesutemre.kutuphanem.viewmodels.ParametreYayineviViewModel
@@ -65,7 +66,7 @@ class YayinEviAdapter(val yayinEviListe:ArrayList<YayineviModel>,
 
     private fun observeYayinevSil(view: View){
         viewModel.yayinEviSilResponse.observe(lifeCycleOwner, Observer { response->
-            showSnackBar(view,response.statusMessage,SnackTypeEnum.SUCCESS);
+            showSnackBar(view,response.statusMessage, SUCCESS);
             if(token != null){
                 viewModel.yayinEviListeGetir(true);
             }
@@ -75,7 +76,8 @@ class YayinEviAdapter(val yayinEviListe:ArrayList<YayineviModel>,
         viewModel.yayinEviSilError.observe(lifeCycleOwner, Observer {error->
             error?.let {
                 if(it){
-                    showSnackBar(view,view.context.resources.getString(R.string.yayinEviSilmeHata),SnackTypeEnum.ERROR);
+                    showSnackBar(view,view.context.resources.getString(R.string.yayinEviSilmeHata),
+                        ERROR);
                 }
             }
         });

@@ -1,17 +1,29 @@
 package com.mesutemre.kutuphanem.fragments
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.adapters.KitapListeAdapter
 import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.customcomponents.LinearSpacingDecoration
+import com.mesutemre.kutuphanem.customcomponents.SwipeToArchiveCallback
 import com.mesutemre.kutuphanem.databinding.KitapListeFragmentBinding
 import com.mesutemre.kutuphanem.model.KitapListeState
+import com.mesutemre.kutuphanem.model.KitapModel
+import com.mesutemre.kutuphanem.model.SUCCESS
+import com.mesutemre.kutuphanem.util.showSnackBar
+import com.mesutemre.kutuphanem.viewholder.KitapListeViewHolder
 import com.mesutemre.kutuphanem.viewmodels.KitapListeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.kitap_liste_fragment.*
@@ -25,6 +37,8 @@ class KitapListeFragment:BaseFragment<KitapListeFragmentBinding>() {
 
     private var adapter:KitapListeAdapter? = null;
     private val viewModel: KitapListeViewModel by viewModels();
+    private var sharedImageUri:Uri? = null;
+    private var selectedSharedKitap:KitapModel? = null;
 
     override fun onCreateFragment(savedInstanceState: Bundle?) {
     }
@@ -40,6 +54,76 @@ class KitapListeFragment:BaseFragment<KitapListeFragmentBinding>() {
             binding.kitapListeSwipeRefreshLayout.isRefreshing = false;
             this.initAdapter();
             this.initState();
+        }
+
+        val archiveSwipeHandler = object:SwipeToArchiveCallback(requireContext(),
+            ItemTouchHelper.LEFT){
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                //TODO : Bu kısımda kitap arşivleme metodu çağırılacak...
+                adapter?.notifyItemChanged(viewHolder.adapterPosition);
+                showSnackBar(view!!,"Kitap arşivlendi", SUCCESS);
+            }
+
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false;
+            }
+
+        }
+        val itemTouchHelper:ItemTouchHelper = ItemTouchHelper(archiveSwipeHandler);
+        itemTouchHelper.attachToRecyclerView(binding.kitapListeRw);
+
+        val shareSwipeHandler = object:SwipeToArchiveCallback(requireContext(),
+            ItemTouchHelper.RIGHT){
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                adapter?.notifyItemChanged(viewHolder.adapterPosition);
+                val kitapItemHolder:KitapListeViewHolder = viewHolder as KitapListeViewHolder;
+                viewModel.prepareShareKitap(kitapItemHolder.view.kitap!!,requireContext());
+                observeShareUri();
+                selectedSharedKitap = kitapItemHolder.view.kitap!!
+                shareObserve();
+            }
+
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false;
+            }
+
+        }
+        val shareTouchHelper:ItemTouchHelper = ItemTouchHelper(shareSwipeHandler);
+        shareTouchHelper.attachToRecyclerView(binding.kitapListeRw);
+    }
+
+    private fun observeShareUri() {
+        viewModel.shareUri.observe(viewLifecycleOwner,Observer{
+            sharedImageUri = it;
+        });
+    }
+
+    private fun shareObserve(){
+        viewModel.imageDownloaded.observe(viewLifecycleOwner,Observer{
+            if(it){
+                val shareIntent = Intent(Intent.ACTION_SEND);
+                shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                shareIntent.setType("image/png");
+                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                shareIntent.putExtra(Intent.EXTRA_TEXT,selectedSharedKitap?.kitapAd+" "+requireContext().resources.getString(R.string.paylasimKitapAdText));
+                shareIntent.putExtra(Intent.EXTRA_STREAM, sharedImageUri);
+                resultLauncher.launch(Intent.createChooser(shareIntent, requireContext().resources.getString(R.string.shareLabel)))
+                viewModel.imageDownloaded.value = false;
+                selectedSharedKitap = null;
+            }
+        });
+    }
+
+    var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_CANCELED) {
         }
     }
 
@@ -64,6 +148,9 @@ class KitapListeFragment:BaseFragment<KitapListeFragmentBinding>() {
             }
         });
     }
+
+
+
 
     override fun destroyOthers() {
         super.destroyOthers();

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -11,10 +12,10 @@
         android:id="@+id/itemLayoutId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:foreground="?attr/selectableItemBackground"
         android:background="@drawable/card_kitap_border"
         android:clickable="true"
-        android:focusable="true">
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground">
 
         <RelativeLayout
             android:id="@+id/imageLayout"
@@ -25,7 +26,7 @@
                 android:id="@+id/kitapImageId"
                 android:layout_width="110dp"
                 android:layout_height="130dp"
-                android:downloadUrl="@{kitap.kitapResimPath}"/>
+                android:downloadUrl="@{kitap.kitapResimPath}" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -33,11 +34,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/imageLayout">
+
             <LinearLayout
                 android:id="@+id/genelBilgiler"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/kitapAdText"
@@ -52,22 +54,88 @@
                     android:id="@+id/kitapTurText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
                     android:layout_marginTop="5dp"
+                    android:gravity="left"
                     android:text="@{`Kitap Türü : ` + kitap.kitapTur.aciklama}"
                     android:textColor="#4E4E4E"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/kitapAciklamaTextId"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    android:fontFamily="@font/alegreya"
                     android:gravity="left"
                     android:text="@{kitap.kitapAciklama.length()>110 ? kitap.kitapAciklama.substring(0,110)+`...` : kitap.kitapAciklama}"
-                    android:fontFamily="@font/alegreya"
                     android:textColor="#515151"
                     android:textSize="12sp" />
+            </LinearLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/swipeLeftLayoutId"
+            android:layout_width="wrap_content"
+            android:layout_height="130dp"
+            android:layout_alignParentRight="true"
+            android:background="@color/acik_kirmizi"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/swipeItemShareLayoutId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginLeft="20dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_baseline_share_24"
+                    app:tint="@color/whiteTextColor" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/alegreya"
+                    android:text="@string/shareLabel"
+                    android:textColor="@color/whiteTextColor"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/swipeItemArchiveLayoutId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_toRightOf="@+id/swipeItemShareLayoutId"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_baseline_archive_white"
+                    app:tint="@color/whiteTextColor" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/alegreya"
+                    android:text="@string/archiveLabel"
+                    android:textColor="@color/whiteTextColor"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
             </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>

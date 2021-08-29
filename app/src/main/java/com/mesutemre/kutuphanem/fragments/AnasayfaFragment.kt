@@ -34,7 +34,7 @@ import javax.inject.Inject
 class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> AnasayfaFragmentBinding
-         = AnasayfaFragmentBinding::inflate;
+            = AnasayfaFragmentBinding::inflate;
     override val layoutName: String = "anasayfa_fragment.xml";
 
     private val viewModel:AnasayfaViewModel by viewModels()

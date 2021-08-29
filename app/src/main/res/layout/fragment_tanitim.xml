@@ -3,52 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tanitimTextView1"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/tanitimTextView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:fontFamily="@font/alegreya"
-        android:foregroundGravity="center"
-        android:gravity="center"
-        android:text="@string/tanitimText1"
-        android:textAlignment="center"
-        android:textColor="@color/whiteTextColor"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tanitimTextView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:fontFamily="@font/alegreya"
-        android:gravity="center"
-        android:text="@string/tanitimText2"
-        android:textAlignment="center"
-        android:textColor="@color/whiteTextColor"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:visibility="gone" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tanitimTextView3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:fontFamily="@font/alegreya"
-        android:gravity="center"
-        android:text="@string/tanitimText3"
-        android:textAlignment="center"
-        android:textColor="@color/whiteTextColor"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:visibility="gone" />
+        android:layout_height="wrap_content"/>
 
 </RelativeLayout>

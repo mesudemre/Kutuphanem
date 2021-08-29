@@ -12,7 +12,7 @@ import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.databinding.ParametreEklemeFragmentBinding
 import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
-import com.mesutemre.kutuphanem.model.SnackTypeEnum
+import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.util.hideKeyboard
 import com.mesutemre.kutuphanem.util.showSnackBar
 import com.mesutemre.kutuphanem.viewmodels.ParametreEklemeViewModel
@@ -65,7 +65,7 @@ class ParametreEklemeFragment: BaseFragment<ParametreEklemeFragmentBinding>() {
             response?.let {
                 binding.parametreEklemeErrorTextView.visibility = View.GONE;
                 binding.parametreEklemeProgressBar.visibility = View.GONE;
-                showSnackBar(view,response.statusMessage, SnackTypeEnum.SUCCESS);
+                showSnackBar(view,response.statusMessage, SUCCESS);
                 binding.paramTurTextView.text = "";
 
             }

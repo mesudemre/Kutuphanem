@@ -11,7 +11,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem.model.SnackTypeEnum
+import com.mesutemre.kutuphanem.model.ERROR
+import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.util.setMotionVisibility
 import com.mesutemre.kutuphanem.util.showSnackBar
 import com.mesutemre.kutuphanem.viewmodels.ProfilIslemViewModel
@@ -51,9 +52,9 @@ class GuncellemeAlertDialogFragment(val jsonStr:String,
         viewModel.kullaniciGuncelleSonuc.observe(lifeCycleOwner, Observer { response->
             response.let {
                 if(it.statusCode.equals("200")){
-                    showSnackBar(mevcutView,response.statusMessage,SnackTypeEnum.SUCCESS);
+                    showSnackBar(mevcutView,response.statusMessage, SUCCESS);
                 }else{
-                    showSnackBar(mevcutView,response.statusMessage,SnackTypeEnum.ERROR);
+                    showSnackBar(mevcutView,response.statusMessage, ERROR);
                 }
             }
         });
@@ -70,7 +71,7 @@ class GuncellemeAlertDialogFragment(val jsonStr:String,
 
         viewModel.kullaniciGuncelleError.observe(lifeCycleOwner,Observer{it->
             progresBar.visibility = View.GONE;
-            showSnackBar(mevcutView,mevcutView.context.getString(R.string.profilGuncellemeSunucuHata),SnackTypeEnum.ERROR)
+            showSnackBar(mevcutView,mevcutView.context.getString(R.string.profilGuncellemeSunucuHata),ERROR)
         });
     }
 

@@ -2,6 +2,7 @@ package com.mesutemre.kutuphanem.util
 
 import android.content.ContentUris
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -17,8 +18,12 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
@@ -30,7 +35,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
-import com.mesutemre.kutuphanem.model.SnackTypeEnum
+import com.mesutemre.kutuphanem.model.*
 import kotlinx.android.synthetic.main.resim_sec_bottom_sheet_dialog_fragment.*
 import java.io.*
 import java.net.HttpURLConnection
@@ -49,6 +54,7 @@ const val CAMERA_REQUEST_CODE:Int = 1991;
 const val READ_EXTERNAL_STORAGE_REQUEST_CODE:Int=1992;
 const val WRITE_EXTERNAL_STORAGE_REQUEST_CODE:Int=2019;
 const val SHARED_PREF_FILE:String = "KUTUPHANEM_SP";
+
 
 fun ImageView.getImageFromUrl(url:String?, iv: ImageView){
     val circularProgressDrawable = CircularProgressDrawable(iv.context);
@@ -151,7 +157,7 @@ fun View.setMotionVisibility(visibility: Int) {
     }
 }
 
-fun showSnackBar(view:View,message:String,type: SnackTypeEnum){
+fun showSnackBar(view:View, message:String,@SnackType type: Int){
     var builder:SpannableStringBuilder  = SpannableStringBuilder();
     val sb: Snackbar = Snackbar.make(view,message, Snackbar.LENGTH_SHORT);
     val tv =sb.view.findViewById(com.google.android.material.R.id.snackbar_text) as TextView;
@@ -160,13 +166,13 @@ fun showSnackBar(view:View,message:String,type: SnackTypeEnum){
     tv.setTextColor(view.resources.getColor(R.color.whiteTextColor,null))
 
     when(type){
-        SnackTypeEnum.SUCCESS->{
+        SUCCESS->{
             sb.setBackgroundTint(view.resources.getColor(R.color.fistikYesil,null));
         }
-        SnackTypeEnum.WARNING->{
+        WARNING->{
             sb.setBackgroundTint(view.resources.getColor(R.color.acikTuruncu,null));
         }
-        else->{
+        ERROR->{
             sb.setBackgroundTint(view.resources.getColor(R.color.kirmizi,null));
         }
 
@@ -371,4 +377,12 @@ fun checkDeviceHasFronCamera(ctx:Context):Boolean{
         return true;
     }
     return false;
+}
+fun shareKitap(kitap:KitapModel, requireContext: Context):Uri{
+    val kitapResim = getBitmapFromUrl(kitap.kitapResimPath!!);
+    val bytes: ByteArrayOutputStream = ByteArrayOutputStream();
+    kitapResim!!.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+    val photoFile = bitmapToFile(kitapResim!!,kitap.kitapAd+"_"+kitap.kitapId+".png",requireContext);
+    val imageUri: Uri = FileProvider.getUriForFile(requireContext,"com.mesutemre.kutuphanem.provider",photoFile!!);
+    return imageUri;
 }

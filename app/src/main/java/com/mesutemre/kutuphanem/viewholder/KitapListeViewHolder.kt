@@ -16,6 +16,10 @@ class KitapListeViewHolder(var view: ItemKitapBinding): RecyclerView.ViewHolder(
         }
     }
 
+    fun getKitapItem():KitapModel?{
+        return this.view.kitap;
+    }
+
     companion object {
         fun create(parent: ViewGroup): KitapListeViewHolder {
             val inflater = LayoutInflater.from(parent.context);
