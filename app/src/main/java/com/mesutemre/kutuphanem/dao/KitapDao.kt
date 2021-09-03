@@ -16,4 +16,7 @@ interface KitapDao {
 
     @Query("DELETE FROM kitapmodel WHERE id=:kitapId")
     suspend fun kitapSil(kitapId:Int):Unit;
+
+    @Query("SELECT * FROM kitapmodel WHERE id=:kitapId")
+    suspend fun getKitapById(kitapId: Int):KitapModel;
 }

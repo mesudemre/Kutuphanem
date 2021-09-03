@@ -5,6 +5,7 @@
       <map>
         <entry key="../../../../../layout/custom_preview.xml" value="0.12239583333333333" />
         <entry key="app/src/main/res/drawable/detay_textview_background.xml" value="0.1265625" />
+        <entry key="app/src/main/res/drawable/ic_baseline_archive_48.xml" value="0.1265625" />
         <entry key="app/src/main/res/drawable/ic_baseline_archive_white.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_baseline_share_24.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_baseline_share_72.xml" value="0.12239583333333333" />
@@ -27,6 +28,7 @@
         <entry key="app/src/main/res/layout/item_yayinevi.xml" value="0.11927083333333334" />
         <entry key="app/src/main/res/layout/kitap_ekleme_fragment.xml" value="0.25" />
         <entry key="app/src/main/res/layout/kitap_item_swipe_layout.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/kitap_liste_fragment.xml" value="0.21958925750394945" />
         <entry key="app/src/main/res/layout/layout_login.xml" value="0.10729166666666666" />
         <entry key="app/src/main/res/layout/parametre_ekleme_fragment.xml" value="0.17844202898550723" />
         <entry key="app/src/main/res/layout/parametre_kitaptur_fragment.xml" value="0.1" />

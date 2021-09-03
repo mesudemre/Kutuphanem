@@ -16,9 +16,12 @@ import androidx.navigation.fragment.navArgs
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.databinding.FragmentKitapDetayBinding
+import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.model.KitapModel
+import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.util.formatDate
 import com.mesutemre.kutuphanem.util.getImageFromUrl
+import com.mesutemre.kutuphanem.util.showSnackBar
 import com.mesutemre.kutuphanem.viewmodels.KitapDetayViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_kitap_detay.view.*
@@ -37,10 +40,12 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
 
     override fun onCreateFragment(savedInstanceState: Bundle?) {
         selectedKitap = args.kitapObj;
+        viewModel.kitapArsivlenmisMi(selectedKitap.kitapId!!);
     }
 
     override fun onCreateViewFragment(view: View) {
         super.onCreateViewFragment(view);
+        observeKitapArsivlenmisMi();
         initializeValues(view);
     }
 
@@ -88,43 +93,79 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
         binding.shareImageViewId?.setOnClickListener {
             viewModel.prepareShareKitap(selectedKitap,requireContext());
             observeShareUri();
-            shareObserve();
         }
 
         binding.kitapArsivleImageViewId.setOnClickListener {
-            //Bu kısımda kitap room db ye kaydedilecektir...
-            /* TODO
-            1.Resim indirilip local de tutulacak ->Yukarıda ki metod ProjectUtil classına taşınacak
-            2.Kitap bilgileri room dbye kaydedilecek.
-            3.Tüm bu işlemler viewmodel tarafında yapılacaktır...
-            4.Yukarıdaki share kısmıda dahil olmak üzere buradaki işlemde viewmodel tarafında yapılacaktır...
-             */
+            viewModel.kitapArsivle(selectedKitap,it.context);
+            observeKitapArsiv(it);
+        }
+
+        binding.kitapArsivCikarImageViewId.setOnClickListener {
+            viewModel.kitapArsivdenCikar(selectedKitap,it.context);
+            observeKitapArsivSilme(it);
         }
     }
 
     private fun observeShareUri() {
         viewModel.shareUri.observe(viewLifecycleOwner,Observer{
-            sharedImageUri = it;
-        });
-    }
-
-    private fun shareObserve(){
-        viewModel.imageDownloaded.observe(viewLifecycleOwner,Observer{
-            if(it){
-                val shareIntent = Intent(Intent.ACTION_SEND);
-                shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                shareIntent.setType("image/png");
-                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                shareIntent.putExtra(Intent.EXTRA_TEXT,selectedKitap.kitapAd+" "+requireContext().resources.getString(R.string.paylasimKitapAdText));
-                shareIntent.putExtra(Intent.EXTRA_STREAM, sharedImageUri);
-                resultLauncher.launch(Intent.createChooser(shareIntent, requireContext().resources.getString(R.string.shareLabel)))
-                viewModel.imageDownloaded.value = false;
+            if(it.hasBeenHandled){
+                it.hasBeenHandled = false;
+                if(it.hasBeenError){
+                    showSnackBar(requireView(),
+                        requireView().context.getString(R.string.kitapShareError),
+                        ERROR
+                    );
+                }else{
+                    sharedImageUri = it.peekContent();
+                    val shareIntent = Intent(Intent.ACTION_SEND);
+                    shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    shareIntent.setType("image/png");
+                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    shareIntent.putExtra(Intent.EXTRA_TEXT,selectedKitap.kitapAd+" "+requireContext().resources.getString(R.string.paylasimKitapAdText));
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, sharedImageUri);
+                    resultLauncher.launch(Intent.createChooser(shareIntent, requireContext().resources.getString(R.string.shareLabel)))
+                }
             }
         });
     }
 
+    private fun observeKitapArsiv(view:View){
+        viewModel.arsivKitap.observe(viewLifecycleOwner,Observer{
+           if(it.hasBeenHandled) {
+               showSnackBar(view,it.peekContent(), SUCCESS);
+               binding.kitapArsivleImageViewId.visibility = View.GONE;
+               binding.kitapArsivCikarImageViewId.visibility = View.VISIBLE;
+               it.hasBeenHandled = false;
+           }
+        });
+
+        viewModel.kitapResimDownload.observe(viewLifecycleOwner,Observer{
+           if(it.hasBeenHandled) {
+               it.hasBeenHandled = false;
+           }
+        });
+    }
+
+    private fun observeKitapArsivlenmisMi(){
+        viewModel.kitapArsivMevcut.observe(viewLifecycleOwner,Observer{
+            it.hasBeenHandled = true;
+            if(!it.hasBeenError) {
+                binding.kitapArsivCikarImageViewId.visibility = View.VISIBLE;
+                binding.kitapArsivleImageViewId.visibility = View.GONE;
+            }
+        });
+    }
+
+    private fun observeKitapArsivSilme(view: View) {
+        viewModel.arsivKitapSil.observe(viewLifecycleOwner,Observer{
+           it.hasBeenHandled = true;
+            showSnackBar(view,it.peekContent(), SUCCESS);
+            binding.kitapArsivleImageViewId.visibility = View.VISIBLE;
+            binding.kitapArsivCikarImageViewId.visibility = View.GONE;
+            it.hasBeenHandled = false;
+        });
+    }
+
     var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_CANCELED) {
-        }
     }
 }

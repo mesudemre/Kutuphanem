@@ -19,9 +19,7 @@ import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.customcomponents.LinearSpacingDecoration
 import com.mesutemre.kutuphanem.customcomponents.SwipeToArchiveCallback
 import com.mesutemre.kutuphanem.databinding.KitapListeFragmentBinding
-import com.mesutemre.kutuphanem.model.KitapListeState
-import com.mesutemre.kutuphanem.model.KitapModel
-import com.mesutemre.kutuphanem.model.SUCCESS
+import com.mesutemre.kutuphanem.model.*
 import com.mesutemre.kutuphanem.util.showSnackBar
 import com.mesutemre.kutuphanem.viewholder.KitapListeViewHolder
 import com.mesutemre.kutuphanem.viewmodels.KitapListeViewModel
@@ -59,9 +57,11 @@ class KitapListeFragment:BaseFragment<KitapListeFragmentBinding>() {
         val archiveSwipeHandler = object:SwipeToArchiveCallback(requireContext(),
             ItemTouchHelper.LEFT){
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                //TODO : Bu kısımda kitap arşivleme metodu çağırılacak...
+                val kitapItemHolder:KitapListeViewHolder = viewHolder as KitapListeViewHolder;
+                viewModel.kitapArsivle(kitapItemHolder.view.kitap!!,requireContext());
                 adapter?.notifyItemChanged(viewHolder.adapterPosition);
-                showSnackBar(view!!,"Kitap arşivlendi", SUCCESS);
+                observeKitapArsiv(view!!);
+                observeArsivUri(view!!);
             }
 
             override fun onMove(
@@ -84,7 +84,6 @@ class KitapListeFragment:BaseFragment<KitapListeFragmentBinding>() {
                 viewModel.prepareShareKitap(kitapItemHolder.view.kitap!!,requireContext());
                 observeShareUri();
                 selectedSharedKitap = kitapItemHolder.view.kitap!!
-                shareObserve();
             }
 
             override fun onMove(
@@ -100,24 +99,54 @@ class KitapListeFragment:BaseFragment<KitapListeFragmentBinding>() {
         shareTouchHelper.attachToRecyclerView(binding.kitapListeRw);
     }
 
-    private fun observeShareUri() {
-        viewModel.shareUri.observe(viewLifecycleOwner,Observer{
-            sharedImageUri = it;
+    private fun observeArsivUri(view: View){
+        viewModel.arsivUri.observe(viewLifecycleOwner,Observer{
+            if(it.hasBeenHandled){
+                it.hasBeenHandled = false;
+                binding.arsivPanelLayoutId.visibility = View.VISIBLE;
+                if(it.hasBeenError){
+                    binding.arsivPanelLayoutId.visibility = View.GONE;
+                    showSnackBar(view,view.context.getString(R.string.kitapArsivResimHata), ERROR);
+                }else{
+                    binding.arsivPanelLayoutId.visibility = View.GONE;
+                }
+            }
         });
     }
 
-    private fun shareObserve(){
-        viewModel.imageDownloaded.observe(viewLifecycleOwner,Observer{
-            if(it){
-                val shareIntent = Intent(Intent.ACTION_SEND);
-                shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                shareIntent.setType("image/png");
-                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                shareIntent.putExtra(Intent.EXTRA_TEXT,selectedSharedKitap?.kitapAd+" "+requireContext().resources.getString(R.string.paylasimKitapAdText));
-                shareIntent.putExtra(Intent.EXTRA_STREAM, sharedImageUri);
-                resultLauncher.launch(Intent.createChooser(shareIntent, requireContext().resources.getString(R.string.shareLabel)))
-                viewModel.imageDownloaded.value = false;
-                selectedSharedKitap = null;
+    private fun observeKitapArsiv(view:View) {
+        viewModel.arsivKitap.observe(viewLifecycleOwner,Observer{
+            if(it.hasBeenHandled) {
+                it.hasBeenHandled = false;
+                if(it.hasBeenError){
+                    showSnackBar(view,it.peekContent(), WARNING);
+                }else{
+                    showSnackBar(view,it.peekContent(), SUCCESS);
+                }
+            }
+        });
+
+    }
+
+    private fun observeShareUri() {
+        viewModel.shareUri.observe(viewLifecycleOwner,Observer{
+            if(it.hasBeenHandled){
+                it.hasBeenHandled = false;
+                if(it.hasBeenError){
+                    showSnackBar(requireView(),
+                        requireView().context.getString(R.string.kitapShareError),
+                        ERROR);
+                }else{
+                    sharedImageUri = it.peekContent();
+                    val shareIntent = Intent(Intent.ACTION_SEND);
+                    shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    shareIntent.setType("image/png");
+                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    shareIntent.putExtra(Intent.EXTRA_TEXT,selectedSharedKitap?.kitapAd+" "+requireContext().resources.getString(R.string.paylasimKitapAdText));
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, sharedImageUri);
+                    resultLauncher.launch(Intent.createChooser(shareIntent, requireContext().resources.getString(R.string.shareLabel)))
+                    selectedSharedKitap = null;
+                }
             }
         });
     }
@@ -148,9 +177,6 @@ class KitapListeFragment:BaseFragment<KitapListeFragmentBinding>() {
             }
         });
     }
-
-
-
 
     override fun destroyOthers() {
         super.destroyOthers();

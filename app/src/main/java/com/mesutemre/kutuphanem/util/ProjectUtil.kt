@@ -2,7 +2,6 @@ package com.mesutemre.kutuphanem.util
 
 import android.content.ContentUris
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -18,9 +17,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -45,7 +41,7 @@ import java.util.*
 
 const val APP_TOKEN_KEY:String = "APP_TOKEN";
 const val KULLANICI_ADI_KEY:String = "KULLANICI_ADI";
-const val API_URL:String = "http://192.168.1.104:8080/KutuphaneSistemiWS/";
+const val API_URL:String = "http://192.168.1.105:8080/KutuphaneSistemiWS/";
 const val KUTUPHANEM_DB_NAME = "kutuphanem";
 const val PARAM_YAYINEVI_DB_KEY:String = "PARAM_YAYINEVI";
 const val PARAM_KITAPTUR_DB_KEY:String = "PARAM_KITAPTUR";
@@ -337,10 +333,23 @@ fun getBitmapFromUrl(url:String): Bitmap? {
     return bitMap;
 }
 
-fun bitmapToFile(bitmap: Bitmap, fileNameToSave: String,requireContext: Context): File? {
+/*fun File.deleteDirectory(): Boolean {
+    return if (exists()) {
+        listFiles()?.forEach {
+            if (it.isDirectory) {
+                it.deleteDirectory()
+            } else {
+                it.delete()
+            }
+        }
+        delete()
+    } else false
+}*/
+
+fun bitmapToFile(bitmap: Bitmap, fileNameToSave: String,requireContext: Context,folderName:String): File? {
     var file: File? = null
     return try {
-        file = File(createOutputDirectory(requireContext),fileNameToSave);
+        file = File(createDownloadedOutputDirectory(requireContext,folderName),fileNameToSave);
 
         val bos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos) // YOU can also save it in JPEG
@@ -365,6 +374,14 @@ fun createOutputDirectory(context: Context): File {
         mediaDir else context.filesDir
 }
 
+fun createDownloadedOutputDirectory(context: Context,folder:String): File {
+    val mediaDir = context.externalMediaDirs.firstOrNull()?.let {
+        File(it, folder).apply { mkdirs() }
+    }
+    return if (mediaDir != null && mediaDir.exists())
+        mediaDir else context.filesDir
+}
+
 fun checkDeviceHasCamera(ctx:Context):Boolean{
     if(ctx.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)){
         return true;
@@ -378,11 +395,21 @@ fun checkDeviceHasFronCamera(ctx:Context):Boolean{
     }
     return false;
 }
-fun shareKitap(kitap:KitapModel, requireContext: Context):Uri{
+fun downloadKitap(kitap:KitapModel, requireContext: Context,isArchive:Boolean):Uri{
     val kitapResim = getBitmapFromUrl(kitap.kitapResimPath!!);
     val bytes: ByteArrayOutputStream = ByteArrayOutputStream();
-    kitapResim!!.compress(Bitmap.CompressFormat.PNG, 100, bytes);
-    val photoFile = bitmapToFile(kitapResim!!,kitap.kitapAd+"_"+kitap.kitapId+".png",requireContext);
-    val imageUri: Uri = FileProvider.getUriForFile(requireContext,"com.mesutemre.kutuphanem.provider",photoFile!!);
-    return imageUri;
+    if(kitapResim != null){
+        kitapResim?.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+        var providerAtuh:String = "com.mesutemre.kutuphanem.provider";
+        var folderName:String = "Kütüphanem";
+        var resimAd:String = kitap.kitapAd+"_"+kitap.kitapId
+        if(isArchive){
+            resimAd = kitap.kitapId.toString();
+        }
+        val photoFile = bitmapToFile(kitapResim!!,resimAd+".png",requireContext,folderName);
+        val imageUri: Uri = FileProvider.getUriForFile(requireContext,providerAtuh,photoFile!!);
+        return imageUri;
+    }
+    return Uri.EMPTY;
 }
+

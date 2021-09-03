@@ -52,6 +52,10 @@
 
     <!--KitapListeFragment -->
     <string name="kitapListeError">Kitap listesi getirilemedi!Tekrar deneyiniz...</string>
+    <string name="kitapShareError">Kitap paylaşıma hazırlanırken hata meydana geldi</string>
+    <string name="kitapArsivResimHata">Kitap resmi arşivlenemedi!</string>
+    <string name="kitapArsivleniyorText">Kitap arşivleniyor...</string>
+    <string name="kitapArsivdeMevcut">Kitap zaten arşivde mevcut!</string>
 
     <!--ProfilIslemFragment -->
     <string name="profilKullaniciAdiLabel">Kullanıcı adınız</string>
@@ -125,4 +129,6 @@
     <string name="yayinEviLabelText">Yayınevi</string>
     <string name="alinmaTarLabelText">Alınma Tarihi</string>
     <string name="paylasimKitapAdText">adlı kitaba göz atın...</string>
+    <string name="kiptaArsivleme">Kitap başarıyla arşivlendi</string>
+    <string name="kitapArsivKaldirma">Kitap arşivden silindi</string>
 </resources>

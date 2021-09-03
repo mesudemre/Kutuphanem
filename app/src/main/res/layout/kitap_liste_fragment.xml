@@ -35,8 +35,36 @@
                 android:indeterminateDrawable="@drawable/wheel_progress_indeterminate"
                 android:layout_height="wrap_content"/>
 
-        </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/arsivPanelLayoutId"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@color/black">
 
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/alegreya_bold"
+                    android:text="@string/kitapArsivleniyorText"
+                    android:textColor="@color/sari"
+                    android:textSize="16sp" />
+
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/sari"
+                    android:indeterminateDrawable="@drawable/wheel_progress_indeterminate_small" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </layout>
