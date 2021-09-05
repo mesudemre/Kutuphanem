@@ -12,10 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
 import com.mesutemre.kutuphanem.model.AccountCredentials
-import com.mesutemre.kutuphanem.util.APP_TOKEN_KEY
-import com.mesutemre.kutuphanem.util.CustomSharedPreferences
-import com.mesutemre.kutuphanem.util.KULLANICI_ADI_KEY
-import com.mesutemre.kutuphanem.util.hideKeyboard
+import com.mesutemre.kutuphanem.util.*
 import com.mesutemre.kutuphanem.viewmodels.LoginActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_login.*
@@ -50,7 +47,7 @@ class LoginActivity : AppCompatActivity() {
             }
             editTextKullaniciAdi.hideKeyboard(editTextKullaniciAdi);
             val accountCredentials = AccountCredentials(kullaniciAdi,sifre);
-            girisProgressBar.visibility = View.VISIBLE;
+            girisProgressBar.showComponent();
             viewModel.doLogin(accountCredentials);
             observeLiveData();
         }
@@ -72,22 +69,22 @@ class LoginActivity : AppCompatActivity() {
         viewModel.isLoading.observe(this, Observer {isLoading->
             isLoading?.let {
                 cirLoginButton.isEnabled = !it;
-                errorTextView.visibility = View.GONE;
+                errorTextView.hideComponent();
                 if(it){
-                    girisProgressBar.visibility = View.VISIBLE;
+                    girisProgressBar.showComponent();
                 }else{
-                    girisProgressBar.visibility = View.GONE;
+                    girisProgressBar.hideComponent();
                 }
             }
         });
 
         viewModel.loginError.observe(this,Observer{loginError->
             loginError?.let {
-                girisProgressBar.visibility = View.GONE;
+                girisProgressBar.hideComponent();
                 if(it){
-                    errorTextView.visibility = View.VISIBLE;
+                    errorTextView.showComponent();
                 }else{
-                    errorTextView.visibility = View.GONE;
+                    errorTextView.hideComponent();
                 }
             }
         });

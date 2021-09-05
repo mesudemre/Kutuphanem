@@ -13,7 +13,9 @@ import androidx.lifecycle.Observer
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.model.SUCCESS
+import com.mesutemre.kutuphanem.util.hideComponent
 import com.mesutemre.kutuphanem.util.setMotionVisibility
+import com.mesutemre.kutuphanem.util.showComponent
 import com.mesutemre.kutuphanem.util.showSnackBar
 import com.mesutemre.kutuphanem.viewmodels.ProfilIslemViewModel
 
@@ -61,16 +63,16 @@ class GuncellemeAlertDialogFragment(val jsonStr:String,
 
         viewModel.kullaniciGuncelleLoading.observe(lifeCycleOwner,Observer{it->
             if(it){
-                progresBar.visibility = View.VISIBLE;
+                progresBar.showComponent();
                 detayLayoutId.setMotionVisibility(View.INVISIBLE);
             }else{
-                progresBar.visibility = View.GONE;
+                progresBar.hideComponent();
                 detayLayoutId.setMotionVisibility(View.VISIBLE);
             }
         });
 
         viewModel.kullaniciGuncelleError.observe(lifeCycleOwner,Observer{it->
-            progresBar.visibility = View.GONE;
+            progresBar.hideComponent();
             showSnackBar(mevcutView,mevcutView.context.getString(R.string.profilGuncellemeSunucuHata),ERROR)
         });
     }

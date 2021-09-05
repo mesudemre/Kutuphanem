@@ -13,6 +13,8 @@ import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.databinding.ParametreKitapturFragmentBinding
 import com.mesutemre.kutuphanem.util.APP_TOKEN_KEY
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
+import com.mesutemre.kutuphanem.util.hideComponent
+import com.mesutemre.kutuphanem.util.showComponent
 import com.mesutemre.kutuphanem.viewmodels.ParametreKitapturViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.parametre_kitaptur_fragment.*
@@ -44,9 +46,9 @@ class ParametreKitapturFragment:BaseFragment<ParametreKitapturFragmentBinding>()
         observeLiveData();
 
         binding.kitapTurSwipeRefreshLayout.setOnRefreshListener {
-            binding.kitapTurProgressBar.visibility = View.VISIBLE;
-            binding.kitapTurErrorTextId.visibility = View.GONE;
-            binding.kitapTurListeRw.visibility = View.GONE;
+            binding.kitapTurProgressBar.showComponent();
+            binding.kitapTurErrorTextId.hideComponent();
+            binding.kitapTurListeRw.hideComponent();
 
             binding.kitapTurSwipeRefreshLayout.isRefreshing = false;
             viewModel.kitapTurListeGetir(true);
@@ -61,7 +63,7 @@ class ParametreKitapturFragment:BaseFragment<ParametreKitapturFragmentBinding>()
     private fun observeLiveData(){
         viewModel.kitapturListe.observe(viewLifecycleOwner, Observer { kitapTurListe->
             kitapTurListe?.let {
-                binding.kitapTurListeRw.visibility = View.VISIBLE;
+                binding.kitapTurListeRw.showComponent();
                 adapter?.updateKitapTurListe(kitapTurListe);
             }
         });
@@ -69,11 +71,11 @@ class ParametreKitapturFragment:BaseFragment<ParametreKitapturFragmentBinding>()
         viewModel.kitapTurError.observe(viewLifecycleOwner,Observer{error->
             error.let {
                 if(it){
-                    binding.kitapTurProgressBar.visibility = View.GONE;
-                    binding.kitapTurErrorTextId.visibility = View.VISIBLE;
-                    binding.kitapTurListeRw.visibility = View.GONE;
+                    binding.kitapTurProgressBar.hideComponent();
+                    binding.kitapTurErrorTextId.showComponent();
+                    binding.kitapTurListeRw.hideComponent();
                 }else{
-                    binding.kitapTurProgressBar.visibility = View.GONE;
+                    binding.kitapTurProgressBar.hideComponent();
                 }
             }
         });
@@ -81,11 +83,11 @@ class ParametreKitapturFragment:BaseFragment<ParametreKitapturFragmentBinding>()
         viewModel.kitapTurLoading.observe(viewLifecycleOwner, Observer { loading->
             loading.let {
                 if(it){
-                    binding.kitapTurProgressBar.visibility = View.VISIBLE;
-                    binding.kitapTurErrorTextId.visibility = View.GONE;
-                    binding.kitapTurListeRw.visibility = View.GONE;
+                    binding.kitapTurProgressBar.showComponent();
+                    binding.kitapTurErrorTextId.hideComponent();
+                    binding.kitapTurListeRw.hideComponent();
                 }else{
-                    binding.kitapTurProgressBar.visibility = View.GONE;
+                    binding.kitapTurProgressBar.hideComponent();
                 }
             }
         })

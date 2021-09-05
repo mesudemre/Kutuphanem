@@ -9,7 +9,7 @@ buildscript {
     ext.navVersion = "2.3.0-alpha04"
     ext.preferencesVersion = "1.1.1"
     ext.swipeRefreshVersion="1.1.0"
-    ext.pagingVersion="2.1.0"
+    ext.pagingVersion="3.0.1"
     ext.rxandroidVersion="2.0.2"
     ext.hilt_version = '2.37'
     ext.camerax_version = '1.0.0-beta12'

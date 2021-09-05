@@ -56,6 +56,9 @@
     <string name="kitapArsivResimHata">Kitap resmi arşivlenemedi!</string>
     <string name="kitapArsivleniyorText">Kitap arşivleniyor...</string>
     <string name="kitapArsivdeMevcut">Kitap zaten arşivde mevcut!</string>
+    <string name="kitapListeAPI">Liste</string>
+    <string name="kitapListeArsiv">Arşivim</string>
+    <string name="kitapListeBegendiklerim">Beğeniler</string>
 
     <!--ProfilIslemFragment -->
     <string name="profilKullaniciAdiLabel">Kullanıcı adınız</string>

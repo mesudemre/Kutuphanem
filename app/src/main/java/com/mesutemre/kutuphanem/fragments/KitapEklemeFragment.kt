@@ -27,10 +27,7 @@ import com.mesutemre.kutuphanem.databinding.KitapEklemeFragmentBinding
 import com.mesutemre.kutuphanem.fragments.dialogs.DogumTarihiDialogFragment
 import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
 import com.mesutemre.kutuphanem.model.*
-import com.mesutemre.kutuphanem.util.CAMERA_REQUEST_CODE
-import com.mesutemre.kutuphanem.util.clearContent
-import com.mesutemre.kutuphanem.util.createOutputDirectory
-import com.mesutemre.kutuphanem.util.showSnackBar
+import com.mesutemre.kutuphanem.util.*
 import com.mesutemre.kutuphanem.viewmodels.KitapEklemeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
@@ -85,8 +82,8 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
             if(kameraIzin != PackageManager.PERMISSION_GRANTED){
                 requestPermissions(arrayOf(Manifest.permission.CAMERA), CAMERA_REQUEST_CODE)
             }else{
-                binding.photoCekLayoutId.visibility = View.VISIBLE;
-                binding.kitapGenelBilgiLayoutId.visibility = View.GONE;
+                binding.photoCekLayoutId.showComponent();
+                binding.kitapGenelBilgiLayoutId.hideComponent();
                 startCamera();
             }
         }
@@ -96,8 +93,8 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
         }
 
         binding.fotoCekIptalButtonId.setOnClickListener {
-            binding.photoCekLayoutId.visibility = View.GONE
-            binding.kitapGenelBilgiLayoutId.visibility = View.VISIBLE;
+            binding.photoCekLayoutId.hideComponent();
+            binding.kitapGenelBilgiLayoutId.showComponent();
             cameraProvider.unbindAll()
         }
 
@@ -196,7 +193,7 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
 
     private fun observeKitapKaydi(view:View){
         viewModel.kitapKaydet.observe(viewLifecycleOwner, Observer { kitapKaydet->
-            binding.kitapKayitProgressLayoutId.visibility = View.GONE
+            binding.kitapKayitProgressLayoutId.hideComponent();
             kitapKaydet.let {
                 if(kitapKaydet){
                     showSnackBar(view,view.context.resources.getString(R.string.kitapKaydiBasarli),SUCCESS)
@@ -209,17 +206,17 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
 
         viewModel.kitapKaydetLoading.observe(viewLifecycleOwner,Observer{it->
             if(it){
-                binding.kitapKayitProgressLayoutId.visibility = View.VISIBLE
+                binding.kitapKayitProgressLayoutId.showComponent();
                 requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             }else{
                 requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                binding.kitapKayitProgressLayoutId.visibility = View.GONE
+                binding.kitapKayitProgressLayoutId.hideComponent();
             }
         })
 
         viewModel.kitapKaydetHata.observe(viewLifecycleOwner,Observer{it->
-            binding.kitapKayitProgressLayoutId.visibility = View.GONE
+            binding.kitapKayitProgressLayoutId.hideComponent();
             if(it){
                 showSnackBar(view,view.context.resources.getString(R.string.kitapKaydiHataText),ERROR)
             }
@@ -238,12 +235,12 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
 
         viewModel.kitapResimYukleLoading.observe(viewLifecycleOwner,Observer{it->
             if(it) {
-                binding.kitapResimYukleProgressLayoutId.visibility = View.VISIBLE
+                binding.kitapResimYukleProgressLayoutId.showComponent();
                 requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                     WindowManager.LayoutParams.FLAG_DIM_BEHIND);
             }else{
                 requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                binding.kitapResimYukleProgressLayoutId.visibility = View.GONE
+                binding.kitapResimYukleProgressLayoutId.hideComponent();
             }
         })
 
@@ -299,8 +296,8 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     savedKitapUri = Uri.fromFile(photoFile)
                     binding.kitapImageCapId.setImageURI(savedKitapUri)
-                    binding.photoCekLayoutId.visibility = View.GONE
-                    binding.kitapGenelBilgiLayoutId.visibility = View.VISIBLE;
+                    binding.photoCekLayoutId.hideComponent();
+                    binding.kitapGenelBilgiLayoutId.showComponent();
                     cameraProvider.unbindAll()
                 }
             })
@@ -329,19 +326,19 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
 
         viewModel.kitapEklemeKitapTurLoading.observe(viewLifecycleOwner,Observer{it->
             if(it){
-                binding.kitapEklemeKitapTurProgressBarId.visibility = View.VISIBLE
-                binding.kitapEklemeKitapTurHataTextView.visibility = View.GONE
+                binding.kitapEklemeKitapTurProgressBarId.showComponent();
+                binding.kitapEklemeKitapTurHataTextView.hideComponent();
             }else{
-                binding.kitapEklemeKitapTurProgressBarId.visibility = View.GONE
+                binding.kitapEklemeKitapTurProgressBarId.hideComponent();
             }
         })
 
         viewModel.kitapEklemeKitapTurError.observe(viewLifecycleOwner,Observer{it->
             if(it){
-                binding.kitapEklemeKitapTurHataTextView.visibility = View.VISIBLE
-                binding.kitapTurlerSpinnerId.visibility = View.GONE
+                binding.kitapEklemeKitapTurHataTextView.showComponent();
+                binding.kitapTurlerSpinnerId.hideComponent();
             }else{
-                binding.kitapEklemeKitapTurHataTextView.visibility = View.GONE
+                binding.kitapEklemeKitapTurHataTextView.hideComponent();
             }
         })
 
@@ -354,19 +351,19 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
 
         viewModel.kitapEklemeYayinEviLoading.observe(viewLifecycleOwner,Observer{it->
             if(it){
-                binding.kitapEklemeYayinEviProgressBarId.visibility = View.VISIBLE
-                binding.kitapEklemeYayinEviHataTextView.visibility = View.GONE
+                binding.kitapEklemeYayinEviProgressBarId.showComponent();
+                binding.kitapEklemeYayinEviHataTextView.hideComponent();
             }else{
-                binding.kitapEklemeYayinEviProgressBarId.visibility = View.GONE
+                binding.kitapEklemeYayinEviProgressBarId.hideComponent();
             }
         })
 
         viewModel.kitapEklemeYayinEviError.observe(viewLifecycleOwner,Observer{it->
             if(it){
-                binding.kitapEklemeYayinEviHataTextView.visibility = View.VISIBLE
-                binding.yayinEviSpinnerId.visibility = View.GONE
+                binding.kitapEklemeYayinEviHataTextView.showComponent();
+                binding.yayinEviSpinnerId.hideComponent();
             }else{
-                binding.kitapEklemeYayinEviHataTextView.visibility = View.GONE
+                binding.kitapEklemeYayinEviHataTextView.hideComponent();
             }
         })
     }
@@ -380,8 +377,8 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
         if(requestCode == CAMERA_REQUEST_CODE){
             kameraIzin = ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.CAMERA)
             if(grantResults.size>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                binding.photoCekLayoutId.visibility = View.VISIBLE
-                binding.kitapGenelBilgiLayoutId.visibility = View.GONE;
+                binding.photoCekLayoutId.showComponent();
+                binding.kitapGenelBilgiLayoutId.hideComponent();
                 startCamera()
             }
         }

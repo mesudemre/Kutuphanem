@@ -22,9 +22,9 @@ import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
-class KitapListeViewModel  @Inject constructor(application: Application,
-                                                 private val kitapDao: KitapDao,
-                                                 private val kitapService: IKitapService
+class KitapListeAPIViewModel  @Inject constructor(application: Application,
+                                                  private val kitapDao: KitapDao,
+                                                  private val kitapService: IKitapService
 ): AndroidViewModel(application), CoroutineScope {
 
     private val disposible = CompositeDisposable();

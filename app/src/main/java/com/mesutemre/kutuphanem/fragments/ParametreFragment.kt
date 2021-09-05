@@ -21,10 +21,10 @@ class ParametreFragment:BaseFragment<ParametreFragmentBinding>() {
     private val fragmentBasliklar:ArrayList<String> = ArrayList<String>();
 
     override fun onCreateFragment(savedInstanceState: Bundle?) {
+        addFragments();
     }
 
     override fun onStartFragment() {
-        addFragments();
         val fragmentAdapter = ParametreTabViewPagerAdapter(childFragmentManager,lifecycle,fragmentListe);
         binding.parametreViewPager.adapter = fragmentAdapter;
 

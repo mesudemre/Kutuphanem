@@ -13,7 +13,9 @@ import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.databinding.ParametreEklemeFragmentBinding
 import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
 import com.mesutemre.kutuphanem.model.SUCCESS
+import com.mesutemre.kutuphanem.util.hideComponent
 import com.mesutemre.kutuphanem.util.hideKeyboard
+import com.mesutemre.kutuphanem.util.showComponent
 import com.mesutemre.kutuphanem.util.showSnackBar
 import com.mesutemre.kutuphanem.viewmodels.ParametreEklemeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,28 +65,28 @@ class ParametreEklemeFragment: BaseFragment<ParametreEklemeFragmentBinding>() {
     private fun observeLiveData(view:View){
         viewModel.parametreEklemeResponse.observe(viewLifecycleOwner, Observer { response->
             response?.let {
-                binding.parametreEklemeErrorTextView.visibility = View.GONE;
-                binding.parametreEklemeProgressBar.visibility = View.GONE;
+                binding.parametreEklemeErrorTextView.hideComponent();
+                binding.parametreEklemeProgressBar.hideComponent();
                 showSnackBar(view,response.statusMessage, SUCCESS);
                 binding.paramTurTextView.text = "";
 
             }
         });
         viewModel.parametreEklemeLoading.observe(viewLifecycleOwner, Observer {
-            binding.parametreEklemeErrorTextView.visibility = View.GONE;
+            binding.parametreEklemeErrorTextView.hideComponent();
             binding.parametreKaydetButton.isEnabled = !it;
             if (it){
-                binding.parametreEklemeProgressBar.visibility = View.VISIBLE;
+                binding.parametreEklemeProgressBar.showComponent();
             }else{
-                binding.parametreEklemeProgressBar.visibility = View.GONE;
+                binding.parametreEklemeProgressBar.hideComponent();
             }
         });
         viewModel.parametreEklemeError.observe(viewLifecycleOwner, Observer {
-            binding.parametreEklemeProgressBar.visibility = View.GONE;
+            binding.parametreEklemeProgressBar.hideComponent();
             if(it){
-                binding.parametreEklemeErrorTextView.visibility = View.VISIBLE;
+                binding.parametreEklemeErrorTextView.showComponent();
             }else{
-                binding.parametreEklemeErrorTextView.visibility = View.GONE;
+                binding.parametreEklemeErrorTextView.hideComponent();
             }
         });
     }

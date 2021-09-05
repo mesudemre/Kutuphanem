@@ -2,7 +2,6 @@ package com.mesutemre.kutuphanem.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -13,6 +12,8 @@ import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.databinding.ParametreYayineviFragmentBinding
 import com.mesutemre.kutuphanem.util.APP_TOKEN_KEY
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
+import com.mesutemre.kutuphanem.util.hideComponent
+import com.mesutemre.kutuphanem.util.showComponent
 import com.mesutemre.kutuphanem.viewmodels.ParametreYayineviViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -43,9 +44,9 @@ class ParametreYayineviFragment: BaseFragment<ParametreYayineviFragmentBinding>(
         observeLiveData();
 
         binding.yayinEviSwipeRefreshLayout.setOnRefreshListener {
-            binding.yayinEviListeRw.visibility = View.GONE;
-            binding.yayinEviErrorTextId.visibility = View.GONE;
-            binding.yayinEviProgressBar.visibility = View.VISIBLE;
+            binding.yayinEviListeRw.hideComponent();
+            binding.yayinEviErrorTextId.hideComponent();
+            binding.yayinEviProgressBar.showComponent();
 
             binding.yayinEviSwipeRefreshLayout.isRefreshing = false;
 
@@ -68,11 +69,11 @@ class ParametreYayineviFragment: BaseFragment<ParametreYayineviFragmentBinding>(
         viewModel.yayinEviError.observe(viewLifecycleOwner, Observer {error->
             error?.let {
                 if(it){
-                    binding.yayinEviErrorTextId.visibility = View.VISIBLE;
-                    binding.yayinEviListeRw.visibility = View.GONE;
+                    binding.yayinEviErrorTextId.showComponent();
+                    binding.yayinEviListeRw.hideComponent();
                 }else{
-                    binding.yayinEviListeRw.visibility = View.VISIBLE;
-                    binding.yayinEviErrorTextId.visibility = View.GONE;
+                    binding.yayinEviListeRw.showComponent();
+                    binding.yayinEviErrorTextId.hideComponent();
                 }
             }
         });
@@ -80,11 +81,11 @@ class ParametreYayineviFragment: BaseFragment<ParametreYayineviFragmentBinding>(
         viewModel.yayinEviLoading.observe(viewLifecycleOwner, Observer {loading->
             loading.let {
                 if(it){
-                    binding.yayinEviProgressBar.visibility = View.VISIBLE;
-                    binding. yayinEviListeRw.visibility = View.GONE;
-                    binding.yayinEviErrorTextId.visibility = View.GONE;
+                    binding.yayinEviProgressBar.showComponent();
+                    binding. yayinEviListeRw.hideComponent();
+                    binding.yayinEviErrorTextId.hideComponent();
                 }else{
-                    binding.yayinEviProgressBar.visibility = View.GONE;
+                    binding.yayinEviProgressBar.hideComponent();
                 }
             }
         })

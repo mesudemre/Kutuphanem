@@ -26,6 +26,8 @@ import com.mesutemre.kutuphanem.adapters.TanitimTabViewPagerAdapter
 import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.databinding.AnasayfaFragmentBinding
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
+import com.mesutemre.kutuphanem.util.hideComponent
+import com.mesutemre.kutuphanem.util.showComponent
 import com.mesutemre.kutuphanem.viewmodels.AnasayfaViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -41,7 +43,7 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
     private var dashKategoriAdapter: DashKategoriAdapter? = null;
     private var tanitimPagerAdapter:TanitimTabViewPagerAdapter? = null;
     private var kitapSearchResultAdapter: KitapSearchResultAdapter? = null;
-    private lateinit var handler:Handler
+    private lateinit var handler:Handler;
 
     companion object{
         const val TRIGGER_AUTO_COMPLETE:Int = 100
@@ -59,7 +61,6 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
         kitapSearchResultAdapter = KitapSearchResultAdapter(requireActivity(),R.layout.item_kitap_search, arrayListOf());
         binding.searchInputEditText.threshold = 2;
         binding.searchInputEditText.setAdapter(kitapSearchResultAdapter);
-
         binding.searchInputEditText.addTextChangedListener(object:TextWatcher{
 
             override fun afterTextChanged(p0: Editable?) {
@@ -141,19 +142,19 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
 
         viewModel.dashKategoriListeLoading.observe(viewLifecycleOwner, Observer { loading->
             if(loading){
-                binding.dashKategoriProgressBarId.visibility = View.VISIBLE;
-                binding.dashKategoriHataTextView.visibility = View.GONE;
+                binding.dashKategoriProgressBarId.showComponent();
+                binding.dashKategoriHataTextView.hideComponent();
             }else{
-                binding.dashKategoriProgressBarId.visibility = View.GONE;
+                binding.dashKategoriProgressBarId.hideComponent();
             }
         })
 
         viewModel.dashKategoriListeError.observe(viewLifecycleOwner,Observer{error->
             if(error){
-                binding.dashKategoriHataTextView.visibility = View.VISIBLE;
-                binding.dashKategoriRecyclerView.visibility = View.GONE;
+                binding.dashKategoriHataTextView.showComponent();
+                binding.dashKategoriRecyclerView.hideComponent();
             }else{
-                binding.dashKategoriHataTextView.visibility = View.GONE;
+                binding.dashKategoriHataTextView.hideComponent();
             }
         })
     }
@@ -177,6 +178,7 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
 
     override fun destroyOthers() {
         super.destroyOthers();
+        handler.removeCallbacksAndMessages(null);
         this.dashKategoriAdapter = null;
         this.tanitimPagerAdapter = null;
         this.kitapSearchResultAdapter = null;

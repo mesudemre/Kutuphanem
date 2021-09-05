@@ -46,6 +46,11 @@
         <item name="android:textStyle">bold</item>
         <item name="textAllCaps">false</item>
     </style>
+    <style name="KitapListeTabLayoutTextStyle" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/alegreya_bold</item>
+        <item name="textAllCaps">false</item>
+    </style>
     <style name="BottomNavigationItemActive">
         <item name="android:fontFamily">@font/alegreya</item>
         <item name="itemTextColor">@color/nav_icontint_colors</item>
@@ -103,5 +108,15 @@
     </style>
     <style name="KutuphanemRadioButtonStyle" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
         <item name="android:buttonTint">@color/lacivert</item>
+    </style>
+    <style name="TabRoundCardviewStyle" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MaterialCardView.Cut</item>
+    </style>
+    <style name="ShapeAppearanceOverlay.MaterialCardView.Cut" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">30dp</item>
+        <item name="cornerSizeTopLeft">30dp</item>
+        <item name="cornerSizeBottomRight">30dp</item>
+        <item name="cornerSizeBottomLeft">30dp</item>
     </style>
 </resources>

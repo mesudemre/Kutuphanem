@@ -1,6 +1,5 @@
 package com.mesutemre.kutuphanem.fragments
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -19,9 +18,7 @@ import com.mesutemre.kutuphanem.databinding.FragmentKitapDetayBinding
 import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.model.KitapModel
 import com.mesutemre.kutuphanem.model.SUCCESS
-import com.mesutemre.kutuphanem.util.formatDate
-import com.mesutemre.kutuphanem.util.getImageFromUrl
-import com.mesutemre.kutuphanem.util.showSnackBar
+import com.mesutemre.kutuphanem.util.*
 import com.mesutemre.kutuphanem.viewmodels.KitapDetayViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_kitap_detay.view.*
@@ -62,8 +59,8 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
                 view.kitapDetayAciklamaTextId.viewTreeObserver.removeOnPreDrawListener(this);
                 if(view.kitapDetayAciklamaTextId.lineCount>4){
                     view.kitapDetayAciklamaTextId.maxLines = 4;
-                    view.viewMoreImageIdLayout.visibility = View.VISIBLE;
-                    view.viewMoreImageId.visibility = View.VISIBLE;
+                    view.viewMoreImageIdLayout.showComponent();
+                    view.viewMoreImageId.showComponent();
                 }
                 return true;
             }
@@ -73,9 +70,9 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
     override fun onStartFragment() {
         binding.viewMoreImageId?.setOnClickListener {
             binding.kitapDetayAciklamaTextId?.maxLines = Integer.MAX_VALUE;
-            binding.viewMoreImageIdLayout?.visibility = View.GONE;
-            binding.viewMoreImageId?.visibility = View.GONE;
-            binding.viewLessImageId?.visibility = View.VISIBLE;
+            binding.viewMoreImageIdLayout?.hideComponent();
+            binding.viewMoreImageId?.hideComponent();
+            binding.viewLessImageId?.showComponent();
 
             val anim = AnimationUtils.loadAnimation(it.context,R.anim.focus_to_y_animation);
             binding.kitapDetayAciklamaTextId?.animation = anim;
@@ -85,9 +82,9 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
 
         binding.viewLessImageId?.setOnClickListener {
             binding.kitapDetayAciklamaTextId?.maxLines = 4;
-            binding.viewMoreImageIdLayout?.visibility = View.VISIBLE;
-            binding.viewMoreImageId?.visibility = View.VISIBLE;
-            binding.viewLessImageId?.visibility = View.GONE;
+            binding.viewMoreImageIdLayout?.showComponent();
+            binding.viewMoreImageId?.showComponent();
+            binding.viewLessImageId?.hideComponent();
         }
 
         binding.shareImageViewId?.setOnClickListener {
@@ -133,8 +130,8 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
         viewModel.arsivKitap.observe(viewLifecycleOwner,Observer{
            if(it.hasBeenHandled) {
                showSnackBar(view,it.peekContent(), SUCCESS);
-               binding.kitapArsivleImageViewId.visibility = View.GONE;
-               binding.kitapArsivCikarImageViewId.visibility = View.VISIBLE;
+               binding.kitapArsivleImageViewId.hideComponent();
+               binding.kitapArsivCikarImageViewId.showComponent();
                it.hasBeenHandled = false;
            }
         });
@@ -150,8 +147,8 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
         viewModel.kitapArsivMevcut.observe(viewLifecycleOwner,Observer{
             it.hasBeenHandled = true;
             if(!it.hasBeenError) {
-                binding.kitapArsivCikarImageViewId.visibility = View.VISIBLE;
-                binding.kitapArsivleImageViewId.visibility = View.GONE;
+                binding.kitapArsivCikarImageViewId.showComponent();
+                binding.kitapArsivleImageViewId.hideComponent();
             }
         });
     }
@@ -160,8 +157,8 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
         viewModel.arsivKitapSil.observe(viewLifecycleOwner,Observer{
            it.hasBeenHandled = true;
             showSnackBar(view,it.peekContent(), SUCCESS);
-            binding.kitapArsivleImageViewId.visibility = View.VISIBLE;
-            binding.kitapArsivCikarImageViewId.visibility = View.GONE;
+            binding.kitapArsivleImageViewId.showComponent();
+            binding.kitapArsivCikarImageViewId.hideComponent();
             it.hasBeenHandled = false;
         });
     }

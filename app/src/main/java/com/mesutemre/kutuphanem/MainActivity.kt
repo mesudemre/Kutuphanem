@@ -3,7 +3,6 @@ package com.mesutemre.kutuphanem
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
@@ -12,6 +11,8 @@ import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import com.mesutemre.kutuphanem.customcomponents.CurvedBottomNavigationView
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.WRITE_EXTERNAL_STORAGE_REQUEST_CODE
+import com.mesutemre.kutuphanem.util.hideComponent
+import com.mesutemre.kutuphanem.util.showComponent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
@@ -54,17 +55,17 @@ class MainActivity : AppCompatActivity() {
         navHostFragment = supportFragmentManager.findFragmentById(R.id.bottomFragmentId) as NavHostFragment;
         navHostFragment.navController.addOnDestinationChangedListener { controller, destination, arguments ->
             if(destination.label.toString().equals("ParametreEklemeFragment")){
-                floatingActionButton3.visibility = View.GONE;
-                navBottomMenu.visibility = View.GONE;
+                floatingActionButton3.hideComponent();
+                navBottomMenu.hideComponent();
             }else if(destination.label.toString().equals("KitapEklemeFragment")){
-                floatingActionButton3.visibility = View.GONE;
-                navBottomMenu.visibility = View.GONE;
+                floatingActionButton3.hideComponent()
+                navBottomMenu.hideComponent();
             }else if(destination.label.toString().equals("KitapDetayFragment")){
-                floatingActionButton3.visibility = View.GONE;
-                navBottomMenu.visibility = View.GONE;
+                floatingActionButton3.hideComponent();
+                navBottomMenu.hideComponent();
             }else{
-                floatingActionButton3.visibility = View.VISIBLE;
-                navBottomMenu.visibility = View.VISIBLE;
+                floatingActionButton3.showComponent();
+                navBottomMenu.showComponent();
             }
         }
         //navHostFragment.navController.backStack.clear();
