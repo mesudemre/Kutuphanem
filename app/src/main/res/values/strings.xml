@@ -11,6 +11,7 @@
     <string name="takePhoto">Çek</string>
     <string name="shareLabel">Paylaş</string>
     <string name="archiveLabel">Arşivle</string>
+    <string name="noNetworkConnection">İnternet bağlantınız bulunmamaktadır!</string>
 
     <!--Bottom Navigation Menu -->
     <string name="anasayfaItem">Anasayfa</string>
