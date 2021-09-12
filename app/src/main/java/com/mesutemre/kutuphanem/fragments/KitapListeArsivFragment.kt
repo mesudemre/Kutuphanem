@@ -43,6 +43,7 @@ class KitapListeArsivFragment:BaseFragment<KitapListeArsivFragmentBinding>() {
         observeKitapArsivListe();
 
         binding.kitapArsivListeSwipeRefreshLayout.setOnRefreshListener {
+            binding.kitapArsivListeSwipeRefreshLayout.isRefreshing = false;
             adapter?.refresh();
         }
     }

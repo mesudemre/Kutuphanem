@@ -42,6 +42,7 @@ class KitapListeBegendiklerimFragment:BaseFragment<KitapListeBegendiklerimFragme
         initKitapBegeniListe();
 
         binding.kitapBegeniListeSwipeRefreshLayout.setOnRefreshListener {
+            binding.kitapBegeniListeSwipeRefreshLayout.isRefreshing = false;
             adapter?.refresh();
         }
     }

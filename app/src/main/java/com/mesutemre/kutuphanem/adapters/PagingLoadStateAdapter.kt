@@ -1,7 +1,6 @@
 package com.mesutemre.kutuphanem.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
@@ -43,28 +42,20 @@ class PagingLoadStateAdapter <T : Any, VH : RecyclerView.ViewHolder>(
         private val retryCallback: () -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        init {
-            binding.retryButton.setOnClickListener { retryCallback() }
-        }
 
         fun bind(loadState: LoadState) {
             with(binding) {
                 if(loadState is LoadState.Loading){
-                    progressBar.showComponent();
+                    footerLoaderProgressBar.showComponent();
                 }else{
-                    progressBar.hide()
+                    footerLoaderProgressBar.hideComponent();
                 }
 
-                if(loadState is LoadState.Error){
-                    retryButton.showComponent();
-                }else{
-                    retryButton.hideComponent();
-                }
                 if(!(loadState as? LoadState.Error)?.error?.message.isNullOrBlank()){
-                    errorMsg.showComponent();
-                    errorMsg.text = (loadState as? LoadState.Error)?.error?.message
+                    footerLoaderErrorText.showComponent();
+                    footerLoaderErrorText.text = (loadState as? LoadState.Error)?.error?.message
                 }else{
-                    errorMsg.hideComponent();
+                    footerLoaderErrorText.hideComponent();
                 }
             }
         }
