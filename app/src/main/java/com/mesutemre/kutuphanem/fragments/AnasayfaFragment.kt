@@ -9,6 +9,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
@@ -25,6 +26,7 @@ import com.mesutemre.kutuphanem.adapters.KitapSearchResultAdapter
 import com.mesutemre.kutuphanem.adapters.TanitimTabViewPagerAdapter
 import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.databinding.AnasayfaFragmentBinding
+import com.mesutemre.kutuphanem.fragments.dialogs.CloseApplicationDialogFragment
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.hideComponent
 import com.mesutemre.kutuphanem.util.showComponent
@@ -79,7 +81,7 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
         binding.searchInputEditText.setOnItemClickListener { parent, view, position, id ->
             val selectedKitap = kitapSearchResultAdapter?.getItem(position);
             binding.searchInputEditText.setText("");
-            val action = AnasayfaFragmentDirections.actionAnasayfaFragmentToKitapDetayFragment(selectedKitap!!);
+            val action = AnasayfaFragmentDirections.actionAnasayfaFragmentToKitapDetayFragment(selectedKitap!!,false);
             Navigation.findNavController(binding.root).navigate(action);
         }
 
@@ -92,6 +94,12 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
                     observeSearchKitap()
                 }
                 return false
+            }
+        });
+
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                CloseApplicationDialogFragment(parentFragment!!).show(requireFragmentManager(),null);
             }
         });
     }

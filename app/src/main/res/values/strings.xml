@@ -59,6 +59,8 @@
     <string name="kitapListeAPI">Liste</string>
     <string name="kitapListeArsiv">Arşivim</string>
     <string name="kitapListeBegendiklerim">Beğeniler</string>
+    <string name="kitapArsivMevcutDegil">Arşivinizde kayıtlı kitap bulunmamaktadır!</string>
+    <string name="kitapArsivNot">NOT : Kitap listesinden dilediğiniz kitabı arşivleyebilirsiniz...</string>
 
     <!--ProfilIslemFragment -->
     <string name="profilKullaniciAdiLabel">Kullanıcı adınız</string>
@@ -101,6 +103,7 @@
     <string name="tanitimText1">Uygulamamızın yeni versiyonu ile karşınızdayız!</string>
     <string name="tanitimText2">Daha performanslı,daha güvenli ve daha çevik!</string>
     <string name="tanitimText3">İstek ve önerilerinizi muhakkak bekliyoruz...</string>
+    <string name="closeAppLabel">Uygulamayı kapatmak istediğinize emin misiniz?</string>
 
     <!--KitapEklemeFragment -->
     <string name="kitapEklemeTitle">Kitap Ekleme</string>
@@ -134,4 +137,5 @@
     <string name="paylasimKitapAdText">adlı kitaba göz atın...</string>
     <string name="kiptaArsivleme">Kitap başarıyla arşivlendi</string>
     <string name="kitapArsivKaldirma">Kitap arşivden silindi</string>
+    <string name="kitapDetayDeepLinkUrl">http://192.168.1.105:8080/KutuphaneSistemiWS/api/kitap/nesne?kitapId=</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.mesutemre.kutuphanem.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -9,7 +10,7 @@ import com.mesutemre.kutuphanem.model.KitapModel
 interface KitapDao {
 
     @Query("SELECT * FROM kitapmodel")
-    suspend fun getKitapListe():List<KitapModel>;
+    fun getKitapListe():PagingSource<Int,KitapModel>;
 
     @Insert
     suspend fun kitapKaydet(kitapModel: KitapModel):Unit;
@@ -19,4 +20,5 @@ interface KitapDao {
 
     @Query("SELECT * FROM kitapmodel WHERE id=:kitapId")
     suspend fun getKitapById(kitapId: Int):KitapModel;
+
 }

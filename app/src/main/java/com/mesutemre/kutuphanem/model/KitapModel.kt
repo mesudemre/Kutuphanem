@@ -62,15 +62,20 @@ data class KitapModel(
         @ColumnInfo(name = "kitapPuan")
         @SerializedName("kitapPuan")
         @Expose
-        val kitapPuan:Float
+        val kitapPuan:Float,
+
+        @ColumnInfo(name = "begenilmis")
+        @SerializedName("begenilmis")
+        @Expose
+        var kitapBegenilmis:Int
 ):Serializable {
         @Ignore
         var isMenuShown:Boolean = false;
 
-        constructor() : this(null,null,null,null,null,null,null,null,null,0f) {
+        constructor() : this(null,null,null,null,null,null,null,null,null,0f,0) {
         }
 
-        constructor(kitapId:Int) : this(kitapId,null,null,null,null,null,null,null,null,0f) {
+        constructor(kitapId:Int) : this(kitapId,null,null,null,null,null,null,null,null,0f,0) {
         }
 
 }

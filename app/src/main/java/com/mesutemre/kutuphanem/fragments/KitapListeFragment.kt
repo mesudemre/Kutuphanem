@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.paging.ExperimentalPagingApi
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.adapters.ParametreTabViewPagerAdapter

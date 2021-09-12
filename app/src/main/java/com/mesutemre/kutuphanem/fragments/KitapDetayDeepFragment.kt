@@ -8,13 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.animation.AnimationUtils
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.base.BaseFragment
-import com.mesutemre.kutuphanem.databinding.FragmentKitapDetayBinding
+import com.mesutemre.kutuphanem.databinding.FragmentKitapDetayDeepBinding
 import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.model.KitapModel
 import com.mesutemre.kutuphanem.model.SUCCESS
@@ -23,24 +25,28 @@ import com.mesutemre.kutuphanem.viewmodels.KitapDetayViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_kitap_detay.view.*
 
+/**
+ * @Author: mesutemre.celenk
+ * @Date: 9.09.2021
+ */
 @AndroidEntryPoint
-class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
+class KitapDetayDeepFragment: BaseFragment<FragmentKitapDetayDeepBinding>() {
 
-    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentKitapDetayBinding
-            = FragmentKitapDetayBinding::inflate
-    override val layoutName: String = "fragment_kitap_detay.xml"
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentKitapDetayDeepBinding
+            = FragmentKitapDetayDeepBinding::inflate
+    override val layoutName: String = "fragment_kitap_detay_deep.xml"
 
-    private val args:KitapDetayFragmentArgs by navArgs();
-    private lateinit var selectedKitap:KitapModel;
+    private val args:KitapDetayDeepFragmentArgs by navArgs();
+    private lateinit var selectedKitap: KitapModel;
     private val viewModel: KitapDetayViewModel by viewModels()
     private var sharedImageUri: Uri? = null;
     private var isFromArsiv:Boolean = false;
+    private lateinit var kitapId:String;
 
     override fun onCreateFragment(savedInstanceState: Bundle?) {
-        isFromArsiv = args.fromArsiv;
-        selectedKitap = args.kitapObj;
+        kitapId = args.kitapId;
         if(!isFromArsiv){
-            viewModel.getKitapByKitapId(selectedKitap.kitapId!!);
+            viewModel.getKitapByKitapId(Integer.parseInt(kitapId));
         }
     }
 
@@ -48,14 +54,17 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
         super.onCreateViewFragment(view);
         if(!isFromArsiv){
             observeKitapDetay(view);
-        }else{
-            viewModel.kitapArsivlenmisMi(selectedKitap.kitapId!!);
-            observeKitapArsivlenmisMi();
-            initializeValues(view);
         }
+
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                val action = KitapDetayDeepFragmentDirections.actionKitapDetayDeepFragmentToAnasayfaFragment();
+                Navigation.findNavController(view).navigate(action);
+            }
+        });
     }
 
-    private fun observeKitapDetay(view:View){
+    private fun observeKitapDetay(view: View){
         viewModel.selectedKitap.observe(viewLifecycleOwner,Observer{
             if(it.hasBeenHandled){
                 it.hasBeenHandled = false;
@@ -114,7 +123,7 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
             binding.viewMoreImageId?.hideComponent();
             binding.viewLessImageId?.showComponent();
 
-            val anim = AnimationUtils.loadAnimation(it.context,R.anim.focus_to_y_animation);
+            val anim = AnimationUtils.loadAnimation(it.context, R.anim.focus_to_y_animation);
             binding.kitapDetayAciklamaTextId?.animation = anim;
             binding.kitapDetayAciklamaTextId?.parent?.
             requestChildFocus(binding.kitapDetayAciklamaTextId,binding.kitapDetayAciklamaTextId);
@@ -172,13 +181,15 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
                     shareIntent.putExtra(Intent.EXTRA_TEXT,requireContext().resources.getString(R.string.kitapDetayDeepLinkUrl)+"${selectedKitap.kitapId}");
                     //shareIntent.setType("image/png");
                     shareIntent.putExtra(Intent.EXTRA_STREAM, sharedImageUri);
-                    resultLauncher.launch(Intent.createChooser(shareIntent, requireContext().resources.getString(R.string.shareLabel)))
+                    resultLauncher.launch(
+                        Intent.createChooser(shareIntent, requireContext().resources.getString(
+                            R.string.shareLabel)))
                 }
             }
         });
     }
 
-    private fun observeKitapArsiv(view:View){
+    private fun observeKitapArsiv(view: View){
         viewModel.arsivKitap.observe(viewLifecycleOwner,Observer{
             if(it.hasBeenHandled) {
                 showSnackBar(view,it.peekContent(), SUCCESS);
@@ -214,7 +225,7 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
             it.hasBeenHandled = false;
         });
     }
-    private fun observeKitapBegenme(view:View){
+    private fun observeKitapBegenme(view: View){
         viewModel.kitapBegenme.observe(viewLifecycleOwner,Observer{
             if(it.hasBeenHandled){
                 binding.kitapIslemProgressBar.showComponent();
@@ -239,4 +250,6 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
 
     var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
     }
+
+
 }

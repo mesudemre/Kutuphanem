@@ -5,7 +5,7 @@ buildscript {
     ext.retrofitVersion = "2.3.0"
     ext.glideVersion = "4.10.0"
     ext.rxJavaVersion = "2.1.9"
-    ext.roomVersion = "2.2.6"
+    ext.roomVersion = "2.3.0"
     ext.navVersion = "2.3.0-alpha04"
     ext.preferencesVersion = "1.1.1"
     ext.swipeRefreshVersion="1.1.0"

@@ -23,7 +23,15 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import androidx.core.content.FileProvider
+import com.google.gson.JsonObject
+import com.mesutemre.kutuphanem.base.BaseViewModel
+import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.util.getPath
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.schedulers.Schedulers
+import org.json.JSONObject
 
 
 @HiltViewModel
@@ -31,17 +39,17 @@ class KitapDetayViewModel @Inject
 constructor(application: Application,
             private val kitapService: IKitapService,
             private val kitapDao: KitapDao
-): AndroidViewModel(application), CoroutineScope {
-
-    private val job = Job();
-    override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.Main; //Önce işi yap sonra main thread e dön.
+): BaseViewModel(application) {
 
     val shareUri = MutableLiveData<BaseEvent<Uri>>();
     val arsivKitap = MutableLiveData<BaseEvent<String>>();
     val kitapResimDownload = MutableLiveData<BaseEvent<Uri>>();
     val kitapArsivMevcut = MutableLiveData<BaseEvent<KitapModel>>();
     val arsivKitapSil = MutableLiveData<BaseEvent<String>>();
+    val kitapBegenme = MutableLiveData<BaseEvent<ResponseStatusModel>>();
+    val selectedKitap = MutableLiveData<BaseEvent<KitapModel>>();
+
+    override val disposible: CompositeDisposable = CompositeDisposable();
 
     fun prepareShareKitap(kitap:KitapModel, requireContext: Context){
         launch(Dispatchers.IO) {
@@ -118,8 +126,85 @@ constructor(application: Application,
         }
     }
 
-    override fun onCleared() {
-        super.onCleared();
-        job.cancel();
+    fun kitapBegenmeIslem(kitapId: Int,begenilmis:Int){
+        if(begenilmis>0){
+            kitapBegenSil(kitapId);
+        }else{
+            kitapBegen(kitapId);
+        }
+    }
+
+    private fun kitapBegen(kitapId: Int){
+        val jsonObj: JSONObject = JSONObject();
+        jsonObj.put("id",kitapId);
+        disposible.add(
+            kitapService.kitapBegen(jsonObj.toString()) .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<ResponseStatusModel>(){
+                    override fun onSuccess(response: ResponseStatusModel) {
+                        val baseEvent = BaseEvent(response);
+                        baseEvent.hasBeenHandled = true;
+                        if(!response.statusCode.equals("200")){
+                            baseEvent.hasBeenError = true;
+                        }
+                        kitapBegenme.value = baseEvent;
+                    }
+                    override fun onError(e: Throwable) {
+                        val baseEvent = BaseEvent(ResponseStatusModel("500",
+                            context.getString(R.string.profilGuncellemeSunucuHata)));
+                        baseEvent.hasBeenError = true;
+                        baseEvent.hasBeenHandled = true;
+                        kitapBegenme.value = baseEvent;
+                    }
+                }));
+    }
+
+    private fun kitapBegenSil(kitapId: Int){
+        val jsonObj: JSONObject = JSONObject();
+        jsonObj.put("id",kitapId);
+        disposible.add(
+            kitapService.kitapBegenKaldir(jsonObj.toString()) .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<ResponseStatusModel>(){
+                    override fun onSuccess(response: ResponseStatusModel) {
+                        val baseEvent = BaseEvent(response);
+                        baseEvent.hasBeenHandled = true;
+                        if(!response.statusCode.equals("200")){
+                            baseEvent.hasBeenError = true;
+                        }
+                        kitapBegenme.value = baseEvent;
+                    }
+                    override fun onError(e: Throwable) {
+                        val baseEvent = BaseEvent(ResponseStatusModel("500",
+                            context.getString(R.string.profilGuncellemeSunucuHata)));
+                        baseEvent.hasBeenError = true;
+                        baseEvent.hasBeenHandled = true;
+                        kitapBegenme.value = baseEvent;
+                    }
+                }));
+    }
+
+    fun getKitapByKitapId(kitapId: Int){
+        val jsonObj: JSONObject = JSONObject();
+        jsonObj.put("id",kitapId);
+        disposible.add(
+            kitapService.getKitapDetay(jsonObj.toString()) .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<KitapModel>(){
+                    override fun onSuccess(response: KitapModel) {
+                        val baseEvent = BaseEvent(response);
+                        baseEvent.hasBeenHandled = true;
+                        if(response == null){
+                            baseEvent.hasBeenError = true;
+                        }
+                        selectedKitap.value = baseEvent;
+                    }
+                    override fun onError(e: Throwable) {
+                        val baseEvent = BaseEvent(KitapModel());
+                        baseEvent.hasBeenError = true;
+                        baseEvent.hasBeenHandled = true;
+                        selectedKitap.value = baseEvent;
+                    }
+                }));
     }
 }

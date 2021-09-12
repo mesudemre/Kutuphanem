@@ -53,14 +53,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpNavigation(){
         navHostFragment = supportFragmentManager.findFragmentById(R.id.bottomFragmentId) as NavHostFragment;
+        val navController = navHostFragment.navController
         navHostFragment.navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            if(destination.label.toString().equals("ParametreEklemeFragment")){
-                floatingActionButton3.hideComponent();
-                navBottomMenu.hideComponent();
-            }else if(destination.label.toString().equals("KitapEklemeFragment")){
-                floatingActionButton3.hideComponent()
-                navBottomMenu.hideComponent();
-            }else if(destination.label.toString().equals("KitapDetayFragment")){
+            if(destination.id in arrayOf(
+                    R.id.parametreEklemeFragment,
+                    R.id.kitapEklemeFragment,
+                    R.id.kitapDetayFragment,
+                    R.id.kitapDetayDeepFragment
+            )){
                 floatingActionButton3.hideComponent();
                 navBottomMenu.hideComponent();
             }else{

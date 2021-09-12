@@ -3,6 +3,7 @@ package com.mesutemre.kutuphanem.util
 import android.content.Context
 import androidx.room.Room
 import com.mesutemre.kutuphanem.database.KutuphanemDatabase
+import com.mesutemre.kutuphanem.database.MIGRATION_2TO2_1
 import com.mesutemre.kutuphanem.service.IKitapService
 import com.mesutemre.kutuphanem.service.IParametreService
 import com.mesutemre.kutuphanem.service.KullaniciService
@@ -32,7 +33,9 @@ object KutuphanemAppModule {
         context,
         KutuphanemDatabase::class.java,
         KUTUPHANEM_DB_NAME
-    ).build();
+    )
+        .addMigrations(MIGRATION_2TO2_1)
+        .build();
 
     @Singleton
     @Provides

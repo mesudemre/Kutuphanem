@@ -35,7 +35,7 @@ class KitapListeAdapter(private val retry: () -> Unit):
         (holder as KitapListeViewHolder).bind(getItem(position));
         holder.view.itemLayoutId.setOnClickListener {
             val kitap:KitapModel? = holder.view.kitap;
-            val action = KitapListeFragmentDirections.actionKitapListeFragmentToKitapDetayFragment(kitap!!);
+            val action = KitapListeFragmentDirections.actionKitapListeFragmentToKitapDetayFragment(kitap!!,false);
             Navigation.findNavController(holder.view.root).navigate(action);
         }
     }

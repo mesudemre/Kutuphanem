@@ -1,12 +1,18 @@
 package com.mesutemre.kutuphanem.util
 
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.PorterDuff
 import android.net.Uri
+import android.os.Environment
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import androidx.annotation.ColorInt
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
+import androidx.core.widget.ImageViewCompat
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
@@ -16,6 +22,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -135,4 +142,31 @@ fun TextInputEditText.hideKeyboard(et: TextInputEditText){
 
 fun TextInputEditText.clearContent(et: TextInputEditText){
     et.editableText.clear();
+}
+
+@BindingAdapter(value = ["android:loadFromLocal"])
+fun loadImageFromLocal(view: ImageView, kitapId:Int){
+    view.getImageFromLocal(kitapId,view);
+}
+
+fun ImageView.getImageFromLocal(kitapId: Int, view: ImageView){
+    var path:String = Environment.getExternalStorageDirectory().path;
+    path = path+"/Android/media/com.mesutemre.kutuphanem/Kütüphanem/${kitapId.toString()}.png";
+    val f = File(path);
+    if(f.exists()){
+        view.setImageBitmap(BitmapFactory.decodeFile(path));
+    }else{
+        Glide.with(view.context)
+            .load(R.mipmap.kutuphanem_icon_round)
+            .into(view);
+    }
+}
+
+fun ImageView.setTint(@ColorInt color: Int?) {
+    if (color == null) {
+        ImageViewCompat.setImageTintList(this, null)
+        return
+    }
+    ImageViewCompat.setImageTintMode(this, PorterDuff.Mode.SRC_ATOP)
+    ImageViewCompat.setImageTintList(this, ColorStateList.valueOf(color))
 }
