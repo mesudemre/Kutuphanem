@@ -62,6 +62,7 @@
     <string name="kitapListeBegendiklerim">Beğeniler</string>
     <string name="kitapArsivMevcutDegil">Arşivinizde kayıtlı kitap bulunmamaktadır!</string>
     <string name="kitapArsivNot">NOT : Kitap listesinden dilediğiniz kitabı arşivleyebilirsiniz...</string>
+    <string name="begeniListeBos">Beğeni listenizde henüz kitap bulunmamaktadır!</string>
 
     <!--ProfilIslemFragment -->
     <string name="profilKullaniciAdiLabel">Kullanıcı adınız</string>

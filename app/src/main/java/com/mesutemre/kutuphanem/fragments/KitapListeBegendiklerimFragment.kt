@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mesutemre.kutuphanem.adapters.KitapBegeniListeAdapter
+import com.mesutemre.kutuphanem.adapters.PagingLoadStateAdapter
 import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.customcomponents.LinearSpacingDecoration
 import com.mesutemre.kutuphanem.databinding.KitapListeBegendiklerimFragmentBinding
@@ -47,6 +48,8 @@ class KitapListeBegendiklerimFragment:BaseFragment<KitapListeBegendiklerimFragme
         }
     }
 
+
+
     private fun initKitapBegeniListe(){
         binding.kitapBegeniListeRw.adapter = adapter;
         lifecycleScope.launch {
@@ -55,19 +58,36 @@ class KitapListeBegendiklerimFragment:BaseFragment<KitapListeBegendiklerimFragme
             }
         }
 
+        adapter?.withLoadStateFooter(
+            footer = PagingLoadStateAdapter(adapter!!)
+        )
         adapter?.addLoadStateListener { combinedLoadStates ->
+            val errorState =
+                when {
+                    combinedLoadStates.append is LoadState.Error -> combinedLoadStates.append as LoadState.Error
+                    combinedLoadStates.prepend is LoadState.Error ->  combinedLoadStates.prepend as LoadState.Error
+                    combinedLoadStates.refresh is LoadState.Error -> combinedLoadStates.refresh as LoadState.Error
+                    else -> null
+                }
+
             when (val loadState = combinedLoadStates.source.refresh) {
                 is LoadState.NotLoading -> {
                     binding.kitapBegeniListeProgressBar.hideComponent();
                     binding.kitapBegeniListeErrorTextId.hideComponent();
+                    binding.kitapBegeniListeRw.showComponent();
                 }
                 is LoadState.Loading -> {
                     binding.kitapBegeniListeProgressBar.showComponent();
                     binding.kitapBegeniListeErrorTextId.hideComponent();
                 }
                 is LoadState.Error -> {
-                    binding.kitapBegeniListeErrorTextId.showComponent();
+                    binding.kitapBegeniListeRw.hideComponent();
                     binding.kitapBegeniListeProgressBar.hideComponent();
+
+                    errorState?.let{
+                        binding.kitapBegeniListeErrorTextId.text = it.error.localizedMessage;
+                        binding.kitapBegeniListeErrorTextId.showComponent();
+                    }
                 }
             }
         }

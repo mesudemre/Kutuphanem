@@ -1,7 +1,11 @@
 package com.mesutemre.kutuphanem.datasource
 
+import android.accounts.NetworkErrorException
+import android.content.Context
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.model.KitapModel
 import com.mesutemre.kutuphanem.service.IKitapService
 import org.json.JSONObject
@@ -13,7 +17,9 @@ import java.lang.Exception
  * @Author: mesutemre.celenk
  * @Date: 9.09.2021
  */
-class KitapBegeniPagingSource(val kitapSevice:IKitapService):PagingSource<Int,KitapModel>() {
+class KitapBegeniPagingSource(val kitapSevice:IKitapService,context:Context):PagingSource<Int,KitapModel>() {
+
+    private val context:Context = context;
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, KitapModel> {
         var page = params.key ?: 0
@@ -29,7 +35,7 @@ class KitapBegeniPagingSource(val kitapSevice:IKitapService):PagingSource<Int,Ki
                     nextKey = if (response.body()!!.isEmpty()) null else page + 1
                 )
             }else{
-                return LoadResult.Error(Exception("Bitti"))
+                return LoadResult.Error(Exception(context.getString(R.string.begeniListeBos)))
             }
 
         }catch (exception: IOException) {
