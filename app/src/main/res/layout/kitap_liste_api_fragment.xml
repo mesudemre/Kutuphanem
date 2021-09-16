@@ -22,7 +22,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:gravity="center"
-                android:textSize="18sp"
+                android:textSize="38sp"
+                android:fontFamily="@font/alegreya_bold"
                 android:visibility="gone"
                 android:text="@string/kitapListeError"
                 android:textColor="@color/kirmizi" />

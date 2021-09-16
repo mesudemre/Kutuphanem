@@ -48,8 +48,6 @@ class KitapListeBegendiklerimFragment:BaseFragment<KitapListeBegendiklerimFragme
         }
     }
 
-
-
     private fun initKitapBegeniListe(){
         binding.kitapBegeniListeRw.adapter = adapter;
         lifecycleScope.launch {

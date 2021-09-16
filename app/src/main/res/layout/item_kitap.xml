@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -8,7 +9,7 @@
             type="com.mesutemre.kutuphanem.model.KitapModel" />
     </data>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/itemLayoutId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,126 +18,64 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground">
 
-        <RelativeLayout
-            android:id="@+id/imageLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/kitapImageId"
-                android:layout_width="110dp"
-                android:layout_height="130dp"
-                android:downloadUrl="@{kitap.kitapResimPath}" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/genelBilgilerRootId"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/imageLayout">
-
-            <LinearLayout
-                android:id="@+id/genelBilgiler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/kitapAdText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="@{kitap.kitapAd.length()>55 ? kitap.kitapAd.substring(0,54)+`...` : kitap.kitapAd}"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/kitapTurText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:gravity="left"
-                    android:text="@{`Kitap Türü : ` + kitap.kitapTur.aciklama}"
-                    android:textColor="#4E4E4E"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/kitapAciklamaTextId"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/alegreya"
-                    android:gravity="left"
-                    android:text="@{kitap.kitapAciklama.length()>110 ? kitap.kitapAciklama.substring(0,110)+`...` : kitap.kitapAciklama}"
-                    android:textColor="#515151"
-                    android:textSize="12sp" />
-            </LinearLayout>
-        </RelativeLayout>
-        <RelativeLayout
-            android:id="@+id/swipeLeftLayoutId"
-            android:layout_width="wrap_content"
+        <ImageView
+            android:id="@+id/kitapImageId"
+            android:layout_width="110dp"
             android:layout_height="130dp"
-            android:layout_alignParentRight="true"
-            android:background="@color/acik_kirmizi"
-            android:visibility="gone">
+            android:downloadUrl="@{kitap.kitapResimPath}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
-                android:id="@+id/swipeItemShareLayoutId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_marginLeft="20dp"
-                android:foreground="?attr/selectableItemBackground"
-                android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_baseline_share_24"
-                    app:tint="@color/whiteTextColor" />
+        <LinearLayout
+            android:id="@+id/genelBilgiler"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toStartOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/kitapImageId"
+            app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/alegreya"
-                    android:text="@string/shareLabel"
-                    android:textColor="@color/whiteTextColor"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/swipeItemArchiveLayoutId"
+            <TextView
+                android:id="@+id/kitapAdText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_toRightOf="@+id/swipeItemShareLayoutId"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
-                android:orientation="vertical">
+                android:fontFamily="@font/alegreya_bold"
+                android:text="@{kitap.kitapAd.length()>40 ? kitap.kitapAd.substring(0,39)+`...` : kitap.kitapAd}"
+                android:textSize="16sp"/>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_baseline_archive_white"
-                    app:tint="@color/whiteTextColor" />
+            <TextView
+                android:id="@+id/kitapTurText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="left"
+                android:text="@{`Kitap Türü : ` + kitap.kitapTur.aciklama}"
+                android:textColor="#4E4E4E"
+                android:textSize="14sp" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/alegreya"
-                    android:text="@string/archiveLabel"
-                    android:textColor="@color/whiteTextColor"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </RelativeLayout>
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/kitapAciklamaTextId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/alegreya"
+                android:gravity="left"
+                android:text="@{kitap.kitapAciklama.length()>90 ? kitap.kitapAciklama.substring(0,90)+`...` : kitap.kitapAciklama}"
+                android:textColor="#515151"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:tint="@color/transparent"
+            android:src="@drawable/ic_baseline_arrow_forward_ios_48"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

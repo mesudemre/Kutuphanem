@@ -12,7 +12,11 @@ interface IKitapService {
 
     @Headers("Content-Type: application/json")
     @POST("api/kitap/liste")
-    fun getKitapListe(@Body jsonStr: String): Single<ArrayList<KitapModel>>;
+    suspend fun getTumKitapListe(@Body jsonStr:String):Response<List<KitapModel>>;
+
+    @Headers("Content-Type: application/json")
+    @POST("api/kitap/liste")
+    fun getKitapListeBySingle(@Body jsonStr: String): Single<List<KitapModel>>;
 
     @Headers("Content-Type: application/json")
     @POST("api/kitap/kaydet")

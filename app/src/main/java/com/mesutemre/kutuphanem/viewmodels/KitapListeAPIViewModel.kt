@@ -3,67 +3,46 @@ package com.mesutemre.kutuphanem.viewmodels
 import android.app.Application
 import android.content.Context
 import android.net.Uri
-import androidx.lifecycle.*
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.base.BaseEvent
+import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.dao.KitapDao
-import com.mesutemre.kutuphanem.datasource.KitapListeDataSource
-import com.mesutemre.kutuphanem.datasource.KitapListeDataSourceFactory
-import com.mesutemre.kutuphanem.model.KitapListeState
+import com.mesutemre.kutuphanem.datasource.KitapListeApiPagingSource
 import com.mesutemre.kutuphanem.model.KitapModel
 import com.mesutemre.kutuphanem.service.IKitapService
 import com.mesutemre.kutuphanem.util.downloadKitap
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
 class KitapListeAPIViewModel  @Inject constructor(application: Application,
                                                   private val kitapDao: KitapDao,
                                                   private val kitapService: IKitapService
-): AndroidViewModel(application), CoroutineScope {
+): BaseViewModel(application) {
 
-    private val disposible = CompositeDisposable();
-
-    var kitapListe:LiveData<PagedList<KitapModel>>;
-    private val pageSize = 4;
-    private val kitapListeDataSourceFactory:KitapListeDataSourceFactory;
+    override val disposible: CompositeDisposable = CompositeDisposable();
 
     val shareUri = MutableLiveData<BaseEvent<Uri>>();
-
     val arsivUri = MutableLiveData<BaseEvent<String>>();
     val arsivKitap = MutableLiveData<BaseEvent<String>>();
 
-    private val job = Job();
-    override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.Main; //Önce işi yap sonra main thread e dön.
-
-    init {
-        kitapListeDataSourceFactory = KitapListeDataSourceFactory(disposible,kitapService);
-        val config = PagedList.Config.Builder()
-                .setPageSize(pageSize)
-                .setInitialLoadSizeHint(pageSize*2)
-                .setEnablePlaceholders(false)
-                .build();
-        kitapListe = LivePagedListBuilder<Int, KitapModel>(kitapListeDataSourceFactory, config).build()
-    }
-
-    fun getKitapListeState():LiveData<KitapListeState> = Transformations.switchMap(
-            kitapListeDataSourceFactory.kitapListe,
-            KitapListeDataSource::kitapState
-    )
-
-    fun retry() {
-        kitapListeDataSourceFactory.kitapListe.value?.invalidate();
-        kitapListeDataSourceFactory.kitapListe.value?.retry();
-    }
-
-    fun listIsEmpty(): Boolean {
-        return kitapListe.value?.isEmpty() ?: true
+    fun getKitapListe(): Flow<PagingData<KitapModel>> {
+        return Pager(
+            config = PagingConfig(pageSize = 5,enablePlaceholders = false),
+            pagingSourceFactory = { KitapListeApiPagingSource(kitapService,context) }
+        ).flow
+            .cachedIn(viewModelScope);
     }
 
     fun prepareShareKitap(kitap:KitapModel, requireContext: Context){
@@ -123,9 +102,4 @@ class KitapListeAPIViewModel  @Inject constructor(application: Application,
         return false;
     }
 
-    override fun onCleared() {
-        super.onCleared();
-        disposible.clear();
-        job.cancel();
-    }
 }

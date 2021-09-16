@@ -10,22 +10,30 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.adapters.KitapListeAdapter
+import com.mesutemre.kutuphanem.adapters.PagingLoadStateAdapter
 import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.customcomponents.LinearSpacingDecoration
 import com.mesutemre.kutuphanem.customcomponents.SwipeToArchiveCallback
 import com.mesutemre.kutuphanem.databinding.KitapListeApiFragmentBinding
-import com.mesutemre.kutuphanem.model.*
+import com.mesutemre.kutuphanem.model.ERROR
+import com.mesutemre.kutuphanem.model.KitapModel
+import com.mesutemre.kutuphanem.model.SUCCESS
+import com.mesutemre.kutuphanem.model.WARNING
 import com.mesutemre.kutuphanem.util.hideComponent
 import com.mesutemre.kutuphanem.util.showComponent
 import com.mesutemre.kutuphanem.util.showSnackBar
 import com.mesutemre.kutuphanem.viewholder.KitapListeViewHolder
 import com.mesutemre.kutuphanem.viewmodels.KitapListeAPIViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 /**
  * @Author: mesutemre.celenk
@@ -43,20 +51,18 @@ class KitapListeAPIFragment:BaseFragment<KitapListeApiFragmentBinding>() {
     private var selectedSharedKitap: KitapModel? = null;
 
     override fun onCreateFragment(savedInstanceState: Bundle?) {
-
     }
 
     override fun onStartFragment() {
+        adapter = KitapListeAdapter();
         binding.kitapListeRw.layoutManager = LinearLayoutManager(context);
         binding.kitapListeRw.addItemDecoration(LinearSpacingDecoration(itemSpacing = 20, edgeSpacing = 30));
 
-        this.initAdapter();
-        this.initState();
+        initKitapListe();
 
         binding.kitapListeSwipeRefreshLayout.setOnRefreshListener {
             binding.kitapListeSwipeRefreshLayout.isRefreshing = false;
-            this.initAdapter();
-            this.initState();
+            adapter?.refresh();
         }
 
         val archiveSwipeHandler = object:SwipeToArchiveCallback(requireContext(),
@@ -102,6 +108,49 @@ class KitapListeAPIFragment:BaseFragment<KitapListeApiFragmentBinding>() {
         }
         val shareTouchHelper:ItemTouchHelper = ItemTouchHelper(shareSwipeHandler);
         shareTouchHelper.attachToRecyclerView(binding.kitapListeRw);
+    }
+
+    private fun initKitapListe(){
+        binding.kitapListeRw.adapter = adapter;
+        lifecycleScope.launch {
+            viewModel.getKitapListe().collectLatest {
+                adapter?.submitData(it);
+            }
+        }
+
+        adapter?.withLoadStateFooter(
+            footer = PagingLoadStateAdapter(adapter!!)
+        )
+        adapter?.addLoadStateListener { combinedLoadStates ->
+            val errorState =
+                when {
+                    combinedLoadStates.append is LoadState.Error -> combinedLoadStates.append as LoadState.Error
+                    combinedLoadStates.prepend is LoadState.Error ->  combinedLoadStates.prepend as LoadState.Error
+                    combinedLoadStates.refresh is LoadState.Error -> combinedLoadStates.refresh as LoadState.Error
+                    else -> null
+                }
+
+            when (val loadState = combinedLoadStates.source.refresh) {
+                is LoadState.NotLoading -> {
+                    binding.kitapListeProgressBar.hideComponent();
+                    binding.kitapListeErrorTextId.hideComponent();
+                    binding.kitapListeRw.showComponent();
+                }
+                is LoadState.Loading -> {
+                    binding.kitapListeProgressBar.showComponent();
+                    binding.kitapListeErrorTextId.hideComponent();
+                }
+                is LoadState.Error -> {
+                    binding.kitapListeRw.hideComponent();
+                    binding.kitapListeProgressBar.hideComponent();
+
+                    errorState?.let{
+                        binding.kitapListeErrorTextId.text = it.error.localizedMessage;
+                        binding.kitapListeErrorTextId.showComponent();
+                    }
+                }
+            }
+        }
     }
 
     private fun observeArsivUri(view: View){
@@ -159,28 +208,6 @@ class KitapListeAPIFragment:BaseFragment<KitapListeApiFragmentBinding>() {
     var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_CANCELED) {
         }
-    }
-
-    private fun initAdapter(){
-        adapter = KitapListeAdapter{viewModel.retry()};
-        binding.kitapListeRw.adapter = adapter;
-        viewModel.kitapListe.observe(viewLifecycleOwner, Observer { kitapListe->
-            adapter?.submitList(kitapListe);
-            adapter?.notifyDataSetChanged();
-        });
-    }
-
-    private fun initState(){
-        binding.kitapListeErrorTextId.setOnClickListener { viewModel.retry() };
-        viewModel.getKitapListeState().observe(viewLifecycleOwner, Observer { kitapState->
-            binding.kitapListeProgressBar.visibility =
-                if(viewModel.listIsEmpty() && kitapState == KitapListeState.LOADING) View.VISIBLE else View.GONE;
-            binding.kitapListeErrorTextId.visibility =
-                if(viewModel.listIsEmpty() && kitapState == KitapListeState.ERROR) View.VISIBLE else View.GONE;
-            if(!viewModel.listIsEmpty()){
-                adapter?.setState(KitapListeState.DONE);
-            }
-        });
     }
 
     override fun destroyOthers() {

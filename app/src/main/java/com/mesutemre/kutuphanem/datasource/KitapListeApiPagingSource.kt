@@ -1,8 +1,6 @@
 package com.mesutemre.kutuphanem.datasource
 
-import android.accounts.NetworkErrorException
 import android.content.Context
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.mesutemre.kutuphanem.R
@@ -15,11 +13,11 @@ import java.lang.Exception
 
 /**
  * @Author: mesutemre.celenk
- * @Date: 9.09.2021
+ * @Date: 15.09.2021
  */
-class KitapBegeniPagingSource(val kitapSevice:IKitapService,context:Context):PagingSource<Int,KitapModel>() {
+class KitapListeApiPagingSource(val kitapService:IKitapService,context: Context): PagingSource<Int, KitapModel>()  {
 
-    private val context:Context = context;
+    private val context: Context = context;
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, KitapModel> {
         var page = params.key ?: 0
@@ -28,9 +26,9 @@ class KitapBegeniPagingSource(val kitapSevice:IKitapService,context:Context):Pag
             jsonObj.put("minKayitNum",(page)*4);
             jsonObj.put("maxKayitNum",4);
 
-            val response = kitapSevice.getBegenilenKitapListe(jsonObj.toString());
+            val response = kitapService.getTumKitapListe(jsonObj.toString());
             if(response.code() != 204){
-               return LoadResult.Page(
+                return LoadResult.Page(
                     response.body()!!,prevKey = if (page == 0) null else page - 1,
                     nextKey = if (response.body()!!.isEmpty()) null else page + 1
                 )

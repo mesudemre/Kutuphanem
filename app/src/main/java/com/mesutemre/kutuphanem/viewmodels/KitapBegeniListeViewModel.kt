@@ -27,7 +27,7 @@ class KitapBegeniListeViewModel @Inject constructor(application: Application,
     override val disposible: CompositeDisposable = CompositeDisposable();
 
 
-    fun getKitapBegeniListe():Flow<PagingData<KitapModel>>{
+    fun getKitapBegeniListe():Flow <PagingData<KitapModel>>{
         return Pager(
             config = PagingConfig(pageSize = 5,enablePlaceholders = false),
             pagingSourceFactory = {KitapBegeniPagingSource(kitapService,context)}
