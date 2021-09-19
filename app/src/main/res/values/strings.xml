@@ -140,4 +140,9 @@
     <string name="kiptaArsivleme">Kitap başarıyla arşivlendi</string>
     <string name="kitapArsivKaldirma">Kitap arşivden silindi</string>
     <string name="kitapDetayDeepLinkUrl">http://192.168.1.105:8080/KutuphaneSistemiWS/api/kitap/nesne?kitapId=</string>
+    <string name="yazarLabel">Yazar;</string>
+    <string name="turLabel">Tür;</string>
+    <string name="yayinEviLabelDetay">Yayınevi;</string>
+    <string name="alinmaTarDetay">Alınma Tarihi;</string>
+    <string name="kitapDetayHata">Kitap bilgileri getirilemedi!</string>
 </resources>

@@ -8,11 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.animation.AnimationUtils
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.base.BaseFragment
@@ -52,36 +50,31 @@ class KitapDetayDeepFragment: BaseFragment<FragmentKitapDetayDeepBinding>() {
 
     override fun onCreateViewFragment(view: View) {
         super.onCreateViewFragment(view);
+        viewModel.kitapArsivlenmisMi(selectedKitap.kitapId!!);
+        observeKitapArsivlenmisMi();
         if(!isFromArsiv){
             observeKitapDetay(view);
+        }else{
+            initializeValues(view);
         }
-
-        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true){
-            override fun handleOnBackPressed() {
-                val action = KitapDetayDeepFragmentDirections.actionKitapDetayDeepFragmentToAnasayfaFragment();
-                Navigation.findNavController(view).navigate(action);
-            }
-        });
     }
 
-    private fun observeKitapDetay(view: View){
+    private fun observeKitapDetay(view:View){
         viewModel.selectedKitap.observe(viewLifecycleOwner,Observer{
             if(it.hasBeenHandled){
                 it.hasBeenHandled = false;
-                binding.kitapIslemProgressBar.showComponent();
+                binding.kitapDetayProgresBar.showComponent();
                 if(it.hasBeenError){
-                    binding.surecLayoutId.showComponent();
-                    binding.kitapResimLayoutId.hideComponent();
-                    binding.aksiyonLayoutId.hideComponent();
-                    binding.kitapDetayBilgiLayoutId.hideComponent();
-                    binding.kitapDetayTextLayoutId.hideComponent();
+                    binding.kitapDetayErrorLayoutId.showComponent();
+                    binding.kitapDetayPanelLayoutId.hideComponent();
+                    binding.kitapDetayGenelBilgilerCardId.hideComponent();
                 }else{
                     selectedKitap = it.peekContent();
                     viewModel.kitapArsivlenmisMi(selectedKitap.kitapId!!);
                     observeKitapArsivlenmisMi();
                     initializeValues(view);
                 }
-                binding.kitapIslemProgressBar.hideComponent();
+                binding.kitapDetayProgresBar.hideComponent();
             }
         });
     }
@@ -102,12 +95,12 @@ class KitapDetayDeepFragment: BaseFragment<FragmentKitapDetayDeepBinding>() {
         view.kitapTurTextViewId.setText(selectedKitap.kitapTur?.aciklama);
         view.yayinEviTextViewId.setText(selectedKitap.yayineviModel?.aciklama);
         view.kitapDetayAciklamaTextId.setText(selectedKitap.kitapAciklama);
-        view.alinmaTarTextViewId.setText(formatDate(selectedKitap.alinmatarihi!!,"dd.Mm.yyyy"));
+        view.alinmaTarTextViewId.setText(formatDate(selectedKitap.alinmatarihi!!,"dd.MM.yyyy"));
         view.kitapDetayAciklamaTextId.viewTreeObserver.addOnPreDrawListener(object: ViewTreeObserver.OnPreDrawListener{
             override fun onPreDraw(): Boolean {
                 view.kitapDetayAciklamaTextId.viewTreeObserver.removeOnPreDrawListener(this);
-                if(view.kitapDetayAciklamaTextId.lineCount>4){
-                    view.kitapDetayAciklamaTextId.maxLines = 4;
+                if(view.kitapDetayAciklamaTextId.lineCount>10){
+                    view.kitapDetayAciklamaTextId.maxLines = 10;
                     view.viewMoreImageIdLayout.showComponent();
                     view.viewMoreImageId.showComponent();
                 }
@@ -123,7 +116,7 @@ class KitapDetayDeepFragment: BaseFragment<FragmentKitapDetayDeepBinding>() {
             binding.viewMoreImageId?.hideComponent();
             binding.viewLessImageId?.showComponent();
 
-            val anim = AnimationUtils.loadAnimation(it.context, R.anim.focus_to_y_animation);
+            val anim = AnimationUtils.loadAnimation(it.context,R.anim.focus_to_y_animation);
             binding.kitapDetayAciklamaTextId?.animation = anim;
             binding.kitapDetayAciklamaTextId?.parent?.
             requestChildFocus(binding.kitapDetayAciklamaTextId,binding.kitapDetayAciklamaTextId);
@@ -158,6 +151,10 @@ class KitapDetayDeepFragment: BaseFragment<FragmentKitapDetayDeepBinding>() {
             viewModel.kitapBegenmeIslem(selectedKitap.kitapId!!,selectedKitap.kitapBegenilmis);
             observeKitapBegenme(it);
         }
+
+        binding.kitapDetayBackImage.setOnClickListener {
+            activity?.onBackPressed();
+        }
     }
 
     private fun observeShareUri() {
@@ -181,15 +178,13 @@ class KitapDetayDeepFragment: BaseFragment<FragmentKitapDetayDeepBinding>() {
                     shareIntent.putExtra(Intent.EXTRA_TEXT,requireContext().resources.getString(R.string.kitapDetayDeepLinkUrl)+"${selectedKitap.kitapId}");
                     //shareIntent.setType("image/png");
                     shareIntent.putExtra(Intent.EXTRA_STREAM, sharedImageUri);
-                    resultLauncher.launch(
-                        Intent.createChooser(shareIntent, requireContext().resources.getString(
-                            R.string.shareLabel)))
+                    resultLauncher.launch(Intent.createChooser(shareIntent, requireContext().resources.getString(R.string.shareLabel)))
                 }
             }
         });
     }
 
-    private fun observeKitapArsiv(view: View){
+    private fun observeKitapArsiv(view:View){
         viewModel.arsivKitap.observe(viewLifecycleOwner,Observer{
             if(it.hasBeenHandled) {
                 showSnackBar(view,it.peekContent(), SUCCESS);
@@ -225,10 +220,9 @@ class KitapDetayDeepFragment: BaseFragment<FragmentKitapDetayDeepBinding>() {
             it.hasBeenHandled = false;
         });
     }
-    private fun observeKitapBegenme(view: View){
+    private fun observeKitapBegenme(view:View){
         viewModel.kitapBegenme.observe(viewLifecycleOwner,Observer{
             if(it.hasBeenHandled){
-                binding.kitapIslemProgressBar.showComponent();
                 if(it.hasBeenError){
                     showSnackBar(view,it.peekContent().statusMessage, ERROR);
                 }else{
@@ -237,19 +231,16 @@ class KitapDetayDeepFragment: BaseFragment<FragmentKitapDetayDeepBinding>() {
                         binding.likeImageViewId.setTint(view.context.getColor(R.color.fistikYesil));
                         selectedKitap.kitapBegenilmis = 1;
                     }else{
-                        binding.likeImageViewId.setTint(view.context.getColor(R.color.transparent));
+                        binding.likeImageViewId.setTint(view.context.getColor(R.color.white));
                         selectedKitap.kitapBegenilmis = 0;
                     }
-
                 }
-                binding.kitapIslemProgressBar.hideComponent();
                 it.hasBeenHandled = false;
             }
         });
     }
 
-    var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            result ->
     }
-
-
 }

@@ -1,37 +1,31 @@
 package com.mesutemre.kutuphanem.viewmodels
 
 import android.app.Application
-import android.app.RecoverableSecurityException
 import android.content.Context
 import android.net.Uri
-import android.os.Build
-import androidx.lifecycle.AndroidViewModel
+import android.os.Environment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.R
+import com.mesutemre.kutuphanem.base.BaseDataEvent
 import com.mesutemre.kutuphanem.base.BaseEvent
+import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.dao.KitapDao
 import com.mesutemre.kutuphanem.model.KitapModel
+import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.service.IKitapService
 import com.mesutemre.kutuphanem.util.downloadKitap
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
-import java.io.File
-import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
-import android.os.Environment
-import android.provider.MediaStore
-import android.util.Log
-import androidx.core.content.FileProvider
-import com.google.gson.JsonObject
-import com.mesutemre.kutuphanem.base.BaseViewModel
-import com.mesutemre.kutuphanem.model.ResponseStatusModel
-import com.mesutemre.kutuphanem.util.getPath
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.io.File
+import javax.inject.Inject
 
 
 @HiltViewModel
@@ -42,6 +36,7 @@ constructor(application: Application,
 ): BaseViewModel(application) {
 
     val shareUri = MutableLiveData<BaseEvent<Uri>>();
+    val shareUriYeni = MutableLiveData<BaseDataEvent<Uri>>();
     val arsivKitap = MutableLiveData<BaseEvent<String>>();
     val kitapResimDownload = MutableLiveData<BaseEvent<Uri>>();
     val kitapArsivMevcut = MutableLiveData<BaseEvent<KitapModel>>();
@@ -53,6 +48,14 @@ constructor(application: Application,
 
     fun prepareShareKitap(kitap:KitapModel, requireContext: Context){
         launch(Dispatchers.IO) {
+            /*shareUriYeni.postValue(BaseDataEvent.Loading);
+            val uri = downloadKitap(kitap,requireContext,false);
+            if(uri != Uri.EMPTY){
+                shareUriYeni.postValue(BaseDataEvent.Success(uri));
+            }else{
+                shareUriYeni.postValue(BaseDataEvent.Error(context.getString(R.string.kitapShareError)))
+            }
+            shareUriYeni.postValue(BaseDataEvent.Handled(true));*/
             val event = BaseEvent(downloadKitap(kitap,requireContext,false));
             event.hasBeenHandled = true;
             if(event.peekContent() == Uri.EMPTY){

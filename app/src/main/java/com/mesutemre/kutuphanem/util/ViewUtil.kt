@@ -20,6 +20,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.textview.MaterialTextView
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
 import java.io.File
@@ -169,4 +170,9 @@ fun ImageView.setTint(@ColorInt color: Int?) {
     }
     ImageViewCompat.setImageTintMode(this, PorterDuff.Mode.SRC_ATOP)
     ImageViewCompat.setImageTintList(this, ColorStateList.valueOf(color))
+}
+
+@BindingAdapter(value = ["android:formatTarih"])
+fun writeFormatTarih(view:MaterialTextView,tarih:Date){
+    view.text = formatDate(tarih,"dd.MM.yyyy");
 }
