@@ -9,7 +9,6 @@ import com.mesutemre.kutuphanem.service.IKitapService
 import org.json.JSONObject
 import retrofit2.HttpException
 import java.io.IOException
-import java.lang.Exception
 
 /**
  * @Author: mesutemre.celenk
@@ -21,11 +20,10 @@ class KitapListeApiPagingSource(val kitapService:IKitapService,context: Context)
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, KitapModel> {
         var page = params.key ?: 0
-        try {
+        try{
             val jsonObj: JSONObject = JSONObject();
             jsonObj.put("minKayitNum",(page)*4);
             jsonObj.put("maxKayitNum",4);
-
             val response = kitapService.getTumKitapListe(jsonObj.toString());
             if(response.code() != 204){
                 return LoadResult.Page(
@@ -33,9 +31,8 @@ class KitapListeApiPagingSource(val kitapService:IKitapService,context: Context)
                     nextKey = if (response.body()!!.isEmpty()) null else page + 1
                 )
             }else{
-                return LoadResult.Error(Exception(context.getString(R.string.begeniListeBos)))
+                return LoadResult.Error(Exception(context.getString(R.string.kitapListeEmpty)))
             }
-
         }catch (exception: IOException) {
             return LoadResult.Error(exception)
         } catch (exception: HttpException) {

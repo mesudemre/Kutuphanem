@@ -1,9 +1,11 @@
 package com.mesutemre.kutuphanem.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
+import com.mesutemre.kutuphanem.model.YayineviModel
 import com.mesutemre.kutuphanem.service.IParametreService
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.PARAM_KITAPTUR_DB_KEY

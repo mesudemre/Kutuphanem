@@ -157,7 +157,8 @@ class ProfilIslemFragment() :Fragment(), ProfilIslemFragmentClickListener {
 
     override fun openDatePicker(view: View, dogumTarihi: Date) {
         val editText = view as TextInputEditText;
-        DogumTarihiDialogFragment(editText,dogumTarihi).show(requireFragmentManager(),null);
+        DogumTarihiDialogFragment(editText,dogumTarihi)
+            .show(requireFragmentManager(),null);
     }
 
     override fun openProfilResimDegistirme(view: View,profilImage:View) {

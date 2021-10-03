@@ -7,7 +7,7 @@ import com.mesutemre.kutuphanem.service.KullaniciService
 import com.mesutemre.kutuphanem.util.API_URL
 import com.mesutemre.kutuphanem.util.APP_TOKEN_KEY
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
-import com.mesutemre.kutuphanem.util.NetworkConnectionInterceptor
+import com.mesutemre.kutuphanem.interceptors.NetworkConnectionInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

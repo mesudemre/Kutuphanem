@@ -19,7 +19,7 @@ data class YayineviModel(
         @SerializedName("aciklama")
         @Expose
         var aciklama:String?
-) : Serializable {
+) :Serializable {
 
         override fun toString(): String {
                 return aciklama!!;

@@ -1,12 +1,14 @@
 package com.mesutemre.kutuphanem.util
 
 import android.content.res.ColorStateList
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Environment
 import android.view.View
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import androidx.annotation.ColorInt
@@ -175,4 +177,19 @@ fun ImageView.setTint(@ColorInt color: Int?) {
 @BindingAdapter(value = ["android:formatTarih"])
 fun writeFormatTarih(view:MaterialTextView,tarih:Date){
     view.text = formatDate(tarih,"dd.MM.yyyy");
+}
+
+fun View.setDisplayMetricHeight(metric:Double){
+    val layoutParams = this.layoutParams
+    val metrics = Resources.getSystem().displayMetrics;
+    val height: Int = (metrics.heightPixels * 0.8).toInt();
+
+    layoutParams.height = height;
+    this.layoutParams = layoutParams
+}
+
+fun View.setDisplayFullHeight(){
+    val layoutParams = this.layoutParams
+    layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT
+    this.layoutParams = layoutParams
 }

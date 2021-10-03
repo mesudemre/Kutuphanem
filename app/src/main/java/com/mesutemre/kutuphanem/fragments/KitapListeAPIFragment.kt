@@ -110,6 +110,20 @@ class KitapListeAPIFragment:BaseFragment<KitapListeApiFragmentBinding>() {
         shareTouchHelper.attachToRecyclerView(binding.kitapListeRw);
     }
 
+    private fun observeKitapArsiv(view:View) {
+        viewModel.arsivKitap.observe(viewLifecycleOwner,Observer{
+            if(it.hasBeenHandled) {
+                it.hasBeenHandled = false;
+                if(it.hasBeenError){
+                    showSnackBar(view,it.peekContent(), WARNING);
+                }else{
+                    showSnackBar(view,it.peekContent(), SUCCESS);
+                }
+            }
+        });
+
+    }
+
     private fun initKitapListe(){
         binding.kitapListeRw.adapter = adapter;
         lifecycleScope.launch {
@@ -166,20 +180,6 @@ class KitapListeAPIFragment:BaseFragment<KitapListeApiFragmentBinding>() {
                 }
             }
         });
-    }
-
-    private fun observeKitapArsiv(view:View) {
-        viewModel.arsivKitap.observe(viewLifecycleOwner,Observer{
-            if(it.hasBeenHandled) {
-                it.hasBeenHandled = false;
-                if(it.hasBeenError){
-                    showSnackBar(view,it.peekContent(), WARNING);
-                }else{
-                    showSnackBar(view,it.peekContent(), SUCCESS);
-                }
-            }
-        });
-
     }
 
     private fun observeShareUri() {

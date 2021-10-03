@@ -5,6 +5,7 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 30
@@ -35,11 +36,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '11'
     }
     lintOptions {
         disable 'RestrictedApi'
@@ -99,4 +100,6 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling:$composeUI_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$composeVM_version"
     implementation "com.google.android.material:compose-theme-adapter:$composeMaterial_version"
+
+    implementation platform('com.google.firebase:firebase-bom:28.4.1')
 }

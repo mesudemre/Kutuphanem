@@ -53,6 +53,7 @@
 
     <!--KitapListeFragment -->
     <string name="kitapListeError">Kitap listesi getirilemedi!Tekrar deneyiniz...</string>
+    <string name="kitapListeEmpty">Henüz kitap bulunmamaktadır...</string>
     <string name="kitapShareError">Kitap paylaşıma hazırlanırken hata meydana geldi</string>
     <string name="kitapArsivResimHata">Kitap resmi arşivlenemedi!</string>
     <string name="kitapArsivleniyorText">Kitap arşivleniyor...</string>
@@ -145,4 +146,7 @@
     <string name="yayinEviLabelDetay">Yayınevi;</string>
     <string name="alinmaTarDetay">Alınma Tarihi;</string>
     <string name="kitapDetayHata">Kitap bilgileri getirilemedi!</string>
+    <string name="kitapYorumlarText">Yorumlar</string>
+    <string name="kitapDetayYorumHint">Herkese açık bir yorum ekle...</string>
+    <string name="kitapYorumSaygiLabel">Yorum yaparken saygılı olmayı unutmayın.Aksi takdirde tarafınıza uygulanacak cezai yaptırımlar bulunmaktadır</string>
 </resources>

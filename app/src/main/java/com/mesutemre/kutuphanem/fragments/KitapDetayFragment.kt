@@ -3,28 +3,27 @@ package com.mesutemre.kutuphanem.fragments
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
-import android.view.animation.AnimationUtils
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem.base.BaseDataEvent
 import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.databinding.FragmentKitapDetayBinding
+import com.mesutemre.kutuphanem.fragments.dialogs.KitapAciklamaBottomSheetDialogFragment
+import com.mesutemre.kutuphanem.fragments.dialogs.KitapYorumBottomSheetDialogFragment
 import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.model.KitapModel
+import com.mesutemre.kutuphanem.model.Kullanici
 import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.util.*
 import com.mesutemre.kutuphanem.viewmodels.KitapDetayViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_kitap_detay.view.*
-import java.util.*
 
 @AndroidEntryPoint
 class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
@@ -38,12 +37,13 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
     private val viewModel: KitapDetayViewModel by viewModels()
     private var sharedImageUri: Uri? = null;
     private var isFromArsiv:Boolean = false;
+    private lateinit var kullanici:Kullanici;
 
     override fun onCreateFragment(savedInstanceState: Bundle?) {
         isFromArsiv = args.fromArsiv;
         selectedKitap = args.kitapObj;
         if(!isFromArsiv){
-            viewModel.getKitapByKitapId(selectedKitap.kitapId!!);
+            viewModel.getKitapBilgiler(selectedKitap.kitapId!!);
         }
     }
 
@@ -53,9 +53,30 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
         observeKitapArsivlenmisMi();
         if(!isFromArsiv){
             observeKitapDetay(view);
+            observeYorumYapanKullanici(view);
         }else{
             initializeValues(view);
         }
+    }
+
+    private fun observeYorumYapanKullanici(view:View){
+        viewModel.yorumYapanKullanici.observe(viewLifecycleOwner,Observer{
+           if(it.hasBeenHandled) {
+               it.hasBeenHandled = false;
+               if(it.hasBeenError){
+                   showSnackBar(requireView(),
+                       requireView().context.getString(R.string.profilSayfaHata),
+                       ERROR
+                   );
+               }else{
+                   kullanici = it.peekContent();
+                   binding.kitapYorumYazanImageViewId.let {
+                       it.getCircleImageFromUrl(kullanici.resim,it);
+                   }
+               }
+
+           }
+        });
     }
 
     private fun observeKitapDetay(view:View){
@@ -98,8 +119,8 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
         view.kitapDetayAciklamaTextId.viewTreeObserver.addOnPreDrawListener(object: ViewTreeObserver.OnPreDrawListener{
             override fun onPreDraw(): Boolean {
                 view.kitapDetayAciklamaTextId.viewTreeObserver.removeOnPreDrawListener(this);
-                if(view.kitapDetayAciklamaTextId.lineCount>10){
-                    view.kitapDetayAciklamaTextId.maxLines = 10;
+                if(view.kitapDetayAciklamaTextId.lineCount>4){
+                    view.kitapDetayAciklamaTextId.maxLines = 4;
                     view.viewMoreImageIdLayout.showComponent();
                     view.viewMoreImageId.showComponent();
                 }
@@ -110,22 +131,8 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
 
     override fun onStartFragment() {
         binding.viewMoreImageId?.setOnClickListener {
-            binding.kitapDetayAciklamaTextId?.maxLines = Integer.MAX_VALUE;
-            binding.viewMoreImageIdLayout?.hideComponent();
-            binding.viewMoreImageId?.hideComponent();
-            binding.viewLessImageId?.showComponent();
-
-            val anim = AnimationUtils.loadAnimation(it.context,R.anim.focus_to_y_animation);
-            binding.kitapDetayAciklamaTextId?.animation = anim;
-            binding.kitapDetayAciklamaTextId?.parent?.
-            requestChildFocus(binding.kitapDetayAciklamaTextId,binding.kitapDetayAciklamaTextId);
-        }
-
-        binding.viewLessImageId?.setOnClickListener {
-            binding.kitapDetayAciklamaTextId?.maxLines = 4;
-            binding.viewMoreImageIdLayout?.showComponent();
-            binding.viewMoreImageId?.showComponent();
-            binding.viewLessImageId?.hideComponent();
+            KitapAciklamaBottomSheetDialogFragment(binding.kitapDetayAciklamaTextId.text.toString())
+                .show(requireFragmentManager(),null);
         }
 
         binding.shareImageViewId?.setOnClickListener {
@@ -154,6 +161,11 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
         binding.kitapDetayBackImage.setOnClickListener {
             activity?.onBackPressed();
         }
+
+        binding.kitapYorumPanel?.setOnClickListener {
+            KitapYorumBottomSheetDialogFragment(kullanici)
+                .show(requireFragmentManager(),null);
+        }
     }
 
     private fun observeShareUri() {
@@ -169,13 +181,9 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
                     sharedImageUri = it.peekContent();
                     val shareIntent = Intent(Intent.ACTION_SEND);
                     shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    shareIntent.setType("image/png");
                     shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-                    //shareIntent.putExtra(Intent.EXTRA_TEXT,selectedKitap.kitapAd+" "+requireContext().resources.getString(R.string.paylasimKitapAdText));
-                    shareIntent.setType("*/*");
-                    //htmlBuilder.append(selectedKitap.kitapAd+" "+requireContext().resources.getString(R.string.paylasimKitapAdText));
-                    shareIntent.putExtra(Intent.EXTRA_TEXT,requireContext().resources.getString(R.string.kitapDetayDeepLinkUrl)+"${selectedKitap.kitapId}");
-                    //shareIntent.setType("image/png");
+                    shareIntent.putExtra(Intent.EXTRA_TEXT,selectedKitap?.kitapAd+" "+requireContext().resources.getString(R.string.paylasimKitapAdText));
                     shareIntent.putExtra(Intent.EXTRA_STREAM, sharedImageUri);
                     resultLauncher.launch(Intent.createChooser(shareIntent, requireContext().resources.getString(R.string.shareLabel)))
                 }
@@ -235,9 +243,9 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
                         binding.likeImageViewId.setTint(view.context.getColor(R.color.white));
                         selectedKitap.kitapBegenilmis = 0;
                     }
+                    binding.kitapDetayProgresBar.hideComponent();
                 }
                 it.hasBeenHandled = false;
-                binding.kitapDetayProgresBar.hideComponent();
             }
         });
     }

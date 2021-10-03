@@ -231,8 +231,34 @@
                             android:textColor="@color/black"
                             android:textSize="14sp" />
                     </LinearLayout>
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <RelativeLayout
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/puanPanel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RatingBar
+                        android:isIndicator="true"
+                        android:numStars="5"
+                        android:rating="3"
+                        android:progressTint="#FFC107"
+                        android:stepSize="0.1"
+                        android:id="@+id/ratingBarKitapPuan"
+                        android:layout_alignParentStart="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginRight="5dp"
+                        android:fontFamily="@font/alegreya_bold"
+                        android:text="3/5"
+                        android:textSize="36sp" />
+                </RelativeLayout>
 
                 <RelativeLayout
                     android:id="@+id/kitapDetayTextLayoutId"
@@ -244,12 +270,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginRight="10dp"
                         android:ellipsize="marquee"
                         android:fontFamily="@font/alegreya"
                         android:textIsSelectable="true"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
                     <RelativeLayout
                         android:id="@+id/viewMoreImageIdLayout"
@@ -268,20 +294,85 @@
                     android:layout_marginTop="-10dp"
                     android:src="@drawable/ic_baseline_expand_more_48"
                     android:visibility="gone" />
-
-                <ImageView
-                    android:id="@+id/viewLessImageId"
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:background="@drawable/detay_textview_background"
-                    android:src="@drawable/ic_baseline_expand_less_48"
-                    android:visibility="gone" />
+                    android:layout_height="1dp"
+                    android:background="@color/transparent"/>
+                <RelativeLayout
+                    android:id="@+id/kitapYorumPanel"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
+                    <RelativeLayout
+                        android:id="@+id/yorumLabelPanelId"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/kitapDetayYorumlarTextId"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/kitapYorumlarText" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_toRightOf="@id/kitapDetayYorumlarTextId"
+                            android:gravity="center"
+                            android:text="12" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginRight="5dp"
+                            android:src="@drawable/ic_baseline_comment_24" />
+                    </RelativeLayout>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_below="@id/yorumLabelPanelId"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/kitapYorumYazanImageViewId"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/ic_baseline_comment_24"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginLeft="5dp"
+                            app:cardBackgroundColor="@color/shrim_grey"
+                            app:cardCornerRadius="4dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/kitapYorumYazanImageViewId"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="3dp"
+                                android:layout_gravity="center_vertical"
+                                android:text="@string/kitapDetayYorumHint" />
+                        </com.google.android.material.card.MaterialCardView>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </RelativeLayout>
             </LinearLayout>
-
         </com.google.android.material.card.MaterialCardView>
-
     </LinearLayout>
-
 </androidx.core.widget.NestedScrollView>

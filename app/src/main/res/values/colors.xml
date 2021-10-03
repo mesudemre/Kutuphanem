@@ -31,4 +31,5 @@
     <color name="kitapDetayItemBackground">#EFEDED</color>
     <color name="acik_kirmizi">#E4485F</color>
     <color name="kahverengi">#571C09</color>
+    <color name="acikGri">#FAFAFA</color>
 </resources>

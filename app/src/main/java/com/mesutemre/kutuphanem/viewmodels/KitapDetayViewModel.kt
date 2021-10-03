@@ -11,9 +11,13 @@ import com.mesutemre.kutuphanem.base.BaseDataEvent
 import com.mesutemre.kutuphanem.base.BaseEvent
 import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.dao.KitapDao
+import com.mesutemre.kutuphanem.dao.KullaniciDao
 import com.mesutemre.kutuphanem.model.KitapModel
+import com.mesutemre.kutuphanem.model.Kullanici
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.service.IKitapService
+import com.mesutemre.kutuphanem.util.CustomSharedPreferences
+import com.mesutemre.kutuphanem.util.KULLANICI_ADI_KEY
 import com.mesutemre.kutuphanem.util.downloadKitap
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -32,7 +36,8 @@ import javax.inject.Inject
 class KitapDetayViewModel @Inject
 constructor(application: Application,
             private val kitapService: IKitapService,
-            private val kitapDao: KitapDao
+            private val kitapDao: KitapDao,
+            private val kullaniciDao:KullaniciDao
 ): BaseViewModel(application) {
 
     val shareUri = MutableLiveData<BaseEvent<Uri>>();
@@ -43,8 +48,12 @@ constructor(application: Application,
     val arsivKitapSil = MutableLiveData<BaseEvent<String>>();
     val kitapBegenme = MutableLiveData<BaseEvent<ResponseStatusModel>>();
     val selectedKitap = MutableLiveData<BaseEvent<KitapModel>>();
+    val yorumYapanKullanici = MutableLiveData<BaseEvent<Kullanici>>();
 
     override val disposible: CompositeDisposable = CompositeDisposable();
+
+    @Inject
+    lateinit var customSharedPreferences: CustomSharedPreferences;
 
     fun prepareShareKitap(kitap:KitapModel, requireContext: Context){
         launch(Dispatchers.IO) {
@@ -187,7 +196,14 @@ constructor(application: Application,
                 }));
     }
 
-    fun getKitapByKitapId(kitapId: Int){
+    fun getKitapBilgiler(kitapId: Int){
+        launch(Dispatchers.IO) {
+            async { getKitapByKitapId(kitapId!!) }
+            async { getYorumYapanKullanici()}
+        }
+    }
+
+    private fun getKitapByKitapId(kitapId: Int){
         val jsonObj: JSONObject = JSONObject();
         jsonObj.put("id",kitapId);
         disposible.add(
@@ -209,5 +225,16 @@ constructor(application: Application,
                         selectedKitap.value = baseEvent;
                     }
                 }));
+    }
+
+    private suspend fun getYorumYapanKullanici(){
+        val kullaniciAd = customSharedPreferences.getStringFromSharedPreferences(KULLANICI_ADI_KEY);
+        val kullanici = kullaniciDao.getKullaniciBilgiByUsername(kullaniciAd);
+        val baseEvent = BaseEvent(kullanici);
+        baseEvent.hasBeenHandled = true;
+        if(kullanici == null) {
+            baseEvent.hasBeenError = true;
+        }
+        yorumYapanKullanici.postValue(baseEvent);
     }
 }

@@ -44,7 +44,7 @@ class KitapDetayDeepFragment: BaseFragment<FragmentKitapDetayDeepBinding>() {
     override fun onCreateFragment(savedInstanceState: Bundle?) {
         kitapId = args.kitapId;
         if(!isFromArsiv){
-            viewModel.getKitapByKitapId(Integer.parseInt(kitapId));
+            viewModel.getKitapBilgiler(Integer.parseInt(kitapId));
         }
     }
 
