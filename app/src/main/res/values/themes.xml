@@ -119,4 +119,7 @@
         <item name="cornerSizeBottomRight">30dp</item>
         <item name="cornerSizeBottomLeft">30dp</item>
     </style>
+    <style name="CustomHintApperance" parent="TextAppearance.Design.Hint">
+        <item name="android:textColor">@color/transparent</item>
+    </style>
 </resources>

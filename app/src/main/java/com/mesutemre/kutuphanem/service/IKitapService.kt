@@ -2,6 +2,7 @@ package com.mesutemre.kutuphanem.service
 
 import com.mesutemre.kutuphanem.model.KitapModel
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
+import com.mesutemre.kutuphanem.model.YorumListeModel
 import io.reactivex.Single
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -41,4 +42,12 @@ interface IKitapService {
     @Headers("Content-Type: application/json")
     @POST("api/kitap/begen/liste")
     suspend fun getBegenilenKitapListe(@Body jsonStr:String):Response<List<KitapModel>>;
+
+    @Headers("Content-Type: application/json")
+    @POST("api/kitap/yorum/kaydet")
+    fun kitapYorumKaydet(@Body jsonStr:String):Single<ResponseStatusModel>;
+
+    @Headers("Content-Type: application/json")
+    @GET("api/kitap/yorumlar/{kitapId}")
+    fun getKitapYorumListe(@Path("kitapId") kitapId:Int):Single<YorumListeModel>;
 }

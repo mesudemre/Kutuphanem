@@ -163,7 +163,7 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
         }
 
         binding.kitapYorumPanel?.setOnClickListener {
-            KitapYorumBottomSheetDialogFragment(kullanici)
+            KitapYorumBottomSheetDialogFragment(kullanici,selectedKitap)
                 .show(requireFragmentManager(),null);
         }
     }

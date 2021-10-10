@@ -147,6 +147,11 @@ fun TextInputEditText.clearContent(et: TextInputEditText){
     et.editableText.clear();
 }
 
+fun TextInputEditText.clearAndHideKeyboard(){
+    this.hideKeyboard(this);
+    this.clearContent(this);
+}
+
 @BindingAdapter(value = ["android:loadFromLocal"])
 fun loadImageFromLocal(view: ImageView, kitapId:Int){
     view.getImageFromLocal(kitapId,view);

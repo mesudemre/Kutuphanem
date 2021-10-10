@@ -297,7 +297,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="top|left"
                         android:hint="@string/aciklamaHintText"
-                        android:inputType="textMultiLine"
+                        android:inputType="textCapSentences|textMultiLine"
                         android:lines="6"
                         android:maxLines="8"
                         android:minLines="4"

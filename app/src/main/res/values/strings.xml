@@ -149,4 +149,9 @@
     <string name="kitapYorumlarText">Yorumlar</string>
     <string name="kitapDetayYorumHint">Herkese açık bir yorum ekle...</string>
     <string name="kitapYorumSaygiLabel">Yorum yaparken saygılı olmayı unutmayın.Aksi takdirde tarafınıza uygulanacak cezai yaptırımlar bulunmaktadır</string>
+
+    <!--KitapYorumBottomSheetDialogFragment -->
+    <string name="kitapDetayYorumHintDlg"><font size="30">Herkese açık bir yorum ekle...</font></string>
+    <string name="kitapYorumListeHata">Yorumlar getirilemedi!</string>
+    <string name="kitapYorumListeBos">Bu kitap hakkında henüz yorum yapılmamış</string>
 </resources>

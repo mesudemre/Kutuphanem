@@ -69,8 +69,6 @@ data class KitapModel(
         @Expose
         var kitapBegenilmis:Int
 ):Serializable {
-        @Ignore
-        var isMenuShown:Boolean = false;
 
         constructor() : this(null,null,null,null,null,null,null,null,null,0f,0) {
         }
