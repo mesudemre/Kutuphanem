@@ -21,10 +21,7 @@ import com.mesutemre.kutuphanem.fragments.dialogs.ResimSecBottomSheetDialogFragm
 import com.mesutemre.kutuphanem.listener.ProfilIslemFragmentClickListener
 import com.mesutemre.kutuphanem.model.KitapturModel
 import com.mesutemre.kutuphanem.model.Kullanici
-import com.mesutemre.kutuphanem.util.CustomSharedPreferences
-import com.mesutemre.kutuphanem.util.formatDate
-import com.mesutemre.kutuphanem.util.getCircleImageFromUrl
-import com.mesutemre.kutuphanem.util.setMotionVisibility
+import com.mesutemre.kutuphanem.util.*
 import com.mesutemre.kutuphanem.viewmodels.ProfilIslemViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.profil_islem_fragment.*
@@ -76,26 +73,26 @@ class ProfilIslemFragment() :Fragment(), ProfilIslemFragmentClickListener {
         });
 
         viewModel.kullaniciLoading.observe(viewLifecycleOwner, Observer {
-            profilErrorTextId.visibility = View.GONE;
+            profilErrorTextId.hideComponent();
             if(it){
-                profilProgressBar.visibility = View.VISIBLE;
+                profilProgressBar.showComponent();
                 profilResimPanelLayoutId.setMotionVisibility(View.GONE);
                 detayLayoutId.setMotionVisibility(View.GONE);
             }else{
-                profilProgressBar.visibility = View.GONE;
+                profilProgressBar.hideComponent();
                 profilResimPanelLayoutId.setMotionVisibility(View.VISIBLE);
                 detayLayoutId.setMotionVisibility(View.VISIBLE);
             }
         });
 
         viewModel.kullaniciError.observe(viewLifecycleOwner, Observer {
-            profilProgressBar.visibility = View.GONE;
+            profilProgressBar.hideComponent();
             if(it){
-                profilErrorTextId.visibility = View.VISIBLE;
+                profilErrorTextId.showComponent();
                 profilResimPanelLayoutId.setMotionVisibility(View.GONE);
                 detayLayoutId.setMotionVisibility(View.GONE);
             }else{
-                profilErrorTextId.visibility = View.GONE;
+                profilErrorTextId.hideComponent();
                 profilResimPanelLayoutId.setMotionVisibility(View.VISIBLE);
                 detayLayoutId.setMotionVisibility(View.VISIBLE);
             }
@@ -127,24 +124,24 @@ class ProfilIslemFragment() :Fragment(), ProfilIslemFragmentClickListener {
         });
 
         viewModel.kitapTurLoading.observe(viewLifecycleOwner, Observer {
-            ilgiAlanHataTextViewId.visibility = View.GONE;
+            ilgiAlanHataTextViewId.hideComponent();
             if(it){
-                ilgiAlanProgressBarId.visibility = View.VISIBLE;
-                ilgiAlanChips.visibility = View.GONE;
+                ilgiAlanProgressBarId.showComponent();
+                ilgiAlanChips.hideComponent();
             }else{
-                ilgiAlanProgressBarId.visibility = View.GONE;
-                ilgiAlanChips.visibility = View.VISIBLE;
+                ilgiAlanProgressBarId.hideComponent();
+                ilgiAlanChips.showComponent();
             }
         });
 
         viewModel.kitapTurError.observe(viewLifecycleOwner, Observer {
-            ilgiAlanProgressBarId.visibility = View.GONE;
+            ilgiAlanProgressBarId.hideComponent();
             if(it){
-                ilgiAlanHataTextViewId.visibility = View.VISIBLE;
-                ilgiAlanChips.visibility = View.GONE;
+                ilgiAlanHataTextViewId.showComponent();
+                ilgiAlanChips.hideComponent();
             }else{
-                ilgiAlanHataTextViewId.visibility = View.GONE;
-                ilgiAlanChips.visibility = View.VISIBLE;
+                ilgiAlanHataTextViewId.hideComponent();
+                ilgiAlanChips.showComponent();
             }
         });
     }
@@ -160,7 +157,8 @@ class ProfilIslemFragment() :Fragment(), ProfilIslemFragmentClickListener {
 
     override fun openDatePicker(view: View, dogumTarihi: Date) {
         val editText = view as TextInputEditText;
-        DogumTarihiDialogFragment(editText,dogumTarihi).show(requireFragmentManager(),null);
+        DogumTarihiDialogFragment(editText,dogumTarihi)
+            .show(requireFragmentManager(),null);
     }
 
     override fun openProfilResimDegistirme(view: View,profilImage:View) {

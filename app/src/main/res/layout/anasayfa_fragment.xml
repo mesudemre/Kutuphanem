@@ -3,202 +3,202 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <RelativeLayout
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/searchInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="48dp"
+                android:focusableInTouchMode="true"
+                app:boxCornerRadiusBottomEnd="20dp"
+                app:boxCornerRadiusBottomStart="20dp"
+                app:boxCornerRadiusTopEnd="20dp"
+                app:boxCornerRadiusTopStart="20dp"
+                app:errorEnabled="true"
+                app:startIconDrawable="@drawable/ic_baseline_search_grey_24">
+
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                    android:id="@+id/searchInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/searchHintText"
+                    android:inputType="textCapWords" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/notificationImageId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_alignRight="@id/searchInputLayout"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/ic_baseline_notifications_48" />
+
+            <TextView
+                android:id="@+id/cart_badge"
+                android:layout_width="20dp"
+                android:layout_alignRight="@id/notificationImageId"
+                android:layout_height="20dp"
+                android:layout_gravity="right|end|top"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="3dp"
+                android:background="@drawable/badge_background"
+                android:gravity="center"
+                android:padding="3dp"
+                android:textColor="@android:color/white"
+                android:text="5"
+                android:textSize="12sp"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="1dp"
+            android:background="@drawable/google_colors"/>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_marginTop="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/searchInputLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginRight="48dp"
-                    android:focusableInTouchMode="true"
-                    app:boxCornerRadiusBottomEnd="20dp"
-                    app:boxCornerRadiusBottomStart="20dp"
-                    app:boxCornerRadiusTopEnd="20dp"
-                    app:boxCornerRadiusTopStart="20dp"
-                    app:errorEnabled="true"
-                    app:startIconDrawable="@drawable/ic_baseline_search_grey_24">
+                    android:layout_height="50dp"
+                    android:background="@color/vbsari">
 
-                    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                        android:id="@+id/searchInputEditText"
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:id="@+id/yeniIconLeftId"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="10dp"
+                        android:src="@drawable/yeni_icon" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/anasayfaHosgeldinMessageTextView"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="@string/searchHintText"
-                        android:inputType="textCapWords" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="2dp"
+                        android:layout_toRightOf="@id/yeniIconLeftId"
+                        android:fontFamily="@font/alegreya"
+                        android:text="@string/yeniArayuzText"
+                        android:textColor="@color/whiteTextColor"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
 
-                <ImageView
-                    android:id="@+id/notificationImageId"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:layout_alignRight="@id/searchInputLayout"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginRight="5dp"
-                    android:src="@drawable/ic_baseline_notifications_48" />
-
-                <TextView
-                    android:id="@+id/cart_badge"
-                    android:layout_width="20dp"
-                    android:layout_alignRight="@id/notificationImageId"
-                    android:layout_height="20dp"
-                    android:layout_gravity="right|end|top"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="3dp"
-                    android:background="@drawable/badge_background"
-                    android:gravity="center"
-                    android:padding="3dp"
-                    android:textColor="@android:color/white"
-                    android:text="5"
-                    android:textSize="12sp"/>
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginTop="1dp"
-                android:background="@drawable/google_colors"/>
-
-            <androidx.core.widget.NestedScrollView
-                android:layout_marginTop="4dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <LinearLayout
+                <RelativeLayout
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="20dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/alegreya"
+                        android:text="@string/dashKategoriText"
+                        android:textColor="@color/transparent"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:background="@color/kategoriBackground"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:background="@color/vbsari">
-
-                        <ImageView
-                            android:id="@+id/yeniIconLeftId"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_marginStart="10dp"
-                            android:src="@drawable/yeni_icon" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/anasayfaHosgeldinMessageTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:layout_marginLeft="2dp"
-                            android:layout_toRightOf="@id/yeniIconLeftId"
-                            android:fontFamily="@font/alegreya"
-                            android:text="@string/yeniArayuzText"
-                            android:textColor="@color/whiteTextColor"
-                            android:textSize="17sp"
-                            android:textStyle="bold" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:fontFamily="@font/alegreya"
-                            android:text="@string/dashKategoriText"
-                            android:textColor="@color/transparent"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
-                    </RelativeLayout>
-
-                    <LinearLayout
-                        android:layout_marginTop="10dp"
-                        android:layout_width="match_parent"
-                        android:background="@color/kategoriBackground"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/dashKategoriHataTextView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:visibility="gone"
-                            android:text="@string/dashKategoriListeHata"
-                            android:textColor="@color/design_default_color_error"
-                            android:textSize="16sp" />
-
-                        <ProgressBar
-                            android:id="@+id/dashKategoriProgressBarId"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/ilgiAlanHataTextViewId"
-                            android:layout_gravity="center"
-                            android:indeterminate="true"
-                            android:visibility="gone"
-                            android:indeterminateDrawable="@drawable/wheel_progress_indeterminate_small" />
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/dashKategoriRecyclerView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_marginTop="20dp"
-                        android:background="@color/lacivert"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <androidx.viewpager2.widget.ViewPager2
-                            android:id="@+id/tanitimViewPager"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp" />
-
-                        <com.google.android.material.tabs.TabLayout
-                            android:id="@+id/tanitimTabLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="20dp"
-                            android:layout_gravity="bottom"
-                            android:background="@color/lacivert"
-                            app:tabBackground="@drawable/tab_selector"
-                            app:tabGravity="center"
-                            app:tabIndicatorHeight="0dp" />
-
-                    </LinearLayout>
-
-                    <RelativeLayout
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_marginTop="20dp"
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/dashKategoriHataTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="gone">
+                        android:gravity="center"
+                        android:visibility="gone"
+                        android:text="@string/dashKategoriListeHata"
+                        android:textColor="@color/design_default_color_error"
+                        android:textSize="16sp" />
 
-                        <com.google.android.material.textview.MaterialTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:fontFamily="@font/alegreya"
-                            android:text="@string/encokYorumlananlarText"
-                            android:textColor="@color/transparent"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
-                    </RelativeLayout>
+                    <ProgressBar
+                        android:id="@+id/dashKategoriProgressBarId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ilgiAlanHataTextViewId"
+                        android:layout_gravity="center"
+                        android:indeterminate="true"
+                        android:visibility="gone"
+                        android:indeterminateDrawable="@drawable/wheel_progress_indeterminate_small" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/dashKategoriRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
-            </androidx.core.widget.NestedScrollView>
-        </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/lacivert"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/tanitimViewPager"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp" />
+
+                    <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/tanitimTabLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:layout_gravity="bottom"
+                        android:background="@color/lacivert"
+                        app:tabBackground="@drawable/tab_selector"
+                        app:tabGravity="center"
+                        app:tabIndicatorHeight="0dp" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/alegreya"
+                        android:text="@string/encokYorumlananlarText"
+                        android:textColor="@color/transparent"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
 </layout>

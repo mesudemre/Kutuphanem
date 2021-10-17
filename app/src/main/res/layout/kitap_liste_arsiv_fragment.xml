@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/kitapArsivListeSwipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/kitapArsivListeRw"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/kitapArsivListeErrorTextId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:fontFamily="@font/alegreya_bold"
+                android:text="@string/kitapArsivMevcutDegil"
+                android:textColor="@color/acik_kirmizi"
+                android:textSize="32sp"
+                android:visibility="gone" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/kitapArsivListeNotTextId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/kitapArsivListeErrorTextId"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/source_sans_pro"
+                android:gravity="center"
+                android:text="@string/kitapArsivNot"
+                android:textAlignment="center"
+                android:textColor="@color/transparent"
+                android:textSize="16sp"
+                android:textStyle="italic"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/kitapArsivListeProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_centerInParent="true"
+                android:indeterminate="true"
+                android:indeterminateDrawable="@drawable/wheel_progress_indeterminate"
+                android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</layout>

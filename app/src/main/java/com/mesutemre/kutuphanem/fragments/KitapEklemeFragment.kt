@@ -18,21 +18,16 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.google.android.material.textfield.TextInputEditText
 import com.mesutemre.kutuphanem.R
+import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.databinding.KitapEklemeFragmentBinding
 import com.mesutemre.kutuphanem.fragments.dialogs.DogumTarihiDialogFragment
 import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
-import com.mesutemre.kutuphanem.model.KitapturModel
-import com.mesutemre.kutuphanem.model.SnackTypeEnum
-import com.mesutemre.kutuphanem.model.YayineviModel
-import com.mesutemre.kutuphanem.util.CAMERA_REQUEST_CODE
-import com.mesutemre.kutuphanem.util.clearContent
-import com.mesutemre.kutuphanem.util.createOutputDirectory
-import com.mesutemre.kutuphanem.util.showSnackBar
+import com.mesutemre.kutuphanem.model.*
+import com.mesutemre.kutuphanem.util.*
 import com.mesutemre.kutuphanem.viewmodels.KitapEklemeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
@@ -45,9 +40,8 @@ import java.util.concurrent.Executors
 typealias LumaListener = (luma: Double) -> Unit
 
 @AndroidEntryPoint
-class KitapEklemeFragment:Fragment() {
+class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
 
-    private var kitapEklemeBinding:KitapEklemeFragmentBinding? = null
     private val viewModel: KitapEklemeViewModel by viewModels()
     private var imageCapture:ImageCapture? = null
     private lateinit var outputDirectory: File
@@ -58,8 +52,11 @@ class KitapEklemeFragment:Fragment() {
     private var selectedKitapTur:Int = 0
     private var selectedYayinevi:Int = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> KitapEklemeFragmentBinding
+            = KitapEklemeFragmentBinding::inflate
+    override val layoutName = "kitap_ekleme_fragment.xml";
+
+    override fun onCreateFragment(savedInstanceState: Bundle?) {
         if(savedInstanceState != null){
             savedKitapUri = savedInstanceState.getParcelable("kitapImage")
         }
@@ -67,46 +64,41 @@ class KitapEklemeFragment:Fragment() {
         outputDirectory = createOutputDirectory(requireContext());
     }
 
-    override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
-        kitapEklemeBinding = KitapEklemeFragmentBinding.inflate(inflater)
-        return kitapEklemeBinding!!.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun onStartFragment() {
         viewModel.initKitapEklemeSpinnerListe()
-        observeSpinnerList()
+        observeSpinnerList();
 
-        kitapEklemeBinding!!.kitapEklemeBackImageId.setOnClickListener {
-            requireActivity().onBackPressed()
+        binding.kitapEklemeBackImageId.setOnClickListener {
+            requireActivity().onBackPressed();
         }
 
-        kitapEklemeBinding!!.editTextAlinmaTar.setOnClickListener {
+        binding.editTextAlinmaTar.setOnClickListener {
             val editText = it as TextInputEditText
             DogumTarihiDialogFragment(editText, Date()).show(requireFragmentManager(),null)
         }
 
-        kitapEklemeBinding!!.kitapImageCapId.setOnClickListener {
+        binding.kitapImageCapId.setOnClickListener {
             kameraIzin = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
             if(kameraIzin != PackageManager.PERMISSION_GRANTED){
                 requestPermissions(arrayOf(Manifest.permission.CAMERA), CAMERA_REQUEST_CODE)
             }else{
-                kitapEklemeBinding!!.photoCekLayoutId.visibility = View.VISIBLE
-                startCamera()
+                binding.photoCekLayoutId.showComponent();
+                binding.kitapGenelBilgiLayoutId.hideComponent();
+                startCamera();
             }
         }
 
-        kitapEklemeBinding!!.fotoCekButtonId.setOnClickListener {
+        binding.fotoCekButtonId.setOnClickListener {
             takeKitapPhoto()
         }
 
-        kitapEklemeBinding!!.fotoCekIptalButtonId.setOnClickListener {
-            kitapEklemeBinding!!.photoCekLayoutId.visibility = View.GONE
+        binding.fotoCekIptalButtonId.setOnClickListener {
+            binding.photoCekLayoutId.hideComponent();
+            binding.kitapGenelBilgiLayoutId.showComponent();
             cameraProvider.unbindAll()
         }
 
-        kitapEklemeBinding!!.kitapTurlerSpinnerId.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.kitapTurlerSpinnerId.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
 
@@ -117,7 +109,7 @@ class KitapEklemeFragment:Fragment() {
 
         }
 
-        kitapEklemeBinding!!.yayinEviSpinnerId.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.yayinEviSpinnerId.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
 
@@ -128,52 +120,52 @@ class KitapEklemeFragment:Fragment() {
         }
 
         if(savedKitapUri != null){
-            kitapEklemeBinding!!.kitapImageCapId.setImageURI(savedKitapUri)
+            binding.kitapImageCapId.setImageURI(savedKitapUri)
         }
 
-        kitapEklemeBinding!!.textInputKitapAd.editText!!.addTextChangedListener(TextInputErrorClearListener(kitapEklemeBinding!!.textInputKitapAd))
-        kitapEklemeBinding!!.textInputYazarAd.editText!!.addTextChangedListener(TextInputErrorClearListener(kitapEklemeBinding!!.textInputYazarAd))
-        kitapEklemeBinding!!.textInputAlinmaTar.editText!!.addTextChangedListener(TextInputErrorClearListener(kitapEklemeBinding!!.textInputAlinmaTar))
-        kitapEklemeBinding!!.textInputKitapAciklama.editText!!.addTextChangedListener(TextInputErrorClearListener(kitapEklemeBinding!!.textInputKitapAciklama))
+        binding.textInputKitapAd.editText!!.addTextChangedListener(TextInputErrorClearListener(binding.textInputKitapAd))
+        binding.textInputYazarAd.editText!!.addTextChangedListener(TextInputErrorClearListener(binding.textInputYazarAd))
+        binding.textInputAlinmaTar.editText!!.addTextChangedListener(TextInputErrorClearListener(binding.textInputAlinmaTar))
+        binding.textInputKitapAciklama.editText!!.addTextChangedListener(TextInputErrorClearListener(binding.textInputKitapAciklama))
 
-        kitapEklemeBinding!!.kitapKaydetButtonId.setOnClickListener {
-            val kitapAd = kitapEklemeBinding!!.textInputKitapAd.editText?.text.toString()
-            val yazarAd = kitapEklemeBinding!!.textInputYazarAd.editText?.text.toString()
-            val alinmaTar = kitapEklemeBinding!!.textInputAlinmaTar.editText?.text.toString()
-            val kitapAciklama = kitapEklemeBinding!!.textInputKitapAciklama.editText?.text.toString()
+        binding.kitapKaydetButtonId.setOnClickListener {
+            val kitapAd = binding.textInputKitapAd.editText?.text.toString()
+            val yazarAd = binding.textInputYazarAd.editText?.text.toString()
+            val alinmaTar = binding.textInputAlinmaTar.editText?.text.toString()
+            val kitapAciklama = binding.textInputKitapAciklama.editText?.text.toString()
 
             if(savedKitapUri == null){
-                showSnackBar(it,it.context.getString(R.string.kitapResimErrorText),SnackTypeEnum.WARNING)
+                showSnackBar(it,it.context.getString(R.string.kitapResimErrorText), WARNING)
                 return@setOnClickListener
             }
 
             if(TextUtils.isEmpty(kitapAd)){
-                kitapEklemeBinding!!.textInputKitapAd.error = it.context.getString(R.string.kitapAdErrorText)
+                binding.textInputKitapAd.error = it.context.getString(R.string.kitapAdErrorText)
                 return@setOnClickListener
             }
 
             if(TextUtils.isEmpty(yazarAd)){
-                kitapEklemeBinding!!.textInputYazarAd.error = it.context.getString(R.string.yazarAdErrorText)
+                binding.textInputYazarAd.error = it.context.getString(R.string.yazarAdErrorText)
                 return@setOnClickListener
             }
 
             if(TextUtils.isEmpty(alinmaTar)){
-                kitapEklemeBinding!!.textInputAlinmaTar.error = it.context.getString(R.string.alinmaTarErrorText)
+                binding.textInputAlinmaTar.error = it.context.getString(R.string.alinmaTarErrorText)
                 return@setOnClickListener
             }
 
             if(TextUtils.isEmpty(kitapAciklama)){
-                kitapEklemeBinding!!.textInputKitapAciklama.error = it.context.getString(R.string.kitapAciklamaErrorText)
+                binding.textInputKitapAciklama.error = it.context.getString(R.string.kitapAciklamaErrorText)
                 return@setOnClickListener
             }
 
             if(selectedKitapTur == 0){
-                showSnackBar(it,it.context.getString(R.string.kitapTurErrorText),SnackTypeEnum.WARNING)
+                showSnackBar(it,it.context.getString(R.string.kitapTurErrorText),WARNING)
                 return@setOnClickListener
             }
 
             if(selectedYayinevi == 0){
-                showSnackBar(it,it.context.getString(R.string.yayinEviErrorText),SnackTypeEnum.WARNING)
+                showSnackBar(it,it.context.getString(R.string.yayinEviErrorText),WARNING)
                 return@setOnClickListener
             }
 
@@ -197,64 +189,64 @@ class KitapEklemeFragment:Fragment() {
             observeKitapKaydi(it)
             observeKitapResimYukleme(it)
         }
-
     }
 
     private fun observeKitapKaydi(view:View){
         viewModel.kitapKaydet.observe(viewLifecycleOwner, Observer { kitapKaydet->
-            kitapEklemeBinding!!.kitapKayitProgressLayoutId.visibility = View.GONE
+            binding.kitapKayitProgressLayoutId.hideComponent();
             kitapKaydet.let {
                 if(kitapKaydet){
-                    showSnackBar(view,view.context.resources.getString(R.string.kitapKaydiBasarli),SnackTypeEnum.SUCCESS)
+                    showSnackBar(view,view.context.resources.getString(R.string.kitapKaydiBasarli),SUCCESS)
                 }else{
-                    showSnackBar(view,view.context.resources.getString(R.string.kitapKaydiHataText),SnackTypeEnum.ERROR)
+                    showSnackBar(view,view.context.resources.getString(R.string.kitapKaydiHataText),
+                        ERROR)
                 }
             }
         })
 
         viewModel.kitapKaydetLoading.observe(viewLifecycleOwner,Observer{it->
             if(it){
-                kitapEklemeBinding!!.kitapKayitProgressLayoutId.visibility = View.VISIBLE
+                binding.kitapKayitProgressLayoutId.showComponent();
                 requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             }else{
                 requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                kitapEklemeBinding!!.kitapKayitProgressLayoutId.visibility = View.GONE
+                binding.kitapKayitProgressLayoutId.hideComponent();
             }
         })
 
         viewModel.kitapKaydetHata.observe(viewLifecycleOwner,Observer{it->
-            kitapEklemeBinding!!.kitapKayitProgressLayoutId.visibility = View.GONE
+            binding.kitapKayitProgressLayoutId.hideComponent();
             if(it){
-                showSnackBar(view,view.context.resources.getString(R.string.kitapKaydiHataText),SnackTypeEnum.ERROR)
+                showSnackBar(view,view.context.resources.getString(R.string.kitapKaydiHataText),ERROR)
             }
         })
     }
 
     private fun observeKitapResimYukleme(view:View){
         viewModel.kitapResimYukle.observe(viewLifecycleOwner, Observer { response->
-           if(response.statusCode.equals("200")){
-               showSnackBar(view,response.statusMessage,SnackTypeEnum.SUCCESS);
-               formTemizle();
-           }else{
-               showSnackBar(view,view.context.resources.getString(R.string.kitapResimErrorText),SnackTypeEnum.ERROR)
-           }
+            if(response.statusCode.equals("200")){
+                showSnackBar(view,response.statusMessage,SUCCESS);
+                formTemizle();
+            }else{
+                showSnackBar(view,view.context.resources.getString(R.string.kitapResimErrorText),ERROR)
+            }
         })
 
         viewModel.kitapResimYukleLoading.observe(viewLifecycleOwner,Observer{it->
-           if(it) {
-               kitapEklemeBinding!!.kitapResimYukleProgressLayoutId.visibility = View.VISIBLE
-               requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                   WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-           }else{
-               requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-               kitapEklemeBinding!!.kitapResimYukleProgressLayoutId.visibility = View.GONE
-           }
+            if(it) {
+                binding.kitapResimYukleProgressLayoutId.showComponent();
+                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            }else{
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                binding.kitapResimYukleProgressLayoutId.hideComponent();
+            }
         })
 
         viewModel.kitapResimYukleHata.observe(viewLifecycleOwner,Observer{it->
             if(it){
-                showSnackBar(view,view.context.resources.getString(R.string.kitapResmiYuklemeHata),SnackTypeEnum.ERROR)
+                showSnackBar(view,view.context.resources.getString(R.string.kitapResmiYuklemeHata),ERROR)
             }
         })
     }
@@ -267,7 +259,7 @@ class KitapEklemeFragment:Fragment() {
             val preview = Preview.Builder()
                 .build()
                 .also {
-                    it.setSurfaceProvider(kitapEklemeBinding!!.kitapImageViewFinder.surfaceProvider)
+                    it.setSurfaceProvider(binding.kitapImageViewFinder.surfaceProvider)
                 }
             imageCapture = ImageCapture.Builder()
                 .build()
@@ -303,82 +295,77 @@ class KitapEklemeFragment:Fragment() {
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     savedKitapUri = Uri.fromFile(photoFile)
-                    kitapEklemeBinding!!.kitapImageCapId.setImageURI(savedKitapUri)
-                    kitapEklemeBinding!!.photoCekLayoutId.visibility = View.GONE
+                    binding.kitapImageCapId.setImageURI(savedKitapUri)
+                    binding.photoCekLayoutId.hideComponent();
+                    binding.kitapGenelBilgiLayoutId.showComponent();
                     cameraProvider.unbindAll()
                 }
             })
     }
 
+    private fun formTemizle(){
+        savedKitapUri = null;
+        binding.kitapImageCapId.setImageDrawable(binding.kitapImageCapId.context.getDrawable(R.drawable.ic_baseline_photo_camera_48));
+        binding.editTextKitapAd.clearContent(binding.editTextKitapAd);
+        binding.editTextYazarAd.clearContent(binding.editTextYazarAd);
+        binding.editTextAlinmaTar.clearContent(binding.editTextAlinmaTar);
+        binding.editTextKitapAciklama.clearContent(binding.editTextKitapAciklama);
+        selectedKitapTur = 0;
+        binding.kitapTurlerSpinnerId.setSelection(selectedKitapTur);
+        selectedYayinevi = 0;
+        binding.yayinEviSpinnerId.setSelection(selectedYayinevi);
+    }
+
     private fun observeSpinnerList(){
         viewModel.kitapEklemeKitapTurListe.observe(viewLifecycleOwner,Observer{kitapTurListe->
-            val adapter = ArrayAdapter(kitapEklemeBinding!!.kitapTurlerSpinnerId.context,
+            val adapter = ArrayAdapter(binding.kitapTurlerSpinnerId.context,
                 android.R.layout.simple_spinner_dropdown_item,
                 kitapTurListe)
-            kitapEklemeBinding!!.kitapTurlerSpinnerId.adapter = adapter
+            binding.kitapTurlerSpinnerId.adapter = adapter
         })
 
         viewModel.kitapEklemeKitapTurLoading.observe(viewLifecycleOwner,Observer{it->
             if(it){
-                kitapEklemeBinding!!.kitapEklemeKitapTurProgressBarId.visibility = View.VISIBLE
-                kitapEklemeBinding!!.kitapEklemeKitapTurHataTextView.visibility = View.GONE
+                binding.kitapEklemeKitapTurProgressBarId.showComponent();
+                binding.kitapEklemeKitapTurHataTextView.hideComponent();
             }else{
-                kitapEklemeBinding!!.kitapEklemeKitapTurProgressBarId.visibility = View.GONE
+                binding.kitapEklemeKitapTurProgressBarId.hideComponent();
             }
         })
 
         viewModel.kitapEklemeKitapTurError.observe(viewLifecycleOwner,Observer{it->
             if(it){
-                kitapEklemeBinding!!.kitapEklemeKitapTurHataTextView.visibility = View.VISIBLE
-                kitapEklemeBinding!!.kitapTurlerSpinnerId.visibility = View.GONE
+                binding.kitapEklemeKitapTurHataTextView.showComponent();
+                binding.kitapTurlerSpinnerId.hideComponent();
             }else{
-                kitapEklemeBinding!!.kitapEklemeKitapTurHataTextView.visibility = View.GONE
+                binding.kitapEklemeKitapTurHataTextView.hideComponent();
             }
         })
 
         viewModel.kitapEklemeYayinEviListe.observe(viewLifecycleOwner,Observer{yayinEviListe->
-            val adapter = ArrayAdapter(kitapEklemeBinding!!.yayinEviSpinnerId.context,
+            val adapter = ArrayAdapter(binding.yayinEviSpinnerId.context,
                 android.R.layout.simple_spinner_dropdown_item,
                 yayinEviListe)
-            kitapEklemeBinding!!.yayinEviSpinnerId.adapter = adapter
+            binding.yayinEviSpinnerId.adapter = adapter
         })
 
         viewModel.kitapEklemeYayinEviLoading.observe(viewLifecycleOwner,Observer{it->
             if(it){
-                kitapEklemeBinding!!.kitapEklemeYayinEviProgressBarId.visibility = View.VISIBLE
-                kitapEklemeBinding!!.kitapEklemeYayinEviHataTextView.visibility = View.GONE
+                binding.kitapEklemeYayinEviProgressBarId.showComponent();
+                binding.kitapEklemeYayinEviHataTextView.hideComponent();
             }else{
-                kitapEklemeBinding!!.kitapEklemeYayinEviProgressBarId.visibility = View.GONE
+                binding.kitapEklemeYayinEviProgressBarId.hideComponent();
             }
         })
 
         viewModel.kitapEklemeYayinEviError.observe(viewLifecycleOwner,Observer{it->
             if(it){
-                kitapEklemeBinding!!.kitapEklemeYayinEviHataTextView.visibility = View.VISIBLE
-                kitapEklemeBinding!!.yayinEviSpinnerId.visibility = View.GONE
+                binding.kitapEklemeYayinEviHataTextView.showComponent();
+                binding.yayinEviSpinnerId.hideComponent();
             }else{
-                kitapEklemeBinding!!.kitapEklemeYayinEviHataTextView.visibility = View.GONE
+                binding.kitapEklemeYayinEviHataTextView.hideComponent();
             }
         })
-    }
-
-    private fun formTemizle(){
-        savedKitapUri = null;
-        kitapEklemeBinding!!.kitapImageCapId.setImageDrawable(kitapEklemeBinding!!.kitapImageCapId.context.getDrawable(R.drawable.ic_baseline_photo_camera_48));
-        kitapEklemeBinding!!.editTextKitapAd.clearContent(kitapEklemeBinding!!.editTextKitapAd);
-        kitapEklemeBinding!!.editTextYazarAd.clearContent(kitapEklemeBinding!!.editTextYazarAd);
-        kitapEklemeBinding!!.editTextAlinmaTar.clearContent(kitapEklemeBinding!!.editTextAlinmaTar);
-        kitapEklemeBinding!!.editTextKitapAciklama.clearContent(kitapEklemeBinding!!.editTextKitapAciklama);
-        selectedKitapTur = 0;
-        kitapEklemeBinding!!.kitapTurlerSpinnerId.setSelection(selectedKitapTur);
-        selectedYayinevi = 0;
-        kitapEklemeBinding!!.yayinEviSpinnerId.setSelection(selectedYayinevi);
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        cameraExecutor.shutdown()
-        this.kitapEklemeBinding = null
     }
 
     override fun onRequestPermissionsResult(
@@ -390,16 +377,14 @@ class KitapEklemeFragment:Fragment() {
         if(requestCode == CAMERA_REQUEST_CODE){
             kameraIzin = ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.CAMERA)
             if(grantResults.size>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                kitapEklemeBinding!!.photoCekLayoutId.visibility = View.VISIBLE
+                binding.photoCekLayoutId.showComponent();
+                binding.kitapGenelBilgiLayoutId.hideComponent();
                 startCamera()
             }
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        if(savedKitapUri != null){
-            outState.putParcelable("kitapImage",savedKitapUri)
-        }
-        super.onSaveInstanceState(outState)
+    override fun destroyOthers() {
+        cameraExecutor.shutdown()
     }
 }

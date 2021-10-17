@@ -12,7 +12,7 @@ import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.databinding.ItemKitapturBinding
 import com.mesutemre.kutuphanem.listener.KitapturDeleteClickListener
 import com.mesutemre.kutuphanem.model.KitapturModel
-import com.mesutemre.kutuphanem.model.SnackTypeEnum
+import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.util.showSnackBar
 import com.mesutemre.kutuphanem.viewmodels.ParametreKitapturViewModel
 import org.json.JSONObject
@@ -64,7 +64,7 @@ class KitapTurAdapter(val kitapTurListe:ArrayList<KitapturModel>,
 
     private fun observeKitapturSil(view: View){
         viewModel.kitapTurSilResponse.observe(lifeCycleOwner,Observer{response->
-            showSnackBar(view,response.statusMessage, SnackTypeEnum.SUCCESS);
+            showSnackBar(view,response.statusMessage, SUCCESS);
             if(token != null){
                 viewModel.kitapTurListeGetir(true);
             }
@@ -73,7 +73,7 @@ class KitapTurAdapter(val kitapTurListe:ArrayList<KitapturModel>,
         viewModel.kitapTurSilError.observe(lifeCycleOwner, Observer {error->
             error?.let {
                 if(it){
-                    showSnackBar(view,view.context.resources.getString(R.string.kitapTurSilmeHata), SnackTypeEnum.SUCCESS);
+                    showSnackBar(view,view.context.resources.getString(R.string.kitapTurSilmeHata), SUCCESS);
                 }
             }
         });

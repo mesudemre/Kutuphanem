@@ -208,18 +208,18 @@ class ResimSecBottomSheetDialogFragment(
     }
 
     private fun startCameraViews(){
-        profilResimCekLayoutId.visibility = View.VISIBLE;
-        profilFotografTitleTextViewId.visibility = View.GONE;
-        seceneklerLayoutId.visibility = View.GONE;
+        profilResimCekLayoutId.showComponent();
+        profilFotografTitleTextViewId.hideComponent();
+        seceneklerLayoutId.hideComponent();
         (dialog as? BottomSheetDialog)?.let {
             it.behavior.state = BottomSheetBehavior.STATE_EXPANDED;
         }
     }
 
     private fun stopCameraViews(){
-        profilResimCekLayoutId.visibility = View.GONE;
-        profilFotografTitleTextViewId.visibility = View.VISIBLE;
-        seceneklerLayoutId.visibility = View.VISIBLE;
+        profilResimCekLayoutId.hideComponent();
+        profilFotografTitleTextViewId.showComponent();
+        seceneklerLayoutId.showComponent();
     }
 
     override fun onDestroyView() {

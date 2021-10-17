@@ -35,6 +35,7 @@
             android:name=".MainActivity"
             android:theme="@style/NoActionBar"
             android:windowSoftInputMode="adjustPan">
+            <nav-graph android:value="@navigation/kutuphanem_navbottom_graph"/>
         </activity>
         <meta-data
             android:name="preloaded_fonts"

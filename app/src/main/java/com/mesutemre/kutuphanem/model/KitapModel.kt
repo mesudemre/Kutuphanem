@@ -3,6 +3,7 @@ package com.mesutemre.kutuphanem.model
 import androidx.annotation.Keep
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
@@ -61,12 +62,18 @@ data class KitapModel(
         @ColumnInfo(name = "kitapPuan")
         @SerializedName("kitapPuan")
         @Expose
-        val kitapPuan:Float
+        val kitapPuan:Float,
+
+        @ColumnInfo(name = "begenilmis")
+        @SerializedName("begenilmis")
+        @Expose
+        var kitapBegenilmis:Int
 ):Serializable {
-        constructor() : this(null,null,null,null,null,null,null,null,null,0f) {
+
+        constructor() : this(null,null,null,null,null,null,null,null,null,0f,0) {
         }
 
-        constructor(kitapId:Int) : this(kitapId,null,null,null,null,null,null,null,null,0f) {
+        constructor(kitapId:Int) : this(kitapId,null,null,null,null,null,null,null,null,0f,0) {
         }
 
 }

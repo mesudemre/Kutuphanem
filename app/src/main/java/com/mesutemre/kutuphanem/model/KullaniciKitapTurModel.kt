@@ -15,5 +15,5 @@ data class KullaniciKitapTurModel(
     var aciklama:String,
 
     @ColumnInfo(name = "username")
-    var username:String,
+    var username:String
 )

@@ -1,39 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center_vertical"
-    android:orientation="vertical">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/lacivert">
-
-        <ImageView
-            android:id="@+id/kitapEklemeBackImageId"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            android:src="@drawable/ic_baseline_chevron_left"
-            app:tint="@color/white" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_toRightOf="@id/kitapEklemeBackImageId"
-            android:fontFamily="@font/alegreya"
-            android:text="@string/kitapEklemeTitle"
-            android:textColor="@color/whiteTextColor"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-    </RelativeLayout>
-
+    android:layout_height="match_parent">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/photoCekLayoutId"
         android:layout_width="match_parent"
@@ -65,252 +35,288 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
+        android:id="@+id/kitapGenelBilgiLayoutId"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:background="@color/lacivert">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
-
-                <ImageView
-                    android:id="@+id/kitapImageCapId"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_centerHorizontal="true"
-                    android:clickable="true"
-                    android:elevation="2dp"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:src="@drawable/ic_baseline_photo_camera_48" />
-            </RelativeLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputKitapAd"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="20dp"
-                app:boxStrokeColor="@color/primaryTextColor"
-                app:errorEnabled="true">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextKitapAd"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/kitapAdHintText"
-                    android:inputType="textCapSentences" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputYazarAd"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="20dp"
-                app:boxStrokeColor="@color/primaryTextColor"
-                app:errorEnabled="true">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextYazarAd"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/yazarAdHintText"
-                    android:inputType="textCapSentences" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <RelativeLayout
-                android:id="@+id/kitapKayitProgressLayoutId"
-                android:visibility="gone"
+            <ImageView
+                android:id="@+id/kitapEklemeBackImageId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal">
-                <ProgressBar
-                    android:id="@+id/kitapKayitProgressBarId"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:indeterminate="true"
-                    android:indeterminateDrawable="@drawable/wheel_progress_indeterminate" />
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:src="@drawable/ic_baseline_chevron_left"
+                app:tint="@color/white" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/kitapKayitProgressBarId"
-                    android:text="@string/kitapKayitProgressText"
-                    android:textColor="@color/black" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/kitapResimYukleProgressLayoutId"
-                android:visibility="gone"
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal">
-                <ProgressBar
-                    android:id="@+id/kitapResimYukleProgressBarId"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:indeterminate="true"
-                    android:indeterminateDrawable="@drawable/wheel_progress_indeterminate" />
+                android:layout_centerInParent="true"
+                android:layout_toRightOf="@id/kitapEklemeBackImageId"
+                android:fontFamily="@font/alegreya"
+                android:text="@string/kitapEklemeTitle"
+                android:textColor="@color/whiteTextColor"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/kitapResimYukleProgressBarId"
-                    android:text="@string/kitapResimYukleProgressText"
-                    android:textColor="@color/black" />
-            </RelativeLayout>
+        </RelativeLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputAlinmaTar"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="20dp"
-                app:boxStrokeColor="@color/primaryTextColor"
-                app:errorEnabled="true">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextAlinmaTar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="false"
-                    android:hint="@string/alinmaTarHintText" />
-            </com.google.android.material.textfield.TextInputLayout>
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/kitapEklemeKitapTurHataTextView"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/kitapEklemeKitapTurListeHata"
-                    android:textColor="@color/design_default_color_error"
-                    android:textSize="16sp"
-                    android:visibility="gone" />
+                    android:layout_marginTop="20dp">
 
-                <ProgressBar
-                    android:id="@+id/kitapEklemeKitapTurProgressBarId"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:indeterminate="true"
-                    android:indeterminateDrawable="@drawable/wheel_progress_indeterminate_small"
-                    android:visibility="gone" />
+                    <ImageView
+                        android:id="@+id/kitapImageCapId"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_centerHorizontal="true"
+                        android:clickable="true"
+                        android:elevation="2dp"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:src="@drawable/ic_baseline_photo_camera_48" />
+                </RelativeLayout>
 
-                <com.google.android.material.card.MaterialCardView
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputKitapAd"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginRight="20dp"
-                    app:cardCornerRadius="4dp"
-                    app:strokeColor="@color/imageShadow"
-                    app:strokeWidth="1dp">
+                    app:boxStrokeColor="@color/primaryTextColor"
+                    app:errorEnabled="true">
 
-                    <Spinner
-                        android:id="@+id/kitapTurlerSpinnerId"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextKitapAd"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
+                        android:layout_height="wrap_content"
+                        android:hint="@string/kitapAdHintText"
+                        android:inputType="textCapSentences" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/kitapEklemeYayinEviHataTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/kitapEklemeYayineviListeHata"
-                    android:textColor="@color/design_default_color_error"
-                    android:textSize="16sp"
-                    android:visibility="gone" />
-
-                <ProgressBar
-                    android:id="@+id/kitapEklemeYayinEviProgressBarId"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:indeterminate="true"
-                    android:indeterminateDrawable="@drawable/wheel_progress_indeterminate_small"
-                    android:visibility="gone" />
-
-                <com.google.android.material.card.MaterialCardView
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputYazarAd"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginRight="20dp"
-                    app:cardCornerRadius="4dp"
-                    app:strokeColor="@color/imageShadow"
-                    app:strokeWidth="1dp">
+                    app:boxStrokeColor="@color/primaryTextColor"
+                    app:errorEnabled="true">
 
-                    <Spinner
-                        android:id="@+id/yayinEviSpinnerId"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextYazarAd"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
+                        android:layout_height="wrap_content"
+                        android:hint="@string/yazarAdHintText"
+                        android:inputType="textCapSentences" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputKitapAciklama"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="20dp"
-                app:boxStrokeColor="@color/primaryTextColor"
-                app:errorEnabled="true">
+                <RelativeLayout
+                    android:id="@+id/kitapKayitProgressLayoutId"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal">
+                    <ProgressBar
+                        android:id="@+id/kitapKayitProgressBarId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:indeterminate="true"
+                        android:indeterminateDrawable="@drawable/wheel_progress_indeterminate" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextKitapAciklama"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/kitapKayitProgressBarId"
+                        android:text="@string/kitapKayitProgressText"
+                        android:textColor="@color/black" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/kitapResimYukleProgressLayoutId"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal">
+                    <ProgressBar
+                        android:id="@+id/kitapResimYukleProgressBarId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:indeterminate="true"
+                        android:indeterminateDrawable="@drawable/wheel_progress_indeterminate" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/kitapResimYukleProgressBarId"
+                        android:text="@string/kitapResimYukleProgressText"
+                        android:textColor="@color/black" />
+                </RelativeLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputAlinmaTar"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="top|left"
-                    android:hint="@string/aciklamaHintText"
-                    android:inputType="textMultiLine"
-                    android:lines="6"
-                    android:maxLines="8"
-                    android:minLines="4"
-                    android:scrollbars="vertical" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="20dp"
+                    app:boxStrokeColor="@color/primaryTextColor"
+                    app:errorEnabled="true">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/kitapKaydetButtonId"
-                style="@style/PrimaryButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp"
-                android:text="@string/kaydet"
-                android:textColor="@color/whiteTextColor" />
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
-</LinearLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextAlinmaTar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:hint="@string/alinmaTarHintText" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/kitapEklemeKitapTurHataTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/kitapEklemeKitapTurListeHata"
+                        android:textColor="@color/design_default_color_error"
+                        android:textSize="16sp"
+                        android:visibility="gone" />
+
+                    <ProgressBar
+                        android:id="@+id/kitapEklemeKitapTurProgressBarId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:indeterminate="true"
+                        android:indeterminateDrawable="@drawable/wheel_progress_indeterminate_small"
+                        android:visibility="gone" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        app:cardCornerRadius="4dp"
+                        app:strokeColor="@color/imageShadow"
+                        app:strokeWidth="1dp">
+
+                        <Spinner
+                            android:id="@+id/kitapTurlerSpinnerId"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/kitapEklemeYayinEviHataTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/kitapEklemeYayineviListeHata"
+                        android:textColor="@color/design_default_color_error"
+                        android:textSize="16sp"
+                        android:visibility="gone" />
+
+                    <ProgressBar
+                        android:id="@+id/kitapEklemeYayinEviProgressBarId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:indeterminate="true"
+                        android:indeterminateDrawable="@drawable/wheel_progress_indeterminate_small"
+                        android:visibility="gone" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        app:cardCornerRadius="4dp"
+                        app:strokeColor="@color/imageShadow"
+                        app:strokeWidth="1dp">
+
+                        <Spinner
+                            android:id="@+id/yayinEviSpinnerId"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputKitapAciklama"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp"
+                    app:boxStrokeColor="@color/primaryTextColor"
+                    app:errorEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextKitapAciklama"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top|left"
+                        android:hint="@string/aciklamaHintText"
+                        android:inputType="textCapSentences|textMultiLine"
+                        android:lines="6"
+                        android:maxLines="8"
+                        android:minLines="4"
+                        android:scrollbars="vertical" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/kitapKaydetButtonId"
+                    style="@style/PrimaryButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/kaydet"
+                    android:textColor="@color/whiteTextColor" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+</FrameLayout>
+

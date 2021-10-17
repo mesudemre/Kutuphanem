@@ -2,77 +2,55 @@ package com.mesutemre.kutuphanem.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.paging.ExperimentalPagingApi
+import com.google.android.material.tabs.TabLayoutMediator
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem.adapters.KitapListeAdapter
-import com.mesutemre.kutuphanem.customcomponents.LinearSpacingDecoration
+import com.mesutemre.kutuphanem.adapters.ParametreTabViewPagerAdapter
+import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.databinding.KitapListeFragmentBinding
-import com.mesutemre.kutuphanem.model.KitapListeState
-import com.mesutemre.kutuphanem.viewmodels.KitapListeViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.kitap_liste_fragment.*
 
 @AndroidEntryPoint
-class KitapListeFragment:Fragment() {
+class KitapListeFragment:BaseFragment<KitapListeFragmentBinding>() {
 
-    private var adapter:KitapListeAdapter? = null;
-    private var kitapListeBinding:KitapListeFragmentBinding? = null
-    private val viewModel: KitapListeViewModel by viewModels();
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> KitapListeFragmentBinding
+            = KitapListeFragmentBinding::inflate;
+    override val layoutName: String = "kitap_liste_fragment.xml";
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private val fragmentListe = mutableListOf<Fragment>();
+    private val fragmentBasliklar = mutableListOf<String>();
+
+    override fun onCreateFragment(savedInstanceState: Bundle?) {
+        addFragments();
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        kitapListeBinding = KitapListeFragmentBinding.inflate(inflater);
-        return kitapListeBinding!!.root;
+    override fun onStartFragment() {
+        val fragmentAdapter = ParametreTabViewPagerAdapter(childFragmentManager,lifecycle,
+            ArrayList(fragmentListe)
+        );
+        binding.kitapListeViewPager.adapter = fragmentAdapter;
+        binding.kitapListeViewPager.isUserInputEnabled = false;
+
+        addLabels();
+
+        TabLayoutMediator(binding.kitapListeTabId,binding.kitapListeViewPager){tab, position ->
+            tab.setText(fragmentBasliklar.get(position));
+        }.attach();
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState);
-        kitapListeBinding!!.kitapListeRw.layoutManager = LinearLayoutManager(context);
-        kitapListeBinding!!.kitapListeRw.addItemDecoration(LinearSpacingDecoration(itemSpacing = 20, edgeSpacing = 30))
-
-        this.initAdapter();
-        this.initState();
-
-        kitapListeBinding!!.kitapListeSwipeRefreshLayout.setOnRefreshListener {
-            kitapListeBinding!!.kitapListeSwipeRefreshLayout.isRefreshing = false;
-            this.initAdapter();
-            this.initState();
-        }
+    private fun addFragments():Unit{
+        fragmentListe.clear();
+        fragmentListe.add(KitapListeAPIFragment());
+        fragmentListe.add(KitapListeArsivFragment());
+        fragmentListe.add(KitapListeBegendiklerimFragment());
     }
 
-    private fun initAdapter(){
-        adapter = KitapListeAdapter{viewModel.retry()};
-        kitapListeBinding!!.kitapListeRw.adapter = adapter;
-        viewModel.kitapListe.observe(viewLifecycleOwner, Observer { kitapListe->
-            adapter?.submitList(kitapListe);
-            adapter?.notifyDataSetChanged();
-        });
-    }
-
-    private fun initState(){
-        kitapListeErrorTextId.setOnClickListener { viewModel.retry() };
-        viewModel.getKitapListeState().observe(viewLifecycleOwner, Observer { kitapState->
-            kitapListeBinding!!.kitapListeProgressBar.visibility =
-                   if(viewModel.listIsEmpty() && kitapState == KitapListeState.LOADING) View.VISIBLE else View.GONE;
-            kitapListeBinding!!.kitapListeErrorTextId.visibility =
-                    if(viewModel.listIsEmpty() && kitapState == KitapListeState.ERROR) View.VISIBLE else View.GONE;
-            if(!viewModel.listIsEmpty()){
-                adapter?.setState(KitapListeState.DONE);
-            }
-        });
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView();
-        kitapListeBinding = null;
-        adapter = null;
+    private fun addLabels(){
+        fragmentBasliklar.clear();
+        fragmentBasliklar.add(resources.getString(R.string.kitapListeAPI));
+        fragmentBasliklar.add(resources.getString(R.string.kitapListeArsiv));
+        fragmentBasliklar.add(resources.getString(R.string.kitapListeBegendiklerim));
     }
 }

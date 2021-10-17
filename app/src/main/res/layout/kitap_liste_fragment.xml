@@ -2,41 +2,37 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/kitapListeSwipeRefreshLayout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <RelativeLayout
+        <com.google.android.material.card.MaterialCardView
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            app:strokeColor="@color/lacivert"
+            app:strokeWidth="1dp"
+            style="@style/TabRoundCardviewStyle">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/kitapListeRw"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-            <TextView
-                android:id="@+id/kitapListeErrorTextId"
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/kitapListeTabId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:textSize="18sp"
-                android:visibility="gone"
-                android:text="@string/kitapListeError"
-                android:textColor="@color/kirmizi" />
+                app:tabBackground="@drawable/kitap_liste_tab_background"
+                app:tabMaxWidth="0dp"
+                app:tabGravity="fill"
+                app:tabTextColor="@color/lacivert"
+                app:tabSelectedTextColor="@color/whiteTextColor"
+                app:tabTextAppearance="@style/KitapListeTabLayoutTextStyle"
+                app:tabIndicatorColor="@color/lacivert"/>
 
-            <ProgressBar
-                android:id="@+id/kitapListeProgressBar"
-                android:layout_width="wrap_content"
-                android:layout_centerInParent="true"
-                android:indeterminate="true"
-                android:indeterminateDrawable="@drawable/wheel_progress_indeterminate"
-                android:layout_height="wrap_content"/>
+        </com.google.android.material.card.MaterialCardView>
 
-        </RelativeLayout>
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/kitapListeViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
 
 </layout>
