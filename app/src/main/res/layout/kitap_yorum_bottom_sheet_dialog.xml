@@ -27,6 +27,7 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
+                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:textSize="18sp"
@@ -51,19 +52,26 @@
             android:layout_height="1dp"
             android:background="@drawable/google_colors"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/kybYorumlarRecyclerView"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/kitapYorumListeSwipeRefreshLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/kybYorumlarRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
-        <ProgressBar
-            android:id="@+id/kybYorumListeProgressBar"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:indeterminateTint="@color/lacivert" />
+            <ProgressBar
+                android:id="@+id/kybYorumListeProgressBar"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:indeterminateTint="@color/lacivert" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
 
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

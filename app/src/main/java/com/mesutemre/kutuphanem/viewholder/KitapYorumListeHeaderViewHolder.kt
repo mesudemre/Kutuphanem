@@ -6,6 +6,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.databinding.KitapYorumHeaderItemBinding
+import com.mesutemre.kutuphanem.listener.KitapYorumClickListener
+import com.mesutemre.kutuphanem.listener.KitapYorumHeaderClickListener
 
 /**
  * @Author: mesutemre.celenk
@@ -13,8 +15,9 @@ import com.mesutemre.kutuphanem.databinding.KitapYorumHeaderItemBinding
  */
 class KitapYorumListeHeaderViewHolder(val view:KitapYorumHeaderItemBinding): RecyclerView.ViewHolder(view.root) {
 
-    fun bind(kullaniciResim:String){
+    fun bind(kullaniciResim:String,clickListener: KitapYorumHeaderClickListener){
         this.view.kullaniciResim = kullaniciResim;
+        this.view.listener = clickListener;
     }
 
     companion object{

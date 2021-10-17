@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,24 +20,23 @@ import com.mesutemre.kutuphanem.util.hideComponent
 import com.mesutemre.kutuphanem.util.setDisplayMetricHeight
 import com.mesutemre.kutuphanem.util.showComponent
 import com.mesutemre.kutuphanem.util.showSnackBar
-import com.mesutemre.kutuphanem.viewmodels.KitapYorumViewModel
-import dagger.hilt.android.AndroidEntryPoint
+import com.mesutemre.kutuphanem.viewmodels.KitapDetayViewModel
 
 /**
  * @Author: mesutemre.celenk
  * @Date: 29.09.2021
  */
-@AndroidEntryPoint
-class KitapYorumBottomSheetDialogFragment(
-    val kullanici:Kullanici,
-    val kitap:KitapModel
-):BottomSheetDialogFragment() {
 
-    private lateinit var binding:KitapYorumBottomSheetDialogBinding;
-    private val viewModel: KitapYorumViewModel by viewModels();
-    private var yorumListeHeaderAdapter:KitapYorumListeHeaderAdapter? = null;
-    private var yorumListeAdapter:KitapYorumListeAdapter? = KitapYorumListeAdapter(listOf(),null);
-    private var concatYorumAdapter:ConcatAdapter? = null;
+class KitapYorumBottomSheetDialogFragment(
+    val kullanici: Kullanici,
+    val kitap: KitapModel,
+    val viewModel: KitapDetayViewModel
+) : BottomSheetDialogFragment() {
+
+    private lateinit var binding: KitapYorumBottomSheetDialogBinding;
+    private var yorumListeHeaderAdapter: KitapYorumListeHeaderAdapter? = null;
+    private var yorumListeAdapter: KitapYorumListeAdapter? = KitapYorumListeAdapter(listOf(), null);
+    private var concatYorumAdapter: ConcatAdapter? = null;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
@@ -61,12 +59,12 @@ class KitapYorumBottomSheetDialogFragment(
             val bottomSheetDialog = it as BottomSheetDialog
             val parentLayout =
                 bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-                parentLayout?.let { it ->
-                    val behaviour = BottomSheetBehavior.from(it)
-                    it.setDisplayMetricHeight(0.8);
-                    behaviour.isDraggable = false;
-                    behaviour.state = BottomSheetBehavior.STATE_EXPANDED
-                }
+            parentLayout?.let { it ->
+                val behaviour = BottomSheetBehavior.from(it)
+                it.setDisplayMetricHeight(0.8);
+                behaviour.isDraggable = false;
+                behaviour.state = BottomSheetBehavior.STATE_EXPANDED
+            }
         }
         return dialog;
     }
@@ -75,54 +73,92 @@ class KitapYorumBottomSheetDialogFragment(
         binding.kybCloseImageview.setOnClickListener {
             this.dismiss();
         }
+        binding.kitapYorumListeSwipeRefreshLayout.setOnRefreshListener {
+            binding.kitapYorumListeSwipeRefreshLayout.isRefreshing = false;
+            viewModel.getKitapYorumListe(kitap.kitapId!!);
+        }
         observeKitapYorumListe();
     }
 
-    private fun observeKitapYorumListe(){
+    private fun observeKitapYorumListe() {
         viewModel.kitapYorumListe.observe(viewLifecycleOwner, Observer {
-           if(it.hasBeenHandled) {
-               binding.kybYorumlarRecyclerView.layoutManager = LinearLayoutManager(context);
-               yorumListeHeaderAdapter = KitapYorumListeHeaderAdapter(kullanici.resim,::kitapYorumKaydet);
+            if (it.hasBeenHandled) {
+                binding.kybYorumListeProgressBar.showComponent();
 
-               binding.kybYorumListeProgressBar.showComponent();
-               if(it.hasBeenError){
-                   binding.kybYorumListeProgressBar.hideComponent();
-                   yorumListeAdapter = KitapYorumListeAdapter(it.peekContent(),context?.getString(R.string.kitapYorumListeHata));
-               }else{
-                   binding.kybYorumListeProgressBar.hideComponent();
-                   if(it.peekContent().isEmpty()){
-                       yorumListeAdapter = KitapYorumListeAdapter(it.peekContent(),context?.getString(R.string.kitapYorumListeBos));
-                   }else{
-                       yorumListeAdapter = KitapYorumListeAdapter(it.peekContent(),null);
-                   }
-               }
-               concatYorumAdapter = ConcatAdapter(yorumListeHeaderAdapter,yorumListeAdapter);
-               binding.kybYorumlarRecyclerView.adapter = concatYorumAdapter;
-               it.hasBeenHandled = false;
-           }
+                binding.kybYorumlarRecyclerView.layoutManager = LinearLayoutManager(context);
+                yorumListeHeaderAdapter = KitapYorumListeHeaderAdapter(
+                    kullanici.resim,
+                    ::kitapYorumKaydet,
+                    ::kitapPuanKaydet
+                );
+
+                if (it.hasBeenError) {
+                    binding.kybYorumListeProgressBar.hideComponent();
+                    yorumListeAdapter = KitapYorumListeAdapter(
+                        it.peekContent(),
+                        context?.getString(R.string.kitapYorumListeHata)
+                    );
+                } else {
+                    if (it.peekContent().isEmpty()) {
+                        yorumListeAdapter = KitapYorumListeAdapter(
+                            it.peekContent(),
+                            context?.getString(R.string.kitapYorumListeBos)
+                        );
+                    } else {
+                        yorumListeAdapter = KitapYorumListeAdapter(it.peekContent(), null);
+                    }
+                    binding.kybYorumListeProgressBar.hideComponent();
+                }
+                concatYorumAdapter = ConcatAdapter(yorumListeHeaderAdapter, yorumListeAdapter);
+                binding.kybYorumlarRecyclerView.adapter = concatYorumAdapter;
+                it.hasBeenHandled = false;
+            }
         });
     }
 
-    fun kitapYorumKaydet(yorum:String){
-        val kitapYorumModel = KitapYorumModel(null,kitap,
-           yorum,null,null);
+    fun kitapYorumKaydet(yorum: String) {
+        val kitapYorumModel = KitapYorumModel(
+            null, kitap,
+            yorum, null, null
+        );
         viewModel.kitapYorumKaydet(kitapYorumModel);
         observeKitapYorumModel();
     }
 
-    private fun observeKitapYorumModel(){
+    fun kitapPuanKaydet(puan: Float) {
+        val kitapPuanModel = KitapPuanModel(kitap,puan.toInt());
+        viewModel.kitapPuanKaydet(kitapPuanModel);
+        observeKitapPuanKayit();
+    }
+
+    private fun observeKitapYorumModel() {
         viewModel.kitapYorumKayit.observe(viewLifecycleOwner, Observer {
-            if(it.hasBeenHandled) {
+            if (it.hasBeenHandled) {
 
                 val response: ResponseStatusModel = it.peekContent();
-                if(it.hasBeenError){
-                    showSnackBar(binding.kybRootCordinator,response.statusMessage, ERROR);
-                }else{
-                    showSnackBar(binding.kybRootCordinator,response.statusMessage, SUCCESS);
+                if (it.hasBeenError) {
+                    showSnackBar(binding.kybRootCordinator, response.statusMessage, ERROR);
+                } else {
+                    showSnackBar(binding.kybRootCordinator, response.statusMessage, SUCCESS);
                 }
                 it.hasBeenHandled = false;
                 viewModel.getKitapYorumListe(kitap.kitapId!!);
                 observeKitapYorumListe();
+            }
+        });
+    }
+
+    private fun observeKitapPuanKayit() {
+        viewModel.kitapPuanKayit.observe(viewLifecycleOwner, Observer {
+            if (it.hasBeenHandled) {
+
+                val response: ResponseStatusModel = it.peekContent();
+                if (it.hasBeenError) {
+                    showSnackBar(binding.kybRootCordinator, response.statusMessage, ERROR);
+                } else {
+                    showSnackBar(binding.kybRootCordinator, response.statusMessage, SUCCESS);
+                }
+                it.hasBeenHandled = false;
             }
         });
     }

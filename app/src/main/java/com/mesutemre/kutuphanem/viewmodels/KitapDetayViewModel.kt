@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.R
@@ -12,9 +13,7 @@ import com.mesutemre.kutuphanem.base.BaseEvent
 import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.dao.KitapDao
 import com.mesutemre.kutuphanem.dao.KullaniciDao
-import com.mesutemre.kutuphanem.model.KitapModel
-import com.mesutemre.kutuphanem.model.Kullanici
-import com.mesutemre.kutuphanem.model.ResponseStatusModel
+import com.mesutemre.kutuphanem.model.*
 import com.mesutemre.kutuphanem.service.IKitapService
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.KULLANICI_ADI_KEY
@@ -49,6 +48,9 @@ constructor(application: Application,
     val kitapBegenme = MutableLiveData<BaseEvent<ResponseStatusModel>>();
     val selectedKitap = MutableLiveData<BaseEvent<KitapModel>>();
     val yorumYapanKullanici = MutableLiveData<BaseEvent<Kullanici>>();
+    val kitapYorumKayit = MutableLiveData<BaseEvent<ResponseStatusModel>>();
+    val kitapYorumListe = MutableLiveData<BaseEvent<List<KitapYorumModel>>>();
+    val kitapPuanKayit = MutableLiveData<BaseEvent<ResponseStatusModel>>();
 
     override val disposible: CompositeDisposable = CompositeDisposable();
 
@@ -236,5 +238,89 @@ constructor(application: Application,
             baseEvent.hasBeenError = true;
         }
         yorumYapanKullanici.postValue(baseEvent);
+    }
+
+    fun kitapYorumKaydet(kitapYorum: KitapYorumModel){
+        val jsonObj: JSONObject = JSONObject();
+        jsonObj.put("yorum",kitapYorum.yorum);
+
+        val jsonKitapObj = JSONObject();
+        jsonKitapObj.put("id",kitapYorum.kitap?.kitapId);
+
+        jsonObj.put("kitap",jsonKitapObj);
+
+        disposible.add(
+            kitapService.kitapYorumKaydet(jsonObj.toString()) .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<ResponseStatusModel>(){
+                    override fun onSuccess(response: ResponseStatusModel) {
+                        val baseEvent = BaseEvent(response);
+                        baseEvent.hasBeenHandled = true;
+                        if(!response.statusCode.equals("200")){
+                            baseEvent.hasBeenError = true;
+                        }
+                        kitapYorumKayit.value = baseEvent;
+                    }
+                    override fun onError(e: Throwable) {
+                        val baseEvent = BaseEvent(ResponseStatusModel("500",e.localizedMessage));
+                        baseEvent.hasBeenError = true;
+                        baseEvent.hasBeenHandled = true;
+                        kitapYorumKayit.value = baseEvent;
+                    }
+                })
+        );
+    }
+
+    fun getKitapYorumListe(kitapId:Int){
+        disposible.add(
+            kitapService.getKitapYorumListe(kitapId)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<YorumListeModel>(){
+                    override fun onSuccess(response: YorumListeModel) {
+                        val baseEvent = BaseEvent(response.yorumListe);
+                        baseEvent.hasBeenHandled = true;
+                        kitapYorumListe.value = baseEvent;
+                    }
+
+                    override fun onError(e: Throwable) {
+                        val baseEvent = BaseEvent(listOf<KitapYorumModel>());
+                        baseEvent.hasBeenHandled = true;
+                        kitapYorumListe.value = baseEvent;
+                    }
+
+                }));
+    }
+
+    fun kitapPuanKaydet(kitapPuanModel: KitapPuanModel){
+        val jsonObj: JSONObject = JSONObject();
+        jsonObj.put("puan",kitapPuanModel.puan);
+
+        val jsonKitapObj = JSONObject();
+        jsonKitapObj.put("id",kitapPuanModel.kitap.kitapId);
+        jsonKitapObj.put("kitapPuan",kitapPuanModel.kitap.kitapPuan);
+
+        jsonObj.put("kitap",jsonKitapObj);
+
+        disposible.add(
+            kitapService.kitapPuanKaydet(jsonObj.toString()) .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<ResponseStatusModel>(){
+                    override fun onSuccess(response: ResponseStatusModel) {
+                        val baseEvent = BaseEvent(response);
+                        baseEvent.hasBeenHandled = true;
+                        if(!response.statusCode.equals("200")){
+                            baseEvent.hasBeenError = true;
+                        }
+                        kitapPuanKayit.value = baseEvent;
+                    }
+                    override fun onError(e: Throwable) {
+                        val baseEvent = BaseEvent(ResponseStatusModel("500",e.localizedMessage));
+                        baseEvent.hasBeenError = true;
+                        baseEvent.hasBeenHandled = true;
+                        kitapPuanKayit.value = baseEvent;
+                    }
+                })
+        );
     }
 }

@@ -6,12 +6,25 @@
         <variable
             name="kullaniciResim"
             type="java.lang.String" />
+        <variable
+            name="listener"
+            type="com.mesutemre.kutuphanem.listener.KitapYorumHeaderClickListener" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:numStars="5"
+            android:onRatingChanged="@{(v,puan,isUser) -> listener.kitapPuanla(v,puan,isUser)}"
+            android:progressTint="@color/ratingYellow"
+            android:secondaryProgressTint="@color/white"
+            android:stepSize="1" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"

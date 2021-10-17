@@ -1,9 +1,12 @@
 package com.mesutemre.kutuphanem.adapters
 
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.mesutemre.kutuphanem.listener.KitapYorumClickListener
 import com.mesutemre.kutuphanem.model.KitapYorumModel
-import com.mesutemre.kutuphanem.viewholder.KitapYorumListeHeaderViewHolder
+import com.mesutemre.kutuphanem.util.hideComponent
+import com.mesutemre.kutuphanem.util.showComponent
 import com.mesutemre.kutuphanem.viewholder.KitapYorumListeViewHolder
 
 /**
@@ -11,7 +14,7 @@ import com.mesutemre.kutuphanem.viewholder.KitapYorumListeViewHolder
  * @Date: 9.10.2021
  */
 class KitapYorumListeAdapter(val yorumListe:List<KitapYorumModel>,val message:String?)
-    : RecyclerView.Adapter<KitapYorumListeViewHolder>() {
+    : RecyclerView.Adapter<KitapYorumListeViewHolder>(),KitapYorumClickListener {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KitapYorumListeViewHolder {
         if(yorumListe == null || yorumListe.isEmpty()){
@@ -24,8 +27,7 @@ class KitapYorumListeAdapter(val yorumListe:List<KitapYorumModel>,val message:St
         if(yorumListe == null || yorumListe.isEmpty()){
             return holder.bindErrorAndEmpty(message!!);
         }else{
-            holder.bind(yorumListe.get(position));
-
+            holder.bind(yorumListe.get(position),this);
         }
     }
 
@@ -37,4 +39,9 @@ class KitapYorumListeAdapter(val yorumListe:List<KitapYorumModel>,val message:St
         }
     }
 
+    override fun yorumunHepsiniGoster(view: View, kismiText: View, fullTextView: View) {
+        view.hideComponent();
+        kismiText.hideComponent();
+        fullTextView.showComponent();
+    }
 }

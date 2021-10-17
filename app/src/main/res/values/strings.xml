@@ -154,4 +154,6 @@
     <string name="kitapDetayYorumHintDlg"><font size="30">Herkese açık bir yorum ekle...</font></string>
     <string name="kitapYorumListeHata">Yorumlar getirilemedi!</string>
     <string name="kitapYorumListeBos">Bu kitap hakkında henüz yorum yapılmamış</string>
+    <string name="kitapYorumDevamGosterLabel">Devamını oku...</string>
+    <string name="noComentKitapYet">Bu kitap henüz puanlanmamış.Yorumlardan kitabı puanlayabilirsiniz...</string>
 </resources>

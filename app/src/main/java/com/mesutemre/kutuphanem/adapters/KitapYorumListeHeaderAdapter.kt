@@ -1,7 +1,11 @@
 package com.mesutemre.kutuphanem.adapters
 
+import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.mesutemre.kutuphanem.listener.KitapYorumClickListener
+import com.mesutemre.kutuphanem.listener.KitapYorumHeaderClickListener
 import com.mesutemre.kutuphanem.util.clearAndHideKeyboard
 import com.mesutemre.kutuphanem.viewholder.KitapYorumListeHeaderViewHolder
 
@@ -10,8 +14,9 @@ import com.mesutemre.kutuphanem.viewholder.KitapYorumListeHeaderViewHolder
  * @Date: 9.10.2021
  */
 class KitapYorumListeHeaderAdapter(val kullaniciResim:String,
-                                   val kitapYorumKaydet:(yorum:String)->Unit )
-    : RecyclerView.Adapter<KitapYorumListeHeaderViewHolder>()  {
+                                   val kitapYorumKaydet:(yorum:String)->Unit,
+                                   val kitapPuanKaydet:(puan:Float)->Unit)
+    : RecyclerView.Adapter<KitapYorumListeHeaderViewHolder>() , KitapYorumHeaderClickListener{
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -24,7 +29,7 @@ class KitapYorumListeHeaderAdapter(val kullaniciResim:String,
         holder: KitapYorumListeHeaderViewHolder,
         position: Int
     ) {
-        holder.bind(kullaniciResim);
+        holder.bind(kullaniciResim,this);
         holder.view.kybKitapYorumTextInput.setEndIconOnClickListener {
             kitapYorumKaydet(holder.view.kybKitapYorumTextInput.editText?.text.toString());
             holder.view.kybKitapYorumEditText.clearAndHideKeyboard();
@@ -33,5 +38,9 @@ class KitapYorumListeHeaderAdapter(val kullaniciResim:String,
 
     override fun getItemCount(): Int {
         return 1;
+    }
+
+    override fun kitapPuanla(view: View,puan:Float,isUser:Boolean) {
+        this.kitapPuanKaydet(puan);
     }
 }

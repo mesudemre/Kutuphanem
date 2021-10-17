@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.databinding.ItemEmptyListBinding
 import com.mesutemre.kutuphanem.databinding.ItemYorumKitapBinding
+import com.mesutemre.kutuphanem.listener.KitapYorumClickListener
 import com.mesutemre.kutuphanem.model.KitapYorumModel
 
 /**
@@ -16,8 +17,9 @@ import com.mesutemre.kutuphanem.model.KitapYorumModel
  */
 class KitapYorumListeViewHolder(val view: ViewDataBinding): RecyclerView.ViewHolder(view.root) {
 
-    fun bind(kitapYorum:KitapYorumModel){
+    fun bind(kitapYorum:KitapYorumModel,clickListener: KitapYorumClickListener){
         (this.view as ItemYorumKitapBinding).yorum = kitapYorum;
+        (this.view as ItemYorumKitapBinding).listener = clickListener;
     }
 
     fun bindErrorAndEmpty(message:String){

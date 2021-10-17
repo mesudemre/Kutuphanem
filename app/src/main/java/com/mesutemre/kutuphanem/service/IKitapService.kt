@@ -50,4 +50,8 @@ interface IKitapService {
     @Headers("Content-Type: application/json")
     @GET("api/kitap/yorumlar/{kitapId}")
     fun getKitapYorumListe(@Path("kitapId") kitapId:Int):Single<YorumListeModel>;
+
+    @Headers("Content-Type: application/json")
+    @POST("api/kitap/puan/kaydet")
+    fun kitapPuanKaydet(@Body jsonStr: String):Single<ResponseStatusModel>;
 }

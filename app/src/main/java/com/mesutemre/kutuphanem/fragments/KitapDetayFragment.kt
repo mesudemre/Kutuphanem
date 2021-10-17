@@ -11,6 +11,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.shape.MarkerEdgeTreatment
+import com.google.android.material.shape.OffsetEdgeTreatment
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.databinding.FragmentKitapDetayBinding
@@ -110,6 +113,15 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
             view.likeImageViewId.setTint(view.context.getColor(R.color.fistikYesil));
         }
 
+        view.ratingBarKitapPuan.rating = selectedKitap.kitapPuan;
+        view.yorumPuanTextViewId.text = "${selectedKitap.kitapPuan}";
+
+        if(selectedKitap.kitapPuan == 0.0F){
+            view.yorumPuanTextViewId.hideComponent();
+            view.ratingBarKitapPuan.hideComponent();
+            view.yorumNoPuanCardViewId.showComponent();
+            addTriangleTreatment(view.noCommentCard);
+        }
         view.kitapAdTextViewId.setText(selectedKitap.kitapAd);
         view.yazarAdTextViewId.setText(selectedKitap.yazarAd);
         view.kitapTurTextViewId.setText(selectedKitap.kitapTur?.aciklama);
@@ -163,7 +175,7 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
         }
 
         binding.kitapYorumPanel?.setOnClickListener {
-            KitapYorumBottomSheetDialogFragment(kullanici,selectedKitap)
+            KitapYorumBottomSheetDialogFragment(kullanici,selectedKitap,viewModel)
                 .show(requireFragmentManager(),null);
         }
     }
@@ -252,5 +264,14 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
 
     var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             result ->
+    }
+
+    private fun addTriangleTreatment(card:MaterialCardView){
+        val triangleSize = getResources().getDimension(R.dimen.triangle_size);
+        val markerEdgeTreatment = MarkerEdgeTreatment(triangleSize);
+        val offsetEdgeTreatment = OffsetEdgeTreatment(markerEdgeTreatment,triangleSize);
+        card.shapeAppearanceModel = card.shapeAppearanceModel.toBuilder()
+            .setBottomEdge(offsetEdgeTreatment)
+            .build();
     }
 }

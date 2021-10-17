@@ -14,14 +14,12 @@ import android.text.SpannableStringBuilder
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
+import kotlin.math.roundToInt
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.model.*
 import java.io.*
@@ -292,5 +290,3 @@ fun downloadKitap(kitap:KitapModel, requireContext: Context,isArchive:Boolean):U
     }
     return Uri.EMPTY;
 }
-
-

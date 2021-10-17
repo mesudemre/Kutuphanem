@@ -3,9 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View"/>
         <variable
             name="yorum"
             type="com.mesutemre.kutuphanem.model.KitapYorumModel" />
+        <variable
+            name="listener"
+            type="com.mesutemre.kutuphanem.listener.KitapYorumClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -40,12 +44,31 @@
                 android:textSize="12sp" />
 
             <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/yorum_kismi_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@{yorum.yorum.length()>90 ? yorum.yorum.substring(0,90)+`...` : yorum.yorum}"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/yorum_full_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:text="@{yorum.yorum}"
+                android:visibility="gone"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/kitapYorumDevamGosterLabel"
+                android:textSize="14sp"
+                android:clickable="true"
+                android:onClick="@{(v) -> listener.yorumunHepsiniGoster(v,yorumKismiText,yorumFullText)}"
+                android:visibility="@{yorum.yorum.length()>89 ? View.VISIBLE : View.GONE}"
+                android:textColor="@color/transparent"/>
         </LinearLayout>
 
         <View
