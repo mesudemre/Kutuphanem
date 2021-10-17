@@ -9,8 +9,14 @@ import com.mesutemre.kutuphanem.dao.KullaniciDao
 import com.mesutemre.kutuphanem.dao.ParametreDao
 import com.mesutemre.kutuphanem.model.*
 
-@Database(  version = 2,
-            entities = arrayOf(YayineviModel::class,KitapturModel::class,Kullanici::class,KullaniciKitapTurModel::class,KitapModel::class),
+@Database(  version = 2_1,
+            entities = arrayOf(
+                YayineviModel::class,
+                KitapturModel::class,
+                Kullanici::class,
+                KullaniciKitapTurModel::class,
+                KitapModel::class
+            ),
             exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class KutuphanemDatabase:RoomDatabase() {

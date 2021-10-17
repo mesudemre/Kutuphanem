@@ -11,7 +11,7 @@ data class CinsiyetModel(
 
     @SerializedName("label")
     @Expose
-    var label:String?,
+    var label:String?
 ) {
     override fun toString(): String {
         return this.value!!;

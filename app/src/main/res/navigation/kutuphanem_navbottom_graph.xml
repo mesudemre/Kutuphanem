@@ -65,10 +65,25 @@
     <fragment
         android:id="@+id/kitapDetayFragment"
         android:name="com.mesutemre.kutuphanem.fragments.KitapDetayFragment"
-        android:label="KitapDetayFragment" >
+        android:label="KitapDetayFragment">
         <argument
             android:name="kitapObj"
-            app:argType="com.mesutemre.kutuphanem.model.KitapModel"/>
+            app:argType="com.mesutemre.kutuphanem.model.KitapModel" />
+        <argument
+            android:name="fromArsiv"
+            app:argType="boolean"/>
+    </fragment>
+    <fragment
+        android:id="@+id/kitapDetayDeepFragment"
+        android:name="com.mesutemre.kutuphanem.fragments.KitapDetayDeepFragment"
+        android:label="KitapDetayDeepFragment" >
+        <action
+            android:id="@+id/action_kitapDetayDeepFragment_to_anasayfaFragment"
+            app:destination="@id/anasayfaFragment" />
+        <deepLink
+            android:id="@+id/deepLinkKitapDetay"
+            app:uri="http://192.168.1.105:8080/KutuphaneSistemiWS/api/kitap/nesne?kitapId={kitapId}" />
+        <argument android:name="kitapId" app:argType="string"/>
     </fragment>
 
 </navigation>

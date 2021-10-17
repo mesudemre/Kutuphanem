@@ -74,7 +74,7 @@ class AnasayfaViewModel @Inject constructor(application: Application,
             jsonObj.put("yazarAd",searchText);
 
             disposible.add(
-                kitapService.getKitapListe(jsonObj.toString())
+                kitapService.getKitapListeBySingle(jsonObj.toString())
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeWith(object : DisposableSingleObserver<List<KitapModel>>(){

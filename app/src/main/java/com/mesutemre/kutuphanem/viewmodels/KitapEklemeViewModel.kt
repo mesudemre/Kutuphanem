@@ -3,10 +3,10 @@ package com.mesutemre.kutuphanem.viewmodels
 import android.app.Application
 import android.content.Context
 import android.net.Uri
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.R
+import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.model.KitapturModel
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.model.YayineviModel
@@ -25,13 +25,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.*
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
 class KitapEklemeViewModel @Inject
@@ -39,14 +39,9 @@ constructor(application: Application,
             private val kitapService: IKitapService,
             private val parametreService: IParametreService,
             private val parametreRepository: ParametreRepository
-    ): AndroidViewModel(application,), CoroutineScope {
+    ): BaseViewModel(application) {
 
-    private val context:Context = application.baseContext;
-    private val job = Job();
-    override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.Main; //Önce işi yap sonra main thread e dön.
-
-    private val disposible = CompositeDisposable();
+    override val disposible: CompositeDisposable = CompositeDisposable();
 
     @Inject
     lateinit var customSharedPreferences: CustomSharedPreferences;
@@ -241,11 +236,5 @@ constructor(application: Application,
         }
 
 
-    }
-
-    override fun onCleared() {
-        super.onCleared();
-        disposible.clear();
-        job.cancel();
     }
 }

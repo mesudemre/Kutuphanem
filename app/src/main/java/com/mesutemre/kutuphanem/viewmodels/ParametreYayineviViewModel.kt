@@ -1,7 +1,6 @@
 package com.mesutemre.kutuphanem.viewmodels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
@@ -11,7 +10,6 @@ import com.mesutemre.kutuphanem.service.IParametreService
 import com.mesutemre.kutuphanem.util.APP_TOKEN_KEY
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.PARAM_YAYINEVI_DB_KEY
-import com.mesutemre.kutuphanem.util.WebApiUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

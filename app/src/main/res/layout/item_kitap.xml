@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -7,68 +9,85 @@
             type="com.mesutemre.kutuphanem.model.KitapModel" />
     </data>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/itemLayoutId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:foreground="?attr/selectableItemBackground"
         android:background="@drawable/card_kitap_border"
         android:clickable="true"
-        android:focusable="true">
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground">
 
-        <RelativeLayout
-            android:id="@+id/imageLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/kitapImageId"
+            android:layout_width="110dp"
+            android:layout_height="130dp"
+            android:downloadUrl="@{kitap.kitapResimPath}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/kitapImageId"
-                android:layout_width="110dp"
-                android:layout_height="130dp"
-                android:downloadUrl="@{kitap.kitapResimPath}"/>
-        </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/genelBilgilerRootId"
+        <LinearLayout
+            android:id="@+id/genelBilgiler"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toStartOf="@+id/kitapDetayGitImageView"
+            app:layout_constraintStart_toEndOf="@+id/kitapImageId"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/kitapAdText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/alegreya_bold"
+                android:text="@{kitap.kitapAd.length()>40 ? kitap.kitapAd.substring(0,39)+`...` : kitap.kitapAd}"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/kitapTurText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="left"
+                android:text="@{`Kitap Türü : ` + kitap.kitapTur.aciklama}"
+                android:textColor="#4E4E4E"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/kitapAciklamaTextId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/alegreya"
+                android:gravity="left"
+                android:text="@{kitap.kitapAciklama.length()>90 ? kitap.kitapAciklama.substring(0,90)+`...` : kitap.kitapAciklama}"
+                android:textColor="#515151"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/kitapDetayGitImageView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_arrow_forward_ios_48"
+            app:layout_constraintBottom_toTopOf="@+id/kitapItemAlinmaTar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/transparent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/kitapItemAlinmaTar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/imageLayout">
-            <LinearLayout
-                android:id="@+id/genelBilgiler"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/kitapAdText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="@{kitap.kitapAd.length()>55 ? kitap.kitapAd.substring(0,54)+`...` : kitap.kitapAd}"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/kitapTurText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:layout_marginTop="5dp"
-                    android:text="@{`Kitap Türü : ` + kitap.kitapTur.aciklama}"
-                    android:textColor="#4E4E4E"
-                    android:textSize="14sp"/>
-
-                <TextView
-                    android:id="@+id/kitapAciklamaTextId"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:gravity="left"
-                    android:text="@{kitap.kitapAciklama.length()>110 ? kitap.kitapAciklama.substring(0,110)+`...` : kitap.kitapAciklama}"
-                    android:fontFamily="@font/alegreya"
-                    android:textColor="#515151"
-                    android:textSize="12sp" />
-            </LinearLayout>
-        </RelativeLayout>
-    </RelativeLayout>
+            android:layout_marginEnd="5dp"
+            android:fontFamily="@font/alegreya_font"
+            android:formatTarih="@{kitap.alinmatarihi}"
+            android:textColor="@color/transparent"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

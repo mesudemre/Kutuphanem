@@ -14,24 +14,14 @@ import android.text.SpannableStringBuilder
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.constraintlayout.motion.widget.MotionLayout
-import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
+import kotlin.math.roundToInt
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
-import com.mesutemre.kutuphanem.model.SnackTypeEnum
-import kotlinx.android.synthetic.main.resim_sec_bottom_sheet_dialog_fragment.*
+import com.mesutemre.kutuphanem.model.*
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
@@ -40,7 +30,7 @@ import java.util.*
 
 const val APP_TOKEN_KEY:String = "APP_TOKEN";
 const val KULLANICI_ADI_KEY:String = "KULLANICI_ADI";
-const val API_URL:String = "http://192.168.1.104:8080/KutuphaneSistemiWS/";
+const val API_URL:String = "http://192.168.1.106:8080/KutuphaneSistemiWS/";
 const val KUTUPHANEM_DB_NAME = "kutuphanem";
 const val PARAM_YAYINEVI_DB_KEY:String = "PARAM_YAYINEVI";
 const val PARAM_KITAPTUR_DB_KEY:String = "PARAM_KITAPTUR";
@@ -50,108 +40,7 @@ const val READ_EXTERNAL_STORAGE_REQUEST_CODE:Int=1992;
 const val WRITE_EXTERNAL_STORAGE_REQUEST_CODE:Int=2019;
 const val SHARED_PREF_FILE:String = "KUTUPHANEM_SP";
 
-fun ImageView.getImageFromUrl(url:String?, iv: ImageView){
-    val circularProgressDrawable = CircularProgressDrawable(iv.context);
-    circularProgressDrawable.strokeWidth = 8f
-    circularProgressDrawable.centerRadius = 40f
-    circularProgressDrawable.start()
-    val options = RequestOptions()
-        .placeholder(circularProgressDrawable)
-        .error(R.mipmap.ic_launcher);
-    Glide.with(context)
-        .setDefaultRequestOptions(options)
-        .load(url)
-        .into(this);
-}
-
-fun ImageView.getCircleImageFromUrl(url:String?, iv: ImageView){
-    val circularProgressDrawable = CircularProgressDrawable(iv.context);
-    circularProgressDrawable.strokeWidth = 8f
-    circularProgressDrawable.centerRadius = 40f
-    circularProgressDrawable.start()
-    val options = RequestOptions()
-        .placeholder(circularProgressDrawable)
-        .diskCacheStrategy(DiskCacheStrategy.NONE)
-        .skipMemoryCache(true)
-        .error(R.mipmap.ic_launcher);
-    Glide.with(context)
-        .setDefaultRequestOptions(options)
-        .load(url)
-        .circleCrop()
-        .into(this);
-}
-
-fun ImageView.getCircleImageFromBitmap(photo:Bitmap?,iv:ImageView){
-    Glide.with(iv.context)
-        .asBitmap()
-        .load(photo)
-        .circleCrop()
-        .into(iv);
-}
-
-fun ImageView.getCircleImageFromUri(photo:Uri?,iv:ImageView){
-    Glide.with(iv.context)
-        .load(photo)
-        .circleCrop()
-        .into(iv);
-}
-
-fun ImageView.getCircleImageFromResource(resourceId:Int?,iv:ImageView){
-    Glide.with(iv.context)
-        .load(resourceId)
-        .circleCrop()
-        .into(iv);
-}
-
-fun TextInputLayout.writeFormatDate(date:Date?,component:TextInputLayout){
-    val sdf: SimpleDateFormat = SimpleDateFormat("dd.MM.yyyy");
-    if(date != null){
-        component.editText?.setText(sdf.format(date));
-    }else{
-        component.editText?.setText("01.01.2021");
-    }
-}
-
-@BindingAdapter(value = ["android:downloadUrl"])
-fun downloadImage(view:ImageView,url:String?){
-    view.getImageFromUrl(url,view);
-}
-
-@BindingAdapter(value = ["android:circleDownloadUrl"])
-fun downloadCirclerImage(view:ImageView,url:String?){
-    view.getCircleImageFromUrl(url,view);
-}
-
-@BindingAdapter(value = ["android:bitMapImageLoad"])
-fun loadCircleBitmapImageLoad(view:ImageView,photo:Bitmap?){
-    view.getCircleImageFromBitmap(photo,view);
-}
-
-@BindingAdapter(value = ["android:circleImageLoad"])
-fun loadCircleImage(view:ImageView,url:String?){
-    view.getCircleImageFromUrl(url,view);
-}
-
-@BindingAdapter(value = ["android:writeDateStringValue"])
-fun writeDateStrValue(view:TextInputLayout,date:Date?){
-    view.writeFormatDate(date,view);
-}
-
-@BindingAdapter(value = ["android:clearStringValidation"])
-fun clearStringValidation(view:TextInputLayout,value:String?){
-    view.editText!!.addTextChangedListener(TextInputErrorClearListener(view));
-}
-
-fun View.setMotionVisibility(visibility: Int) {
-    val motionLayout = parent as MotionLayout
-    motionLayout.constraintSetIds.forEach {
-        val constraintSet = motionLayout.getConstraintSet(it) ?: return@forEach
-        constraintSet.setVisibility(this.id, visibility)
-        constraintSet.applyTo(motionLayout)
-    }
-}
-
-fun showSnackBar(view:View,message:String,type: SnackTypeEnum){
+fun showSnackBar(view:View, message:String,@SnackType type: Int){
     var builder:SpannableStringBuilder  = SpannableStringBuilder();
     val sb: Snackbar = Snackbar.make(view,message, Snackbar.LENGTH_SHORT);
     val tv =sb.view.findViewById(com.google.android.material.R.id.snackbar_text) as TextView;
@@ -160,13 +49,13 @@ fun showSnackBar(view:View,message:String,type: SnackTypeEnum){
     tv.setTextColor(view.resources.getColor(R.color.whiteTextColor,null))
 
     when(type){
-        SnackTypeEnum.SUCCESS->{
+        SUCCESS->{
             sb.setBackgroundTint(view.resources.getColor(R.color.fistikYesil,null));
         }
-        SnackTypeEnum.WARNING->{
+        WARNING->{
             sb.setBackgroundTint(view.resources.getColor(R.color.acikTuruncu,null));
         }
-        else->{
+        ERROR->{
             sb.setBackgroundTint(view.resources.getColor(R.color.kirmizi,null));
         }
 
@@ -289,15 +178,6 @@ private fun isMediaDocument(uri:Uri):Boolean {
     return "com.android.providers.media.documents".equals(uri.getAuthority());
 }
 
-fun TextInputEditText.hideKeyboard(et:TextInputEditText){
-    val imm = ContextCompat.getSystemService(et.context, InputMethodManager::class.java);
-    imm?.hideSoftInputFromWindow(et.windowToken, 0);
-}
-
-fun TextInputEditText.clearContent(et:TextInputEditText){
-    et.editableText.clear();
-}
-
 @BindingAdapter(value = ["android:rippleEffect"])
 fun rippleEffect(view:View,value:Boolean){
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -331,10 +211,23 @@ fun getBitmapFromUrl(url:String): Bitmap? {
     return bitMap;
 }
 
-fun bitmapToFile(bitmap: Bitmap, fileNameToSave: String,requireContext: Context): File? {
+/*fun File.deleteDirectory(): Boolean {
+    return if (exists()) {
+        listFiles()?.forEach {
+            if (it.isDirectory) {
+                it.deleteDirectory()
+            } else {
+                it.delete()
+            }
+        }
+        delete()
+    } else false
+}*/
+
+fun bitmapToFile(bitmap: Bitmap, fileNameToSave: String,requireContext: Context,folderName:String): File? {
     var file: File? = null
     return try {
-        file = File(createOutputDirectory(requireContext),fileNameToSave);
+        file = File(createDownloadedOutputDirectory(requireContext,folderName),fileNameToSave);
 
         val bos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos) // YOU can also save it in JPEG
@@ -359,6 +252,14 @@ fun createOutputDirectory(context: Context): File {
         mediaDir else context.filesDir
 }
 
+fun createDownloadedOutputDirectory(context: Context,folder:String): File {
+    val mediaDir = context.externalMediaDirs.firstOrNull()?.let {
+        File(it, folder).apply { mkdirs() }
+    }
+    return if (mediaDir != null && mediaDir.exists())
+        mediaDir else context.filesDir
+}
+
 fun checkDeviceHasCamera(ctx:Context):Boolean{
     if(ctx.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)){
         return true;
@@ -371,4 +272,21 @@ fun checkDeviceHasFronCamera(ctx:Context):Boolean{
         return true;
     }
     return false;
+}
+fun downloadKitap(kitap:KitapModel, requireContext: Context,isArchive:Boolean):Uri{
+    val kitapResim = getBitmapFromUrl(kitap.kitapResimPath!!);
+    val bytes: ByteArrayOutputStream = ByteArrayOutputStream();
+    if(kitapResim != null){
+        kitapResim?.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+        var providerAtuh:String = "com.mesutemre.kutuphanem.provider";
+        var folderName:String = "Kütüphanem";
+        var resimAd:String = kitap.kitapAd+"_"+kitap.kitapId
+        if(isArchive){
+            resimAd = kitap.kitapId.toString();
+        }
+        val photoFile = bitmapToFile(kitapResim!!,resimAd+".png",requireContext,folderName);
+        val imageUri: Uri = FileProvider.getUriForFile(requireContext,providerAtuh,photoFile!!);
+        return imageUri;
+    }
+    return Uri.EMPTY;
 }

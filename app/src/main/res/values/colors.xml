@@ -25,6 +25,12 @@
     <color name="acikTuruncu">#EA881F</color>
     <color name="kategoriBackground">#F1F1F1</color>
     <color name="acikSari">#F5FAAA</color>
+    <color name="sari">#FFEB3B</color>
     <color name="imageShadow">#A6A4A3</color>
+    <color name="shrim_grey">#E4E4E4</color>
     <color name="kitapDetayItemBackground">#EFEDED</color>
+    <color name="acik_kirmizi">#E4485F</color>
+    <color name="kahverengi">#571C09</color>
+    <color name="acikGri">#FAFAFA</color>
+    <color name="ratingYellow">#FFC107</color>
 </resources>

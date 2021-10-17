@@ -5,102 +5,89 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.mesutemre.kutuphanem.R
+import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.databinding.ParametreEklemeFragmentBinding
 import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
-import com.mesutemre.kutuphanem.model.SnackTypeEnum
+import com.mesutemre.kutuphanem.model.SUCCESS
+import com.mesutemre.kutuphanem.util.hideComponent
 import com.mesutemre.kutuphanem.util.hideKeyboard
+import com.mesutemre.kutuphanem.util.showComponent
 import com.mesutemre.kutuphanem.util.showSnackBar
 import com.mesutemre.kutuphanem.viewmodels.ParametreEklemeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.parametre_ekleme_fragment.*
 
 @AndroidEntryPoint
-class ParametreEklemeFragment: Fragment() {
+class ParametreEklemeFragment: BaseFragment<ParametreEklemeFragmentBinding>() {
+
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> ParametreEklemeFragmentBinding
+            = ParametreEklemeFragmentBinding::inflate
+    override val layoutName = "parametre_ekleme_fragment.xml";
 
     private var tur:String? = null;
-
     private val viewModel: ParametreEklemeViewModel by viewModels();
-    private var parametreEklemeBinding:ParametreEklemeFragmentBinding? = null;
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        parametreEklemeBinding = ParametreEklemeFragmentBinding.inflate(inflater);
-        return parametreEklemeBinding!!.root;
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState);
-
+    override fun onCreateFragment(savedInstanceState: Bundle?) {
         arguments?.let {
             tur = ParametreEklemeFragmentArgs.fromBundle(it).paramTur;
-            if(tur.equals("kitaptur")){
-                parametreEklemeBinding!!.paramTurTextView.text = context?.resources?.getString(R.string.parametreParamKitaptur);
-            }else{
-                parametreEklemeBinding!!.paramTurTextView.text = context?.resources?.getString(R.string.parametreParamYayinevi);
-            }
         }
+    }
 
-        parametreEklemeBinding!!.backLayoutId.setOnClickListener {
+    override fun onStartFragment() {
+        if(tur.equals("kitaptur")){
+            binding.paramTurTextView.text = context?.resources?.getString(R.string.parametreParamKitaptur);
+        }else{
+            binding.paramTurTextView.text = context?.resources?.getString(R.string.parametreParamYayinevi);
+        }
+        binding.backLayoutId.setOnClickListener {
             val action = ParametreEklemeFragmentDirections.actionParametreEklemeFragmentToParametreFragment();
             Navigation.findNavController(it).navigate(action);
         }
 
         parametreKaydetButton.setOnClickListener {
-            val aciklama = parametreEklemeBinding!!.editTextParametreAciklama.text.toString().trim();
-            parametreEklemeBinding!!.editTextParametreAciklama.hideKeyboard(parametreEklemeBinding!!.editTextParametreAciklama);
+            val aciklama = binding.editTextParametreAciklama.text.toString().trim();
+            binding.editTextParametreAciklama.hideKeyboard(binding.editTextParametreAciklama);
             if(TextUtils.isEmpty(aciklama)){
-                parametreEklemeBinding!!.textInputParametreAciklama.error = it.context.resources.getString(R.string.parametreAciklamaHata);
+                binding.textInputParametreAciklama.error = it.context.resources.getString(R.string.parametreAciklamaHata);
                 return@setOnClickListener;
             }
 
             viewModel.parametreEkle(tur,aciklama);
             observeLiveData(it);
         }
-        parametreEklemeBinding!!.textInputParametreAciklama.editText!!.addTextChangedListener(TextInputErrorClearListener(parametreEklemeBinding!!.textInputParametreAciklama));
+        binding.textInputParametreAciklama.editText!!.addTextChangedListener(TextInputErrorClearListener(binding.textInputParametreAciklama));
     }
 
     private fun observeLiveData(view:View){
         viewModel.parametreEklemeResponse.observe(viewLifecycleOwner, Observer { response->
             response?.let {
-                parametreEklemeBinding!!.parametreEklemeErrorTextView.visibility = View.GONE;
-                parametreEklemeBinding!!.parametreEklemeProgressBar.visibility = View.GONE;
-                showSnackBar(view,response.statusMessage, SnackTypeEnum.SUCCESS);
-                parametreEklemeBinding!!.paramTurTextView.text = "";
+                binding.parametreEklemeErrorTextView.hideComponent();
+                binding.parametreEklemeProgressBar.hideComponent();
+                showSnackBar(view,response.statusMessage, SUCCESS);
+                binding.paramTurTextView.text = "";
 
             }
         });
         viewModel.parametreEklemeLoading.observe(viewLifecycleOwner, Observer {
-            parametreEklemeBinding!!.parametreEklemeErrorTextView.visibility = View.GONE;
-            parametreEklemeBinding!!.parametreKaydetButton.isEnabled = !it;
+            binding.parametreEklemeErrorTextView.hideComponent();
+            binding.parametreKaydetButton.isEnabled = !it;
             if (it){
-                parametreEklemeBinding!!.parametreEklemeProgressBar.visibility = View.VISIBLE;
+                binding.parametreEklemeProgressBar.showComponent();
             }else{
-                parametreEklemeBinding!!.parametreEklemeProgressBar.visibility = View.GONE;
+                binding.parametreEklemeProgressBar.hideComponent();
             }
         });
         viewModel.parametreEklemeError.observe(viewLifecycleOwner, Observer {
-            parametreEklemeBinding!!.parametreEklemeProgressBar.visibility = View.GONE;
+            binding.parametreEklemeProgressBar.hideComponent();
             if(it){
-                parametreEklemeBinding!!.parametreEklemeErrorTextView.visibility = View.VISIBLE;
+                binding.parametreEklemeErrorTextView.showComponent();
             }else{
-                parametreEklemeBinding!!.parametreEklemeErrorTextView.visibility = View.GONE;
+                binding.parametreEklemeErrorTextView.hideComponent();
             }
         });
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView();
-        parametreEklemeBinding = null;
-    }
-
 }

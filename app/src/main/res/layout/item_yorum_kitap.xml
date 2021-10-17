@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="yorum"
+            type="com.mesutemre.kutuphanem.model.KitapYorumModel" />
+        <variable
+            name="listener"
+            type="com.mesutemre.kutuphanem.listener.KitapYorumClickListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iykUserImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:circleDownloadUrl="@{yorum.kullaniciResim}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iykUserImage"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{yorum.olusturan.ad+` `+yorum.olusturan.soyad}"
+                android:textColor="@color/transparent"
+                android:textSize="12sp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/yorum_kismi_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@{yorum.yorum.length()>90 ? yorum.yorum.substring(0,90)+`...` : yorum.yorum}"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/yorum_full_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@{yorum.yorum}"
+                android:visibility="gone"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/kitapYorumDevamGosterLabel"
+                android:textSize="14sp"
+                android:clickable="true"
+                android:onClick="@{(v) -> listener.yorumunHepsiniGoster(v,yorumKismiText,yorumFullText)}"
+                android:visibility="@{yorum.yorum.length()>89 ? View.VISIBLE : View.GONE}"
+                android:textColor="@color/transparent"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/transparent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
