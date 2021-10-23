@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -47,7 +48,6 @@ class LoginActivity : AppCompatActivity() {
             }
             editTextKullaniciAdi.hideKeyboard(editTextKullaniciAdi);
             val accountCredentials = AccountCredentials(kullaniciAdi,sifre);
-            girisProgressBar.showComponent();
             viewModel.doLogin(accountCredentials);
             observeLiveData();
         }
@@ -72,6 +72,9 @@ class LoginActivity : AppCompatActivity() {
                 errorTextView.hideComponent();
                 if(it){
                     girisProgressBar.showComponent();
+                    window.setFlags(
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }else{
                     girisProgressBar.hideComponent();
                 }

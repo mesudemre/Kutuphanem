@@ -1,56 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     style="@style/loginParent"
+    android:orientation="vertical"
     tools:context=".LoginActivity">
 
-  <ScrollView
-      style="@style/generalParent">
-    <RelativeLayout
-        style="@style/generalParent">
-      <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:layout_alignParentTop="true"
-          android:weightSum="12">
+    <ScrollView style="@style/generalParent">
 
-        <LinearLayout
-            style="@style/generalParent"
-            android:background="@drawable/login_shape_bk"
-            android:orientation="vertical"
-            android:layout_weight="3">
+        <RelativeLayout style="@style/generalParent">
 
-          <ImageView
-              style="@style/generalParent"
-              android:background="@drawable/ic_login_bk"
-              android:contentDescription="login background" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:weightSum="12">
 
-        </LinearLayout>
-      </LinearLayout>
+                <LinearLayout
+                    style="@style/generalParent"
+                    android:layout_weight="3"
+                    android:background="@drawable/login_shape_bk"
+                    android:orientation="vertical">
 
-      <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:layout_alignParentTop="true"
-          android:orientation="vertical"
-          android:layout_marginTop="40dp"
-          android:layout_marginRight="30dp"
-          android:layout_marginLeft="30dp">
+                    <ImageView
+                        style="@style/generalParent"
+                        android:background="@drawable/ic_login_bk"
+                        android:contentDescription="login background" />
 
-        <TextView
-            style="@style/headerText"
-            android:layout_gravity="center"
-            android:text="@string/app_name"
-            android:layout_marginTop="40dp"/>
+                </LinearLayout>
+            </LinearLayout>
 
-        <include
-            android:id="@+id/loginLayoutId"
-            layout="@layout/layout_login"/>
-      </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginRight="30dp"
+                android:orientation="vertical">
 
-    </RelativeLayout>
+                <TextView
+                    style="@style/headerText"
+                    android:fontFamily="@font/alegreya"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="40dp"
+                    android:text="@string/app_name" />
 
-  </ScrollView>
+                <include
+                    android:id="@+id/loginLayoutId"
+                    layout="@layout/layout_login" />
+            </LinearLayout>
 
-  </RelativeLayout>
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
