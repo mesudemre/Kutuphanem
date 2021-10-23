@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/loginViewId"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/loginParent"
+    android:orientation="vertical">
+
+    <ScrollView style="@style/generalParent">
+
+        <RelativeLayout style="@style/generalParent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:weightSum="12">
+
+                <LinearLayout
+                    style="@style/generalParent"
+                    android:layout_weight="3"
+                    android:background="@drawable/login_shape_bk"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        style="@style/generalParent"
+                        android:background="@drawable/ic_login_bk"
+                        android:contentDescription="login background" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginRight="30dp"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/headerText"
+                    android:fontFamily="@font/alegreya"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="40dp"
+                    android:text="@string/app_name" />
+
+                <androidx.cardview.widget.CardView
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="20dp"
+                    android:elevation="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@color/whiteTextColor">
+
+                    <RelativeLayout
+                        android:id="@+id/loginLayout"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="20dp">
+
+                        <TextView
+                            android:id="@+id/girisLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:fontFamily="@font/alegreya_bold"
+                            android:text="@string/girisLabel"
+                            android:textAlignment="center"
+                            android:textColor="@color/primaryTextColor"
+                            android:textSize="22sp" />
+
+                        <ProgressBar
+                            android:id="@+id/girisProgressBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/girisLabel"
+                            android:layout_centerInParent="true"
+                            android:indeterminateTint="@color/lacivert"
+                            android:visibility="gone" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/textInputKullaniciAdi"
+                            android:layout_width="match_parent"
+                            android:layout_below="@+id/girisProgressBar"
+                            android:layout_height="wrap_content"
+                            app:boxBackgroundColor="@color/whiteTextColor"
+                            app:errorEnabled="true"
+                            android:layout_marginTop="20dp">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/editTextKullaniciAdi"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/login_email_hint"
+                                android:maxLines="1" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/textInputSifre"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/textInputKullaniciAdi"
+                            app:errorEnabled="true"
+                            app:boxBackgroundColor="@color/whiteTextColor">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/editTextSifre"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/login_password_hint"
+                                android:maxLines="1"
+                                android:inputType="textPassword"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <RelativeLayout
+                            android:layout_marginTop="5dp"
+                            android:layout_below="@+id/textInputSifre"
+                            android:id="@+id/sifremiUnuttumLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toLeftOf="@id/sifremiUnuttumTextView"
+                                android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+                                app:tint="@color/primaryTextColor" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/sifremiUnuttumTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:fontFamily="@font/alegreya"
+                                android:text="@string/sifremiUnuttumLabel"
+                                android:textColor="@color/primaryTextColor" />
+                        </RelativeLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:layout_marginTop="10dp"
+                            android:id="@+id/cirLoginButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/sifremiUnuttumLayout"
+                            android:layout_centerHorizontal="true"
+                            android:layout_gravity="center"
+                            android:text="@string/girisButtonLabel"
+                            android:textStyle="bold"
+                            app:cornerRadius="10dp"
+                            app:elevation="10dp"
+                            app:icon="@drawable/ic_baseline_login_24" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_marginTop="20dp"
+                            android:id="@+id/yeniKayitTextview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/hesapYokKayitLabel"
+                            android:layout_below="@id/cirLoginButton"
+                            android:gravity="center"
+                            android:textColor="@color/primaryTextColor"
+                            android:fontFamily="@font/alegreya"/>
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/errorTextView"
+                            android:drawablePadding="2dp"
+                            android:visibility="gone"
+                            android:layout_marginTop="20dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/yeniKayitTextview"
+                            android:textStyle="bold"
+                            android:text="@string/hataliLogin"
+                            android:textColor="@color/design_default_color_error"/>
+
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
