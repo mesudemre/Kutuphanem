@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/kutuphanem_navbottom_graph"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/anasayfaFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/anasayfaFragment"
@@ -45,7 +45,11 @@
         android:id="@+id/profilIslemFragment"
         tools:layout="@layout/profil_islem_fragment"
         android:name="com.mesutemre.kutuphanem.fragments.ProfilIslemFragment"
-        android:label="ProfilIslemFragment" />
+        android:label="ProfilIslemFragment" >
+        <action
+            android:id="@+id/action_profilIslemFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/parametreEklemeFragment"
         android:name="com.mesutemre.kutuphanem.fragments.ParametreEklemeFragment"
@@ -84,6 +88,25 @@
             android:id="@+id/deepLinkKitapDetay"
             app:uri="http://192.168.1.105:8080/KutuphaneSistemiWS/api/kitap/nesne?kitapId={kitapId}" />
         <argument android:name="kitapId" app:argType="string"/>
+    </fragment>
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.mesutemre.kutuphanem.fragments.SplashFragment"
+        android:label="SplashFragment" >
+        <action
+            android:id="@+id/action_splashFragment_to_anasayfaFragment"
+            app:destination="@id/anasayfaFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.mesutemre.kutuphanem.fragments.LoginFragment"
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_anasayfaFragment"
+            app:destination="@id/anasayfaFragment" />
     </fragment>
 
 </navigation>

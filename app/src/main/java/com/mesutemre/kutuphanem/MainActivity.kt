@@ -59,7 +59,9 @@ class MainActivity : AppCompatActivity() {
                     R.id.parametreEklemeFragment,
                     R.id.kitapEklemeFragment,
                     R.id.kitapDetayFragment,
-                    R.id.kitapDetayDeepFragment
+                    R.id.kitapDetayDeepFragment,
+                    R.id.splashFragment,
+                    R.id.loginFragment
             )){
                 floatingActionButton3.hideComponent();
                 navBottomMenu.hideComponent();
@@ -68,7 +70,6 @@ class MainActivity : AppCompatActivity() {
                 navBottomMenu.showComponent();
             }
         }
-        //navHostFragment.navController.backStack.clear();
         NavigationUI.setupWithNavController(navBottomMenu,navHostFragment.navController);
     }
 }

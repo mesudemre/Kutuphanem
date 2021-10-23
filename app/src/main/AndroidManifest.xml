@@ -22,19 +22,14 @@
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
-        <activity android:name=".SplashActivity" android:theme="@style/NoActionBar" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".LoginActivity"
-            android:theme="@style/NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:theme="@style/NoActionBar"
             android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
             <nav-graph android:value="@navigation/kutuphanem_navbottom_graph"/>
         </activity>
         <meta-data
