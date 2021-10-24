@@ -48,7 +48,8 @@
         android:label="ProfilIslemFragment" >
         <action
             android:id="@+id/action_profilIslemFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/slide_down" />
     </fragment>
     <fragment
         android:id="@+id/parametreEklemeFragment"
@@ -98,7 +99,8 @@
             app:destination="@id/anasayfaFragment" />
         <action
             android:id="@+id/action_splashFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/slide_down" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
