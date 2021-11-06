@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="custom_card_item_attributes">
+        <attr name="custom_card_title" format="reference" />
+        <attr name="custom_card_isArrowable" format="boolean"/>
+        <attr name="custom_card_titleColor" format="color"/>
+        <attr name="custom_card_arrowTint" format="color"/>
+        <attr name="custom_card_backgroundColor" format="color"/>
+    </declare-styleable>
+</resources>

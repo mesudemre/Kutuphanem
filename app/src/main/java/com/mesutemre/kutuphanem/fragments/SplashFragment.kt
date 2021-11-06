@@ -10,6 +10,7 @@ import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.databinding.SplashFragmentBinding
 import com.mesutemre.kutuphanem.util.APP_TOKEN_KEY
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
+import com.mesutemre.kutuphanem.util.hideComponent
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -48,6 +49,7 @@ class SplashFragment:BaseFragment<SplashFragmentBinding>() {
             }
 
             override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
+                p0?.hideComponent();
                 Navigation.findNavController(binding.splashMainLayoutId).navigate(action);
             }
 

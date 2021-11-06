@@ -25,7 +25,7 @@ object BindingConverters {
         return null;
     }
 
-    @InverseMethod("toCinsiyetSelected")
+    /*@InverseMethod("toCinsiyetSelected")
     @JvmStatic fun selectedCinsiyet(value:CinsiyetModel?):Int{
         if(value?.value.equals("ERKEK")){
             return R.id.erkekCinsiyetRadioButtonId;
@@ -41,6 +41,6 @@ object BindingConverters {
             return CinsiyetModel("KADIN","Bayan");
         }
 
-    }
+    }*/
 
 }

@@ -138,9 +138,9 @@ class ResimSecBottomSheetDialogFragment(
                     profilImageEnd.getCircleImageFromUri(selectedImageUri,profilImageEnd);
                     stopCameraViews();
                     cameraProvider?.unbindAll();
-                    val fr = parentFragment as ProfilIslemFragment;
+                    /*val fr = parentFragment as ProfilIslemFragment;
                     fr.setProfilResimChanged(true);
-                    fr.setSelectedImageUri(selectedImageUri);
+                    fr.setSelectedImageUri(selectedImageUri);*/
                     dismiss();
                 }
             })
@@ -175,9 +175,9 @@ class ResimSecBottomSheetDialogFragment(
             profilImageEnd.getCircleImageFromUri(uri,profilImageEnd);
             selectedImageUri = uri;
         }
-        val fr = parentFragment as ProfilIslemFragment;
+        /*val fr = parentFragment as ProfilIslemFragment;
         fr.setProfilResimChanged(true);
-        fr.setSelectedImageUri(selectedImageUri);
+        fr.setSelectedImageUri(selectedImageUri);*/
         dismiss();
     }
 

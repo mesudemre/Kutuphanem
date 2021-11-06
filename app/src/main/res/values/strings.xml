@@ -92,6 +92,10 @@
     <string name="cinsiyetErkekValue">ERKEK</string>
     <string name="cinsiyetKadinValue">KADIN</string>
     <string name="profilGuncellemeSunucuHata">Sunucu ile bağlantı kurulamadı!</string>
+    <string name="profilGuncellemeAdSoyadBilgiLabel">Ad Soyad ve E-Posta Bilgilerim</string>
+    <string name="profilGuncellemeCinsiyetDogumTarLabel">Doğum Tarihi ve Cinsiyet</string>
+    <string name="profilGuncellemeIlgiAlanlariLabel">İlgi Alanlarım</string>
+    <string name="profilGuncellemeTercihlerLabel">Uygulama Tercihlerim</string>
 
     <!--profil_image_degistir_menu.xml -->
     <string name="itemPhotoCamera">Kamera</string>

@@ -50,6 +50,9 @@
             android:id="@+id/action_profilIslemFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:enterAnim="@anim/slide_down" />
+        <action
+            android:id="@+id/action_profilIslemFragment_to_profilIslemAdSoyadEpostaFragment"
+            app:destination="@id/profilIslemAdSoyadEpostaFragment" />
     </fragment>
     <fragment
         android:id="@+id/parametreEklemeFragment"
@@ -109,6 +112,14 @@
         <action
             android:id="@+id/action_loginFragment_to_anasayfaFragment"
             app:destination="@id/anasayfaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profilIslemAdSoyadEpostaFragment"
+        android:name="com.mesutemre.kutuphanem.fragments.ProfilIslemAdSoyadEpostaFragment"
+        android:label="ProfilIslemAdSoyadEpostaFragment">
+        <argument
+            android:name="kullaniciObj"
+            app:argType="com.mesutemre.kutuphanem.model.Kullanici" />
     </fragment>
 
 </navigation>

@@ -3,11 +3,11 @@ package com.mesutemre.kutuphanem.viewmodels
 import android.app.Application
 import android.content.Context
 import android.net.Uri
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
+import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.dao.KullaniciDao
 import com.mesutemre.kutuphanem.model.KitapturModel
 import com.mesutemre.kutuphanem.model.Kullanici
@@ -22,13 +22,14 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
 class ProfilIslemViewModel @Inject constructor(application: Application,
@@ -37,16 +38,12 @@ class ProfilIslemViewModel @Inject constructor(application: Application,
                                                private val savedStateHandle: SavedStateHandle,
                                                private val parametreService: IParametreService,
                                                private val parametreRepository: ParametreRepository
-): AndroidViewModel(application), CoroutineScope {
+): BaseViewModel(application) {
 
     @Inject
     lateinit var customSharedPreferences: CustomSharedPreferences;
 
-    private val job = Job();
-    override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.Main; //Önce işi yap sonra main thread e dön.
-
-    private val disposible = CompositeDisposable();
+    override val disposible: CompositeDisposable = CompositeDisposable();
 
     val kullanici = MutableLiveData<Kullanici>();
     val kullaniciLoading = MutableLiveData<Boolean>();
@@ -58,6 +55,43 @@ class ProfilIslemViewModel @Inject constructor(application: Application,
     val kullaniciGuncelleLoading = MutableLiveData<Boolean>();
     val kullaniciGuncelleSonuc = MutableLiveData<ResponseStatusModel>();
     val kullaniciGuncelleError = MutableLiveData<Boolean>();
+
+    fun getKullaniciInfo(){ //Async şekilde türler ve kullanıcı biller alınacak...
+        val kullaniciDbMevcut:Boolean = customSharedPreferences.getBooleanFromSharedPreferences(KULLANICI_DB_MEVCUT);
+        if(kullaniciDbMevcut){
+            val username:String = customSharedPreferences.getStringFromSharedPreferences(KULLANICI_ADI_KEY);
+            getKullaniciBilgilerDB(username);
+        }else{
+            getKullaniciBilgiFromAPI();
+        }
+    }
+
+    private fun getKullaniciBilgilerDB(kullaniciAd:String){
+        launch(Dispatchers.IO){
+            kullaniciLoading.postValue(true);
+            val user = kullaniciDao.getKullaniciBilgiByUsername(kullaniciAd);
+            if(user == null) {
+                kullaniciError.postValue(true);
+            }else{
+                kullanici.postValue(user);
+            }
+            kullaniciLoading.postValue(false)
+        }
+    }
+
+    fun getKullaniciIlgiAlanlarFromDB(kullaniciAd: String){
+        launch(Dispatchers.IO){
+            val user = kullaniciDao.getKullaniciBilgiByUsername(kullaniciAd);
+            val kullaniciIlgiAlanListe = kullaniciDao.getKullaniciIlgiAlanListe(kullaniciAd);
+            var ilgiAlanListe = mutableListOf<KitapturModel>();
+            if(kullaniciIlgiAlanListe != null && kullaniciIlgiAlanListe.size>0){
+                for (ia in kullaniciIlgiAlanListe){
+                    ilgiAlanListe.add(KitapturModel(ia.aciklamaId,ia.aciklama));
+                }
+                user.ilgiAlanlari = ilgiAlanListe;
+            }
+        }
+    }
 
     fun getKullaniciBilgi(){
         val kayitliState: String? = savedStateHandle.get<String>("state");
@@ -95,8 +129,8 @@ class ProfilIslemViewModel @Inject constructor(application: Application,
                             kullaniciLoading.value = false;
                             kullaniciError.value = false;
                             kullanici.value = t;
-                            writeUserToDB(t);
-                            writeIlgiAlanlarToDB(t);
+                            async { writeUserToDB(t); }
+                            async { writeIlgiAlanlarToDB(t); }
                         }
 
                         override fun onError(e: Throwable) {
@@ -128,7 +162,7 @@ class ProfilIslemViewModel @Inject constructor(application: Application,
     }
 
     private fun writeUserToDB(kullanici: Kullanici):Unit{
-        launch {
+        launch(Dispatchers.IO){
             customSharedPreferences.putBooleanToSharedPreferences(KULLANICI_DB_MEVCUT,true);
             kullaniciDao.kullaniciSil(kullanici.username);
             kullaniciDao.kullaniciKaydet(kullanici);
@@ -136,7 +170,7 @@ class ProfilIslemViewModel @Inject constructor(application: Application,
     }
 
     private fun writeIlgiAlanlarToDB(kullanici: Kullanici):Unit{
-        launch {
+        launch(Dispatchers.IO){
             kullaniciDao.kullaniciIlgiAlanSil(kullanici.username);
             val ilgiAlanListe = kullanici.ilgiAlanlari;
             if(ilgiAlanListe != null && ilgiAlanListe.size>0){
@@ -233,11 +267,4 @@ class ProfilIslemViewModel @Inject constructor(application: Application,
                     }
                 }));
     }
-
-    override fun onCleared() {
-        super.onCleared();
-        disposible.clear();
-        job.cancel();
-    }
-
 }

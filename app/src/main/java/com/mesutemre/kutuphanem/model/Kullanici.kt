@@ -1,11 +1,14 @@
 package com.mesutemre.kutuphanem.model
 
+import androidx.annotation.Keep
 import androidx.room.*
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName;
 import com.mesutemre.kutuphanem.converters.Converters
+import java.io.Serializable
 import java.util.*
 
+@Keep
 @Entity
 data class Kullanici(
 
@@ -49,7 +52,7 @@ data class Kullanici(
     @ColumnInfo(name = "haberdarmi")
     @Expose
     var haberdarmi:Boolean
-){
+): Serializable {
     @Ignore
     @SerializedName("ilgiAlanlari")
     @Expose
