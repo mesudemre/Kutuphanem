@@ -110,6 +110,7 @@
                 app:custom_card_title="@string/profilGuncellemeTercihlerLabel" />
 
             <com.mesutemre.kutuphanem.customcomponents.CustomCardItem
+                android:id="@+id/cikisCardId"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:custom_card_arrowTint="@color/white"

@@ -25,6 +25,7 @@ import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.databinding.KitapEklemeFragmentBinding
 import com.mesutemre.kutuphanem.fragments.dialogs.DogumTarihiDialogFragment
+import com.mesutemre.kutuphanem.fragments.dialogs.SelectionDialogFragment
 import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
 import com.mesutemre.kutuphanem.model.*
 import com.mesutemre.kutuphanem.util.*
@@ -51,6 +52,7 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
     private var kameraIzin:Int = 0
     private var selectedKitapTur:Int = 0
     private var selectedYayinevi:Int = 0
+    private lateinit var kitapTurler:List<KitapturModel>;
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> KitapEklemeFragmentBinding
             = KitapEklemeFragmentBinding::inflate
@@ -123,6 +125,14 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
             binding.kitapImageCapId.setImageURI(savedKitapUri)
         }
 
+        binding.selectKitapTurCardId.setOnClickListener {
+            var selectList = mutableListOf<SelectItemModel>();
+            for (kt in kitapTurler) {
+                selectList.add(SelectItemModel(kt.kitapTurId!!,kt.aciklama!!));
+            }
+            SelectionDialogFragment(selectList,::onSelectKitapTur).show(requireFragmentManager(),null);
+        }
+
         binding.textInputKitapAd.editText!!.addTextChangedListener(TextInputErrorClearListener(binding.textInputKitapAd))
         binding.textInputYazarAd.editText!!.addTextChangedListener(TextInputErrorClearListener(binding.textInputYazarAd))
         binding.textInputAlinmaTar.editText!!.addTextChangedListener(TextInputErrorClearListener(binding.textInputAlinmaTar))
@@ -189,6 +199,10 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
             observeKitapKaydi(it)
             observeKitapResimYukleme(it)
         }
+    }
+
+    private fun onSelectKitapTur(selectedItem:SelectItemModel){
+        binding.selectedKitapTurMaterialTextViewId.setText(selectedItem.selectedItemLabel);
     }
 
     private fun observeKitapKaydi(view:View){
@@ -321,6 +335,7 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
             val adapter = ArrayAdapter(binding.kitapTurlerSpinnerId.context,
                 android.R.layout.simple_spinner_dropdown_item,
                 kitapTurListe)
+            kitapTurler = kitapTurListe;
             binding.kitapTurlerSpinnerId.adapter = adapter
         })
 

@@ -237,6 +237,27 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                     </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/selectKitapTurCardId"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        app:cardCornerRadius="4dp"
+                        app:strokeColor="@color/imageShadow"
+                        app:strokeWidth="1dp">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/selectedKitapTurMaterialTextViewId"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/black"
+                            android:layout_marginLeft="10dp"
+                            android:text="@string/kitapTurSecinizText"
+                            android:textSize="16sp" />
+                    </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
 
                 <LinearLayout

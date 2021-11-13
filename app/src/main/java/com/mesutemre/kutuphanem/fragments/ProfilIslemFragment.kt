@@ -8,12 +8,15 @@ import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.databinding.ProfilIslemFragmentBinding
+import com.mesutemre.kutuphanem.fragments.dialogs.ExitFromApplicationDialogFragment
 import com.mesutemre.kutuphanem.model.Kullanici
+import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.getCircleImageFromUrl
 import com.mesutemre.kutuphanem.util.hideComponent
 import com.mesutemre.kutuphanem.util.showComponent
 import com.mesutemre.kutuphanem.viewmodels.ProfilIslemViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ProfilIslemFragment() :BaseFragment<ProfilIslemFragmentBinding>() {
@@ -25,6 +28,9 @@ class ProfilIslemFragment() :BaseFragment<ProfilIslemFragmentBinding>() {
     private val viewModel: ProfilIslemViewModel by viewModels();
     private lateinit var kullanici:Kullanici;
 
+    @Inject
+    lateinit var customSharedPreferences: CustomSharedPreferences;
+
     override fun onCreateFragment(savedInstanceState: Bundle?) {
         viewModel.getKullaniciInfo();
     }
@@ -34,6 +40,10 @@ class ProfilIslemFragment() :BaseFragment<ProfilIslemFragmentBinding>() {
         binding.adSoyadEpostaCardId.setOnClickListener {
             val action = ProfilIslemFragmentDirections.actionProfilIslemFragmentToProfilIslemAdSoyadEpostaFragment(kullanici);
             Navigation.findNavController(it).navigate(action);
+        }
+        binding.cikisCardId.setOnClickListener {
+            ExitFromApplicationDialogFragment(customSharedPreferences,this)
+                .show(requireFragmentManager(),null);
         }
     }
 
