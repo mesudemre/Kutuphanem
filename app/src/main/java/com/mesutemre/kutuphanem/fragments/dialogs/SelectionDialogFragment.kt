@@ -10,12 +10,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.mesutemre.kutuphanem.adapters.SelectionAdapter
 import com.mesutemre.kutuphanem.databinding.SelectionDialogBinding
 import com.mesutemre.kutuphanem.model.SelectItemModel
+import com.mesutemre.kutuphanem.util.hideComponent
 
 /**
  * @Author: mesutemre.celenk
  * @Date: 13.11.2021
  */
 class SelectionDialogFragment(
+    val isFilterable:Boolean,
     val selectionList:MutableList<SelectItemModel>,
     val onSelectItem:(item:SelectItemModel)->Unit
 ): BottomSheetDialogFragment(),SearchView.OnQueryTextListener {
@@ -46,7 +48,11 @@ class SelectionDialogFragment(
 
         binding.selectionRecyclerViewId.adapter = adapter;
 
-        binding.selectionSearchView.setOnQueryTextListener(this)
+        if(isFilterable){
+            binding.selectionSearchView.setOnQueryTextListener(this)
+        }else {
+            binding.selectionSearchView.hideComponent();
+        }
     }
 
     private fun selectItem(item: SelectItemModel) {
