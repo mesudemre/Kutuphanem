@@ -95,6 +95,7 @@
                 app:custom_card_title="@string/profilGuncellemeAdSoyadBilgiLabel" />
 
             <com.mesutemre.kutuphanem.customcomponents.CustomCardItem
+                android:id="@+id/dogumTarCinsiyetCardId"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:custom_card_title="@string/profilGuncellemeCinsiyetDogumTarLabel" />

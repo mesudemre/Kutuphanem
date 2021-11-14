@@ -45,6 +45,10 @@ class ProfilIslemFragment() :BaseFragment<ProfilIslemFragmentBinding>() {
             ExitFromApplicationDialogFragment(customSharedPreferences,this)
                 .show(requireFragmentManager(),null);
         }
+        binding.dogumTarCinsiyetCardId.setOnClickListener {
+            val action = ProfilIslemFragmentDirections.actionProfilIslemFragmentToProfilIslemDogumTarCinsiyetFragment(kullanici);
+            Navigation.findNavController(it).navigate(action);
+        }
     }
 
     private fun observeKullaniciBilgi(){

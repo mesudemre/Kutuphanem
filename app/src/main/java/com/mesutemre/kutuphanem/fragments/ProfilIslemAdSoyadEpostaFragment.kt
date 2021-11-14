@@ -11,11 +11,13 @@ import com.mesutemre.kutuphanem.databinding.ProfilIslemAdSoyadEpostaBinding
 import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
 import com.mesutemre.kutuphanem.model.Kullanici
 import com.mesutemre.kutuphanem.util.hideKeyboard
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * @Author: mesutemre.celenk
  * @Date: 31.10.2021
  */
+@AndroidEntryPoint
 class ProfilIslemAdSoyadEpostaFragment:BaseFragment<ProfilIslemAdSoyadEpostaBinding>() {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> ProfilIslemAdSoyadEpostaBinding
