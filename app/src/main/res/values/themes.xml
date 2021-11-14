@@ -144,4 +144,11 @@
         <item name="android:background">@color/transparent</item>
         <!--        <item name="closeIcon">@drawable/ic_clo</item>-->
     </style>
+
+    <style name="BottomSheetCollapseView" parent="">
+        <item name="android:background">@drawable/view_radius_corner</item>
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">4dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
 </resources>

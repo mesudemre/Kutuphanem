@@ -162,4 +162,6 @@
     <string name="kitapYorumListeBos">Bu kitap hakkında henüz yorum yapılmamış</string>
     <string name="kitapYorumDevamGosterLabel">Devamını oku...</string>
     <string name="noComentKitapYet">Bu kitap henüz puanlanmamış.Yorumlardan kitabı puanlayabilirsiniz...</string>
+
+    <string name="kitapSelectionTurLabel">Kitap Türü Seçimi</string>
 </resources>

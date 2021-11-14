@@ -245,6 +245,7 @@
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
                         app:cardCornerRadius="4dp"
+                        android:visibility="gone"
                         app:strokeColor="@color/imageShadow"
                         app:strokeWidth="1dp">
 

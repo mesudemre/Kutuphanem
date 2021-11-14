@@ -130,7 +130,11 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
             for (kt in kitapTurler) {
                 selectList.add(SelectItemModel(kt.kitapTurId!!,kt.aciklama!!));
             }
-            SelectionDialogFragment(true,selectList,::onSelectKitapTur)
+            SelectionDialogFragment(
+                it.context.getString(R.string.kitapSelectionTurLabel)
+                ,true
+                ,selectList
+                ,::onSelectKitapTur)
                 .show(requireFragmentManager(),null);
         }
 

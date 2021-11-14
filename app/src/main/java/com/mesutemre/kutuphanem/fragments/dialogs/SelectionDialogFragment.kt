@@ -1,6 +1,7 @@
 package com.mesutemre.kutuphanem.fragments.dialogs
 
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import com.mesutemre.kutuphanem.util.hideComponent
  * @Date: 13.11.2021
  */
 class SelectionDialogFragment(
+    val selectionTitle:String,
     val isFilterable:Boolean,
     val selectionList:MutableList<SelectItemModel>,
     val onSelectItem:(item:SelectItemModel)->Unit
@@ -40,6 +42,7 @@ class SelectionDialogFragment(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.selectionTitleTextViewId.text = selectionTitle;
         binding.selectionRecyclerViewId.layoutManager = LinearLayoutManager(context);
 
         adapter = SelectionAdapter(::selectItem);
@@ -49,7 +52,8 @@ class SelectionDialogFragment(
         binding.selectionRecyclerViewId.adapter = adapter;
 
         if(isFilterable){
-            binding.selectionSearchView.setOnQueryTextListener(this)
+            binding.selectionSearchView.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+            binding.selectionSearchView.setOnQueryTextListener(this);
         }else {
             binding.selectionSearchView.hideComponent();
         }
