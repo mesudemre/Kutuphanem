@@ -49,6 +49,16 @@ class ProfilIslemFragment() :BaseFragment<ProfilIslemFragmentBinding>() {
             val action = ProfilIslemFragmentDirections.actionProfilIslemFragmentToProfilIslemDogumTarCinsiyetFragment(kullanici);
             Navigation.findNavController(it).navigate(action);
         }
+
+        binding.ilgiAlanlarimCardId.setOnClickListener {
+            val action = ProfilIslemFragmentDirections.actionProfilIslemFragmentToProfilIslemIlgiAlanlarimFragment(kullanici);
+            Navigation.findNavController(it).navigate(action);
+        }
+
+        binding.uygulamaTercihlerimCardId.setOnClickListener {
+            val action = ProfilIslemFragmentDirections.actionProfilIslemFragmentToProfilIslemIletisiTercihlerimFragment(kullanici);
+            Navigation.findNavController(it).navigate(action);
+        }
     }
 
     private fun observeKullaniciBilgi(){

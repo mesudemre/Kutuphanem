@@ -101,11 +101,13 @@
                 app:custom_card_title="@string/profilGuncellemeCinsiyetDogumTarLabel" />
 
             <com.mesutemre.kutuphanem.customcomponents.CustomCardItem
+                android:id="@+id/ilgiAlanlarimCardId"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:custom_card_title="@string/profilGuncellemeIlgiAlanlariLabel" />
 
             <com.mesutemre.kutuphanem.customcomponents.CustomCardItem
+                android:id="@+id/uygulamaTercihlerimCardId"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:custom_card_title="@string/profilGuncellemeTercihlerLabel" />

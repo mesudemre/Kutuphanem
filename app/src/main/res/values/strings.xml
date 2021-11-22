@@ -76,7 +76,7 @@
     <string name="profilDogumtarihLabel">Doğum Tarihiniz</string>
     <string name="profilSayfaHata">Profil bilgileriniz getirilemedi!</string>
     <string name="ilgiAlanlarinizLegendTitle">İlgi Alanlarınız</string>
-    <string name="ilgiAlanHata">İlgi alanlarınız geitirilemedi!</string>
+    <string name="ilgiAlanHata">İlgi alanlarınız getirilemedi!</string>
     <string name="profilGuncelleButtonLabel">Güncelle</string>
     <string name="cikisButtonLabel">Çıkış</string>
     <string name="guncelleAlertMessage">Üyelik bilgileriniz güncellenecektir. Devam etmek istiyor musunuz?</string>
@@ -97,6 +97,7 @@
     <string name="profilGuncellemeCinsiyetDogumTarCinsiyetBilgiLabel">Doğum Tarihi ve Cinsiyet Bilgilerim</string>
     <string name="profilGuncellemeIlgiAlanlariLabel">İlgi Alanlarım</string>
     <string name="profilGuncellemeTercihlerLabel">Uygulama Tercihlerim</string>
+    <string name="cinsiyetLabel">Cinsiyetiniz</string>
 
     <!--profil_image_degistir_menu.xml -->
     <string name="itemPhotoCamera">Kamera</string>

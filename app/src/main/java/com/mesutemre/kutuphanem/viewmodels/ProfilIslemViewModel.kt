@@ -16,7 +16,10 @@ import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.repositories.ParametreRepository
 import com.mesutemre.kutuphanem.service.IParametreService
 import com.mesutemre.kutuphanem.service.KullaniciService
-import com.mesutemre.kutuphanem.util.*
+import com.mesutemre.kutuphanem.util.CustomSharedPreferences
+import com.mesutemre.kutuphanem.util.KULLANICI_ADI_KEY
+import com.mesutemre.kutuphanem.util.KULLANICI_DB_MEVCUT
+import com.mesutemre.kutuphanem.util.getPath
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -48,13 +51,12 @@ class ProfilIslemViewModel @Inject constructor(application: Application,
     val kullanici = MutableLiveData<Kullanici>();
     val kullaniciLoading = MutableLiveData<Boolean>();
     val kullaniciError = MutableLiveData<Boolean>();
-    val kitapTurListe = MutableLiveData<List<KitapturModel>>()
-    val kitapTurLoading = MutableLiveData<Boolean>();
-    val kitapTurError = MutableLiveData<Boolean>();
 
     val kullaniciGuncelleLoading = MutableLiveData<Boolean>();
     val kullaniciGuncelleSonuc = MutableLiveData<ResponseStatusModel>();
     val kullaniciGuncelleError = MutableLiveData<Boolean>();
+
+    val kullaniciIlgiAlanlar = MutableLiveData<List<KitapturModel>>();
 
     fun getKullaniciInfo(){ //Async şekilde türler ve kullanıcı biller alınacak...
         val kullaniciDbMevcut:Boolean = customSharedPreferences.getBooleanFromSharedPreferences(KULLANICI_DB_MEVCUT);
@@ -79,47 +81,23 @@ class ProfilIslemViewModel @Inject constructor(application: Application,
         }
     }
 
+
     fun getKullaniciIlgiAlanlarFromDB(kullaniciAd: String){
         launch(Dispatchers.IO){
-            val user = kullaniciDao.getKullaniciBilgiByUsername(kullaniciAd);
             val kullaniciIlgiAlanListe = kullaniciDao.getKullaniciIlgiAlanListe(kullaniciAd);
             var ilgiAlanListe = mutableListOf<KitapturModel>();
             if(kullaniciIlgiAlanListe != null && kullaniciIlgiAlanListe.size>0){
                 for (ia in kullaniciIlgiAlanListe){
                     ilgiAlanListe.add(KitapturModel(ia.aciklamaId,ia.aciklama));
                 }
-                user.ilgiAlanlari = ilgiAlanListe;
-            }
-        }
-    }
-
-    fun getKullaniciBilgi(){
-        val kayitliState: String? = savedStateHandle.get<String>("state");
-        val kayitliOlmayanState:String = savedStateHandle.toString();
-        if(!kayitliOlmayanState.equals(kayitliState)){
-            val kullaniciDbMevcut:Boolean = customSharedPreferences.getBooleanFromSharedPreferences(KULLANICI_DB_MEVCUT);
-            val kitapTurDbMevcut :Boolean = customSharedPreferences.getBooleanFromSharedPreferences(PARAM_KITAPTUR_DB_KEY);
-
-            if(kitapTurDbMevcut){
-                this.getKitapTurListeFromDB();
-            }else{
-                this.getKitapTurListeFromAPI();
-            }
-
-            if(kullaniciDbMevcut){
-                this.getKullaniciBilgiFromDB();
-                //this.getKullaniciBilgiFromAPI();
-                savedStateHandle.set("state",savedStateHandle.toString());
-            }else{
-                this.getKullaniciBilgiFromAPI();
-                savedStateHandle.set("state",savedStateHandle.toString());
+                kullaniciIlgiAlanlar.postValue(ilgiAlanListe);
             }
         }
     }
 
     private fun getKullaniciBilgiFromAPI(){
         kullaniciLoading.value = true;
-        launch {
+
             disposible.add(
                 kullaniciService.getKullaniciBilgi()
                     .subscribeOn(Schedulers.newThread())
@@ -140,26 +118,9 @@ class ProfilIslemViewModel @Inject constructor(application: Application,
 
                     }));
 
-        }
+
     }
 
-    private fun getKullaniciBilgiFromDB(){
-        launch {
-            val username:String = customSharedPreferences.getStringFromSharedPreferences(KULLANICI_ADI_KEY);
-            val kullaniciIlgiAlanListe = kullaniciDao.getKullaniciIlgiAlanListe(username);
-            val user = kullaniciDao.getKullaniciBilgiByUsername(username);
-            var ilgiAlanListe = ArrayList<KitapturModel>();
-            if(kullaniciIlgiAlanListe != null && kullaniciIlgiAlanListe.size>0){
-                for (ia in kullaniciIlgiAlanListe){
-                    ilgiAlanListe.add(KitapturModel(ia.aciklamaId,ia.aciklama));
-                }
-                user.ilgiAlanlari = ilgiAlanListe;
-            }
-            kullanici.value = user;
-            kullaniciLoading.value = false;
-            kullaniciError.value = false;
-        }
-    }
 
     private fun writeUserToDB(kullanici: Kullanici):Unit{
         launch(Dispatchers.IO){
@@ -183,32 +144,7 @@ class ProfilIslemViewModel @Inject constructor(application: Application,
         }
     }
 
-    private fun getKitapTurListeFromDB(){
-        launch {
-            kitapTurListe.value = parametreRepository.getKitapTurListe();
-        }
-    }
 
-    private fun getKitapTurListeFromAPI(){
-        kitapTurLoading.value = true;
-        kitapTurError.value = false;
-        disposible.add(
-            parametreService.getKitapTurListe()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<List<KitapturModel>>(){
-                    override fun onSuccess(response: List<KitapturModel>) {
-                        kitapTurListe.value = response;
-                        kitapTurLoading.value = false;
-                        kitapTurError.value = false;
-                    }
-
-                    override fun onError(e: Throwable) {
-                        kitapTurLoading.value = false;
-                        kitapTurError.value = true;
-                    }
-                }));
-    }
 
     fun kullaniciBilgiUpdate(jsonStr:String,resimGuncellenecek:Boolean,selectedImageUri:Uri,username:String,context:Context){
         viewModelScope.launch {

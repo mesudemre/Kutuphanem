@@ -63,7 +63,9 @@ class MainActivity : AppCompatActivity() {
                     R.id.splashFragment,
                     R.id.loginFragment,
                     R.id.profilIslemAdSoyadEpostaFragment,
-                    R.id.profilIslemDogumTarCinsiyetFragment
+                    R.id.profilIslemDogumTarCinsiyetFragment,
+                    R.id.profilIslemIlgiAlanlarimFragment,
+                    R.id.profilIslemIletisiTercihlerimFragment
             )){
                 floatingActionButton3.hideComponent();
                 navBottomMenu.hideComponent();

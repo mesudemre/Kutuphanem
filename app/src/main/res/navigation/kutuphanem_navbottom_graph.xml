@@ -56,6 +56,12 @@
         <action
             android:id="@+id/action_profilIslemFragment_to_profilIslemDogumTarCinsiyetFragment"
             app:destination="@id/profilIslemDogumTarCinsiyetFragment" />
+        <action
+            android:id="@+id/action_profilIslemFragment_to_profilIslemIlgiAlanlarimFragment"
+            app:destination="@id/profilIslemIlgiAlanlarimFragment" />
+        <action
+            android:id="@+id/action_profilIslemFragment_to_profilIslemIletisiTercihlerimFragment"
+            app:destination="@id/profilIslemIletisiTercihlerimFragment" />
     </fragment>
     <fragment
         android:id="@+id/parametreEklemeFragment"
@@ -132,5 +138,22 @@
             android:name="kullaniciObj"
             app:argType="com.mesutemre.kutuphanem.model.Kullanici" />
     </fragment>
+    <fragment
+        android:id="@+id/profilIslemIlgiAlanlarimFragment"
+        android:name="com.mesutemre.kutuphanem.fragments.ProfilIslemIlgiAlanlarimFragment"
+        android:label="ProfilIslemIlgiAlanlarimFragment">
+        <argument
+            android:name="kullaniciObj"
+            app:argType="com.mesutemre.kutuphanem.model.Kullanici" />
+    </fragment>
+    <fragment
+        android:id="@+id/profilIslemIletisiTercihlerimFragment"
+        android:name="com.mesutemre.kutuphanem.fragments.ProfilIslemIletisimTercihlerimFragment"
+        android:label="ProfilIslemIletisiTercihlerimFragment">
+        <argument
+            android:name="kullaniciObj"
+            app:argType="com.mesutemre.kutuphanem.model.Kullanici" />
+    </fragment>
+
 
 </navigation>
