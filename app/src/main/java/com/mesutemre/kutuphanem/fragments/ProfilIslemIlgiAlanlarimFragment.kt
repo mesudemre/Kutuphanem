@@ -14,6 +14,7 @@ import com.mesutemre.kutuphanem.model.KitapturModel
 import com.mesutemre.kutuphanem.model.Kullanici
 import com.mesutemre.kutuphanem.util.hideComponent
 import com.mesutemre.kutuphanem.util.showComponent
+import com.mesutemre.kutuphanem.util.startActivity
 import com.mesutemre.kutuphanem.viewmodels.ParametreKitapturViewModel
 import com.mesutemre.kutuphanem.viewmodels.ProfilIslemViewModel
 import dagger.hilt.android.AndroidEntryPoint

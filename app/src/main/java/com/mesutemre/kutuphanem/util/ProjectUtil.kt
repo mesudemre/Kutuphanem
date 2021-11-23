@@ -1,7 +1,9 @@
 package com.mesutemre.kutuphanem.util
 
+import android.app.Activity
 import android.content.ContentUris
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -290,3 +292,9 @@ fun downloadKitap(kitap:KitapModel, requireContext: Context,isArchive:Boolean):U
     }
     return Uri.EMPTY;
 }
+
+inline fun <reified T: Activity>
+        Context.startActivity(){
+            val intent = Intent(this,T::class.java);
+            startActivity(intent);
+        }
