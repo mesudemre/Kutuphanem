@@ -136,8 +136,8 @@
     <string name="kitapKaydiBasarli">Kitap başarıyla kaydedildi</string>
     <string name="kitapKaydiHataText">Kitap kaydı esnasında hata meydana geldi!</string>
     <string name="kitapResmiYuklemeHata">Kitap resmi yüklenirken hata meydana geldi!</string>
-    <string name="kitapTurSecinizText">Kitap türü seçiniz</string>
-    <string name="yayinEviSecinizText">Yayınevi seçiniz</string>
+    <string name="kitapTurSecinizText">Kitap türü seçiniz...</string>
+    <string name="yayinEviSecinizText">Yayınevi seçiniz...</string>
 
     <!--KitapDetayFragment -->
     <string name="kitapAdLabelText">Kitap Adı</string>
@@ -166,4 +166,5 @@
     <string name="noComentKitapYet">Bu kitap henüz puanlanmamış.Yorumlardan kitabı puanlayabilirsiniz...</string>
 
     <string name="kitapSelectionTurLabel">Kitap Türü Seçimi</string>
+    <string name="kitapSelectionYayineviLabel">Yayınevi Seçimi</string>
 </resources>

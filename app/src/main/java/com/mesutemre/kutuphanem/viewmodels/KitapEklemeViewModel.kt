@@ -92,8 +92,7 @@ constructor(application: Application,
                         kitapEklemeKitapTurError.value = false;
                         kitapEklemeKitapTurLoading.value = false;
                         var liste = response.toMutableList();
-                        liste.add(KitapturModel(0,context.getString(R.string.kitapTurSecinizText)));
-                        val sortedList = liste.sortedWith(compareBy({it.kitapTurId}));
+                        val sortedList = liste.sortedWith(compareBy({it.aciklama}));
                         kitapEklemeKitapTurListe.value = sortedList;
                     }
 
@@ -108,8 +107,7 @@ constructor(application: Application,
     private fun initKitapTurFromDatabase(){
         launch {
             var liste = parametreRepository.getKitapTurListe().toMutableList();
-            liste.add(KitapturModel(0,context.getString(R.string.kitapTurSecinizText)));
-            val sortedList = liste.sortedWith(compareBy({it.kitapTurId}));
+            val sortedList = liste.sortedWith(compareBy({it.aciklama}));
             kitapEklemeKitapTurListe.value = sortedList;
             kitapEklemeKitapTurError.value = false;
             kitapEklemeKitapTurLoading.value = false;
@@ -148,8 +146,7 @@ constructor(application: Application,
                         kitapEklemeYayinEviLoading.value = false;
 
                         var liste = response.toMutableList();
-                        liste.add(YayineviModel(0,context.getString(R.string.yayinEviSecinizText)));
-                        val sortedList = liste.sortedWith(compareBy({it.yayinEviId}));
+                        val sortedList = liste.sortedWith(compareBy({it.aciklama}));
                         kitapEklemeYayinEviListe.value = sortedList;
                     }
 
@@ -165,8 +162,7 @@ constructor(application: Application,
             kitapEklemeYayinEviError.value = false;
             kitapEklemeYayinEviLoading.value = false;
             var liste = parametreRepository.getYayinEviListe().toMutableList();
-            liste.add(YayineviModel(0,context.getString(R.string.yayinEviSecinizText)));
-            val sortedList = liste.sortedWith(compareBy({it.yayinEviId}));
+            val sortedList = liste.sortedWith(compareBy({it.aciklama}));
             kitapEklemeYayinEviListe.value = sortedList;
         }
     }

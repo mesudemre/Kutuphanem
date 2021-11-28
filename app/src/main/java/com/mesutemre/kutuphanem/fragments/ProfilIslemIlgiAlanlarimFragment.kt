@@ -14,7 +14,6 @@ import com.mesutemre.kutuphanem.model.KitapturModel
 import com.mesutemre.kutuphanem.model.Kullanici
 import com.mesutemre.kutuphanem.util.hideComponent
 import com.mesutemre.kutuphanem.util.showComponent
-import com.mesutemre.kutuphanem.util.startActivity
 import com.mesutemre.kutuphanem.viewmodels.ParametreKitapturViewModel
 import com.mesutemre.kutuphanem.viewmodels.ProfilIslemViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -75,16 +74,20 @@ class ProfilIslemIlgiAlanlarimFragment:BaseFragment<ProfilIslemIlgiAlanlarBindin
     }
 
     private fun observeKullaniciIlgiAlanlari(kitapTurListe:List<KitapturModel>){
-        val ilgiAlanSecili: (List<KitapturModel>,KitapturModel) ->Boolean = {ilgiAlanListe,ilgiliAlan ->
-            for (ia in ilgiAlanListe){
-                if(ia.kitapTurId == ilgiliAlan.kitapTurId){
-                     true;
+        profilIslemViewModel.kullaniciIlgiAlanlar.observe(viewLifecycleOwner, Observer {kullaniciIlgiAlanlar->
+            /*val ilgiAlanSecili: (List<KitapturModel>,KitapturModel) ->Boolean = ilgiAlanSecili@ {ilgiAlanListe,ilgiliAlan ->
+                for (ia in ilgiAlanListe){
+                    if(ia.kitapTurId == ilgiliAlan.kitapTurId){
+                        return@ilgiAlanSecili true;
+                    }
+                }
+                false;
+            }*/
+            val ilgiAlanSeciliFixed : (List<KitapturModel>,KitapturModel) ->Boolean = {ilgiAlanListe,ilgiliAlan ->
+                ilgiAlanListe.any {
+                    it.kitapTurId == ilgiliAlan.kitapTurId
                 }
             }
-            false;
-        }
-
-        profilIslemViewModel.kullaniciIlgiAlanlar.observe(viewLifecycleOwner, Observer {kullaniciIlgiAlanlar->
             if(kitapTurListe != null && kitapTurListe.size>0) {
                 for (ia in kitapTurListe){
                     val ilgiAlan: Chip = Chip(requireContext());
@@ -97,7 +100,7 @@ class ProfilIslemIlgiAlanlarimFragment:BaseFragment<ProfilIslemIlgiAlanlarBindin
                     ilgiAlan.setCheckedIconResource(R.drawable.ic_baseline_check_circle_outline_24);
 
                     if(kullaniciIlgiAlanlar != null && kullaniciIlgiAlanlar.size>0){
-                        if(ilgiAlanSecili(kullaniciIlgiAlanlar,ia)){
+                        if(ilgiAlanSeciliFixed(kullaniciIlgiAlanlar,ia)){
                             ilgiAlan.isChecked = true;
                         }
                     }

@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -53,6 +52,7 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
     private var selectedKitapTur:Int = 0
     private var selectedYayinevi:Int = 0
     private lateinit var kitapTurler:List<KitapturModel>;
+    private lateinit var yayinEvler:List<YayineviModel>;
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> KitapEklemeFragmentBinding
             = KitapEklemeFragmentBinding::inflate
@@ -100,17 +100,6 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
             cameraProvider.unbindAll()
         }
 
-        binding.kitapTurlerSpinnerId.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedKT = parent!!.getItemAtPosition(position) as KitapturModel;
-                selectedKitapTur = selectedKT.kitapTurId!!;
-            }
-
-        }
-
         binding.yayinEviSpinnerId.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
@@ -136,6 +125,18 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
                 ,selectList
                 ,::onSelectKitapTur)
                 .show(requireFragmentManager(),null);
+        }
+
+        binding.selectYayineviCardId.setOnClickListener {
+            var selectList = mutableListOf<SelectItemModel>();
+            for (ye in yayinEvler) {
+                selectList.add(SelectItemModel(ye.yayinEviId!!,ye.aciklama!!));
+            }
+            SelectionDialogFragment(
+                it.context.getString(R.string.kitapSelectionYayineviLabel),
+                true,
+                selectList,
+                ::onSelectYayinevi).show(requireFragmentManager(),null);
         }
 
         binding.textInputKitapAd.editText!!.addTextChangedListener(TextInputErrorClearListener(binding.textInputKitapAd))
@@ -208,6 +209,12 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
 
     private fun onSelectKitapTur(selectedItem:SelectItemModel){
         binding.selectedKitapTurMaterialTextViewId.setText(selectedItem.selectedItemLabel);
+        selectedKitapTur = selectedItem.selectedItemValue;
+    }
+
+    private fun onSelectYayinevi(selectedItem:SelectItemModel){
+        binding.selectedYayineviMaterialTextViewId.setText(selectedItem.selectedItemLabel);
+        selectedYayinevi = selectedItem.selectedItemValue;
     }
 
     private fun observeKitapKaydi(view:View){
@@ -330,20 +337,15 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
         binding.editTextAlinmaTar.clearContent(binding.editTextAlinmaTar);
         binding.editTextKitapAciklama.clearContent(binding.editTextKitapAciklama);
         selectedKitapTur = 0;
-        binding.kitapTurlerSpinnerId.setSelection(selectedKitapTur);
+        //binding.kitapTurlerSpinnerId.setSelection(selectedKitapTur);
         selectedYayinevi = 0;
-        binding.yayinEviSpinnerId.setSelection(selectedYayinevi);
+        //binding.yayinEviSpinnerId.setSelection(selectedYayinevi);
     }
 
     private fun observeSpinnerList(){
         viewModel.kitapEklemeKitapTurListe.observe(viewLifecycleOwner,Observer{kitapTurListe->
-            val adapter = ArrayAdapter(binding.kitapTurlerSpinnerId.context,
-                android.R.layout.simple_spinner_dropdown_item,
-                kitapTurListe)
             kitapTurler = kitapTurListe;
-            binding.kitapTurlerSpinnerId.adapter = adapter
         })
-
         viewModel.kitapEklemeKitapTurLoading.observe(viewLifecycleOwner,Observer{it->
             if(it){
                 binding.kitapEklemeKitapTurProgressBarId.showComponent();
@@ -356,17 +358,14 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
         viewModel.kitapEklemeKitapTurError.observe(viewLifecycleOwner,Observer{it->
             if(it){
                 binding.kitapEklemeKitapTurHataTextView.showComponent();
-                binding.kitapTurlerSpinnerId.hideComponent();
+                binding.selectKitapTurCardId.hideComponent();
             }else{
                 binding.kitapEklemeKitapTurHataTextView.hideComponent();
             }
         })
 
         viewModel.kitapEklemeYayinEviListe.observe(viewLifecycleOwner,Observer{yayinEviListe->
-            val adapter = ArrayAdapter(binding.yayinEviSpinnerId.context,
-                android.R.layout.simple_spinner_dropdown_item,
-                yayinEviListe)
-            binding.yayinEviSpinnerId.adapter = adapter
+            yayinEvler = yayinEviListe;
         })
 
         viewModel.kitapEklemeYayinEviLoading.observe(viewLifecycleOwner,Observer{it->

@@ -133,22 +133,25 @@
         <item name="android:textColor">@color/transparent</item>
     </style>
     <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
-        <!-- Gets rid of the search icon -->
-        <!--        <item name="searchIcon">@null</item>-->
-        <!-- Gets rid of the "underline" in the text -->
-        <!-- Gets rid of the search icon when the SearchView is expanded -->
         <item name="searchHintIcon">@null</item>
-        <!-- The hint text that appears when the user has not typed anything -->
         <item name="queryHint">@string/searchHintText</item>
         <item name="android:queryHint">@string/searchHintText</item>
         <item name="android:background">@color/transparent</item>
-        <!--        <item name="closeIcon">@drawable/ic_clo</item>-->
     </style>
 
     <style name="BottomSheetCollapseView" parent="">
         <item name="android:background">@drawable/view_radius_corner</item>
-        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_marginTop">3dp</item>
+        <item name="android:layout_width">50dp</item>
         <item name="android:layout_height">4dp</item>
         <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
+    <style name="KutuphanemSwitchButtonStyle" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="trackTint">@color/switch_track_selector</item>
+        <item name="thumbTint">@color/switch_thumb_selector</item>
+        <item name="android:textColor">@color/transparent</item>
     </style>
 </resources>
