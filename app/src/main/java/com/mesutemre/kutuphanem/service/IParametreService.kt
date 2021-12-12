@@ -4,6 +4,7 @@ import com.mesutemre.kutuphanem.model.KitapturModel
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.model.YayineviModel
 import io.reactivex.Single
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -18,10 +19,18 @@ interface IParametreService {
     @POST("api/parametre/yayinevi/kaydet")
     fun yayinEviKaydet(@Body jsonStr: String):Single<ResponseStatusModel>;
 
+    @Headers("Content-Type: application/json")
+    @POST("api/parametre/yayinevi/kaydet")
+    suspend fun yayinEviKaydetGeneric(@Body jsonStr: String):Response<ResponseStatusModel>;
+
     @GET("api/parametre/kitaptur/liste")
     fun getKitapTurListe():Single<ArrayList<KitapturModel>>;
 
     @Headers("Content-Type: application/json")
     @POST("api/parametre/kitaptur/kaydet")
     fun kitapTurKaydet(@Body jsonStr: String):Single<ResponseStatusModel>;
+
+    @Headers("Content-Type: application/json")
+    @POST("api/parametre/kitaptur/kaydet")
+    suspend fun kitapTurKaydetGeneric(@Body jsonStr: String):Response<ResponseStatusModel>;
 }

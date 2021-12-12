@@ -78,7 +78,6 @@ constructor(application: Application,
         }else{
             this.initKitapTurFromService();
         }
-
     }
 
     private fun initKitapTurFromService(){
@@ -178,7 +177,7 @@ constructor(application: Application,
     fun kitapKaydet(jsonStr:String,kitapImageUri:Uri,context:Context){
         kitapKaydetLoading.value = true;
         disposible.add(
-            kitapService.kitapKaydet(jsonStr) .subscribeOn(Schedulers.newThread())
+            kitapService.kitapKaydet(jsonStr).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<ResponseStatusModel>(){
                     override fun onSuccess(response: ResponseStatusModel) {

@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.base.BaseFragment
+import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.databinding.ParametreEklemeFragmentBinding
 import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
 import com.mesutemre.kutuphanem.model.SUCCESS
@@ -63,31 +64,27 @@ class ParametreEklemeFragment: BaseFragment<ParametreEklemeFragmentBinding>() {
     }
 
     private fun observeLiveData(view:View){
-        viewModel.parametreEklemeResponse.observe(viewLifecycleOwner, Observer { response->
-            response?.let {
-                binding.parametreEklemeErrorTextView.hideComponent();
-                binding.parametreEklemeProgressBar.hideComponent();
-                showSnackBar(view,response.statusMessage, SUCCESS);
-                binding.paramTurTextView.text = "";
-
-            }
-        });
-        viewModel.parametreEklemeLoading.observe(viewLifecycleOwner, Observer {
-            binding.parametreEklemeErrorTextView.hideComponent();
-            binding.parametreKaydetButton.isEnabled = !it;
-            if (it){
-                binding.parametreEklemeProgressBar.showComponent();
-            }else{
-                binding.parametreEklemeProgressBar.hideComponent();
-            }
-        });
-        viewModel.parametreEklemeError.observe(viewLifecycleOwner, Observer {
-            binding.parametreEklemeProgressBar.hideComponent();
-            if(it){
-                binding.parametreEklemeErrorTextView.showComponent();
-            }else{
-                binding.parametreEklemeErrorTextView.hideComponent();
-            }
+        viewModel.parametreEklemeResourceEvent.observe(viewLifecycleOwner,Observer{
+           when(it){
+               is BaseResourceEvent.Loading->{
+                   binding.parametreEklemeErrorTextView.hideComponent();
+                   binding.parametreKaydetButton.isEnabled = false;
+                   binding.parametreEklemeProgressBar.showComponent();
+               }
+               is BaseResourceEvent.Error->{
+                   binding.parametreEklemeProgressBar.hideComponent();
+                   binding.parametreKaydetButton.isEnabled = true;
+                   binding.parametreEklemeErrorTextView.showComponent();
+                   binding.parametreEklemeErrorTextView.setText(it.message)
+               }
+               is BaseResourceEvent.Success->{
+                   binding.parametreEklemeProgressBar.hideComponent();
+                   binding.parametreKaydetButton.isEnabled = true;
+                   binding.parametreEklemeErrorTextView.hideComponent();
+                   showSnackBar(view,it.data!!.statusMessage, SUCCESS);
+                   binding.textInputParametreAciklama.editText!!.setText("");
+               }
+           }
         });
     }
 }

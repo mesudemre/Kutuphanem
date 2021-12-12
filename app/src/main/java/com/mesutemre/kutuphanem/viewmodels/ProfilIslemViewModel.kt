@@ -97,27 +97,25 @@ class ProfilIslemViewModel @Inject constructor(application: Application,
 
     private fun getKullaniciBilgiFromAPI(){
         kullaniciLoading.value = true;
+        disposible.add(
+            kullaniciService.getKullaniciBilgi()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<Kullanici>(){
+                    override fun onSuccess(t: Kullanici) {
+                        kullaniciLoading.value = false;
+                        kullaniciError.value = false;
+                        kullanici.value = t;
+                        async { writeUserToDB(t); }
+                        async { writeIlgiAlanlarToDB(t); }
+                    }
 
-            disposible.add(
-                kullaniciService.getKullaniciBilgi()
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(object : DisposableSingleObserver<Kullanici>(){
-                        override fun onSuccess(t: Kullanici) {
-                            kullaniciLoading.value = false;
-                            kullaniciError.value = false;
-                            kullanici.value = t;
-                            async { writeUserToDB(t); }
-                            async { writeIlgiAlanlarToDB(t); }
-                        }
+                    override fun onError(e: Throwable) {
+                        kullaniciLoading.value = false;
+                        kullaniciError.value = true;
+                    }
 
-                        override fun onError(e: Throwable) {
-                            kullaniciLoading.value = false;
-                            kullaniciError.value = true;
-                        }
-
-                    }));
-
+                }));
 
     }
 

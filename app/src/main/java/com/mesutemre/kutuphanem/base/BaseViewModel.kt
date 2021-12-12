@@ -7,6 +7,7 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import retrofit2.Response
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -23,6 +24,48 @@ abstract class BaseViewModel(application: Application)
     open val context:Context = application.baseContext;
 
     abstract val disposible: CompositeDisposable;
+
+    open suspend fun <T:Any> serviceCall(call: suspend() -> Response<T>):BaseDataEvent<T>{
+        val response:Response<T>;
+
+        try {
+            response = call.invoke();
+        }catch (t:Throwable){
+            return BaseDataEvent.Error(t.message!!);
+        }
+
+        return if (!response.isSuccessful){
+            val errorBody = response.errorBody();
+            BaseDataEvent.Error(errorBody.toString());
+        }else {
+            return if (response.body() == null) {
+                BaseDataEvent.Error("Boş response");
+            }else {
+                BaseDataEvent.Success(response.body());
+            }
+        }
+    }
+
+    open suspend fun <T:Any> serviceCall2(call: suspend() -> Response<T>):BaseDataEvent<T>{
+        val response:Response<T>;
+
+        try {
+            response = call.invoke();
+        }catch (t:Throwable){
+            return BaseDataEvent.Error(t.message!!);
+        }
+
+        return if (!response.isSuccessful){
+            val errorBody = response.errorBody();
+            BaseDataEvent.Error(errorBody.toString());
+        }else {
+            return if (response.body() == null) {
+                BaseDataEvent.Error("Boş response");
+            }else {
+                BaseDataEvent.Success(response.body());
+            }
+        }
+    }
 
     override fun onCleared() {
         super.onCleared();
