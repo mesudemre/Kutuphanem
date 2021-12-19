@@ -1,48 +1,42 @@
 package com.mesutemre.kutuphanem.viewmodels
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.mesutemre.kutuphanem.base.BaseDataEvent
+import com.mesutemre.kutuphanem.base.BaseResourceEvent
+import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.model.YayineviModel
 import com.mesutemre.kutuphanem.repositories.ParametreRepository
 import com.mesutemre.kutuphanem.service.IParametreService
 import com.mesutemre.kutuphanem.util.APP_TOKEN_KEY
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
+import com.mesutemre.kutuphanem.util.PARAM_KITAPTUR_DB_KEY
 import com.mesutemre.kutuphanem.util.PARAM_YAYINEVI_DB_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
 class ParametreYayineviViewModel @Inject constructor(application: Application,
                                                      private val parametreService: IParametreService,
                                                      private val parametreRepository: ParametreRepository)
-    : AndroidViewModel(application), CoroutineScope {
+    : BaseViewModel(application) {
 
-    val yayineviListe =  MutableLiveData<List<YayineviModel>>();
-    val yayinEviError = MutableLiveData<Boolean>();
-    val yayinEviLoading = MutableLiveData<Boolean>();
-    private val disposible = CompositeDisposable();
+    override val disposible: CompositeDisposable = CompositeDisposable();
 
-    val yayinEviSilResponse = MutableLiveData<ResponseStatusModel>();
-    val yayinEviSilError = MutableLiveData<Boolean>();
     private lateinit var token:String;
+
+    val yayinEviListeResourceEvent = MutableLiveData<BaseResourceEvent<List<YayineviModel>>>();
+    val yayinEviSilResourceEvent = MutableLiveData<BaseResourceEvent<ResponseStatusModel>>();
 
     @Inject
     lateinit var customSharedPreferences: CustomSharedPreferences;
-
-    private val job = Job();
-    override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.Main; //Önce işi yap sonra main thread e dön.
 
     fun yayinEviListeGetir(isSwipeRefresh:Boolean){
         token = customSharedPreferences.getStringFromSharedPreferences(APP_TOKEN_KEY);
@@ -59,50 +53,59 @@ class ParametreYayineviViewModel @Inject constructor(application: Application,
     }
 
     private fun initFromService(){
-        this.yayinEviLoading.value = true;
-        disposible.add(
-                parametreService.getYayinEviListe()
-                        .subscribeOn(Schedulers.newThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeWith(object : DisposableSingleObserver<List<YayineviModel>>(){
-                            override fun onSuccess(response: List<YayineviModel>) {
-                                yayinEviError.value = false;
-                                yayinEviLoading.value = false;
-                                yayineviListe.value = response;
-                                storeInDatabse(response);
-                            }
-
-                            override fun onError(e: Throwable) {
-                                yayinEviError.value = true;
-                                yayinEviLoading.value = false;
-                            }
-                        }));
+        launch(Dispatchers.IO) {
+            yayinEviListeResourceEvent.postValue(BaseResourceEvent.Loading());
+            val yayinEviListeResponse = serviceCall(
+                call = {
+                    parametreService.getYayinEviListeGeneric();
+                });
+            when(yayinEviListeResponse){
+                is BaseDataEvent.Success->{
+                    yayinEviListeResourceEvent.postValue(BaseResourceEvent.Success(yayinEviListeResponse.data!!));
+                    storeInDatabse(yayinEviListeResponse.data!!);
+                }
+                is BaseDataEvent.Error->{
+                    yayinEviListeResourceEvent.postValue(BaseResourceEvent.Error(yayinEviListeResponse.errMessage));
+                }
+            }
+        }
     }
 
     fun deleteYayineviParametre(jsonStr:String){
-        disposible.add(
-                parametreService.yayinEviKaydet(jsonStr)
-                        .subscribeOn(Schedulers.newThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeWith(object : DisposableSingleObserver<ResponseStatusModel>(){
-                            override fun onSuccess(response: ResponseStatusModel) {
-                                yayinEviSilError.value = false;
-                                yayinEviSilResponse.value = response;
-                                customSharedPreferences.removeFromSharedPreferences(PARAM_YAYINEVI_DB_KEY);
-                            }
-
-                            override fun onError(e: Throwable) {
-                                yayinEviSilError.value = true;
-                            }
-
-                        }));
+        launch(Dispatchers.IO) {
+            yayinEviSilResourceEvent.postValue(BaseResourceEvent.Loading());
+            val yayinEviParametreSilmeResponse = serviceCall(
+                call = {
+                    parametreService.yayinEviKaydet(jsonStr)
+                });
+            when(yayinEviParametreSilmeResponse){
+                is BaseDataEvent.Success->{
+                    customSharedPreferences.removeFromSharedPreferences(PARAM_YAYINEVI_DB_KEY);
+                    yayinEviSilResourceEvent.postValue(BaseResourceEvent.Success(yayinEviParametreSilmeResponse.data!!));
+                }
+                is BaseDataEvent.Error->{
+                    yayinEviSilResourceEvent.postValue(BaseResourceEvent.Error(yayinEviParametreSilmeResponse.errMessage));
+                }
+            }
+        }
     }
 
     private fun initFromDatabase(){
-        launch {
-            yayineviListe.value = parametreRepository.getYayinEviListe();
-            yayinEviError.value = false;
-            yayinEviLoading.value = false;
+        launch(Dispatchers.IO) {
+            yayinEviListeResourceEvent.postValue(BaseResourceEvent.Loading());
+            val yayinEviListeDBResponse = dbCall(
+                call = {
+                    parametreRepository.getYayinEviListe()
+                });
+
+            when(yayinEviListeDBResponse){
+                is BaseDataEvent.Success->{
+                    yayinEviListeResourceEvent.postValue(BaseResourceEvent.Success(yayinEviListeDBResponse.data!!));
+                }
+                is BaseDataEvent.Error->{
+                    yayinEviListeResourceEvent.postValue(BaseResourceEvent.Error(yayinEviListeDBResponse.errMessage));
+                }
+            }
         }
     }
 
@@ -113,11 +116,4 @@ class ParametreYayineviViewModel @Inject constructor(application: Application,
             customSharedPreferences.putBooleanToSharedPreferences(PARAM_YAYINEVI_DB_KEY,true);
         }
     }
-
-    override fun onCleared() {
-        super.onCleared();
-        disposible.clear();
-        job.cancel();
-    }
-
 }

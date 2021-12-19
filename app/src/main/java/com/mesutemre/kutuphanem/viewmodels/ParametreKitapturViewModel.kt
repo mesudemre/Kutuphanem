@@ -1,8 +1,10 @@
 package com.mesutemre.kutuphanem.viewmodels
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.mesutemre.kutuphanem.base.BaseDataEvent
+import com.mesutemre.kutuphanem.base.BaseResourceEvent
+import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.model.KitapturModel
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.repositories.ParametreRepository
@@ -11,39 +13,26 @@ import com.mesutemre.kutuphanem.util.APP_TOKEN_KEY
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.PARAM_KITAPTUR_DB_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableSingleObserver
-import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
 class ParametreKitapturViewModel  @Inject constructor(application: Application,
                                                       private val parametreService: IParametreService,
                                                       private val parametreRepository: ParametreRepository
-): AndroidViewModel(application), CoroutineScope {
+): BaseViewModel(application) {
 
-    private val job = Job();
-    override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.Main; //Önce işi yap sonra main thread e dön.
+    override val disposible: CompositeDisposable = CompositeDisposable();
 
     @Inject
     lateinit var customSharedPreferences: CustomSharedPreferences;
 
-    private val disposible = CompositeDisposable();
     private lateinit var token:String;
 
-    val kitapturListe = MutableLiveData<List<KitapturModel>>();
-    val kitapTurError = MutableLiveData<Boolean>();
-    val kitapTurLoading = MutableLiveData<Boolean>();
-
-    val kitapTurSilResponse = MutableLiveData<ResponseStatusModel>();
-    val kitapTurSilError = MutableLiveData<Boolean>();
+    val kitapTurSilResourceEvent = MutableLiveData<BaseResourceEvent<ResponseStatusModel>>();
+    val kitapTurListeResourceEvent = MutableLiveData<BaseResourceEvent<List<KitapturModel>>>();
 
     fun kitapTurListeGetir(isSwipeRefresh:Boolean){
         token = customSharedPreferences.getStringFromSharedPreferences(APP_TOKEN_KEY);
@@ -60,32 +49,40 @@ class ParametreKitapturViewModel  @Inject constructor(application: Application,
     }
 
     private fun initFromService(){
-        this.kitapTurLoading.value = true;
-        disposible.add(
-            parametreService.getKitapTurListe()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<List<KitapturModel>>(){
-                    override fun onSuccess(response: List<KitapturModel>) {
-                        kitapTurError.value = false;
-                        kitapTurLoading.value = false;
-                        kitapturListe.value = response;
-                        storeInDatabse(response);
-                    }
-
-                    override fun onError(e: Throwable) {
-                        kitapTurError.value = true;
-                        kitapTurLoading.value = false;
-                    }
-
-                }));
+        launch(Dispatchers.IO) {
+            kitapTurListeResourceEvent.postValue(BaseResourceEvent.Loading());
+            val kitapTurListeResponse = serviceCall(
+                call = {
+                    parametreService.getKitapTurListeGeneric()
+                });
+            when(kitapTurListeResponse){
+                is BaseDataEvent.Success->{
+                    kitapTurListeResourceEvent.postValue(BaseResourceEvent.Success(kitapTurListeResponse.data!!));
+                    storeInDatabse(kitapTurListeResponse.data!!);
+                }
+                is BaseDataEvent.Error->{
+                    kitapTurListeResourceEvent.postValue(BaseResourceEvent.Error(kitapTurListeResponse.errMessage));
+                }
+            }
+        }
     }
 
     private fun initFromDatabase(){
-        launch {
-            kitapturListe.value = parametreRepository.getKitapTurListe();
-            kitapTurError.value = false;
-            kitapTurLoading.value = false;
+        launch(Dispatchers.IO) {
+            kitapTurListeResourceEvent.postValue(BaseResourceEvent.Loading());
+            val kitapTurListeDBResponse = dbCall(
+                call = {
+                    parametreRepository.getKitapTurListe()
+                });
+
+            when(kitapTurListeDBResponse){
+                is BaseDataEvent.Success->{
+                    kitapTurListeResourceEvent.postValue(BaseResourceEvent.Success(kitapTurListeDBResponse.data!!));
+                }
+                is BaseDataEvent.Error->{
+                    kitapTurListeResourceEvent.postValue(BaseResourceEvent.Error(kitapTurListeDBResponse.errMessage));
+                }
+            }
         }
     }
 
@@ -98,28 +95,21 @@ class ParametreKitapturViewModel  @Inject constructor(application: Application,
     }
 
     fun deleteKitapturParametre(jsonStr:String){
-        disposible.add(
-                parametreService.kitapTurKaydet(jsonStr)
-                        .subscribeOn(Schedulers.newThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeWith(object : DisposableSingleObserver<ResponseStatusModel>(){
-                            override fun onSuccess(response: ResponseStatusModel) {
-                                kitapTurSilError.value = false;
-                                kitapTurSilResponse.value = response;
-                                customSharedPreferences.removeFromSharedPreferences(PARAM_KITAPTUR_DB_KEY);
-                            }
-
-                            override fun onError(e: Throwable) {
-                                kitapTurSilError.value = true;
-                            }
-
-                        }));
+        launch(Dispatchers.IO) {
+            kitapTurSilResourceEvent.postValue(BaseResourceEvent.Loading());
+            val kitapTurParametreSilmeResponse = serviceCall(
+                call = {
+                    parametreService.kitapTurKaydet(jsonStr)
+                });
+            when(kitapTurParametreSilmeResponse){
+                is BaseDataEvent.Success->{
+                    customSharedPreferences.removeFromSharedPreferences(PARAM_KITAPTUR_DB_KEY);
+                    kitapTurSilResourceEvent.postValue(BaseResourceEvent.Success(kitapTurParametreSilmeResponse.data!!));
+                }
+                is BaseDataEvent.Error->{
+                    kitapTurSilResourceEvent.postValue(BaseResourceEvent.Error(kitapTurParametreSilmeResponse.errMessage));
+                }
+            }
+        }
     }
-
-    override fun onCleared() {
-        super.onCleared();
-        disposible.clear();
-        job.cancel();
-    }
-
 }

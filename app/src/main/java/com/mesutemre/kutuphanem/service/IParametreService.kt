@@ -15,9 +15,12 @@ interface IParametreService {
     @GET("api/parametre/yayinevi/liste")
     fun getYayinEviListe(): Single<ArrayList<YayineviModel>>;
 
+    @GET("api/parametre/yayinevi/liste")
+    suspend fun getYayinEviListeGeneric(): Response<List<YayineviModel>>;
+
     @Headers("Content-Type: application/json")
     @POST("api/parametre/yayinevi/kaydet")
-    fun yayinEviKaydet(@Body jsonStr: String):Single<ResponseStatusModel>;
+    suspend fun yayinEviKaydet(@Body jsonStr: String):Response<ResponseStatusModel>;
 
     @Headers("Content-Type: application/json")
     @POST("api/parametre/yayinevi/kaydet")
@@ -26,11 +29,10 @@ interface IParametreService {
     @GET("api/parametre/kitaptur/liste")
     fun getKitapTurListe():Single<ArrayList<KitapturModel>>;
 
-    @Headers("Content-Type: application/json")
-    @POST("api/parametre/kitaptur/kaydet")
-    fun kitapTurKaydet(@Body jsonStr: String):Single<ResponseStatusModel>;
+    @GET("api/parametre/kitaptur/liste")
+    suspend fun getKitapTurListeGeneric():Response<List<KitapturModel>>;
 
     @Headers("Content-Type: application/json")
     @POST("api/parametre/kitaptur/kaydet")
-    suspend fun kitapTurKaydetGeneric(@Body jsonStr: String):Response<ResponseStatusModel>;
+    suspend fun kitapTurKaydet(@Body jsonStr: String):Response<ResponseStatusModel>;
 }

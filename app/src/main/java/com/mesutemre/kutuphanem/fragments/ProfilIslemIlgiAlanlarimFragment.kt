@@ -9,6 +9,7 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.chip.Chip
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.base.BaseFragment
+import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.databinding.ProfilIslemIlgiAlanlarBinding
 import com.mesutemre.kutuphanem.model.KitapturModel
 import com.mesutemre.kutuphanem.model.Kullanici
@@ -49,27 +50,24 @@ class ProfilIslemIlgiAlanlarimFragment:BaseFragment<ProfilIslemIlgiAlanlarBindin
     }
 
     private fun observeParametreKitapTurListe() {
-        parametreViewModel.kitapTurLoading.observe(viewLifecycleOwner, Observer {
-            if (it) {
-                binding.profilIlgiAlanlarimProgressBar.showComponent();
-            }else {
-                binding.profilIlgiAlanlarimProgressBar.hideComponent();
+        parametreViewModel.kitapTurListeResourceEvent.observe(viewLifecycleOwner,Observer{
+            when(it){
+                is BaseResourceEvent.Loading->{
+                    binding.profilIlgiAlanlarimProgressBar.showComponent();
+                }
+                is BaseResourceEvent.Error->{
+                    binding.profilIlgiAlanlarimProgressBar.hideComponent();
+                    binding.ilgiAlanlarimInfoCardId.hideComponent();
+                    binding.ilgiAlanlarimInfoErrorCardId.showComponent();
+                }
+                is BaseResourceEvent.Success->{
+                    binding.profilIlgiAlanlarimProgressBar.hideComponent();
+                    binding.ilgiAlanlarimInfoCardId.showComponent();
+                    binding.ilgiAlanlarimInfoErrorCardId.hideComponent();
+                    profilIslemViewModel.getKullaniciIlgiAlanlarFromDB(kullanici.username);
+                    observeKullaniciIlgiAlanlari(it.data!!);
+                }
             }
-        });
-        parametreViewModel.kitapturListe.observe(viewLifecycleOwner, Observer {
-            if(it != null && it.size>0) {
-                binding.ilgiAlanlarimInfoCardId.showComponent();
-                binding.ilgiAlanlarimInfoErrorCardId.hideComponent();
-                profilIslemViewModel.getKullaniciIlgiAlanlarFromDB(kullanici.username);
-                observeKullaniciIlgiAlanlari(it);
-            }
-        });
-        parametreViewModel.kitapTurError.observe(viewLifecycleOwner, Observer {
-            binding.profilIlgiAlanlarimProgressBar.hideComponent();
-           if (it) {
-               binding.ilgiAlanlarimInfoCardId.hideComponent();
-               binding.ilgiAlanlarimInfoErrorCardId.showComponent();
-           }
         });
     }
 

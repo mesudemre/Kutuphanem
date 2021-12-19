@@ -5,22 +5,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.databinding.ItemKitapturBinding
 import com.mesutemre.kutuphanem.listener.KitapturDeleteClickListener
 import com.mesutemre.kutuphanem.model.KitapturModel
-import com.mesutemre.kutuphanem.model.SUCCESS
-import com.mesutemre.kutuphanem.util.showSnackBar
-import com.mesutemre.kutuphanem.viewmodels.ParametreKitapturViewModel
 import org.json.JSONObject
 
 class KitapTurAdapter(val kitapTurListe:ArrayList<KitapturModel>,
-                      val viewModel:ParametreKitapturViewModel,
-                      val lifeCycleOwner: LifecycleOwner,
-                      val token:String?):RecyclerView.Adapter<KitapTurAdapter.KitapTurViewHolder>(),KitapturDeleteClickListener  {
+                      val token:String?,
+                      val kitapTurSil:(json:String)->Unit):RecyclerView.Adapter<KitapTurAdapter.KitapTurViewHolder>(),KitapturDeleteClickListener  {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KitapTurViewHolder {
         val inflater = LayoutInflater.from(parent.context);
@@ -52,31 +46,13 @@ class KitapTurAdapter(val kitapTurListe:ArrayList<KitapturModel>,
             jsonObj.put("durum","PASIF");
             jsonObj.put("aciklama",selectedKitaptur.aciklama);
 
-            viewModel.deleteKitapturParametre(jsonObj.toString());
-            observeKitapturSil(view);
+            kitapTurSil(jsonObj.toString());
         }
 
         ad.setNegativeButton(view.context.resources.getString(R.string.hayir)){dialogInterface, i ->
 
         }
         ad.create().show();
-    }
-
-    private fun observeKitapturSil(view: View){
-        viewModel.kitapTurSilResponse.observe(lifeCycleOwner,Observer{response->
-            showSnackBar(view,response.statusMessage, SUCCESS);
-            if(token != null){
-                viewModel.kitapTurListeGetir(true);
-            }
-        });
-
-        viewModel.kitapTurSilError.observe(lifeCycleOwner, Observer {error->
-            error?.let {
-                if(it){
-                    showSnackBar(view,view.context.resources.getString(R.string.kitapTurSilmeHata), SUCCESS);
-                }
-            }
-        });
     }
 
     class KitapTurViewHolder(var view: ItemKitapturBinding): RecyclerView.ViewHolder(view.root) {

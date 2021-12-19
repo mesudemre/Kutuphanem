@@ -45,7 +45,7 @@ class ParametreEklemeViewModel @Inject constructor(application: Application,
             parametreEklemeResourceEvent.postValue(BaseResourceEvent.Loading());
             val kitapTurParametreEklemeResponse = serviceCall(
                 call = {
-                    parametreService.kitapTurKaydetGeneric(json)
+                    parametreService.kitapTurKaydet(json)
                 });
 
             when(kitapTurParametreEklemeResponse){

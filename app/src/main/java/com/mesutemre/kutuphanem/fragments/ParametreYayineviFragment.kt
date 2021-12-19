@@ -9,14 +9,15 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mesutemre.kutuphanem.adapters.YayinEviAdapter
 import com.mesutemre.kutuphanem.base.BaseFragment
+import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.databinding.ParametreYayineviFragmentBinding
-import com.mesutemre.kutuphanem.util.APP_TOKEN_KEY
-import com.mesutemre.kutuphanem.util.CustomSharedPreferences
+import com.mesutemre.kutuphanem.model.ERROR
+import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.util.hideComponent
 import com.mesutemre.kutuphanem.util.showComponent
+import com.mesutemre.kutuphanem.util.showSnackBar
 import com.mesutemre.kutuphanem.viewmodels.ParametreYayineviViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class ParametreYayineviFragment: BaseFragment<ParametreYayineviFragmentBinding>() {
@@ -25,9 +26,6 @@ class ParametreYayineviFragment: BaseFragment<ParametreYayineviFragmentBinding>(
             = ParametreYayineviFragmentBinding::inflate;
     override val layoutName = "parametre_yayinevi_fragment.xml";
 
-    @Inject
-    lateinit var customSharedPreferences: CustomSharedPreferences;
-
     private val viewModel:ParametreYayineviViewModel by viewModels();
     private var adapter:YayinEviAdapter? = null;
 
@@ -35,8 +33,7 @@ class ParametreYayineviFragment: BaseFragment<ParametreYayineviFragmentBinding>(
     }
 
     override fun onStartFragment() {
-        val token = customSharedPreferences.getStringFromSharedPreferences(APP_TOKEN_KEY);
-        adapter = YayinEviAdapter(arrayListOf(),viewModel,viewLifecycleOwner,token);
+        adapter = YayinEviAdapter(arrayListOf(),::deleteYayinevi);
         viewModel.yayinEviListeGetir(false);
         binding.yayinEviListeRw.layoutManager = LinearLayoutManager(context);
         binding.yayinEviListeRw.adapter = adapter;
@@ -60,35 +57,54 @@ class ParametreYayineviFragment: BaseFragment<ParametreYayineviFragmentBinding>(
     }
 
     private fun observeLiveData(){
-        viewModel.yayineviListe.observe(viewLifecycleOwner, Observer { yayineviListe->
-            yayineviListe?.let {
-                adapter?.updateYayineviListe(yayineviListe);
-            }
-        });
-
-        viewModel.yayinEviError.observe(viewLifecycleOwner, Observer {error->
-            error?.let {
-                if(it){
-                    binding.yayinEviErrorTextId.showComponent();
-                    binding.yayinEviListeRw.hideComponent();
-                }else{
-                    binding.yayinEviListeRw.showComponent();
-                    binding.yayinEviErrorTextId.hideComponent();
-                }
-            }
-        });
-
-        viewModel.yayinEviLoading.observe(viewLifecycleOwner, Observer {loading->
-            loading.let {
-                if(it){
+        viewModel.yayinEviListeResourceEvent.observe(viewLifecycleOwner,Observer{
+            when(it){
+                is BaseResourceEvent.Loading->{
                     binding.yayinEviProgressBar.showComponent();
                     binding. yayinEviListeRw.hideComponent();
                     binding.yayinEviErrorTextId.hideComponent();
-                }else{
+                }
+                is BaseResourceEvent.Error->{
+                    binding.yayinEviErrorTextId.showComponent();
+                    binding.yayinEviListeRw.hideComponent();
                     binding.yayinEviProgressBar.hideComponent();
                 }
+                is BaseResourceEvent.Success->{
+                    binding.yayinEviProgressBar.hideComponent();
+                    binding.yayinEviErrorTextId.hideComponent();
+                    binding. yayinEviListeRw.showComponent();
+                    adapter?.updateYayineviListe(it.data!!);
+                }
             }
-        })
+        });
+    }
+
+    private fun deleteYayinevi(jsonStr:String) {
+        viewModel.deleteYayineviParametre(jsonStr);
+        observeYayineviSilLiveData();
+    }
+
+    private fun observeYayineviSilLiveData(){
+        viewModel.yayinEviSilResourceEvent.observe(viewLifecycleOwner,Observer{
+            when(it){
+                is BaseResourceEvent.Loading->{
+                    binding.yayinEviProgressBar.showComponent();
+                    binding.yayinEviErrorTextId.hideComponent();
+                    binding.yayinEviListeRw.hideComponent();
+                }
+                is BaseResourceEvent.Error->{
+                    binding.yayinEviProgressBar.hideComponent();
+                    showSnackBar(getFragmentView(),it.message!!, ERROR);
+                }
+                is BaseResourceEvent.Success->{
+                    binding.yayinEviProgressBar.hideComponent();
+                    binding.yayinEviErrorTextId.hideComponent();
+                    showSnackBar(getFragmentView(),it.data!!.statusMessage, SUCCESS);
+                    viewModel.yayinEviListeGetir(false);
+                    observeLiveData();
+                }
+            }
+        });
     }
 
     override fun destroyOthers() {

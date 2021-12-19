@@ -2,19 +2,19 @@ package com.mesutemre.kutuphanem.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.adapters.KitapTurAdapter
 import com.mesutemre.kutuphanem.base.BaseFragment
+import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.databinding.ParametreKitapturFragmentBinding
-import com.mesutemre.kutuphanem.util.APP_TOKEN_KEY
-import com.mesutemre.kutuphanem.util.CustomSharedPreferences
-import com.mesutemre.kutuphanem.util.hideComponent
-import com.mesutemre.kutuphanem.util.showComponent
+import com.mesutemre.kutuphanem.model.ERROR
+import com.mesutemre.kutuphanem.model.SUCCESS
+import com.mesutemre.kutuphanem.util.*
 import com.mesutemre.kutuphanem.viewmodels.ParametreKitapturViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.parametre_kitaptur_fragment.*
@@ -38,7 +38,7 @@ class ParametreKitapturFragment:BaseFragment<ParametreKitapturFragmentBinding>()
 
     override fun onStartFragment() {
         val token = customSharedPreferences.getStringFromSharedPreferences(APP_TOKEN_KEY);
-        adapter = KitapTurAdapter(arrayListOf(),viewModel,viewLifecycleOwner,token);
+        adapter = KitapTurAdapter(arrayListOf(),token,::deleteKitapTur);
         viewModel.kitapTurListeGetir(false);
         binding.kitapTurListeRw.layoutManager = LinearLayoutManager(context);
         binding.kitapTurListeRw.adapter = adapter;
@@ -61,36 +61,53 @@ class ParametreKitapturFragment:BaseFragment<ParametreKitapturFragmentBinding>()
     }
 
     private fun observeLiveData(){
-        viewModel.kitapturListe.observe(viewLifecycleOwner, Observer { kitapTurListe->
-            kitapTurListe?.let {
-                binding.kitapTurListeRw.showComponent();
-                adapter?.updateKitapTurListe(kitapTurListe);
-            }
-        });
-
-        viewModel.kitapTurError.observe(viewLifecycleOwner,Observer{error->
-            error.let {
-                if(it){
-                    binding.kitapTurProgressBar.hideComponent();
-                    binding.kitapTurErrorTextId.showComponent();
-                    binding.kitapTurListeRw.hideComponent();
-                }else{
-                    binding.kitapTurProgressBar.hideComponent();
-                }
-            }
-        });
-
-        viewModel.kitapTurLoading.observe(viewLifecycleOwner, Observer { loading->
-            loading.let {
-                if(it){
+        viewModel.kitapTurListeResourceEvent.observe(viewLifecycleOwner,Observer{
+            when(it){
+                is BaseResourceEvent.Loading->{
                     binding.kitapTurProgressBar.showComponent();
                     binding.kitapTurErrorTextId.hideComponent();
                     binding.kitapTurListeRw.hideComponent();
-                }else{
+                }
+                is BaseResourceEvent.Error->{
                     binding.kitapTurProgressBar.hideComponent();
+                    binding.kitapTurErrorTextId.showComponent();
+                    binding.kitapTurListeRw.hideComponent();
+                }
+                is BaseResourceEvent.Success->{
+                    binding.kitapTurProgressBar.hideComponent();
+                    binding.kitapTurErrorTextId.hideComponent();
+                    binding.kitapTurListeRw.showComponent();
+                    adapter?.updateKitapTurListe(it.data!!);
                 }
             }
-        })
+        });
+    }
+
+    private fun deleteKitapTur(jsonStr:String) {
+        viewModel.deleteKitapturParametre(jsonStr);
+        observeKitapturSil();
+    }
+
+    private fun observeKitapturSil() {
+        viewModel.kitapTurSilResourceEvent.observe(viewLifecycleOwner, Observer {
+           when(it){
+               is BaseResourceEvent.Loading->{
+                   binding.kitapTurProgressBar.showComponent();
+                   binding.kitapTurErrorTextId.hideComponent();
+                   binding.kitapTurListeRw.hideComponent();
+               }
+               is BaseResourceEvent.Error->{
+                   binding.kitapTurProgressBar.hideComponent();
+                   showSnackBar(getFragmentView(),getFragmentView().context.resources.getString(R.string.kitapTurSilmeHata), ERROR);
+               }
+               is BaseResourceEvent.Success->{
+                   binding.kitapTurProgressBar.hideComponent();
+                   showSnackBar(getFragmentView(),it.data!!.statusMessage, SUCCESS);
+                   viewModel.kitapTurListeGetir(false);
+                   observeLiveData();
+               }
+           }
+        });
     }
 
     override fun destroyOthers() {

@@ -25,7 +25,7 @@ abstract class BaseViewModel(application: Application)
 
     abstract val disposible: CompositeDisposable;
 
-    open suspend fun <T:Any> serviceCall(call: suspend() -> Response<T>):BaseDataEvent<T>{
+    inline suspend fun <T:Any> serviceCall(call: suspend() -> Response<T>):BaseDataEvent<T>{
         val response:Response<T>;
 
         try {
@@ -46,8 +46,8 @@ abstract class BaseViewModel(application: Application)
         }
     }
 
-    open suspend fun <T:Any> serviceCall2(call: suspend() -> Response<T>):BaseDataEvent<T>{
-        val response:Response<T>;
+    inline suspend fun <T:Any> dbCall(call: suspend() -> T):BaseDataEvent<T>{
+        val response:T;
 
         try {
             response = call.invoke();
@@ -55,17 +55,13 @@ abstract class BaseViewModel(application: Application)
             return BaseDataEvent.Error(t.message!!);
         }
 
-        return if (!response.isSuccessful){
-            val errorBody = response.errorBody();
-            BaseDataEvent.Error(errorBody.toString());
+        return if (response == null){
+            BaseDataEvent.Error("Herhangi bir data bulunamadı!");
         }else {
-            return if (response.body() == null) {
-                BaseDataEvent.Error("Boş response");
-            }else {
-                BaseDataEvent.Success(response.body());
-            }
+            BaseDataEvent.Success(response);
         }
     }
+
 
     override fun onCleared() {
         super.onCleared();
