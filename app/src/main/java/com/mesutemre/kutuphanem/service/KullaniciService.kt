@@ -6,12 +6,13 @@ import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import io.reactivex.Single
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.Response
 import retrofit2.http.*
 
 interface KullaniciService {
 
     @POST("login")
-    fun login(@Body user:AccountCredentials):Single<String>;
+    suspend fun login(@Body user:AccountCredentials):Response<String>;
 
     @GET("api/kullanici/bilgi")
     fun getKullaniciBilgi():Single<Kullanici>;

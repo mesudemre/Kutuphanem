@@ -91,7 +91,11 @@
                             android:layout_below="@+id/girisProgressBar"
                             android:layout_height="wrap_content"
                             app:boxBackgroundColor="@color/whiteTextColor"
+                            app:endIconDrawable="@drawable/ic_baseline_person_24"
+                            app:endIconMode="custom"
+                            app:endIconTint="@color/primaryTextColor"
                             app:errorEnabled="true"
+
                             android:layout_marginTop="20dp">
 
                             <com.google.android.material.textfield.TextInputEditText
@@ -108,6 +112,9 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/textInputKullaniciAdi"
                             app:errorEnabled="true"
+                            app:endIconDrawable="@drawable/ic_baseline_vpn_key_24"
+                            app:endIconMode="custom"
+                            app:endIconTint="@color/primaryTextColor"
                             app:boxBackgroundColor="@color/whiteTextColor">
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/editTextSifre"

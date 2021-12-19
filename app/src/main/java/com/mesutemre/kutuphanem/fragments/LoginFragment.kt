@@ -12,13 +12,14 @@ import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.base.BaseFragment
+import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.databinding.LoginFragmentBinding
 import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
 import com.mesutemre.kutuphanem.model.AccountCredentials
+import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.util.*
 import com.mesutemre.kutuphanem.viewmodels.LoginFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 /**
  * @Author: mesutemre.celenk
@@ -33,9 +34,6 @@ class LoginFragment:BaseFragment<LoginFragmentBinding>() {
 
     private val viewModel: LoginFragmentViewModel by viewModels();
     private lateinit var kullaniciAdi:String;
-
-    @Inject
-    lateinit var customSharedPreferences: CustomSharedPreferences;
 
     override fun onCreateFragment(savedInstanceState: Bundle?) {
     }
@@ -80,34 +78,22 @@ class LoginFragment:BaseFragment<LoginFragmentBinding>() {
     }
 
     private fun observeLiveData(){
-        viewModel.token.observe(viewLifecycleOwner,Observer { token->
-            token?.let {
-                customSharedPreferences.putStringToSharedPreferences(APP_TOKEN_KEY,token);
-                customSharedPreferences.putStringToSharedPreferences(KULLANICI_ADI_KEY,kullaniciAdi);
-                val action = LoginFragmentDirections.actionLoginFragmentToAnasayfaFragment();
-                Navigation.findNavController(binding.loginViewId).navigate(action);
-            }
-        });
-
-        viewModel.isLoading.observe(viewLifecycleOwner, Observer {isLoading->
-            isLoading?.let {
-                binding.cirLoginButton.isEnabled = !it;
-                binding.errorTextView.hideComponent();
-                if(it){
+        viewModel.loginSingleResourceEvent.observe(viewLifecycleOwner, Observer {
+            when(it){
+                is BaseResourceEvent.Loading->{
                     binding.girisProgressBar.showComponent();
-                }else{
-                    binding.girisProgressBar.hideComponent();
+                    binding.cirLoginButton.isEnabled = false;
                 }
-            }
-        });
-
-        viewModel.loginError.observe(viewLifecycleOwner,Observer{loginError->
-            loginError?.let {
-                binding.girisProgressBar.hideComponent();
-                if(it){
-                    binding.errorTextView.showComponent();
-                }else{
-                    binding.errorTextView.hideComponent();
+                is BaseResourceEvent.Error->{
+                    binding.girisProgressBar.hideComponent();
+                    binding.cirLoginButton.isEnabled = true;
+                    showSnackBar(getFragmentView(),getFragmentView().context.resources.getString(R.string.hataliLogin), ERROR);
+                }
+                is BaseResourceEvent.Success->{
+                    binding.girisProgressBar.hideComponent();
+                    binding.cirLoginButton.isEnabled = true;
+                    val action = LoginFragmentDirections.actionLoginFragmentToAnasayfaFragment();
+                    Navigation.findNavController(getFragmentView()).navigate(action);
                 }
             }
         });

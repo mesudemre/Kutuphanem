@@ -4,13 +4,22 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
+import com.google.gson.Gson
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.databinding.ProfilIslemAdSoyadEpostaBinding
 import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
+import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.model.Kullanici
+import com.mesutemre.kutuphanem.model.SUCCESS
+import com.mesutemre.kutuphanem.util.hideComponent
 import com.mesutemre.kutuphanem.util.hideKeyboard
+import com.mesutemre.kutuphanem.util.showComponent
+import com.mesutemre.kutuphanem.util.showSnackBar
+import com.mesutemre.kutuphanem.viewmodels.ProfilIslemViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -26,6 +35,7 @@ class ProfilIslemAdSoyadEpostaFragment:BaseFragment<ProfilIslemAdSoyadEpostaBind
 
     private val args:ProfilIslemAdSoyadEpostaFragmentArgs by navArgs();
     private lateinit var kullanici: Kullanici;
+    private val profilIslemViewModel: ProfilIslemViewModel by viewModels();
 
     override fun onCreateFragment(savedInstanceState: Bundle?) {
         kullanici = args.kullaniciObj;
@@ -66,7 +76,40 @@ class ProfilIslemAdSoyadEpostaFragment:BaseFragment<ProfilIslemAdSoyadEpostaBind
                 binding.textInputProfilEposta.error = it.resources.getString(R.string.epostaFormatValidationErr);
                 return@setOnClickListener;
             }
+
+            kullanici.apply {
+                this.ad = ad;
+                this.soyad = soyad;
+                this.eposta = eposta;
+            }
+            profilIslemViewModel.kullaniciBilgiGuncelle(Gson().toJson(kullanici));
+            observeKullaniciBilgiGuncelle();
         }
+    }
+
+    private fun observeKullaniciBilgiGuncelle(){
+        profilIslemViewModel.kullaniciGuncelleLoading.observe(viewLifecycleOwner, Observer {
+           if (it) {
+               binding.profilIslemAdSoyadEpostaProggressBar.showComponent();
+               binding.profilIslemAdSoyadEpostaMainLayoutId.hideComponent();
+           }
+        });
+
+        profilIslemViewModel.kullaniciGuncelleError.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                binding.profilIslemAdSoyadEpostaProggressBar.hideComponent();
+                binding.profilIslemAdSoyadEpostaMainLayoutId.showComponent();
+                showSnackBar(getFragmentView(),getFragmentView().context.resources.getString(R.string.profilGuncellemeSunucuHata), ERROR);
+            }
+        });
+        profilIslemViewModel.kullaniciGuncelleSonuc.observe(viewLifecycleOwner, Observer {
+            binding.profilIslemAdSoyadEpostaProggressBar.hideComponent();
+            binding.profilIslemAdSoyadEpostaMainLayoutId.showComponent();
+            showSnackBar(getFragmentView(),it.statusMessage, SUCCESS);
+        });
+        /*kullaniciGuncelleError.value = false;
+                            kullaniciGuncelleLoading.value = false;
+                            kullaniciGuncelleSonuc.value = response;*/
     }
 
     private fun addTextChangeListeners() {
