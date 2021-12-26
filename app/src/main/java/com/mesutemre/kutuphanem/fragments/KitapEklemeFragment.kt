@@ -54,6 +54,7 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
     private var selectedYayinevi:Int = 0
     private lateinit var kitapTurler:List<KitapturModel>;
     private lateinit var yayinEvler:List<YayineviModel>;
+    private var cameraSelector:CameraSelector? = null;
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> KitapEklemeFragmentBinding
             = KitapEklemeFragmentBinding::inflate
@@ -68,6 +69,8 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
     }
 
     override fun onStartFragment() {
+        cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA;
+
         viewModel.initKitapEklemeSpinnerListe()
         observeSpinnerList();
 
@@ -91,14 +94,23 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
             }
         }
 
-        binding.fotoCekButtonId.setOnClickListener {
+        binding.kitapResimPhotoCekImageId.setOnClickListener {
             takeKitapPhoto()
         }
 
-        binding.fotoCekIptalButtonId.setOnClickListener {
+        binding.kitapResimIptalImageId.setOnClickListener {
             binding.photoCekLayoutId.hideComponent();
             binding.kitapGenelBilgiLayoutId.showComponent();
             cameraProvider.unbindAll()
+        }
+
+        binding.switchCameraImageId.setOnClickListener {
+            if(cameraSelector == CameraSelector.DEFAULT_FRONT_CAMERA){
+                cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA;
+            }else if(checkDeviceHasFronCamera(it.context)){
+                cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA;
+            }
+            startCamera();
         }
 
         binding.yayinEviSpinnerId.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -275,12 +287,11 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
                 }
             imageCapture = ImageCapture.Builder()
                 .build()
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
             try {
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview,imageCapture)
+                    this, cameraSelector!!, preview,imageCapture)
 
             } catch(exc: Exception) {
 
