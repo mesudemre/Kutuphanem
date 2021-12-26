@@ -7,6 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
+import com.mesutemre.kutuphanem.base.BaseDataEvent
+import com.mesutemre.kutuphanem.base.BaseResourceEvent
+import com.mesutemre.kutuphanem.base.BaseSingleLiveEvent
 import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.dao.KullaniciDao
 import com.mesutemre.kutuphanem.model.KitapturModel
@@ -38,7 +41,6 @@ import javax.inject.Inject
 class ProfilIslemViewModel @Inject constructor(application: Application,
                                                private val kullaniciService: KullaniciService,
                                                private val kullaniciDao:KullaniciDao,
-                                               private val savedStateHandle: SavedStateHandle,
                                                private val parametreService: IParametreService,
                                                private val parametreRepository: ParametreRepository
 ): BaseViewModel(application) {
@@ -48,9 +50,7 @@ class ProfilIslemViewModel @Inject constructor(application: Application,
 
     override val disposible: CompositeDisposable = CompositeDisposable();
 
-    val kullanici = MutableLiveData<Kullanici>();
-    val kullaniciLoading = MutableLiveData<Boolean>();
-    val kullaniciError = MutableLiveData<Boolean>();
+    val kullaniciBilgiResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<Kullanici>>();
 
     val kullaniciGuncelleLoading = MutableLiveData<Boolean>();
     val kullaniciGuncelleSonuc = MutableLiveData<ResponseStatusModel>();
@@ -70,17 +70,15 @@ class ProfilIslemViewModel @Inject constructor(application: Application,
 
     private fun getKullaniciBilgilerDB(kullaniciAd:String){
         launch(Dispatchers.IO){
-            kullaniciLoading.postValue(true);
+            kullaniciBilgiResourceEvent.postValue(BaseResourceEvent.Loading());
             val user = kullaniciDao.getKullaniciBilgiByUsername(kullaniciAd);
             if(user == null) {
-                kullaniciError.postValue(true);
+                kullaniciBilgiResourceEvent.postValue(BaseResourceEvent.Error("Kullanıcı bilgisi getirilemedi!"));
             }else{
-                kullanici.postValue(user);
+                kullaniciBilgiResourceEvent.postValue(BaseResourceEvent.Success(user));
             }
-            kullaniciLoading.postValue(false)
         }
     }
-
 
     fun getKullaniciIlgiAlanlarFromDB(kullaniciAd: String){
         launch(Dispatchers.IO){
@@ -96,27 +94,23 @@ class ProfilIslemViewModel @Inject constructor(application: Application,
     }
 
     private fun getKullaniciBilgiFromAPI(){
-        kullaniciLoading.value = true;
-        disposible.add(
-            kullaniciService.getKullaniciBilgi()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<Kullanici>(){
-                    override fun onSuccess(t: Kullanici) {
-                        kullaniciLoading.value = false;
-                        kullaniciError.value = false;
-                        kullanici.value = t;
-                        async { writeUserToDB(t); }
-                        async { writeIlgiAlanlarToDB(t); }
-                    }
-
-                    override fun onError(e: Throwable) {
-                        kullaniciLoading.value = false;
-                        kullaniciError.value = true;
-                    }
-
-                }));
-
+        launch(Dispatchers.IO) {
+            kullaniciBilgiResourceEvent.postValue(BaseResourceEvent.Loading());
+            val kullaniciResponse = serviceCall(
+                call = {
+                    kullaniciService.getKullaniciBilgi()
+                });
+            when(kullaniciResponse){
+                is BaseDataEvent.Success->{
+                    kullaniciBilgiResourceEvent.postValue(BaseResourceEvent.Success(kullaniciResponse.data!!));
+                    async { writeUserToDB(kullaniciResponse.data!!); }
+                    async { writeIlgiAlanlarToDB(kullaniciResponse.data!!); }
+                }
+                is BaseDataEvent.Error->{
+                    kullaniciBilgiResourceEvent.postValue(BaseResourceEvent.Error(kullaniciResponse.errMessage));
+                }
+            }
+        }
     }
 
 
@@ -141,8 +135,6 @@ class ProfilIslemViewModel @Inject constructor(application: Application,
             }
         }
     }
-
-
 
     fun kullaniciBilgiUpdate(jsonStr:String,resimGuncellenecek:Boolean,selectedImageUri:Uri,username:String,context:Context){
         viewModelScope.launch {

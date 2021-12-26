@@ -15,7 +15,7 @@ interface KullaniciService {
     suspend fun login(@Body user:AccountCredentials):Response<String>;
 
     @GET("api/kullanici/bilgi")
-    fun getKullaniciBilgi():Single<Kullanici>;
+    suspend fun getKullaniciBilgi():Response<Kullanici>;
 
     @Headers("Content-Type: application/json")
     @POST("api/kullanici/guncelle")

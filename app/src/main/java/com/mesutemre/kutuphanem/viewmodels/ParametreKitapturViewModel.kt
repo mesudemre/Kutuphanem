@@ -1,9 +1,9 @@
 package com.mesutemre.kutuphanem.viewmodels
 
 import android.app.Application
-import androidx.lifecycle.MutableLiveData
 import com.mesutemre.kutuphanem.base.BaseDataEvent
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
+import com.mesutemre.kutuphanem.base.BaseSingleLiveEvent
 import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.model.KitapturModel
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
@@ -31,8 +31,8 @@ class ParametreKitapturViewModel  @Inject constructor(application: Application,
 
     private lateinit var token:String;
 
-    val kitapTurSilResourceEvent = MutableLiveData<BaseResourceEvent<ResponseStatusModel>>();
-    val kitapTurListeResourceEvent = MutableLiveData<BaseResourceEvent<List<KitapturModel>>>();
+    val kitapTurSilResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<ResponseStatusModel>>();
+    val kitapTurListeResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<List<KitapturModel>>>();
 
     fun kitapTurListeGetir(isSwipeRefresh:Boolean){
         token = customSharedPreferences.getStringFromSharedPreferences(APP_TOKEN_KEY);
@@ -53,7 +53,7 @@ class ParametreKitapturViewModel  @Inject constructor(application: Application,
             kitapTurListeResourceEvent.postValue(BaseResourceEvent.Loading());
             val kitapTurListeResponse = serviceCall(
                 call = {
-                    parametreService.getKitapTurListeGeneric()
+                    parametreService.getKitapTurListe()
                 });
             when(kitapTurListeResponse){
                 is BaseDataEvent.Success->{

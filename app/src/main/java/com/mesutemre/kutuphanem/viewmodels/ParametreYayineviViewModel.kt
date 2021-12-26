@@ -1,9 +1,9 @@
 package com.mesutemre.kutuphanem.viewmodels
 
 import android.app.Application
-import androidx.lifecycle.MutableLiveData
 import com.mesutemre.kutuphanem.base.BaseDataEvent
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
+import com.mesutemre.kutuphanem.base.BaseSingleLiveEvent
 import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.model.YayineviModel
@@ -11,13 +11,9 @@ import com.mesutemre.kutuphanem.repositories.ParametreRepository
 import com.mesutemre.kutuphanem.service.IParametreService
 import com.mesutemre.kutuphanem.util.APP_TOKEN_KEY
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
-import com.mesutemre.kutuphanem.util.PARAM_KITAPTUR_DB_KEY
 import com.mesutemre.kutuphanem.util.PARAM_YAYINEVI_DB_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableSingleObserver
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,8 +28,8 @@ class ParametreYayineviViewModel @Inject constructor(application: Application,
 
     private lateinit var token:String;
 
-    val yayinEviListeResourceEvent = MutableLiveData<BaseResourceEvent<List<YayineviModel>>>();
-    val yayinEviSilResourceEvent = MutableLiveData<BaseResourceEvent<ResponseStatusModel>>();
+    val yayinEviListeResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<List<YayineviModel>>>();
+    val yayinEviSilResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<ResponseStatusModel>>();
 
     @Inject
     lateinit var customSharedPreferences: CustomSharedPreferences;
@@ -57,7 +53,7 @@ class ParametreYayineviViewModel @Inject constructor(application: Application,
             yayinEviListeResourceEvent.postValue(BaseResourceEvent.Loading());
             val yayinEviListeResponse = serviceCall(
                 call = {
-                    parametreService.getYayinEviListeGeneric();
+                    parametreService.getYayinEviListe();
                 });
             when(yayinEviListeResponse){
                 is BaseDataEvent.Success->{

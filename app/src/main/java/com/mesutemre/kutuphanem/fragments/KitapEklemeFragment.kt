@@ -22,6 +22,7 @@ import androidx.lifecycle.Observer
 import com.google.android.material.textfield.TextInputEditText
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.base.BaseFragment
+import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.databinding.KitapEklemeFragmentBinding
 import com.mesutemre.kutuphanem.fragments.dialogs.DogumTarihiDialogFragment
 import com.mesutemre.kutuphanem.fragments.dialogs.SelectionDialogFragment
@@ -71,7 +72,7 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
         observeSpinnerList();
 
         binding.kitapEklemeBackImageId.setOnClickListener {
-            requireActivity().onBackPressed();
+            onBackPressed();
         }
 
         binding.editTextAlinmaTar.setOnClickListener {
@@ -218,63 +219,48 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
     }
 
     private fun observeKitapKaydi(view:View){
-        viewModel.kitapKaydet.observe(viewLifecycleOwner, Observer { kitapKaydet->
-            binding.kitapKayitProgressLayoutId.hideComponent();
-            kitapKaydet.let {
-                if(kitapKaydet){
+        viewModel.kitapKaydetResourceEvent.observe(viewLifecycleOwner, Observer {
+            when(it){
+                is BaseResourceEvent.Loading->{
+                    binding.kitapKayitProgressLayoutId.showComponent();
+                    requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                }
+                is BaseResourceEvent.Error->{
+                    binding.kitapKayitProgressLayoutId.hideComponent();
+                    requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                    showSnackBar(view,view.context.resources.getString(R.string.kitapKaydiHataText),ERROR)
+                }
+                is BaseResourceEvent.Success->{
+                    binding.kitapKayitProgressLayoutId.hideComponent();
+                    requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                     showSnackBar(view,view.context.resources.getString(R.string.kitapKaydiBasarli),SUCCESS)
-                }else{
-                    showSnackBar(view,view.context.resources.getString(R.string.kitapKaydiHataText),
-                        ERROR)
                 }
             }
-        })
-
-        viewModel.kitapKaydetLoading.observe(viewLifecycleOwner,Observer{it->
-            if(it){
-                binding.kitapKayitProgressLayoutId.showComponent();
-                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-            }else{
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                binding.kitapKayitProgressLayoutId.hideComponent();
-            }
-        })
-
-        viewModel.kitapKaydetHata.observe(viewLifecycleOwner,Observer{it->
-            binding.kitapKayitProgressLayoutId.hideComponent();
-            if(it){
-                showSnackBar(view,view.context.resources.getString(R.string.kitapKaydiHataText),ERROR)
-            }
-        })
+        });
     }
 
     private fun observeKitapResimYukleme(view:View){
-        viewModel.kitapResimYukle.observe(viewLifecycleOwner, Observer { response->
-            if(response.statusCode.equals("200")){
-                showSnackBar(view,response.statusMessage,SUCCESS);
-                formTemizle();
-            }else{
-                showSnackBar(view,view.context.resources.getString(R.string.kitapResimErrorText),ERROR)
+        viewModel.kitapResimYukleResourceEvent.observe(viewLifecycleOwner, Observer {
+            when(it){
+                is BaseResourceEvent.Loading->{
+                    binding.kitapResimYukleProgressLayoutId.showComponent();
+                    requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                }
+                is BaseResourceEvent.Error->{
+                    requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                    binding.kitapResimYukleProgressLayoutId.hideComponent();
+                    showSnackBar(view,view.context.resources.getString(R.string.kitapResmiYuklemeHata),ERROR)
+                }
+                is BaseResourceEvent.Success->{
+                    requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                    binding.kitapResimYukleProgressLayoutId.hideComponent();
+                    showSnackBar(view,it.data!!.statusMessage,SUCCESS);
+                    formTemizle();
+                }
             }
-        })
-
-        viewModel.kitapResimYukleLoading.observe(viewLifecycleOwner,Observer{it->
-            if(it) {
-                binding.kitapResimYukleProgressLayoutId.showComponent();
-                requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                    WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-            }else{
-                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                binding.kitapResimYukleProgressLayoutId.hideComponent();
-            }
-        })
-
-        viewModel.kitapResimYukleHata.observe(viewLifecycleOwner,Observer{it->
-            if(it){
-                showSnackBar(view,view.context.resources.getString(R.string.kitapResmiYuklemeHata),ERROR)
-            }
-        })
+        });
     }
 
     private fun startCamera() {
@@ -343,48 +329,39 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
     }
 
     private fun observeSpinnerList(){
-        viewModel.kitapEklemeKitapTurListe.observe(viewLifecycleOwner,Observer{kitapTurListe->
-            kitapTurler = kitapTurListe;
-        })
-        viewModel.kitapEklemeKitapTurLoading.observe(viewLifecycleOwner,Observer{it->
-            if(it){
-                binding.kitapEklemeKitapTurProgressBarId.showComponent();
-                binding.kitapEklemeKitapTurHataTextView.hideComponent();
-            }else{
-                binding.kitapEklemeKitapTurProgressBarId.hideComponent();
+        viewModel.kitapTurListeResourceEvent.observe(viewLifecycleOwner,Observer{
+            when(it){
+                is BaseResourceEvent.Loading->{
+                    binding.kitapEklemeKitapTurProgressBarId.showComponent();
+                    binding.kitapEklemeKitapTurHataTextView.hideComponent();
+                }
+                is BaseResourceEvent.Error->{
+                    binding.kitapEklemeKitapTurProgressBarId.hideComponent();
+                    binding.kitapEklemeKitapTurHataTextView.showComponent();
+                }
+                is BaseResourceEvent.Success->{
+                    getFragmentView().hideComponents(binding.kitapEklemeKitapTurProgressBarId,binding.kitapEklemeKitapTurHataTextView);
+                    kitapTurler = it.data!!;
+                }
             }
-        })
+        });
 
-        viewModel.kitapEklemeKitapTurError.observe(viewLifecycleOwner,Observer{it->
-            if(it){
-                binding.kitapEklemeKitapTurHataTextView.showComponent();
-                binding.selectKitapTurCardId.hideComponent();
-            }else{
-                binding.kitapEklemeKitapTurHataTextView.hideComponent();
+        viewModel.yayinEviListeResourceEvent.observe(viewLifecycleOwner,Observer{
+            when(it){
+                is BaseResourceEvent.Loading->{
+                    binding.kitapEklemeYayinEviProgressBarId.showComponent();
+                    binding.kitapEklemeYayinEviHataTextView.hideComponent();
+                }
+                is BaseResourceEvent.Error->{
+                    binding.kitapEklemeYayinEviProgressBarId.hideComponent();
+                    binding.kitapEklemeYayinEviHataTextView.showComponent();
+                }
+                is BaseResourceEvent.Success->{
+                    yayinEvler = it.data!!;
+                    getFragmentView().hideComponents(binding.kitapEklemeYayinEviProgressBarId,binding.kitapEklemeYayinEviHataTextView);
+                }
             }
-        })
-
-        viewModel.kitapEklemeYayinEviListe.observe(viewLifecycleOwner,Observer{yayinEviListe->
-            yayinEvler = yayinEviListe;
-        })
-
-        viewModel.kitapEklemeYayinEviLoading.observe(viewLifecycleOwner,Observer{it->
-            if(it){
-                binding.kitapEklemeYayinEviProgressBarId.showComponent();
-                binding.kitapEklemeYayinEviHataTextView.hideComponent();
-            }else{
-                binding.kitapEklemeYayinEviProgressBarId.hideComponent();
-            }
-        })
-
-        viewModel.kitapEklemeYayinEviError.observe(viewLifecycleOwner,Observer{it->
-            if(it){
-                binding.kitapEklemeYayinEviHataTextView.showComponent();
-                binding.yayinEviSpinnerId.hideComponent();
-            }else{
-                binding.kitapEklemeYayinEviHataTextView.hideComponent();
-            }
-        })
+        });
     }
 
     override fun onRequestPermissionsResult(

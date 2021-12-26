@@ -45,7 +45,7 @@ class ProfilIslemIlgiAlanlarimFragment:BaseFragment<ProfilIslemIlgiAlanlarBindin
         binding.textInputProfilKullaniciAd.editText?.setText(kullanici.username);
         observeParametreKitapTurListe();
         binding.ilgiAlanlarimBackImageId.setOnClickListener {
-            requireActivity().onBackPressed();
+            onBackPressed();
         }
     }
 

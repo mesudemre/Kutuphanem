@@ -14,10 +14,7 @@ import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.databinding.ParametreEklemeFragmentBinding
 import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
 import com.mesutemre.kutuphanem.model.SUCCESS
-import com.mesutemre.kutuphanem.util.hideComponent
-import com.mesutemre.kutuphanem.util.hideKeyboard
-import com.mesutemre.kutuphanem.util.showComponent
-import com.mesutemre.kutuphanem.util.showSnackBar
+import com.mesutemre.kutuphanem.util.*
 import com.mesutemre.kutuphanem.viewmodels.ParametreEklemeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.parametre_ekleme_fragment.*
@@ -68,8 +65,8 @@ class ParametreEklemeFragment: BaseFragment<ParametreEklemeFragmentBinding>() {
            when(it){
                is BaseResourceEvent.Loading->{
                    binding.parametreEklemeErrorTextView.hideComponent();
-                   binding.parametreKaydetButton.isEnabled = false;
                    binding.parametreEklemeProgressBar.showComponent();
+                   binding.parametreKaydetButton.isEnabled = false;
                }
                is BaseResourceEvent.Error->{
                    binding.parametreEklemeProgressBar.hideComponent();
@@ -78,9 +75,8 @@ class ParametreEklemeFragment: BaseFragment<ParametreEklemeFragmentBinding>() {
                    binding.parametreEklemeErrorTextView.setText(it.message)
                }
                is BaseResourceEvent.Success->{
-                   binding.parametreEklemeProgressBar.hideComponent();
+                   getFragmentView().hideComponents(binding.parametreEklemeProgressBar,binding.parametreEklemeErrorTextView);
                    binding.parametreKaydetButton.isEnabled = true;
-                   binding.parametreEklemeErrorTextView.hideComponent();
                    showSnackBar(view,it.data!!.statusMessage, SUCCESS);
                    binding.textInputParametreAciklama.editText!!.setText("");
                }

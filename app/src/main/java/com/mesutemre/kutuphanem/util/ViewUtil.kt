@@ -138,6 +138,18 @@ fun View.hideComponent(){
     this.visibility = View.GONE;
 }
 
+fun View.hideComponents(vararg views:View) {
+    for (v in views){
+        v.hideComponent();
+    }
+}
+
+fun View.showComponents(vararg views:View) {
+    for (v in views){
+        v.showComponent();
+    }
+}
+
 fun TextInputEditText.hideKeyboard(et: TextInputEditText){
     val imm = ContextCompat.getSystemService(et.context, InputMethodManager::class.java);
     imm?.hideSoftInputFromWindow(et.windowToken, 0);

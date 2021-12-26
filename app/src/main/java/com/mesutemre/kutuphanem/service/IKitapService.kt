@@ -16,16 +16,12 @@ interface IKitapService {
     suspend fun getTumKitapListe(@Body jsonStr:String):Response<List<KitapModel>>;
 
     @Headers("Content-Type: application/json")
-    @POST("api/kitap/liste")
-    fun getKitapListeBySingle(@Body jsonStr: String): Single<List<KitapModel>>;
-
-    @Headers("Content-Type: application/json")
     @POST("api/kitap/kaydet")
-    fun kitapKaydet(@Body jsonStr:String):Single<ResponseStatusModel>;
+    suspend fun kitapKaydet(@Body jsonStr:String):Response<ResponseStatusModel>;
 
     @Multipart
     @POST("api/kitap/resim/yukle")
-    fun kitapResimYukle(@Part file: MultipartBody.Part, @Part("kitapId") kitapId: RequestBody):Single<ResponseStatusModel>;
+    suspend fun kitapResimYukle(@Part file: MultipartBody.Part, @Part("kitapId") kitapId: RequestBody):Response<ResponseStatusModel>;
 
     @Headers("Content-Type: application/json")
     @POST("api/kitap/begen")

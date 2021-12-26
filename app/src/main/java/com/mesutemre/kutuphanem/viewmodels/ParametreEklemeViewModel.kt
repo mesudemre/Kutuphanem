@@ -1,10 +1,10 @@
 package com.mesutemre.kutuphanem.viewmodels
 
 import android.app.Application
-import androidx.lifecycle.MutableLiveData
 import com.mesutemre.kutuphanem.base.BaseDataEvent
-import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
+import com.mesutemre.kutuphanem.base.BaseSingleLiveEvent
+import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.service.IParametreService
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
@@ -27,7 +27,7 @@ class ParametreEklemeViewModel @Inject constructor(application: Application,
     @Inject
     lateinit var customSharedPreferences: CustomSharedPreferences;
 
-    val parametreEklemeResourceEvent = MutableLiveData<BaseResourceEvent<ResponseStatusModel>>();
+    val parametreEklemeResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<ResponseStatusModel>>();
 
     fun parametreEkle(tip:String?,aciklama:String){
         val jsonObj: JSONObject = JSONObject();

@@ -50,7 +50,7 @@ class ProfilIslemAdSoyadEpostaFragment:BaseFragment<ProfilIslemAdSoyadEpostaBind
         addTextChangeListeners();
 
         binding.adSoyadEPostaBackImageId.setOnClickListener {
-            requireActivity().onBackPressed();
+            onBackPressed();
         }
 
         binding.adSoyadGuncelleButtonId.setOnClickListener {

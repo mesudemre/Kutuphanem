@@ -29,7 +29,7 @@ class ProfilIslemIletisimTercihlerimFragment:BaseFragment<ProfilIslemIletisimTer
         binding.textInputProfilKullaniciAd.editText?.setText(kullanici.username);
 
         binding.iletisimTercihBackImageId.setOnClickListener {
-            requireActivity().onBackPressed();
+            onBackPressed();
         }
     }
 }

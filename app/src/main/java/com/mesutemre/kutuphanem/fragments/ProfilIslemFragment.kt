@@ -7,13 +7,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.mesutemre.kutuphanem.base.BaseFragment
+import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.databinding.ProfilIslemFragmentBinding
 import com.mesutemre.kutuphanem.fragments.dialogs.ExitFromApplicationDialogFragment
 import com.mesutemre.kutuphanem.model.Kullanici
-import com.mesutemre.kutuphanem.util.CustomSharedPreferences
-import com.mesutemre.kutuphanem.util.getCircleImageFromUrl
-import com.mesutemre.kutuphanem.util.hideComponent
-import com.mesutemre.kutuphanem.util.showComponent
+import com.mesutemre.kutuphanem.util.*
 import com.mesutemre.kutuphanem.viewmodels.ProfilIslemViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -32,11 +30,12 @@ class ProfilIslemFragment() :BaseFragment<ProfilIslemFragmentBinding>() {
     lateinit var customSharedPreferences: CustomSharedPreferences;
 
     override fun onCreateFragment(savedInstanceState: Bundle?) {
-        viewModel.getKullaniciInfo();
     }
 
     override fun onStartFragment() {
+        viewModel.getKullaniciInfo();
         observeKullaniciBilgi();
+
         binding.adSoyadEpostaCardId.setOnClickListener {
             val action = ProfilIslemFragmentDirections.actionProfilIslemFragmentToProfilIslemAdSoyadEpostaFragment(kullanici);
             Navigation.findNavController(it).navigate(action);
@@ -62,25 +61,23 @@ class ProfilIslemFragment() :BaseFragment<ProfilIslemFragmentBinding>() {
     }
 
     private fun observeKullaniciBilgi(){
-        viewModel.kullaniciLoading.observe(viewLifecycleOwner, Observer {
-           if(it) {
-               binding.profilBilgiProgressBar.showComponent();
-               binding.profilBilgiLayoutId.hideComponent();
-               binding.profilResimLayout.hideComponent();
-               binding.profilIslemlerItems.hideComponent();
-           }else{
-               binding.profilBilgiProgressBar.hideComponent();
-               binding.profilBilgiLayoutId.showComponent();
-               binding.profilResimLayout.showComponent();
-               binding.profilIslemlerItems.showComponent();
-           }
-        });
-
-        viewModel.kullanici.observe(viewLifecycleOwner, Observer {
-            kullanici = it;
-            binding.profilAdSoyadTextViewId.setText(kullanici.ad+" "+kullanici.soyad);
-            binding.profilResimImage.getCircleImageFromUrl(kullanici.resim,
-                binding.profilResimImage);
+        viewModel.kullaniciBilgiResourceEvent.observe(viewLifecycleOwner, Observer {
+            when(it){
+                is BaseResourceEvent.Loading->{
+                    binding.profilBilgiProgressBar.showComponent();
+                    getFragmentView().hideComponents(binding.profilBilgiLayoutId,binding.profilResimLayout,binding.profilIslemlerItems)
+                }
+                is BaseResourceEvent.Error->{
+                }
+                is BaseResourceEvent.Success->{
+                    kullanici = it.data!!;
+                    binding.profilBilgiProgressBar.hideComponent();
+                    getFragmentView().showComponents(binding.profilBilgiLayoutId,binding.profilResimLayout,binding.profilIslemlerItems)
+                    binding.profilAdSoyadTextViewId.setText(kullanici.ad+" "+kullanici.soyad);
+                    binding.profilResimImage.getCircleImageFromUrl(kullanici.resim,
+                        binding.profilResimImage);
+                }
+            }
         });
     }
 }

@@ -35,7 +35,7 @@ class ProfilIslemDogumTarCinsiyetFragment:BaseFragment<ProfilIslemDogumtarCinsiy
         binding.textInputProfilDogumtarih.editText?.setText(formatDate(kullanici.dogumTarihi,"dd.MM.yyyy"));
 
         binding.dogumTarihiCinsiyetBackImageId.setOnClickListener {
-            requireActivity().onBackPressed();
+            onBackPressed();
         }
 
         binding.editTextProfilDogumtarih.setOnClickListener {

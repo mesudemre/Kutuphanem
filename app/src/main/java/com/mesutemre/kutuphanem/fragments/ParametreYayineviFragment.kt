@@ -14,6 +14,7 @@ import com.mesutemre.kutuphanem.databinding.ParametreYayineviFragmentBinding
 import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.util.hideComponent
+import com.mesutemre.kutuphanem.util.hideComponents
 import com.mesutemre.kutuphanem.util.showComponent
 import com.mesutemre.kutuphanem.util.showSnackBar
 import com.mesutemre.kutuphanem.viewmodels.ParametreYayineviViewModel
@@ -41,8 +42,7 @@ class ParametreYayineviFragment: BaseFragment<ParametreYayineviFragmentBinding>(
         observeLiveData();
 
         binding.yayinEviSwipeRefreshLayout.setOnRefreshListener {
-            binding.yayinEviListeRw.hideComponent();
-            binding.yayinEviErrorTextId.hideComponent();
+            getFragmentView().hideComponents(binding.yayinEviListeRw,binding.yayinEviErrorTextId)
             binding.yayinEviProgressBar.showComponent();
 
             binding.yayinEviSwipeRefreshLayout.isRefreshing = false;
@@ -60,18 +60,15 @@ class ParametreYayineviFragment: BaseFragment<ParametreYayineviFragmentBinding>(
         viewModel.yayinEviListeResourceEvent.observe(viewLifecycleOwner,Observer{
             when(it){
                 is BaseResourceEvent.Loading->{
+                    getFragmentView().hideComponents(binding. yayinEviListeRw,binding.yayinEviErrorTextId)
                     binding.yayinEviProgressBar.showComponent();
-                    binding. yayinEviListeRw.hideComponent();
-                    binding.yayinEviErrorTextId.hideComponent();
                 }
                 is BaseResourceEvent.Error->{
+                    getFragmentView().hideComponents(binding.yayinEviListeRw,binding.yayinEviProgressBar);
                     binding.yayinEviErrorTextId.showComponent();
-                    binding.yayinEviListeRw.hideComponent();
-                    binding.yayinEviProgressBar.hideComponent();
                 }
                 is BaseResourceEvent.Success->{
-                    binding.yayinEviProgressBar.hideComponent();
-                    binding.yayinEviErrorTextId.hideComponent();
+                    getFragmentView().hideComponents(binding.yayinEviProgressBar,binding.yayinEviErrorTextId);
                     binding. yayinEviListeRw.showComponent();
                     adapter?.updateYayineviListe(it.data!!);
                 }
@@ -89,16 +86,14 @@ class ParametreYayineviFragment: BaseFragment<ParametreYayineviFragmentBinding>(
             when(it){
                 is BaseResourceEvent.Loading->{
                     binding.yayinEviProgressBar.showComponent();
-                    binding.yayinEviErrorTextId.hideComponent();
-                    binding.yayinEviListeRw.hideComponent();
+                    getFragmentView().hideComponents(binding.yayinEviErrorTextId,binding.yayinEviListeRw);
                 }
                 is BaseResourceEvent.Error->{
                     binding.yayinEviProgressBar.hideComponent();
                     showSnackBar(getFragmentView(),it.message!!, ERROR);
                 }
                 is BaseResourceEvent.Success->{
-                    binding.yayinEviProgressBar.hideComponent();
-                    binding.yayinEviErrorTextId.hideComponent();
+                    getFragmentView().hideComponents(binding.yayinEviProgressBar,binding.yayinEviErrorTextId)
                     showSnackBar(getFragmentView(),it.data!!.statusMessage, SUCCESS);
                     viewModel.yayinEviListeGetir(false);
                     observeLiveData();

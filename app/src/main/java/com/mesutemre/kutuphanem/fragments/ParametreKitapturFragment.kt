@@ -47,8 +47,7 @@ class ParametreKitapturFragment:BaseFragment<ParametreKitapturFragmentBinding>()
 
         binding.kitapTurSwipeRefreshLayout.setOnRefreshListener {
             binding.kitapTurProgressBar.showComponent();
-            binding.kitapTurErrorTextId.hideComponent();
-            binding.kitapTurListeRw.hideComponent();
+            getFragmentView().hideComponents(binding.kitapTurErrorTextId,binding.kitapTurListeRw)
 
             binding.kitapTurSwipeRefreshLayout.isRefreshing = false;
             viewModel.kitapTurListeGetir(true);
@@ -65,17 +64,14 @@ class ParametreKitapturFragment:BaseFragment<ParametreKitapturFragmentBinding>()
             when(it){
                 is BaseResourceEvent.Loading->{
                     binding.kitapTurProgressBar.showComponent();
-                    binding.kitapTurErrorTextId.hideComponent();
-                    binding.kitapTurListeRw.hideComponent();
+                    getFragmentView().hideComponents(binding.kitapTurErrorTextId,binding.kitapTurListeRw);
                 }
                 is BaseResourceEvent.Error->{
-                    binding.kitapTurProgressBar.hideComponent();
                     binding.kitapTurErrorTextId.showComponent();
-                    binding.kitapTurListeRw.hideComponent();
+                    getFragmentView().hideComponents(binding.kitapTurProgressBar,binding.kitapTurListeRw);
                 }
                 is BaseResourceEvent.Success->{
-                    binding.kitapTurProgressBar.hideComponent();
-                    binding.kitapTurErrorTextId.hideComponent();
+                    getFragmentView().hideComponents(binding.kitapTurProgressBar,binding.kitapTurErrorTextId);
                     binding.kitapTurListeRw.showComponent();
                     adapter?.updateKitapTurListe(it.data!!);
                 }
@@ -92,9 +88,8 @@ class ParametreKitapturFragment:BaseFragment<ParametreKitapturFragmentBinding>()
         viewModel.kitapTurSilResourceEvent.observe(viewLifecycleOwner, Observer {
            when(it){
                is BaseResourceEvent.Loading->{
+                   getFragmentView().hideComponents(binding.kitapTurErrorTextId,binding.kitapTurListeRw);
                    binding.kitapTurProgressBar.showComponent();
-                   binding.kitapTurErrorTextId.hideComponent();
-                   binding.kitapTurListeRw.hideComponent();
                }
                is BaseResourceEvent.Error->{
                    binding.kitapTurProgressBar.hideComponent();

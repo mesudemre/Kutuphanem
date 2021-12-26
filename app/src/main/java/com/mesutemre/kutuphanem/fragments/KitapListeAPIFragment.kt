@@ -27,6 +27,7 @@ import com.mesutemre.kutuphanem.model.KitapModel
 import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.model.WARNING
 import com.mesutemre.kutuphanem.util.hideComponent
+import com.mesutemre.kutuphanem.util.hideComponents
 import com.mesutemre.kutuphanem.util.showComponent
 import com.mesutemre.kutuphanem.util.showSnackBar
 import com.mesutemre.kutuphanem.viewholder.KitapListeViewHolder
@@ -146,8 +147,7 @@ class KitapListeAPIFragment:BaseFragment<KitapListeApiFragmentBinding>() {
 
             when (val loadState = combinedLoadStates.source.refresh) {
                 is LoadState.NotLoading -> {
-                    binding.kitapListeProgressBar.hideComponent();
-                    binding.kitapListeErrorTextId.hideComponent();
+                    getFragmentView().hideComponents(binding.kitapListeProgressBar,binding.kitapListeErrorTextId);
                     binding.kitapListeRw.showComponent();
                 }
                 is LoadState.Loading -> {

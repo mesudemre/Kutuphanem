@@ -25,10 +25,11 @@ import com.mesutemre.kutuphanem.adapters.DashKategoriAdapter
 import com.mesutemre.kutuphanem.adapters.KitapSearchResultAdapter
 import com.mesutemre.kutuphanem.adapters.TanitimTabViewPagerAdapter
 import com.mesutemre.kutuphanem.base.BaseFragment
+import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.databinding.AnasayfaFragmentBinding
 import com.mesutemre.kutuphanem.fragments.dialogs.CloseApplicationDialogFragment
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
-import com.mesutemre.kutuphanem.util.hideComponent
+import com.mesutemre.kutuphanem.util.hideComponents
 import com.mesutemre.kutuphanem.util.showComponent
 import com.mesutemre.kutuphanem.viewmodels.AnasayfaViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -124,17 +125,20 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
     }
 
     private fun observeSearchKitap(){
-        viewModel.kitapSearchResult.observe(viewLifecycleOwner, Observer { kitapListe->
-            kitapSearchResultAdapter?.updateKitapSearchListe(kitapListe);
-        });
-
-        viewModel.kitapSearchLoading.observe(viewLifecycleOwner, Observer { it->
-            if(it){
-                binding.searchInputLayout.isEndIconVisible = true;
-            }else{
-                binding.searchInputLayout.isEndIconVisible = false;
+        viewModel.kitapSearchResourceEvent.observe(viewLifecycleOwner, Observer {
+            when(it) {
+                is BaseResourceEvent.Loading->{
+                    binding.searchInputLayout.isEndIconVisible = true;
+                }
+                is BaseResourceEvent.Error->{
+                    binding.searchInputLayout.isEndIconVisible = false;
+                }
+                is BaseResourceEvent.Success->{
+                    binding.searchInputLayout.isEndIconVisible = false;
+                    kitapSearchResultAdapter?.updateKitapSearchListe(it.data!!);
+                }
             }
-        })
+        });
     }
 
     private fun observeLiveData(){
@@ -142,29 +146,23 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
     }
 
     private fun observeDashKategoriListe(){
-        viewModel.dashKategoriListe.observe(viewLifecycleOwner, Observer { kitapTurListe->
-            kitapTurListe?.let {
-                dashKategoriAdapter?.updateKategorListe(kitapTurListe)
-            }
-        })
-
-        viewModel.dashKategoriListeLoading.observe(viewLifecycleOwner, Observer { loading->
-            if(loading){
-                binding.dashKategoriProgressBarId.showComponent();
-                binding.dashKategoriHataTextView.hideComponent();
-            }else{
-                binding.dashKategoriProgressBarId.hideComponent();
-            }
-        })
-
-        viewModel.dashKategoriListeError.observe(viewLifecycleOwner,Observer{error->
-            if(error){
-                binding.dashKategoriHataTextView.showComponent();
-                binding.dashKategoriRecyclerView.hideComponent();
-            }else{
-                binding.dashKategoriHataTextView.hideComponent();
-            }
-        })
+        viewModel.dashKategoriListeResourceEvent.observe(viewLifecycleOwner, Observer {
+           when(it) {
+               is BaseResourceEvent.Loading->{
+                   binding.dashKategoriProgressBarId.showComponent();
+                   getFragmentView().hideComponents(binding.dashKategoriHataTextView,binding.dashKategoriRecyclerView)
+               }
+               is BaseResourceEvent.Error->{
+                   binding.dashKategoriHataTextView.showComponent();
+                   getFragmentView().hideComponents(binding.dashKategoriProgressBarId,binding.dashKategoriRecyclerView)
+               }
+               is BaseResourceEvent.Success->{
+                   getFragmentView().hideComponents(binding.dashKategoriProgressBarId,binding.dashKategoriHataTextView)
+                   binding.dashKategoriRecyclerView.showComponent();
+                   dashKategoriAdapter?.updateKategorListe(it.data!!)
+               }
+           }
+        });
     }
 
     private fun prepareProggressForSearch(){

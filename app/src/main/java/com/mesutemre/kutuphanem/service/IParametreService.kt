@@ -13,10 +13,7 @@ import retrofit2.http.POST
 interface IParametreService {
 
     @GET("api/parametre/yayinevi/liste")
-    fun getYayinEviListe(): Single<ArrayList<YayineviModel>>;
-
-    @GET("api/parametre/yayinevi/liste")
-    suspend fun getYayinEviListeGeneric(): Response<List<YayineviModel>>;
+    suspend fun getYayinEviListe(): Response<List<YayineviModel>>;
 
     @Headers("Content-Type: application/json")
     @POST("api/parametre/yayinevi/kaydet")
@@ -27,10 +24,7 @@ interface IParametreService {
     suspend fun yayinEviKaydetGeneric(@Body jsonStr: String):Response<ResponseStatusModel>;
 
     @GET("api/parametre/kitaptur/liste")
-    fun getKitapTurListe():Single<ArrayList<KitapturModel>>;
-
-    @GET("api/parametre/kitaptur/liste")
-    suspend fun getKitapTurListeGeneric():Response<List<KitapturModel>>;
+    suspend fun getKitapTurListe():Response<List<KitapturModel>>;
 
     @Headers("Content-Type: application/json")
     @POST("api/parametre/kitaptur/kaydet")

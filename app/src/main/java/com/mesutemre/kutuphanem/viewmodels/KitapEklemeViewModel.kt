@@ -3,9 +3,10 @@ package com.mesutemre.kutuphanem.viewmodels
 import android.app.Application
 import android.content.Context
 import android.net.Uri
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.mesutemre.kutuphanem.R
+import com.mesutemre.kutuphanem.base.BaseDataEvent
+import com.mesutemre.kutuphanem.base.BaseResourceEvent
+import com.mesutemre.kutuphanem.base.BaseSingleLiveEvent
 import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.model.KitapturModel
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
@@ -21,10 +22,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.default
 import id.zelory.compressor.constraint.destination
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableSingleObserver
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import okhttp3.MediaType
@@ -46,21 +45,10 @@ constructor(application: Application,
     @Inject
     lateinit var customSharedPreferences: CustomSharedPreferences;
 
-    val kitapEklemeKitapTurListe = MutableLiveData<List<KitapturModel>>();
-    val kitapEklemeKitapTurError = MutableLiveData<Boolean>();
-    val kitapEklemeKitapTurLoading = MutableLiveData<Boolean>();
-
-    val kitapEklemeYayinEviListe = MutableLiveData<List<YayineviModel>>();
-    val kitapEklemeYayinEviError = MutableLiveData<Boolean>();
-    val kitapEklemeYayinEviLoading = MutableLiveData<Boolean>();
-
-    val kitapKaydet = MutableLiveData<Boolean>();
-    val kitapKaydetHata = MutableLiveData<Boolean>();
-    val kitapKaydetLoading = MutableLiveData<Boolean>();
-
-    val kitapResimYukle = MutableLiveData<ResponseStatusModel>();
-    val kitapResimYukleHata = MutableLiveData<Boolean>();
-    val kitapResimYukleLoading = MutableLiveData<Boolean>();
+    val kitapTurListeResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<List<KitapturModel>>>();
+    val yayinEviListeResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<List<YayineviModel>>>();
+    val kitapKaydetResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<Boolean>>();
+    val kitapResimYukleResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<ResponseStatusModel>>();
 
     fun initKitapEklemeSpinnerListe(){
         viewModelScope.launch {
@@ -81,40 +69,45 @@ constructor(application: Application,
     }
 
     private fun initKitapTurFromService(){
-        disposible.add(
-            parametreService.getKitapTurListe()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<List<KitapturModel>>(){
-                    override fun onSuccess(response: List<KitapturModel>) {
-                        storeKitapTurInDatabse(response);
-                        kitapEklemeKitapTurError.value = false;
-                        kitapEklemeKitapTurLoading.value = false;
-                        var liste = response.toMutableList();
-                        val sortedList = liste.sortedWith(compareBy({it.aciklama}));
-                        kitapEklemeKitapTurListe.value = sortedList;
-                    }
-
-                    override fun onError(e: Throwable) {
-                        kitapEklemeKitapTurError.value = true;
-                        kitapEklemeKitapTurLoading.value = false;
-                    }
-
-                }));
+        launch(Dispatchers.IO) {
+            kitapTurListeResourceEvent.postValue(BaseResourceEvent.Loading());
+            val kitapTurListeResponse = serviceCall(
+                call = {
+                    parametreService.getKitapTurListe()
+                });
+            when(kitapTurListeResponse){
+                is BaseDataEvent.Success->{
+                    kitapTurListeResourceEvent.postValue(BaseResourceEvent.Success(kitapTurListeResponse.data!!));
+                    storeKitapTurInDatabse(kitapTurListeResponse.data!!);
+                }
+                is BaseDataEvent.Error->{
+                    kitapTurListeResourceEvent.postValue(BaseResourceEvent.Error(kitapTurListeResponse.errMessage));
+                }
+            }
+        }
     }
 
     private fun initKitapTurFromDatabase(){
-        launch {
-            var liste = parametreRepository.getKitapTurListe().toMutableList();
-            val sortedList = liste.sortedWith(compareBy({it.aciklama}));
-            kitapEklemeKitapTurListe.value = sortedList;
-            kitapEklemeKitapTurError.value = false;
-            kitapEklemeKitapTurLoading.value = false;
+        launch(Dispatchers.IO) {
+            kitapTurListeResourceEvent.postValue(BaseResourceEvent.Loading());
+            val kitapTurListeDBResponse = dbCall(
+                call = {
+                    parametreRepository.getKitapTurListe()
+                });
+
+            when(kitapTurListeDBResponse){
+                is BaseDataEvent.Success->{
+                    kitapTurListeResourceEvent.postValue(BaseResourceEvent.Success(kitapTurListeDBResponse.data!!));
+                }
+                is BaseDataEvent.Error->{
+                    kitapTurListeResourceEvent.postValue(BaseResourceEvent.Error(kitapTurListeDBResponse.errMessage));
+                }
+            }
         }
     }
 
     private fun storeKitapTurInDatabse(kitapTurListe:List<KitapturModel>){
-        launch {
+        launch(Dispatchers.IO) {
             parametreRepository.deleteKitapTurListe();
             parametreRepository.kitapTurParametreKaydet(*kitapTurListe.toTypedArray());
             customSharedPreferences.putBooleanToSharedPreferences(PARAM_KITAPTUR_DB_KEY,true);
@@ -134,40 +127,45 @@ constructor(application: Application,
     }
 
     private fun initYayinEviFromService(){
-        disposible.add(
-            parametreService.getYayinEviListe()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<List<YayineviModel>>(){
-                    override fun onSuccess(response: List<YayineviModel>) {
-                        kitapEklemeYayinEviError.value = false;
-                        storeYayinEviInDatabse(response);
-                        kitapEklemeYayinEviLoading.value = false;
-
-                        var liste = response.toMutableList();
-                        val sortedList = liste.sortedWith(compareBy({it.aciklama}));
-                        kitapEklemeYayinEviListe.value = sortedList;
-                    }
-
-                    override fun onError(e: Throwable) {
-                        kitapEklemeYayinEviError.value = true;
-                        kitapEklemeYayinEviLoading.value = false;
-                    }
-                }));
+        launch(Dispatchers.IO) {
+            yayinEviListeResourceEvent.postValue(BaseResourceEvent.Loading());
+            val yayinEviListeResponse = serviceCall(
+                call = {
+                    parametreService.getYayinEviListe();
+                });
+            when(yayinEviListeResponse){
+                is BaseDataEvent.Success->{
+                    yayinEviListeResourceEvent.postValue(BaseResourceEvent.Success(yayinEviListeResponse.data!!));
+                    storeYayinEviInDatabse(yayinEviListeResponse.data!!);
+                }
+                is BaseDataEvent.Error->{
+                    yayinEviListeResourceEvent.postValue(BaseResourceEvent.Error(yayinEviListeResponse.errMessage));
+                }
+            }
+        }
     }
 
     private fun initYayinEviFromDatabase(){
-        launch {
-            kitapEklemeYayinEviError.value = false;
-            kitapEklemeYayinEviLoading.value = false;
-            var liste = parametreRepository.getYayinEviListe().toMutableList();
-            val sortedList = liste.sortedWith(compareBy({it.aciklama}));
-            kitapEklemeYayinEviListe.value = sortedList;
+        launch(Dispatchers.IO) {
+            yayinEviListeResourceEvent.postValue(BaseResourceEvent.Loading());
+            val yayinEviListeDBResponse = dbCall(
+                call = {
+                    parametreRepository.getYayinEviListe()
+                });
+
+            when(yayinEviListeDBResponse){
+                is BaseDataEvent.Success->{
+                    yayinEviListeResourceEvent.postValue(BaseResourceEvent.Success(yayinEviListeDBResponse.data!!));
+                }
+                is BaseDataEvent.Error->{
+                    yayinEviListeResourceEvent.postValue(BaseResourceEvent.Error(yayinEviListeDBResponse.errMessage));
+                }
+            }
         }
     }
 
     private fun storeYayinEviInDatabse(yayinEviListe:List<YayineviModel>){
-        launch {
+        launch(Dispatchers.IO) {
             parametreRepository.deleteYayinEviListe();
             parametreRepository.yayinEviParametreKaydet(*yayinEviListe.toTypedArray());
             customSharedPreferences.putBooleanToSharedPreferences(PARAM_YAYINEVI_DB_KEY,true);
@@ -175,33 +173,28 @@ constructor(application: Application,
     }
 
     fun kitapKaydet(jsonStr:String,kitapImageUri:Uri,context:Context){
-        kitapKaydetLoading.value = true;
-        disposible.add(
-            kitapService.kitapKaydet(jsonStr).subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<ResponseStatusModel>(){
-                    override fun onSuccess(response: ResponseStatusModel) {
-                       if(response.statusCode.equals("200")){
-                           kitapKaydet.value = true;
-                           kitapKaydetLoading.value = false;
-                           kitapKaydetHata.value = false;
-                           val kitapId = response.statusMessage;
-                           kitapResimYukle(kitapImageUri,kitapId,context);
-                       }else{
-                           kitapKaydet.value = false;
-                           kitapKaydetLoading.value = false;
-                           kitapKaydetHata.value = true;
-                       }
-                    }
-                    override fun onError(e: Throwable) {
-                        kitapKaydetHata.value = true;
-                        kitapKaydetLoading.value = false;
-                    }
-                }));
+        launch(Dispatchers.IO) {
+            kitapKaydetResourceEvent.postValue(BaseResourceEvent.Loading());
+            val kitapKaydetResponse = serviceCall(
+                call = {
+                    kitapService.kitapKaydet(jsonStr)
+                });
+            when(kitapKaydetResponse){
+                is BaseDataEvent.Success->{
+                    kitapKaydetResourceEvent.postValue(BaseResourceEvent.Success(true));
+                    val kitapId = kitapKaydetResponse.data!!.statusMessage;
+                    kitapResimYukle(kitapImageUri,kitapId,context);
+                }
+                is BaseDataEvent.Error->{
+                    kitapKaydetResourceEvent.postValue(BaseResourceEvent.Error(kitapKaydetResponse.errMessage));
+                }
+            }
+        }
     }
 
     private fun kitapResimYukle(kitapImageUri: Uri,kitapId:String,context:Context){
-        launch {
+        launch(Dispatchers.IO) {
+            kitapResimYukleResourceEvent.postValue(BaseResourceEvent.Loading());
             val kitapIdParam: RequestBody = RequestBody.create(MediaType.parse("text/plain"),kitapId);
             val originalFile: File =  org.apache.commons.io.FileUtils.getFile(getPath(context,kitapImageUri));
             val photoFile2 = Compressor.compress(context,originalFile){
@@ -211,25 +204,18 @@ constructor(application: Application,
             val fileParam: RequestBody = RequestBody.create(MediaType.parse("image/jpeg"),photoFile2);
             val file: MultipartBody.Part = MultipartBody.Part.createFormData("file",originalFile.name,fileParam);
 
-            kitapResimYukleLoading.value = true;
-            disposible.add(
-                kitapService.kitapResimYukle(file,kitapIdParam)
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(object : DisposableSingleObserver<ResponseStatusModel>(){
-                        override fun onSuccess(response: ResponseStatusModel) {
-                            kitapResimYukle.value = response;
-                            kitapResimYukleLoading.value = false;
-                            kitapResimYukleHata.value = false;
-                            originalFile.delete();
-                        }
-                        override fun onError(e: Throwable) {
-                            kitapResimYukleHata.value = true;
-                            kitapResimYukleLoading.value = false;
-                        }
-                    }));
+            val kitapResimYukleRespons = serviceCall(
+                call = {
+                    kitapService.kitapResimYukle(file,kitapIdParam)
+                });
+            when(kitapResimYukleRespons){
+                is BaseDataEvent.Success->{
+                    kitapResimYukleResourceEvent.postValue(BaseResourceEvent.Success(kitapResimYukleRespons.data!!));
+                }
+                is BaseDataEvent.Error->{
+                    kitapResimYukleResourceEvent.postValue(BaseResourceEvent.Error(kitapResimYukleRespons.errMessage));
+                }
+            }
         }
-
-
     }
 }
