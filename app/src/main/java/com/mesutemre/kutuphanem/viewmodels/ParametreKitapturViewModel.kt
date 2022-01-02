@@ -1,10 +1,11 @@
 package com.mesutemre.kutuphanem.viewmodels
 
-import android.app.Application
+import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.base.BaseDataEvent
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.base.BaseSingleLiveEvent
-import com.mesutemre.kutuphanem.base.BaseViewModel
+import com.mesutemre.kutuphanem.base.BaseViewModelLast
+import com.mesutemre.kutuphanem.di.IoDispatcher
 import com.mesutemre.kutuphanem.model.KitapturModel
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.repositories.ParametreRepository
@@ -13,18 +14,17 @@ import com.mesutemre.kutuphanem.util.APP_TOKEN_KEY
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.PARAM_KITAPTUR_DB_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class ParametreKitapturViewModel  @Inject constructor(application: Application,
-                                                      private val parametreService: IParametreService,
-                                                      private val parametreRepository: ParametreRepository
-): BaseViewModel(application) {
-
-    override val disposible: CompositeDisposable = CompositeDisposable();
+class ParametreKitapturViewModel  @Inject constructor(
+                  private val parametreService: IParametreService,
+                  private val parametreRepository: ParametreRepository,
+                  @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+): BaseViewModelLast() {
 
     @Inject
     lateinit var customSharedPreferences: CustomSharedPreferences;
@@ -49,45 +49,47 @@ class ParametreKitapturViewModel  @Inject constructor(application: Application,
     }
 
     private fun initFromService(){
-        launch(Dispatchers.IO) {
-            kitapTurListeResourceEvent.postValue(BaseResourceEvent.Loading());
+        viewModelScope.launch {
+            kitapTurListeResourceEvent.value = BaseResourceEvent.Loading();
             val kitapTurListeResponse = serviceCall(
                 call = {
                     parametreService.getKitapTurListe()
-                });
+                },ioDispatcher);
+
             when(kitapTurListeResponse){
                 is BaseDataEvent.Success->{
-                    kitapTurListeResourceEvent.postValue(BaseResourceEvent.Success(kitapTurListeResponse.data!!));
+                    kitapTurListeResourceEvent.value = BaseResourceEvent.Success(kitapTurListeResponse.data!!);
                     storeInDatabse(kitapTurListeResponse.data!!);
                 }
                 is BaseDataEvent.Error->{
-                    kitapTurListeResourceEvent.postValue(BaseResourceEvent.Error(kitapTurListeResponse.errMessage));
+                    kitapTurListeResourceEvent.value = BaseResourceEvent.Error(kitapTurListeResponse.errMessage);
                 }
             }
         }
     }
 
     private fun initFromDatabase(){
-        launch(Dispatchers.IO) {
-            kitapTurListeResourceEvent.postValue(BaseResourceEvent.Loading());
+        viewModelScope.launch {
+            kitapTurListeResourceEvent.value = BaseResourceEvent.Loading();
             val kitapTurListeDBResponse = dbCall(
-                call = {
-                    parametreRepository.getKitapTurListe()
-                });
+                    call = {
+                        parametreRepository.getKitapTurListe()
+                    },ioDispatcher);
+
 
             when(kitapTurListeDBResponse){
                 is BaseDataEvent.Success->{
-                    kitapTurListeResourceEvent.postValue(BaseResourceEvent.Success(kitapTurListeDBResponse.data!!));
+                    kitapTurListeResourceEvent.value = BaseResourceEvent.Success(kitapTurListeDBResponse.data!!);
                 }
                 is BaseDataEvent.Error->{
-                    kitapTurListeResourceEvent.postValue(BaseResourceEvent.Error(kitapTurListeDBResponse.errMessage));
+                    kitapTurListeResourceEvent.value = BaseResourceEvent.Error(kitapTurListeDBResponse.errMessage)
                 }
             }
         }
     }
 
-    private fun storeInDatabse(kitapTurListe:List<KitapturModel>){
-        launch {
+    private suspend fun storeInDatabse(kitapTurListe:List<KitapturModel>){
+        withContext(ioDispatcher) {
             parametreRepository.deleteKitapTurListe();
             parametreRepository.kitapTurParametreKaydet(*kitapTurListe.toTypedArray());
             customSharedPreferences.putBooleanToSharedPreferences(PARAM_KITAPTUR_DB_KEY,true);
@@ -95,19 +97,21 @@ class ParametreKitapturViewModel  @Inject constructor(application: Application,
     }
 
     fun deleteKitapturParametre(jsonStr:String){
-        launch(Dispatchers.IO) {
-            kitapTurSilResourceEvent.postValue(BaseResourceEvent.Loading());
+        viewModelScope.launch {
+            kitapTurSilResourceEvent.value = BaseResourceEvent.Loading();
             val kitapTurParametreSilmeResponse = serviceCall(
-                call = {
-                    parametreService.kitapTurKaydet(jsonStr)
-                });
+                    call = {
+                        parametreService.kitapTurKaydet(jsonStr)
+                    },
+                    ioDispatcher);
+
             when(kitapTurParametreSilmeResponse){
                 is BaseDataEvent.Success->{
                     customSharedPreferences.removeFromSharedPreferences(PARAM_KITAPTUR_DB_KEY);
-                    kitapTurSilResourceEvent.postValue(BaseResourceEvent.Success(kitapTurParametreSilmeResponse.data!!));
+                    kitapTurSilResourceEvent.value = BaseResourceEvent.Success(kitapTurParametreSilmeResponse.data!!);
                 }
                 is BaseDataEvent.Error->{
-                    kitapTurSilResourceEvent.postValue(BaseResourceEvent.Error(kitapTurParametreSilmeResponse.errMessage));
+                    kitapTurSilResourceEvent.value = BaseResourceEvent.Error(kitapTurParametreSilmeResponse.errMessage);
                 }
             }
         }

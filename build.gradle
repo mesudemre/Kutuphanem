@@ -18,6 +18,8 @@ buildscript {
     ext.composeVM_version='1.0.0-alpha07'
     ext.composeMaterial_version='1.0.1'
     ext.google_service_version='4.3.10'
+    ext.PROD_API_URL=''
+    ext.DEV_ALPHA_BETA_API_URL='http://192.168.1.106:8080/KutuphaneSistemiWS/'
 
     repositories {
         google()

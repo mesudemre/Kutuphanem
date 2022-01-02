@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import com.mesutemre.kutuphanem.customcomponents.CurvedBottomNavigationView
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
@@ -74,6 +74,6 @@ class MainActivity : AppCompatActivity() {
                 navBottomMenu.showComponent();
             }
         }
-        NavigationUI.setupWithNavController(navBottomMenu,navHostFragment.navController);
+        setupWithNavController(navBottomMenu,navHostFragment.navController);
     }
 }

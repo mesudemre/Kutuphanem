@@ -2,7 +2,6 @@ package com.mesutemre.kutuphanem.interceptors
 
 import android.content.Context
 import android.net.ConnectivityManager
-import android.util.Log
 import com.mesutemre.kutuphanem.R
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -21,7 +20,6 @@ class NetworkConnectionInterceptor(context: Context) : Interceptor {
         if (!isConnected)
             throw NoConnectionException()
         val builder: Request.Builder = chain.request().newBuilder();
-        Log.d("METHOD",chain.request().method()+" | "+chain.request().url().toString());
         return chain.proceed(builder.build())
     }
 

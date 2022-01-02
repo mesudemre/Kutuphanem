@@ -31,8 +31,25 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            debuggable false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField 'String', 'API_URL', "\"${PROD_API_URL}\""
+        }
+
+        debug {
+            buildConfigField 'String', 'API_URL', "\"${DEV_ALPHA_BETA_API_URL}\""
+            debuggable true
+        }
+
+        alpha {
+            buildConfigField 'String', 'API_URL', "\"${DEV_ALPHA_BETA_API_URL}\""
+            debuggable true
+        }
+
+        beta {
+            buildConfigField 'String', 'API_URL', "\"${DEV_ALPHA_BETA_API_URL}\""
+            debuggable true
         }
     }
     compileOptions {

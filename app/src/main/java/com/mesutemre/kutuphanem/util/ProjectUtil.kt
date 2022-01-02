@@ -32,7 +32,6 @@ import java.util.*
 
 const val APP_TOKEN_KEY:String = "APP_TOKEN";
 const val KULLANICI_ADI_KEY:String = "KULLANICI_ADI";
-const val API_URL:String = "http://192.168.1.106:8080/KutuphaneSistemiWS/";
 const val KUTUPHANEM_DB_NAME = "kutuphanem";
 const val PARAM_YAYINEVI_DB_KEY:String = "PARAM_YAYINEVI";
 const val PARAM_KITAPTUR_DB_KEY:String = "PARAM_KITAPTUR";

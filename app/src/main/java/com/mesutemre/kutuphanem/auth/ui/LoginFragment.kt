@@ -1,4 +1,4 @@
-package com.mesutemre.kutuphanem.fragments
+package com.mesutemre.kutuphanem.auth.ui
 
 import android.os.Build
 import android.os.Bundle
@@ -18,7 +18,6 @@ import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
 import com.mesutemre.kutuphanem.model.AccountCredentials
 import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.util.*
-import com.mesutemre.kutuphanem.viewmodels.LoginFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 /**

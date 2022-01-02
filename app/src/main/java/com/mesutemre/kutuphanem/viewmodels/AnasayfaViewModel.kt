@@ -59,7 +59,6 @@ class AnasayfaViewModel @Inject constructor(application: Application,
             val jsonObj: JSONObject = JSONObject();
             jsonObj.put("kitapAd",searchText);
             jsonObj.put("yazarAd",searchText);
-
             val kitapListeResponse = serviceCall(
                 call = {
                     kitapService.getTumKitapListe(jsonObj.toString());
