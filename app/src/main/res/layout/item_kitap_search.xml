@@ -4,7 +4,7 @@
     <data>
         <variable
             name="kitapSearch"
-            type="com.mesutemre.kutuphanem.model.KitapModel" />
+            type="com.mesutemre.kutuphanem.kitap.liste.model.KitapModel" />
     </data>
 
     <LinearLayout

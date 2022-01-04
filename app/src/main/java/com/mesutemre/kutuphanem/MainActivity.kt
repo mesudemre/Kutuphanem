@@ -8,9 +8,9 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.google.android.material.bottomnavigation.LabelVisibilityMode
-import com.mesutemre.kutuphanem.customcomponents.CurvedBottomNavigationView
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.WRITE_EXTERNAL_STORAGE_REQUEST_CODE
+import com.mesutemre.kutuphanem.util.customcomponents.CurvedBottomNavigationView
 import com.mesutemre.kutuphanem.util.hideComponent
 import com.mesutemre.kutuphanem.util.showComponent
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,7 +53,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpNavigation(){
         navHostFragment = supportFragmentManager.findFragmentById(R.id.bottomFragmentId) as NavHostFragment;
-        val navController = navHostFragment.navController
         navHostFragment.navController.addOnDestinationChangedListener { controller, destination, arguments ->
             if(destination.id in arrayOf(
                     R.id.parametreEklemeFragment,

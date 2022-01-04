@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/anasayfaFragment"
         tools:layout="@layout/anasayfa_fragment"
-        android:name="com.mesutemre.kutuphanem.fragments.AnasayfaFragment"
+        android:name="com.mesutemre.kutuphanem.anasayfa.ui.AnasayfaFragment"
         android:label="AnasayfaFragment" >
         <action
             android:id="@+id/action_anasayfaFragment_to_kitapListeFragment"
@@ -20,7 +20,7 @@
     <fragment
         android:id="@+id/kitapListeFragment"
         tools:layout="@layout/kitap_liste_fragment"
-        android:name="com.mesutemre.kutuphanem.fragments.KitapListeFragment"
+        android:name="com.mesutemre.kutuphanem.kitap.liste.ui.KitapListeFragment"
         android:label="KitapListeFragment" >
         <action
             android:id="@+id/action_kitapListeFragment_to_parametreFragment"
@@ -32,7 +32,7 @@
     <fragment
         android:id="@+id/parametreFragment"
         tools:layout="@layout/parametre_fragment"
-        android:name="com.mesutemre.kutuphanem.fragments.ParametreFragment"
+        android:name="com.mesutemre.kutuphanem.parametre.ui.ParametreFragment"
         android:label="ParametreFragment" >
         <action
             android:id="@+id/action_parametreFragment_to_profilIslemFragment"
@@ -44,7 +44,7 @@
     <fragment
         android:id="@+id/profilIslemFragment"
         tools:layout="@layout/profil_islem_fragment"
-        android:name="com.mesutemre.kutuphanem.fragments.ProfilIslemFragment"
+        android:name="com.mesutemre.kutuphanem.auth.profil.ui.ProfilIslemFragment"
         android:label="ProfilIslemFragment" >
         <action
             android:id="@+id/action_profilIslemFragment_to_loginFragment"
@@ -65,7 +65,7 @@
     </fragment>
     <fragment
         android:id="@+id/parametreEklemeFragment"
-        android:name="com.mesutemre.kutuphanem.fragments.ParametreEklemeFragment"
+        android:name="com.mesutemre.kutuphanem.parametre.ekleme.ui.ParametreEklemeFragment"
         android:label="ParametreEklemeFragment" >
         <argument
             android:name="paramTur"
@@ -77,22 +77,22 @@
     </fragment>
     <fragment
         android:id="@+id/kitapEklemeFragment"
-        android:name="com.mesutemre.kutuphanem.fragments.KitapEklemeFragment"
+        android:name="com.mesutemre.kutuphanem.kitap.ekleme.ui.KitapEklemeFragment"
         android:label="KitapEklemeFragment" />
     <fragment
         android:id="@+id/kitapDetayFragment"
-        android:name="com.mesutemre.kutuphanem.fragments.KitapDetayFragment"
+        android:name="com.mesutemre.kutuphanem.kitap.detay.ui.KitapDetayFragment"
         android:label="KitapDetayFragment">
         <argument
             android:name="kitapObj"
-            app:argType="com.mesutemre.kutuphanem.model.KitapModel" />
+            app:argType="com.mesutemre.kutuphanem.kitap.liste.model.KitapModel" />
         <argument
             android:name="fromArsiv"
             app:argType="boolean"/>
     </fragment>
     <fragment
         android:id="@+id/kitapDetayDeepFragment"
-        android:name="com.mesutemre.kutuphanem.fragments.KitapDetayDeepFragment"
+        android:name="com.mesutemre.kutuphanem.kitap.detay.ui.KitapDetayDeepFragment"
         android:label="KitapDetayDeepFragment" >
         <action
             android:id="@+id/action_kitapDetayDeepFragment_to_anasayfaFragment"
@@ -104,7 +104,7 @@
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.mesutemre.kutuphanem.fragments.SplashFragment"
+        android:name="com.mesutemre.kutuphanem.anasayfa.ui.SplashFragment"
         android:label="SplashFragment" >
         <action
             android:id="@+id/action_splashFragment_to_anasayfaFragment"
@@ -116,7 +116,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.mesutemre.kutuphanem.auth.ui.LoginFragment"
+        android:name="com.mesutemre.kutuphanem.auth.login.ui.LoginFragment"
         android:label="LoginFragment" >
         <action
             android:id="@+id/action_loginFragment_to_anasayfaFragment"
@@ -124,35 +124,35 @@
     </fragment>
     <fragment
         android:id="@+id/profilIslemAdSoyadEpostaFragment"
-        android:name="com.mesutemre.kutuphanem.fragments.ProfilIslemAdSoyadEpostaFragment"
+        android:name="com.mesutemre.kutuphanem.auth.profil.ui.ProfilIslemAdSoyadEpostaFragment"
         android:label="ProfilIslemAdSoyadEpostaFragment">
         <argument
             android:name="kullaniciObj"
-            app:argType="com.mesutemre.kutuphanem.model.Kullanici" />
+            app:argType="com.mesutemre.kutuphanem.auth.profil.model.Kullanici" />
     </fragment>
     <fragment
         android:id="@+id/profilIslemDogumTarCinsiyetFragment"
-        android:name="com.mesutemre.kutuphanem.fragments.ProfilIslemDogumTarCinsiyetFragment"
+        android:name="com.mesutemre.kutuphanem.auth.profil.ui.ProfilIslemDogumTarCinsiyetFragment"
         android:label="ProfilIslemDogumTarCinsiyetFragment">
         <argument
             android:name="kullaniciObj"
-            app:argType="com.mesutemre.kutuphanem.model.Kullanici" />
+            app:argType="com.mesutemre.kutuphanem.auth.profil.model.Kullanici" />
     </fragment>
     <fragment
         android:id="@+id/profilIslemIlgiAlanlarimFragment"
-        android:name="com.mesutemre.kutuphanem.fragments.ProfilIslemIlgiAlanlarimFragment"
+        android:name="com.mesutemre.kutuphanem.auth.profil.ui.ProfilIslemIlgiAlanlarimFragment"
         android:label="ProfilIslemIlgiAlanlarimFragment">
         <argument
             android:name="kullaniciObj"
-            app:argType="com.mesutemre.kutuphanem.model.Kullanici" />
+            app:argType="com.mesutemre.kutuphanem.auth.profil.model.Kullanici" />
     </fragment>
     <fragment
         android:id="@+id/profilIslemIletisiTercihlerimFragment"
-        android:name="com.mesutemre.kutuphanem.fragments.ProfilIslemIletisimTercihlerimFragment"
+        android:name="com.mesutemre.kutuphanem.auth.profil.ui.ProfilIslemIletisimTercihlerimFragment"
         android:label="ProfilIslemIletisiTercihlerimFragment">
         <argument
             android:name="kullaniciObj"
-            app:argType="com.mesutemre.kutuphanem.model.Kullanici" />
+            app:argType="com.mesutemre.kutuphanem.auth.profil.model.Kullanici" />
     </fragment>
 
 

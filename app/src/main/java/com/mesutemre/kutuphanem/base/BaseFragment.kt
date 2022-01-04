@@ -67,5 +67,4 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
     open fun onBackPressed() {
         requireActivity().onBackPressed();
     }
-
 }

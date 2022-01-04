@@ -3,11 +3,10 @@ package com.mesutemre.kutuphanem.di
 import android.content.Context
 import com.mesutemre.kutuphanem.BuildConfig
 import com.mesutemre.kutuphanem.interceptors.HeaderInterceptor
-import com.mesutemre.kutuphanem.interceptors.HttpLoggingInterceptor
 import com.mesutemre.kutuphanem.interceptors.NetworkConnectionInterceptor
-import com.mesutemre.kutuphanem.service.IKitapService
-import com.mesutemre.kutuphanem.service.IParametreService
-import com.mesutemre.kutuphanem.service.KullaniciService
+import com.mesutemre.kutuphanem.kitap.service.IKitapService
+import com.mesutemre.kutuphanem.parametre.service.IParametreService
+import com.mesutemre.kutuphanem.auth.service.KullaniciService
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import dagger.Module
 import dagger.Provides
@@ -15,6 +14,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -28,6 +28,15 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class KutuphanemNetworkModule {
+
+    private val loggingInterceptor = run {
+        val httpLoggingInterceptor = HttpLoggingInterceptor()
+        httpLoggingInterceptor.apply {
+            if (BuildConfig.DEBUG) {
+                httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+            }
+        }
+    }
 
     @Singleton
     @Provides
@@ -48,7 +57,7 @@ class KutuphanemNetworkModule {
         return OkHttpClient.Builder()
             .addInterceptor(HeaderInterceptor(customSharedPreferences))
             .addInterceptor(NetworkConnectionInterceptor(context))
-            .addInterceptor(HttpLoggingInterceptor())
+            .addInterceptor(loggingInterceptor)
             .build();
     }
 

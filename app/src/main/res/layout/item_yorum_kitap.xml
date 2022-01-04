@@ -6,10 +6,10 @@
         <import type="android.view.View"/>
         <variable
             name="yorum"
-            type="com.mesutemre.kutuphanem.model.KitapYorumModel" />
+            type="com.mesutemre.kutuphanem.kitap.yorum.model.KitapYorumModel" />
         <variable
             name="listener"
-            type="com.mesutemre.kutuphanem.listener.KitapYorumClickListener" />
+            type="com.mesutemre.kutuphanem.kitap.yorum.listener.KitapYorumClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

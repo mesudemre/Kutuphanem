@@ -8,10 +8,10 @@
 
         <variable
             name="selectItem"
-            type="com.mesutemre.kutuphanem.model.SelectItemModel" />
+            type="com.mesutemre.kutuphanem.util.customcomponents.selection.model.SelectItemModel" />
         <variable
             name="onSelectItem"
-            type="Function1&lt;com.mesutemre.kutuphanem.model.SelectItemModel, Unit>"/>
+            type="Function1&lt;com.mesutemre.kutuphanem.util.customcomponents.selection.model.SelectItemModel, Unit>"/>
     </data>
 
     <com.google.android.material.card.MaterialCardView

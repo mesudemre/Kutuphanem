@@ -88,31 +88,31 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.mesutemre.kutuphanem.customcomponents.CustomCardItem
+            <com.mesutemre.kutuphanem.util.customcomponents.CustomCardItem
                 android:id="@+id/adSoyadEpostaCardId"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:custom_card_title="@string/profilGuncellemeAdSoyadBilgiLabel" />
 
-            <com.mesutemre.kutuphanem.customcomponents.CustomCardItem
+            <com.mesutemre.kutuphanem.util.customcomponents.CustomCardItem
                 android:id="@+id/dogumTarCinsiyetCardId"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:custom_card_title="@string/profilGuncellemeCinsiyetDogumTarLabel" />
 
-            <com.mesutemre.kutuphanem.customcomponents.CustomCardItem
+            <com.mesutemre.kutuphanem.util.customcomponents.CustomCardItem
                 android:id="@+id/ilgiAlanlarimCardId"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:custom_card_title="@string/profilGuncellemeIlgiAlanlariLabel" />
 
-            <com.mesutemre.kutuphanem.customcomponents.CustomCardItem
+            <com.mesutemre.kutuphanem.util.customcomponents.CustomCardItem
                 android:id="@+id/uygulamaTercihlerimCardId"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:custom_card_title="@string/profilGuncellemeTercihlerLabel" />
 
-            <com.mesutemre.kutuphanem.customcomponents.CustomCardItem
+            <com.mesutemre.kutuphanem.util.customcomponents.CustomCardItem
                 android:id="@+id/cikisCardId"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"

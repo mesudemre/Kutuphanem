@@ -167,4 +167,6 @@
 
     <string name="kitapSelectionTurLabel">Kitap Türü Seçimi</string>
     <string name="kitapSelectionYayineviLabel">Yayınevi Seçimi</string>
+
+    <string name="pleaseSearch">Ara...</string>
 </resources>

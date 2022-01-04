@@ -29,7 +29,7 @@
         app:srcCompat="@drawable/ic_baseline_add_24"
         app:tint="@color/white" />
 
-    <com.mesutemre.kutuphanem.customcomponents.CurvedBottomNavigationView
+    <com.mesutemre.kutuphanem.util.customcomponents.CurvedBottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,6 +38,6 @@
         app:itemTextAppearanceInactive="@style/BottomNavigationItemInActive"
         app:menu="@menu/bottom_nav_menu">
 
-    </com.mesutemre.kutuphanem.customcomponents.CurvedBottomNavigationView>
+    </com.mesutemre.kutuphanem.util.customcomponents.CurvedBottomNavigationView>
 
 </RelativeLayout>

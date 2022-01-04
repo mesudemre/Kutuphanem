@@ -8,7 +8,7 @@
             type="java.lang.String" />
         <variable
             name="listener"
-            type="com.mesutemre.kutuphanem.listener.KitapYorumHeaderClickListener" />
+            type="com.mesutemre.kutuphanem.kitap.yorum.listener.KitapYorumHeaderClickListener" />
     </data>
 
     <LinearLayout
