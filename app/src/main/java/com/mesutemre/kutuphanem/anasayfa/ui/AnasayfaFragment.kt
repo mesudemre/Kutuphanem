@@ -7,11 +7,11 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.progressindicator.CircularDrawingDelegate
@@ -24,14 +24,16 @@ import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.anasayfa.adapter.DashKategoriAdapter
 import com.mesutemre.kutuphanem.anasayfa.adapter.KitapSearchResultAdapter
 import com.mesutemre.kutuphanem.anasayfa.adapter.TanitimTabViewPagerAdapter
+import com.mesutemre.kutuphanem.anasayfa.ui.dialog.CloseApplicationDialogFragment
 import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.databinding.AnasayfaFragmentBinding
-import com.mesutemre.kutuphanem.anasayfa.ui.dialog.CloseApplicationDialogFragment
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.hideComponents
 import com.mesutemre.kutuphanem.util.showComponent
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -58,8 +60,20 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
     override fun onCreateFragment(savedInstanceState: Bundle?) {
     }
 
-    override fun onCreateViewFragment(view: View) {
-        super.onCreateViewFragment(view);
+    override fun onStartFragment() {
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                CloseApplicationDialogFragment(parentFragment!!).show(requireFragmentManager(),null);
+            }
+        });
+        viewLifecycleOwner.lifecycleScope.launch {
+            async { prepareSearchProperties() }
+            async { prepareAnasayfaDashListe() }
+            async { prepareTanitimPageAdapter() }
+        }
+    }
+
+    private fun prepareSearchProperties() {
         kitapSearchResultAdapter = KitapSearchResultAdapter(requireActivity(),R.layout.item_kitap_search, arrayListOf());
         binding.searchInputEditText.threshold = 2;
         binding.searchInputEditText.setAdapter(kitapSearchResultAdapter);
@@ -98,15 +112,9 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
                 return false
             }
         });
-
-        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true){
-            override fun handleOnBackPressed() {
-                CloseApplicationDialogFragment(parentFragment!!).show(requireFragmentManager(),null);
-            }
-        });
     }
 
-    override fun onStartFragment() {
+    private fun prepareAnasayfaDashListe() {
         dashKategoriAdapter = DashKategoriAdapter(arrayListOf())
 
         viewModel.getAnasayfaDashListe()
@@ -117,7 +125,9 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
         binding.dashKategoriRecyclerView.adapter = dashKategoriAdapter;
 
         observeLiveData()
+    }
 
+    private fun prepareTanitimPageAdapter() {
         tanitimPagerAdapter = TanitimTabViewPagerAdapter(this.requireActivity())
         binding.tanitimViewPager.adapter = tanitimPagerAdapter
         TabLayoutMediator(binding.tanitimTabLayout,binding.tanitimViewPager){tab,position->

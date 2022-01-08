@@ -14,7 +14,7 @@ import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.databinding.LoginFragmentBinding
-import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
+import com.mesutemre.kutuphanem.util.listener.TextInputErrorClearListener
 import com.mesutemre.kutuphanem.auth.login.model.AccountCredentials
 import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.util.*

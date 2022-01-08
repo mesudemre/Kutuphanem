@@ -24,7 +24,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
+import com.mesutemre.kutuphanem.util.listener.TextInputErrorClearListener
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*

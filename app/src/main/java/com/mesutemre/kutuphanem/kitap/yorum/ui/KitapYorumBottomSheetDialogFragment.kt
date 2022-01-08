@@ -12,19 +12,21 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.mesutemre.kutuphanem.R
+import com.mesutemre.kutuphanem.auth.profil.model.Kullanici
+import com.mesutemre.kutuphanem.base.BaseResourceEvent
+import com.mesutemre.kutuphanem.databinding.KitapYorumBottomSheetDialogBinding
+import com.mesutemre.kutuphanem.kitap.detay.ui.KitapDetayViewModel
+import com.mesutemre.kutuphanem.kitap.liste.model.KitapModel
 import com.mesutemre.kutuphanem.kitap.yorum.adapter.KitapYorumListeAdapter
 import com.mesutemre.kutuphanem.kitap.yorum.adapter.KitapYorumListeHeaderAdapter
-import com.mesutemre.kutuphanem.auth.profil.model.Kullanici
-import com.mesutemre.kutuphanem.databinding.KitapYorumBottomSheetDialogBinding
-import com.mesutemre.kutuphanem.kitap.liste.model.KitapModel
-import com.mesutemre.kutuphanem.model.*
-import com.mesutemre.kutuphanem.util.setDisplayMetricHeight
-import com.mesutemre.kutuphanem.util.showSnackBar
-import com.mesutemre.kutuphanem.kitap.detay.ui.KitapDetayViewModel
 import com.mesutemre.kutuphanem.kitap.yorum.model.KitapPuanModel
 import com.mesutemre.kutuphanem.kitap.yorum.model.KitapYorumModel
+import com.mesutemre.kutuphanem.model.ERROR
+import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.util.hideComponent
+import com.mesutemre.kutuphanem.util.setDisplayMetricHeight
 import com.mesutemre.kutuphanem.util.showComponent
+import com.mesutemre.kutuphanem.util.showSnackBar
 
 /**
  * @Author: mesutemre.celenk
@@ -86,36 +88,36 @@ class KitapYorumBottomSheetDialogFragment(
 
     private fun observeKitapYorumListe() {
         viewModel.kitapYorumListe.observe(viewLifecycleOwner, Observer {
-            if (it.hasBeenHandled) {
-                binding.kybYorumListeProgressBar.showComponent();
-
-                binding.kybYorumlarRecyclerView.layoutManager = LinearLayoutManager(context);
-                yorumListeHeaderAdapter = KitapYorumListeHeaderAdapter(
-                    kullanici.resim,
-                    ::kitapYorumKaydet,
-                    ::kitapPuanKaydet
-                );
-
-                if (it.hasBeenError) {
+            when(it){
+                is BaseResourceEvent.Loading->{
+                    binding.kybYorumListeProgressBar.showComponent();
+                }
+                is BaseResourceEvent.Error->{
                     binding.kybYorumListeProgressBar.hideComponent();
                     yorumListeAdapter = KitapYorumListeAdapter(
-                        it.peekContent(),
+                        it.data!!,
                         context?.getString(R.string.kitapYorumListeHata)
                     );
-                } else {
-                    if (it.peekContent().isEmpty()) {
+                }
+                is BaseResourceEvent.Success->{
+                    binding.kybYorumListeProgressBar.hideComponent();
+                    binding.kybYorumlarRecyclerView.layoutManager = LinearLayoutManager(context);
+                    yorumListeHeaderAdapter = KitapYorumListeHeaderAdapter(
+                        kullanici.resim,
+                        ::kitapYorumKaydet,
+                        ::kitapPuanKaydet
+                    );
+                    if(it.data != null && it.data.isEmpty()) {
                         yorumListeAdapter = KitapYorumListeAdapter(
-                            it.peekContent(),
+                            it.data!!,
                             context?.getString(R.string.kitapYorumListeBos)
                         );
-                    } else {
-                        yorumListeAdapter = KitapYorumListeAdapter(it.peekContent(), null);
+                    }else {
+                        yorumListeAdapter = KitapYorumListeAdapter(it.data!!, null);
                     }
-                    binding.kybYorumListeProgressBar.hideComponent();
+                    concatYorumAdapter = ConcatAdapter(yorumListeHeaderAdapter, yorumListeAdapter);
+                    binding.kybYorumlarRecyclerView.adapter = concatYorumAdapter;
                 }
-                concatYorumAdapter = ConcatAdapter(yorumListeHeaderAdapter, yorumListeAdapter);
-                binding.kybYorumlarRecyclerView.adapter = concatYorumAdapter;
-                it.hasBeenHandled = false;
             }
         });
     }
@@ -137,32 +139,28 @@ class KitapYorumBottomSheetDialogFragment(
 
     private fun observeKitapYorumModel() {
         viewModel.kitapYorumKayit.observe(viewLifecycleOwner, Observer {
-            if (it.hasBeenHandled) {
-
-                val response: ResponseStatusModel = it.peekContent();
-                if (it.hasBeenError) {
-                    showSnackBar(binding.kybRootCordinator, response.statusMessage, ERROR);
-                } else {
-                    showSnackBar(binding.kybRootCordinator, response.statusMessage, SUCCESS);
+            when(it){
+                is BaseResourceEvent.Error->{
+                    showSnackBar(binding.kybRootCordinator, it.message!!, ERROR);
                 }
-                it.hasBeenHandled = false;
-                viewModel.getKitapYorumListe(kitap.kitapId!!);
-                observeKitapYorumListe();
+                is BaseResourceEvent.Success->{
+                    showSnackBar(binding.kybRootCordinator, it.data!!.statusMessage, SUCCESS);
+                    viewModel.getKitapYorumListe(kitap.kitapId!!);
+                    observeKitapYorumListe();
+                }
             }
         });
     }
 
     private fun observeKitapPuanKayit() {
         viewModel.kitapPuanKayit.observe(viewLifecycleOwner, Observer {
-            if (it.hasBeenHandled) {
-
-                val response: ResponseStatusModel = it.peekContent();
-                if (it.hasBeenError) {
-                    showSnackBar(binding.kybRootCordinator, response.statusMessage, ERROR);
-                } else {
-                    showSnackBar(binding.kybRootCordinator, response.statusMessage, SUCCESS);
+            when(it){
+                is BaseResourceEvent.Error->{
+                    showSnackBar(binding.kybRootCordinator, it.message!!, ERROR);
                 }
-                it.hasBeenHandled = false;
+                is BaseResourceEvent.Success->{
+                    showSnackBar(binding.kybRootCordinator, it.data!!.statusMessage, SUCCESS);
+                }
             }
         });
     }

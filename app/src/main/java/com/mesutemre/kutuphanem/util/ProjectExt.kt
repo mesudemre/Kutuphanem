@@ -20,8 +20,6 @@ import android.widget.TextView
 import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
-import androidx.navigation.NavDirections
-import androidx.navigation.Navigation
 import com.google.android.material.snackbar.Snackbar
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.kitap.liste.model.KitapModel
@@ -295,6 +293,22 @@ fun downloadKitap(kitap: KitapModel, requireContext: Context, isArchive:Boolean)
         return imageUri;
     }
     return Uri.EMPTY;
+}
+
+fun saveFile(kitap: KitapModel, requireContext: Context, isArchive:Boolean,arr:ByteArray): File? {
+    val kitapResim =  BitmapFactory.decodeByteArray(arr,0,arr.size);
+    val bytes: ByteArrayOutputStream = ByteArrayOutputStream();
+    var photoFile:File? = null;
+    if (kitapResim != null) {
+        kitapResim?.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+        var folderName: String = "Kütüphanem";
+        var resimAd: String = kitap.kitapAd + "_" + kitap.kitapId
+        if (isArchive) {
+            resimAd = kitap.kitapId.toString();
+        }
+        photoFile = bitmapToFile(kitapResim!!, resimAd + ".png", requireContext, folderName);
+    }
+    return photoFile;
 }
 
 inline fun <reified T: Activity>

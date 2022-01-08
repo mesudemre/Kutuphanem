@@ -1,35 +1,31 @@
 package com.mesutemre.kutuphanem.auth.profil.ui
 
-import android.app.Application
 import android.content.Context
 import android.net.Uri
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
+import com.mesutemre.kutuphanem.R
+import com.mesutemre.kutuphanem.auth.dao.KullaniciDao
+import com.mesutemre.kutuphanem.auth.profil.model.Kullanici
+import com.mesutemre.kutuphanem.auth.profil.model.KullaniciKitapTurModel
+import com.mesutemre.kutuphanem.auth.service.KullaniciService
 import com.mesutemre.kutuphanem.base.BaseDataEvent
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.base.BaseSingleLiveEvent
-import com.mesutemre.kutuphanem.base.BaseViewModel
-import com.mesutemre.kutuphanem.auth.dao.KullaniciDao
-import com.mesutemre.kutuphanem.parametre.kitaptur.model.KitapturModel
-import com.mesutemre.kutuphanem.auth.profil.model.Kullanici
-import com.mesutemre.kutuphanem.auth.profil.model.KullaniciKitapTurModel
+import com.mesutemre.kutuphanem.base.BaseViewModelLast
+import com.mesutemre.kutuphanem.di.IoDispatcher
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
-import com.mesutemre.kutuphanem.parametre.dao.ParametreRepository
-import com.mesutemre.kutuphanem.parametre.service.IParametreService
-import com.mesutemre.kutuphanem.auth.service.KullaniciService
+import com.mesutemre.kutuphanem.parametre.kitaptur.model.KitapturModel
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.KULLANICI_ADI_KEY
 import com.mesutemre.kutuphanem.util.KULLANICI_DB_MEVCUT
 import com.mesutemre.kutuphanem.util.getPath
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableSingleObserver
-import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.Dispatchers
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -37,92 +33,97 @@ import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfilIslemViewModel @Inject constructor(application: Application,
+class ProfilIslemViewModel @Inject constructor(@IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+                                               @ApplicationContext private val appContext: Context,
                                                private val kullaniciService: KullaniciService,
                                                private val kullaniciDao: KullaniciDao,
-                                               private val parametreService: IParametreService,
-                                               private val parametreRepository: ParametreRepository
-): BaseViewModel(application) {
+): BaseViewModelLast() {
 
     @Inject
     lateinit var customSharedPreferences: CustomSharedPreferences;
 
-    override val disposible: CompositeDisposable = CompositeDisposable();
-
     val kullaniciBilgiResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<Kullanici>>();
-
-    val kullaniciGuncelleLoading = MutableLiveData<Boolean>();
-    val kullaniciGuncelleSonuc = MutableLiveData<ResponseStatusModel>();
-    val kullaniciGuncelleError = MutableLiveData<Boolean>();
-
-    val kullaniciIlgiAlanlar = MutableLiveData<List<KitapturModel>>();
+    val kullaniciIlgiAlanlar = BaseSingleLiveEvent<BaseResourceEvent<List<KitapturModel>>>();
+    val kullaniciBilgiGuncelleResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<ResponseStatusModel>>();
 
     fun getKullaniciInfo(){ //Async şekilde türler ve kullanıcı biller alınacak...
-        val kullaniciDbMevcut:Boolean = customSharedPreferences.getBooleanFromSharedPreferences(KULLANICI_DB_MEVCUT);
-        if(kullaniciDbMevcut){
-            val username:String = customSharedPreferences.getStringFromSharedPreferences(KULLANICI_ADI_KEY);
-            getKullaniciBilgilerDB(username);
-        }else{
-            getKullaniciBilgiFromAPI();
+        viewModelScope.launch {
+            val kullaniciDbMevcut:Boolean = customSharedPreferences.getBooleanFromSharedPreferences(KULLANICI_DB_MEVCUT);
+            if(kullaniciDbMevcut){
+                val username:String = customSharedPreferences.getStringFromSharedPreferences(KULLANICI_ADI_KEY);
+                getKullaniciBilgilerDB(username);
+            }else{
+                getKullaniciBilgiFromAPI();
+            }
         }
     }
 
-    private fun getKullaniciBilgilerDB(kullaniciAd:String){
-        launch(Dispatchers.IO){
-            kullaniciBilgiResourceEvent.postValue(BaseResourceEvent.Loading());
-            val user = kullaniciDao.getKullaniciBilgiByUsername(kullaniciAd);
-            if(user == null) {
-                kullaniciBilgiResourceEvent.postValue(BaseResourceEvent.Error("Kullanıcı bilgisi getirilemedi!"));
-            }else{
-                kullaniciBilgiResourceEvent.postValue(BaseResourceEvent.Success(user));
+    private suspend fun getKullaniciBilgilerDB(kullaniciAd:String){
+        kullaniciBilgiResourceEvent.value = BaseResourceEvent.Loading();
+        val userResponse = dbCall( call = {
+            kullaniciDao.getKullaniciBilgiByUsername(kullaniciAd)
+        },ioDispatcher);
+        when(userResponse){
+            is BaseDataEvent.Success->{
+                kullaniciBilgiResourceEvent.value = BaseResourceEvent.Success(userResponse.data!!);
+            }
+            is BaseDataEvent.Error->{
+                kullaniciBilgiResourceEvent.value = BaseResourceEvent.Error(appContext.resources.getString(R.string.profilGuncellemeSunucuHata));
             }
         }
     }
 
     fun getKullaniciIlgiAlanlarFromDB(kullaniciAd: String){
-        launch(Dispatchers.IO){
-            val kullaniciIlgiAlanListe = kullaniciDao.getKullaniciIlgiAlanListe(kullaniciAd);
-            var ilgiAlanListe = mutableListOf<KitapturModel>();
-            if(kullaniciIlgiAlanListe != null && kullaniciIlgiAlanListe.size>0){
-                for (ia in kullaniciIlgiAlanListe){
-                    ilgiAlanListe.add(KitapturModel(ia.aciklamaId,ia.aciklama));
-                }
-                kullaniciIlgiAlanlar.postValue(ilgiAlanListe);
-            }
-        }
-    }
-
-    private fun getKullaniciBilgiFromAPI(){
-        launch(Dispatchers.IO) {
-            kullaniciBilgiResourceEvent.postValue(BaseResourceEvent.Loading());
-            val kullaniciResponse = serviceCall(
-                call = {
-                    kullaniciService.getKullaniciBilgi()
-                });
-            when(kullaniciResponse){
+        viewModelScope.launch {
+            kullaniciIlgiAlanlar.value = BaseResourceEvent.Loading();
+            val kullaniciIlgiAlanlariResponse = dbCall( call = {
+                kullaniciDao.getKullaniciIlgiAlanListe(kullaniciAd)
+            },ioDispatcher);
+            when(kullaniciIlgiAlanlariResponse) {
                 is BaseDataEvent.Success->{
-                    kullaniciBilgiResourceEvent.postValue(BaseResourceEvent.Success(kullaniciResponse.data!!));
-                    async { writeUserToDB(kullaniciResponse.data!!); }
-                    async { writeIlgiAlanlarToDB(kullaniciResponse.data!!); }
+                    var ilgiAlanListe = mutableListOf<KitapturModel>();
+                    if(kullaniciIlgiAlanlariResponse.data != null && kullaniciIlgiAlanlariResponse.data.size>0){
+                        for (ia in kullaniciIlgiAlanlariResponse.data){
+                            ilgiAlanListe.add(KitapturModel(ia.aciklamaId,ia.aciklama));
+                        }
+                    }
+                    kullaniciIlgiAlanlar.value = BaseResourceEvent.Success(ilgiAlanListe);
                 }
                 is BaseDataEvent.Error->{
-                    kullaniciBilgiResourceEvent.postValue(BaseResourceEvent.Error(kullaniciResponse.errMessage));
+                    kullaniciIlgiAlanlar.value = BaseResourceEvent.Error(appContext.resources.getString(R.string.profilGuncellemeSunucuHata));
                 }
             }
         }
     }
 
+    private suspend fun getKullaniciBilgiFromAPI(){
+        kullaniciBilgiResourceEvent.value = BaseResourceEvent.Loading();
+        val kullaniciResponse = serviceCall(
+            call = {
+                kullaniciService.getKullaniciBilgi()
+            },ioDispatcher);
+        when(kullaniciResponse){
+            is BaseDataEvent.Success->{
+                kullaniciBilgiResourceEvent.value = BaseResourceEvent.Success(kullaniciResponse.data!!);
+                writeUserToDB(kullaniciResponse.data!!);
+                writeIlgiAlanlarToDB(kullaniciResponse.data!!);
+            }
+            is BaseDataEvent.Error->{
+                kullaniciBilgiResourceEvent.value = BaseResourceEvent.Error(kullaniciResponse.errMessage);
+            }
+        }
+    }
 
-    private fun writeUserToDB(kullanici: Kullanici):Unit{
-        launch(Dispatchers.IO){
+    private suspend fun writeUserToDB(kullanici: Kullanici):Unit{
+        withContext(ioDispatcher){
             customSharedPreferences.putBooleanToSharedPreferences(KULLANICI_DB_MEVCUT,true);
             kullaniciDao.kullaniciSil(kullanici.username);
             kullaniciDao.kullaniciKaydet(kullanici);
         }
     }
 
-    private fun writeIlgiAlanlarToDB(kullanici: Kullanici):Unit{
-        launch(Dispatchers.IO){
+    private suspend fun writeIlgiAlanlarToDB(kullanici: Kullanici):Unit{
+        withContext(ioDispatcher){
             kullaniciDao.kullaniciIlgiAlanSil(kullanici.username);
             val ilgiAlanListe = kullanici.ilgiAlanlari;
             if(ilgiAlanListe != null && ilgiAlanListe.size>0){
@@ -140,56 +141,56 @@ class ProfilIslemViewModel @Inject constructor(application: Application,
             async {kullaniciBilgiGuncelle(jsonStr)};
             async {
                 if(resimGuncellenecek){
-                    kullaniciResimGuncelle(selectedImageUri,username,context);
+                    kullaniciResimGuncelle(selectedImageUri,username);
                     Glide.get(context).clearMemory();
                 }};
             }
         }
 
     fun kullaniciBilgiGuncelle(jsonStr:String){
-            kullaniciGuncelleLoading.value = true;
-            disposible.add(
-                kullaniciService.kullaniciBilgiGuncelle(jsonStr)
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(object : DisposableSingleObserver<ResponseStatusModel>(){
-                        override fun onSuccess(response: ResponseStatusModel) {
-                            kullaniciGuncelleError.value = false;
-                            kullaniciGuncelleLoading.value = false;
-                            kullaniciGuncelleSonuc.value = response;
-                            customSharedPreferences.removeFromSharedPreferences(KULLANICI_DB_MEVCUT);
-                        }
-                        override fun onError(e: Throwable) {
-                            kullaniciGuncelleError.value = true;
-                            kullaniciGuncelleLoading.value = false;
-                        }
-                    }));
+        viewModelScope.launch {
+            kullaniciBilgiGuncelleResourceEvent.value = BaseResourceEvent.Loading();
+            val kullaniciBilgiGuncelleResponse = serviceCall(
+                call = {
+                    kullaniciService.kullaniciBilgiGuncelle(jsonStr)
+                },ioDispatcher);
+
+            when(kullaniciBilgiGuncelleResponse){
+                is BaseDataEvent.Success->{
+                    customSharedPreferences.removeFromSharedPreferences(KULLANICI_DB_MEVCUT);
+                    kullaniciBilgiGuncelleResourceEvent.value = BaseResourceEvent.Success(kullaniciBilgiGuncelleResponse.data!!);
+                }
+                is BaseDataEvent.Error->{
+                    kullaniciBilgiGuncelleResourceEvent.value = BaseResourceEvent.Error(kullaniciBilgiGuncelleResponse.errMessage);
+                }
+            }
+        }
     }
 
     fun kullaniciResimGuncelle(
         selectedImageUri: Uri,
-        username: String,
-        context: Context
+        username: String
     ){
-        kullaniciGuncelleLoading.value = true;
-        val usernameParam: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),username);
-        val originalFile: File =  org.apache.commons.io.FileUtils.getFile(getPath(context,selectedImageUri));
-        val fileParam:RequestBody = RequestBody.create("image/jpeg".toMediaTypeOrNull(),originalFile);
-        val file: MultipartBody.Part = MultipartBody.Part.createFormData("file",originalFile.name,fileParam);
-        disposible.add(
-            kullaniciService.kullaniciResimGuncelle(file,usernameParam)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<ResponseStatusModel>(){
-                    override fun onSuccess(response: ResponseStatusModel) {
-                        kullaniciGuncelleError.value = false;
-                        kullaniciGuncelleLoading.value = false;
-                        kullaniciGuncelleSonuc.value = response;
-                    }
-                    override fun onError(e: Throwable) {
-                        kullaniciGuncelleError.value = true;
-                        kullaniciGuncelleLoading.value = false;
-                    }
-                }));
+        viewModelScope.launch {
+            val usernameParam: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),username);
+            val originalFile: File =  org.apache.commons.io.FileUtils.getFile(getPath(appContext,selectedImageUri));
+            val fileParam:RequestBody = RequestBody.create("image/jpeg".toMediaTypeOrNull(),originalFile);
+            val file: MultipartBody.Part = MultipartBody.Part.createFormData("file",originalFile.name,fileParam);
+
+            kullaniciBilgiGuncelleResourceEvent.value = BaseResourceEvent.Loading();
+            val kullaniciResimGuncelleResponse = serviceCall(
+                call = {
+                    kullaniciService.kullaniciResimGuncelle(file,usernameParam)
+                },ioDispatcher);
+
+            when(kullaniciResimGuncelleResponse){
+                is BaseDataEvent.Success->{
+                    kullaniciBilgiGuncelleResourceEvent.value = BaseResourceEvent.Success(kullaniciResimGuncelleResponse.data!!);
+                }
+                is BaseDataEvent.Error->{
+                    kullaniciBilgiGuncelleResourceEvent.value = BaseResourceEvent.Error(kullaniciResimGuncelleResponse.errMessage);
+                }
+            }
+        }
     }
 }

@@ -1,30 +1,27 @@
 package com.mesutemre.kutuphanem.anasayfa.ui
 
-import android.app.Application
 import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.base.BaseDataEvent
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.base.BaseSingleLiveEvent
-import com.mesutemre.kutuphanem.base.BaseViewModel
+import com.mesutemre.kutuphanem.base.BaseViewModelLast
+import com.mesutemre.kutuphanem.di.IoDispatcher
 import com.mesutemre.kutuphanem.kitap.liste.model.KitapModel
-import com.mesutemre.kutuphanem.parametre.kitaptur.model.KitapturModel
 import com.mesutemre.kutuphanem.kitap.service.IKitapService
+import com.mesutemre.kutuphanem.parametre.kitaptur.model.KitapturModel
 import com.mesutemre.kutuphanem.parametre.service.IParametreService
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import javax.inject.Inject
 
 @HiltViewModel
-class AnasayfaViewModel @Inject constructor(application: Application,
+class AnasayfaViewModel @Inject constructor(@IoDispatcher private val ioDispatcher: CoroutineDispatcher,
                                             private val parametreService: IParametreService,
                                             private val kitapService: IKitapService
-): BaseViewModel(application) {
-
-    override val disposible: CompositeDisposable = CompositeDisposable();
+): BaseViewModelLast() {
 
     val dashKategoriListeResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<List<KitapturModel>>>();
     val kitapSearchResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<List<KitapModel>>>();
@@ -35,40 +32,39 @@ class AnasayfaViewModel @Inject constructor(application: Application,
         }
     }
 
-    private fun initDashKategoriListe(){
-        launch(Dispatchers.IO) {
-            dashKategoriListeResourceEvent.postValue(BaseResourceEvent.Loading());
-            val kitapTurListeResponse = serviceCall(
-                call = {
-                    parametreService.getKitapTurListe()
-                });
-            when(kitapTurListeResponse){
-                is BaseDataEvent.Success->{
-                    dashKategoriListeResourceEvent.postValue(BaseResourceEvent.Success(kitapTurListeResponse.data!!));
-                }
-                is BaseDataEvent.Error->{
-                    dashKategoriListeResourceEvent.postValue(BaseResourceEvent.Error(kitapTurListeResponse.errMessage));
-                }
+    private suspend fun initDashKategoriListe(){
+        dashKategoriListeResourceEvent.value = BaseResourceEvent.Loading();
+        val kitapTurListeResponse = serviceCall(
+            call = {
+                parametreService.getKitapTurListe()
+            },ioDispatcher);
+        when(kitapTurListeResponse){
+            is BaseDataEvent.Success->{
+                dashKategoriListeResourceEvent.value = BaseResourceEvent.Success(kitapTurListeResponse.data!!);
+            }
+            is BaseDataEvent.Error->{
+                dashKategoriListeResourceEvent.value = BaseResourceEvent.Error(kitapTurListeResponse.errMessage);
             }
         }
     }
 
     fun searchKitapYazar(searchText:String){
-        launch(Dispatchers.IO) {
-            kitapSearchResourceEvent.postValue(BaseResourceEvent.Loading());
+        viewModelScope.launch {
+            kitapSearchResourceEvent.value = BaseResourceEvent.Loading();
             val jsonObj: JSONObject = JSONObject();
             jsonObj.put("kitapAd",searchText);
             jsonObj.put("yazarAd",searchText);
             val kitapListeResponse = serviceCall(
                 call = {
                     kitapService.getTumKitapListe(jsonObj.toString());
-                });
+                },ioDispatcher);
+
             when(kitapListeResponse){
                 is BaseDataEvent.Success->{
-                    kitapSearchResourceEvent.postValue(BaseResourceEvent.Success(kitapListeResponse.data!!));
+                    kitapSearchResourceEvent.value = BaseResourceEvent.Success(kitapListeResponse.data!!);
                 }
                 is BaseDataEvent.Error->{
-                    kitapSearchResourceEvent.postValue(BaseResourceEvent.Error(kitapListeResponse.errMessage));
+                    kitapSearchResourceEvent.value = BaseResourceEvent.Error(kitapListeResponse.errMessage);
                 }
             }
         }

@@ -12,7 +12,7 @@ import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.databinding.ParametreEklemeFragmentBinding
-import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
+import com.mesutemre.kutuphanem.util.listener.TextInputErrorClearListener
 import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.util.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,7 +56,9 @@ class ParametreEklemeFragment: BaseFragment<ParametreEklemeFragmentBinding>() {
             viewModel.parametreEkle(tur,aciklama);
             observeLiveData(it);
         }
-        binding.textInputParametreAciklama.editText!!.addTextChangedListener(TextInputErrorClearListener(binding.textInputParametreAciklama));
+        binding.textInputParametreAciklama.editText!!.addTextChangedListener(
+            TextInputErrorClearListener(binding.textInputParametreAciklama)
+        );
     }
 
     private fun observeLiveData(view:View){

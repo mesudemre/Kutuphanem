@@ -6,6 +6,7 @@ import com.mesutemre.kutuphanem.kitap.yorum.model.YorumListeModel
 import io.reactivex.Single
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -25,15 +26,15 @@ interface IKitapService {
 
     @Headers("Content-Type: application/json")
     @POST("api/kitap/begen")
-    fun kitapBegen(@Body jsonStr:String):Single<ResponseStatusModel>;
+    suspend fun kitapBegen(@Body jsonStr:String):Response<ResponseStatusModel>;
 
     @Headers("Content-Type: application/json")
     @POST("api/kitap/begen/kaldir")
-    fun kitapBegenKaldir(@Body jsonStr:String):Single<ResponseStatusModel>;
+    suspend fun kitapBegenKaldir(@Body jsonStr:String):Response<ResponseStatusModel>;
 
     @Headers("Content-Type: application/json")
     @POST("api/kitap/nesne")
-    fun getKitapDetay(@Body jsonStr:String):Single<KitapModel>;
+    suspend fun getKitapDetay(@Body jsonStr:String):Response<KitapModel>;
 
     @Headers("Content-Type: application/json")
     @POST("api/kitap/begen/liste")
@@ -41,13 +42,17 @@ interface IKitapService {
 
     @Headers("Content-Type: application/json")
     @POST("api/kitap/yorum/kaydet")
-    fun kitapYorumKaydet(@Body jsonStr:String):Single<ResponseStatusModel>;
+    suspend fun kitapYorumKaydet(@Body jsonStr:String):Response<ResponseStatusModel>;
 
     @Headers("Content-Type: application/json")
     @GET("api/kitap/yorumlar/{kitapId}")
-    fun getKitapYorumListe(@Path("kitapId") kitapId:Int):Single<YorumListeModel>;
+    suspend fun getKitapYorumListe(@Path("kitapId") kitapId:Int):Response<YorumListeModel>;
 
     @Headers("Content-Type: application/json")
     @POST("api/kitap/puan/kaydet")
-    fun kitapPuanKaydet(@Body jsonStr: String):Single<ResponseStatusModel>;
+    suspend fun kitapPuanKaydet(@Body jsonStr: String):Response<ResponseStatusModel>;
+
+    @Streaming
+    @GET
+    suspend fun downloadKitapResim(@Url fileUrl:String):Response<ResponseBody>;
 }

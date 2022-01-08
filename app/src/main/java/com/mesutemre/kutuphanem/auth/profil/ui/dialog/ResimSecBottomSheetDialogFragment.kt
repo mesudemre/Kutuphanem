@@ -24,6 +24,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.util.*
+import com.mesutemre.kutuphanem.util.customcomponents.selection.model.SelectItemModel
 import kotlinx.android.synthetic.main.resim_sec_bottom_sheet_dialog_fragment.*
 import java.io.File
 import java.util.concurrent.ExecutorService
@@ -32,9 +33,8 @@ import java.util.concurrent.Executors
 typealias LumaListener = (luma: Double) -> Unit
 
 class ResimSecBottomSheetDialogFragment(
-    val profilImageView: ImageView,
-    val profilImageEnd:ImageView,
-    val ctx:Context
+    val ctx:Context,
+    val onSelectProfilePicture:(uri:Uri)->Unit
 ):BottomSheetDialogFragment() {
 
     private var kameraIzin:Int = 0;
@@ -95,8 +95,7 @@ class ResimSecBottomSheetDialogFragment(
         }
 
         removeImageLayoutId.setOnClickListener {
-            profilImageView.getCircleImageFromResource(R.drawable.ic_baseline_person_24,profilImageView);
-            profilImageEnd.getCircleImageFromResource(R.drawable.ic_baseline_person_24,profilImageEnd);
+            //profilImageView.getCircleImageFromResource(R.drawable.ic_baseline_person_24,profilImageView);
         }
 
         switchCameraImageId.setOnClickListener {
@@ -133,8 +132,8 @@ class ResimSecBottomSheetDialogFragment(
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     selectedImageUri = Uri.fromFile(photoFile);
-                    profilImageView.getCircleImageFromUri(selectedImageUri,profilImageView);
-                    profilImageEnd.getCircleImageFromUri(selectedImageUri,profilImageEnd);
+                    //profilImageView.getCircleImageFromUri(selectedImageUri,profilImageView);
+                    onSelectProfilePicture(selectedImageUri);
                     stopCameraViews();
                     cameraProvider?.unbindAll();
                     /*val fr = parentFragment as ProfilIslemFragment;
@@ -170,13 +169,10 @@ class ResimSecBottomSheetDialogFragment(
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == READ_EXTERNAL_STORAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK){
             val uri: Uri = data?.data!!;
-            profilImageView.getCircleImageFromUri(uri,profilImageView);
-            profilImageEnd.getCircleImageFromUri(uri,profilImageEnd);
+            onSelectProfilePicture(uri);
+            //profilImageView.getCircleImageFromUri(uri,profilImageView);
             selectedImageUri = uri;
         }
-        /*val fr = parentFragment as ProfilIslemFragment;
-        fr.setProfilResimChanged(true);
-        fr.setSelectedImageUri(selectedImageUri);*/
         dismiss();
     }
 

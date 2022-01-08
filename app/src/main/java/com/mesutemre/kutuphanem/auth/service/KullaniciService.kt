@@ -19,9 +19,9 @@ interface KullaniciService {
 
     @Headers("Content-Type: application/json")
     @POST("api/kullanici/guncelle")
-    fun kullaniciBilgiGuncelle(@Body jsonStr:String):Single<ResponseStatusModel>;
+    suspend fun kullaniciBilgiGuncelle(@Body jsonStr:String):Response<ResponseStatusModel>;
 
     @Multipart
     @POST("api/kullanici/resim/yukle")
-    fun kullaniciResimGuncelle(@Part file: MultipartBody.Part, @Part("username") username: RequestBody):Single<ResponseStatusModel>;
+    suspend fun kullaniciResimGuncelle(@Part file: MultipartBody.Part, @Part("username") username: RequestBody):Response<ResponseStatusModel>;
 }

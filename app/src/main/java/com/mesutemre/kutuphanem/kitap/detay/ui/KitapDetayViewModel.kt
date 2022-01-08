@@ -1,130 +1,150 @@
 package com.mesutemre.kutuphanem.kitap.detay.ui
 
-import android.app.Application
 import android.content.Context
-import android.net.Uri
 import android.os.Environment
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.R
+import com.mesutemre.kutuphanem.auth.dao.KullaniciDao
 import com.mesutemre.kutuphanem.auth.profil.model.Kullanici
 import com.mesutemre.kutuphanem.base.BaseDataEvent
-import com.mesutemre.kutuphanem.base.BaseEvent
-import com.mesutemre.kutuphanem.base.BaseViewModel
+import com.mesutemre.kutuphanem.base.BaseResourceEvent
+import com.mesutemre.kutuphanem.base.BaseSingleLiveEvent
+import com.mesutemre.kutuphanem.base.BaseViewModelLast
+import com.mesutemre.kutuphanem.di.IoDispatcher
 import com.mesutemre.kutuphanem.kitap.dao.KitapDao
-import com.mesutemre.kutuphanem.auth.dao.KullaniciDao
 import com.mesutemre.kutuphanem.kitap.liste.model.KitapModel
-import com.mesutemre.kutuphanem.model.*
 import com.mesutemre.kutuphanem.kitap.service.IKitapService
 import com.mesutemre.kutuphanem.kitap.yorum.model.KitapPuanModel
 import com.mesutemre.kutuphanem.kitap.yorum.model.KitapYorumModel
-import com.mesutemre.kutuphanem.kitap.yorum.model.YorumListeModel
+import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.KULLANICI_ADI_KEY
-import com.mesutemre.kutuphanem.util.downloadKitap
+import com.mesutemre.kutuphanem.util.saveFile
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableSingleObserver
-import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.Dispatchers
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.File
 import javax.inject.Inject
 
-
 @HiltViewModel
 class KitapDetayViewModel @Inject
-constructor(application: Application,
+constructor(
             private val kitapService: IKitapService,
             private val kitapDao: KitapDao,
-            private val kullaniciDao: KullaniciDao
-): BaseViewModel(application) {
+            private val kullaniciDao: KullaniciDao,
+            @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+            @ApplicationContext private val appContext: Context
+): BaseViewModelLast() {
 
-    val shareUri = MutableLiveData<BaseEvent<Uri>>();
-    val shareUriYeni = MutableLiveData<BaseDataEvent<Uri>>();
-    val arsivKitap = MutableLiveData<BaseEvent<String>>();
-    val kitapResimDownload = MutableLiveData<BaseEvent<Uri>>();
-    val kitapArsivMevcut = MutableLiveData<BaseEvent<KitapModel>>();
-    val arsivKitapSil = MutableLiveData<BaseEvent<String>>();
-    val kitapBegenme = MutableLiveData<BaseEvent<ResponseStatusModel>>();
-    val selectedKitap = MutableLiveData<BaseEvent<KitapModel>>();
-    val yorumYapanKullanici = MutableLiveData<BaseEvent<Kullanici>>();
-    val kitapYorumKayit = MutableLiveData<BaseEvent<ResponseStatusModel>>();
-    val kitapYorumListe = MutableLiveData<BaseEvent<List<KitapYorumModel>>>();
-    val kitapPuanKayit = MutableLiveData<BaseEvent<ResponseStatusModel>>();
-
-    override val disposible: CompositeDisposable = CompositeDisposable();
+    val shareKitapUri = BaseSingleLiveEvent<BaseResourceEvent<File>>();
+    val arsivKitap = BaseSingleLiveEvent<BaseResourceEvent<String>>();
+    val arsivKitapSil = BaseSingleLiveEvent<BaseResourceEvent<String>>();
+    val kitapArsivMevcut = BaseSingleLiveEvent<BaseResourceEvent<KitapModel>>();
+    val kitapBegenme = BaseSingleLiveEvent<BaseResourceEvent<ResponseStatusModel>>();
+    val selectedKitap = BaseSingleLiveEvent<BaseResourceEvent<KitapModel>>();
+    val yorumYapanKullanici = BaseSingleLiveEvent<BaseResourceEvent<Kullanici>>();
+    val kitapYorumKayit = BaseSingleLiveEvent<BaseResourceEvent<ResponseStatusModel>>();
+    val kitapYorumListe = BaseSingleLiveEvent<BaseResourceEvent<List<KitapYorumModel>>>();
+    val kitapPuanKayit = BaseSingleLiveEvent<BaseResourceEvent<ResponseStatusModel>>();
 
     @Inject
     lateinit var customSharedPreferences: CustomSharedPreferences;
 
-    fun prepareShareKitap(kitap: KitapModel, requireContext: Context){
-        launch(Dispatchers.IO) {
-            /*shareUriYeni.postValue(BaseDataEvent.Loading);
-            val uri = downloadKitap(kitap,requireContext,false);
-            if(uri != Uri.EMPTY){
-                shareUriYeni.postValue(BaseDataEvent.Success(uri));
-            }else{
-                shareUriYeni.postValue(BaseDataEvent.Error(context.getString(R.string.kitapShareError)))
-            }
-            shareUriYeni.postValue(BaseDataEvent.Handled(true));*/
-            val event = BaseEvent(downloadKitap(kitap,requireContext,false));
-            event.hasBeenHandled = true;
-            if(event.peekContent() == Uri.EMPTY){
-                event.hasBeenError = true;
-            }
-            shareUri.postValue(event);
-        }
-    }
-
-    fun kitapArsivle(kitap: KitapModel, requireContext: Context){
+    fun prepareShareKitap(kitap: KitapModel){
         viewModelScope.launch {
-            async { saveKitapToDB(kitap,requireContext) }
-            async { downloadKitapResimForArchive(kitap, requireContext) }
+            downloadAndSaveKitap(kitap,false)
         }
     }
 
-    fun kitapArsivdenCikar(kitap: KitapModel, requireContext: Context){
+    private suspend fun downloadAndSaveKitap(kitap: KitapModel,isArchive:Boolean) {
+        shareKitapUri.value = BaseResourceEvent.Loading();
+        val downloadKitapResponse = serviceCall(
+            call = {
+                kitapService.downloadKitapResim(kitap.kitapResimPath!!)
+            },ioDispatcher
+        );
+        when(downloadKitapResponse){
+            is BaseDataEvent.Success->{
+                val byteArr = downloadKitapResponse.data!!.bytes();
+                val kitapSaved = withContext(ioDispatcher) {
+                    saveFile(kitap,appContext,isArchive,byteArr);
+                }
+                if (kitapSaved != null && kitapSaved.exists()) {
+                    shareKitapUri.value = BaseResourceEvent.Success(kitapSaved);
+                }
+            }
+            is BaseDataEvent.Error->{
+                shareKitapUri.value = BaseResourceEvent.Error(downloadKitapResponse.errMessage);
+            }
+        }
+    }
+
+    fun kitapArsivle(kitap: KitapModel){
         viewModelScope.launch {
-            async { arsivdenCikar(kitap.kitapId!!,requireContext) }
-            async { arsivKitapResimSil(kitap.kitapId,requireContext) }
+            async { saveKitapToDB(kitap) }
+            async { saveKitapToLocal(kitap) }
         }
     }
 
-    private fun saveKitapToDB(kitap: KitapModel, requireContext: Context){
-        launch(Dispatchers.IO){
-            val event = BaseEvent(requireContext.getString(R.string.kiptaArsivleme));
+    private suspend fun saveKitapToLocal(kitap:KitapModel) {
+        val downloadKitapResponse = serviceCall(
+            call = {
+                kitapService.downloadKitapResim(kitap.kitapResimPath!!)
+            },ioDispatcher
+        );
+        when(downloadKitapResponse){
+            is BaseDataEvent.Success->{
+                val byteArr = downloadKitapResponse.data!!.bytes();
+                withContext(ioDispatcher) {
+                    saveFile(kitap,appContext,true,byteArr);
+                }
+            }
+        }
+    }
+
+    fun kitapArsivdenCikar(kitap: KitapModel){
+        viewModelScope.launch {
+            async { arsivdenCikar(kitap.kitapId!!) }
+            async { arsivKitapResimSil(kitap.kitapId) }
+        }
+    }
+
+    private suspend fun saveKitapToDB(kitap: KitapModel){
+        arsivKitap.value = BaseResourceEvent.Loading();
+        val kitapDBKayitResponse = dbCall( call = {
             kitapDao.kitapKaydet(kitap)
-            event.hasBeenHandled = true;
-            arsivKitap.postValue(event);
-        }
-    }
-
-    private fun downloadKitapResimForArchive(kitap: KitapModel, requireContext: Context){
-        launch(Dispatchers.IO) {
-            val event = BaseEvent(downloadKitap(kitap,requireContext,true));
-            event.hasBeenHandled = true;
-            if(event.peekContent() == Uri.EMPTY){
-                event.hasBeenError = true;
+        },ioDispatcher)
+        when(kitapDBKayitResponse){
+            is BaseDataEvent.Success->{
+                arsivKitap.value = BaseResourceEvent.Success(appContext.resources.getString(R.string.kiptaArsivleme));
             }
-            shareUri.postValue(event);
+            is BaseDataEvent.Error->{
+                arsivKitap.value = BaseResourceEvent.Error(appContext.resources.getString(R.string.kiptaArsivleme))
+            }
         }
     }
 
-    private fun arsivdenCikar(kitapId: Int,requireContext: Context){
-        launch(Dispatchers.IO){
-            val event = BaseEvent(requireContext.getString(R.string.kitapArsivKaldirma));
+    private suspend fun arsivdenCikar(kitapId: Int){
+        arsivKitapSil.value = BaseResourceEvent.Loading();
+        val kitapDBSilResponse = dbCall( call = {
             kitapDao.kitapSil(kitapId);
-            event.hasBeenHandled = true;
-            arsivKitapSil.postValue(event);
+        },ioDispatcher)
+        when(kitapDBSilResponse){
+            is BaseDataEvent.Success->{
+                arsivKitapSil.value = BaseResourceEvent.Success(appContext.resources.getString(R.string.kitapArsivKaldirma));
+            }
+            is BaseDataEvent.Error->{
+                arsivKitapSil.value = BaseResourceEvent.Error(appContext.resources.getString(R.string.kitapArsivKaldirma));
+            }
         }
     }
 
-    private fun arsivKitapResimSil(kitapId: Int?, requireContext: Context) {
-        launch(Dispatchers.IO){
+    private suspend fun arsivKitapResimSil(kitapId: Int?) {
+        withContext(ioDispatcher){
             val path:String = Environment.getExternalStorageDirectory().path;
             val f = File(path+"/Android/media/com.mesutemre.kutuphanem/Kütüphanem/${kitapId.toString()}.png");
             if(f.exists()){
@@ -134,197 +154,185 @@ constructor(application: Application,
     }
 
     fun kitapArsivlenmisMi(kitapId:Int){
-        launch(Dispatchers.IO){
-            val event = BaseEvent(kitapDao.getKitapById(kitapId));
-            event.hasBeenHandled = true;
-            if(event.peekContent() == null){
-                event.hasBeenError = true;
+        viewModelScope.launch {
+            kitapArsivMevcut.value = BaseResourceEvent.Loading();
+            val kitapDBMevcutResponse = dbCall( call = {
+                kitapDao.getKitapById(kitapId)
+            },ioDispatcher)
+            when(kitapDBMevcutResponse){
+                is BaseDataEvent.Success->{
+                    kitapArsivMevcut.value = BaseResourceEvent.Success(kitapDBMevcutResponse.data!!);
+                }
+                is BaseDataEvent.Error->{
+                    kitapArsivMevcut.value = BaseResourceEvent.Error(appContext.resources.getString(R.string.kitapArsivKaldirma))
+                }
             }
-            kitapArsivMevcut.postValue(event);
         }
     }
 
     fun kitapBegenmeIslem(kitapId: Int,begenilmis:Int){
-        if(begenilmis>0){
-            kitapBegenSil(kitapId);
-        }else{
-            kitapBegen(kitapId);
+        viewModelScope.launch {
+            if(begenilmis>0){
+                kitapBegenSil(kitapId);
+            }else{
+                kitapBegen(kitapId);
+            }
         }
     }
 
-    private fun kitapBegen(kitapId: Int){
+    private suspend fun kitapBegen(kitapId: Int){
         val jsonObj: JSONObject = JSONObject();
         jsonObj.put("id",kitapId);
-        disposible.add(
-            kitapService.kitapBegen(jsonObj.toString()) .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<ResponseStatusModel>(){
-                    override fun onSuccess(response: ResponseStatusModel) {
-                        val baseEvent = BaseEvent(response);
-                        baseEvent.hasBeenHandled = true;
-                        if(!response.statusCode.equals("200")){
-                            baseEvent.hasBeenError = true;
-                        }
-                        kitapBegenme.value = baseEvent;
-                    }
-                    override fun onError(e: Throwable) {
-                        val baseEvent = BaseEvent(ResponseStatusModel("500",
-                            context.getString(R.string.profilGuncellemeSunucuHata)));
-                        baseEvent.hasBeenError = true;
-                        baseEvent.hasBeenHandled = true;
-                        kitapBegenme.value = baseEvent;
-                    }
-                }));
+        kitapBegenme.value = BaseResourceEvent.Loading();
+        val kitapBegenResponse = serviceCall(
+            call = {
+                kitapService.kitapBegen(jsonObj.toString())
+            },ioDispatcher
+        );
+        when(kitapBegenResponse){
+            is BaseDataEvent.Success->{
+                kitapBegenme.value = BaseResourceEvent.Success(kitapBegenResponse.data!!);
+            }
+            is BaseDataEvent.Error->{
+                kitapBegenme.value = BaseResourceEvent.Error(kitapBegenResponse.errMessage);
+            }
+        }
     }
 
-    private fun kitapBegenSil(kitapId: Int){
+    private suspend fun kitapBegenSil(kitapId: Int){
         val jsonObj: JSONObject = JSONObject();
         jsonObj.put("id",kitapId);
-        disposible.add(
-            kitapService.kitapBegenKaldir(jsonObj.toString()) .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<ResponseStatusModel>(){
-                    override fun onSuccess(response: ResponseStatusModel) {
-                        val baseEvent = BaseEvent(response);
-                        baseEvent.hasBeenHandled = true;
-                        if(!response.statusCode.equals("200")){
-                            baseEvent.hasBeenError = true;
-                        }
-                        kitapBegenme.value = baseEvent;
-                    }
-                    override fun onError(e: Throwable) {
-                        val baseEvent = BaseEvent(ResponseStatusModel("500",
-                            context.getString(R.string.profilGuncellemeSunucuHata)));
-                        baseEvent.hasBeenError = true;
-                        baseEvent.hasBeenHandled = true;
-                        kitapBegenme.value = baseEvent;
-                    }
-                }));
+        kitapBegenme.value = BaseResourceEvent.Loading();
+        val kitapBegenResponse = serviceCall(
+            call = {
+                kitapService.kitapBegenKaldir(jsonObj.toString())
+            },ioDispatcher
+        );
+        when(kitapBegenResponse){
+            is BaseDataEvent.Success->{
+                kitapBegenme.value = BaseResourceEvent.Success(kitapBegenResponse.data!!);
+            }
+            is BaseDataEvent.Error->{
+                kitapBegenme.value = BaseResourceEvent.Error(kitapBegenResponse.errMessage);
+            }
+        }
     }
 
     fun getKitapBilgiler(kitapId: Int){
-        launch(Dispatchers.IO) {
+        viewModelScope.launch {
             async { getKitapByKitapId(kitapId!!) }
             async { getYorumYapanKullanici()}
         }
     }
 
-    private fun getKitapByKitapId(kitapId: Int){
+    private suspend fun getKitapByKitapId(kitapId: Int){
+        selectedKitap.value = BaseResourceEvent.Loading();
         val jsonObj: JSONObject = JSONObject();
         jsonObj.put("id",kitapId);
-        disposible.add(
-            kitapService.getKitapDetay(jsonObj.toString()) .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<KitapModel>(){
-                    override fun onSuccess(response: KitapModel) {
-                        val baseEvent = BaseEvent(response);
-                        baseEvent.hasBeenHandled = true;
-                        if(response == null){
-                            baseEvent.hasBeenError = true;
-                        }
-                        selectedKitap.value = baseEvent;
-                    }
-                    override fun onError(e: Throwable) {
-                        val baseEvent = BaseEvent(KitapModel());
-                        baseEvent.hasBeenError = true;
-                        baseEvent.hasBeenHandled = true;
-                        selectedKitap.value = baseEvent;
-                    }
-                }));
+        val kitapDetayResponse = serviceCall(
+            call = {
+                kitapService.getKitapDetay(jsonObj.toString())
+            },ioDispatcher
+        );
+        when(kitapDetayResponse){
+            is BaseDataEvent.Success->{
+                selectedKitap.value = BaseResourceEvent.Success(kitapDetayResponse.data!!);
+            }
+            is BaseDataEvent.Error->{
+                selectedKitap.value = BaseResourceEvent.Error(kitapDetayResponse.errMessage);
+            }
+        }
     }
 
     private suspend fun getYorumYapanKullanici(){
+        yorumYapanKullanici.value = BaseResourceEvent.Loading();
         val kullaniciAd = customSharedPreferences.getStringFromSharedPreferences(KULLANICI_ADI_KEY);
-        val kullanici = kullaniciDao.getKullaniciBilgiByUsername(kullaniciAd);
-        val baseEvent = BaseEvent(kullanici);
-        baseEvent.hasBeenHandled = true;
-        if(kullanici == null) {
-            baseEvent.hasBeenError = true;
+        val kullaniciBilgiResponse = dbCall( call = {
+            kullaniciDao.getKullaniciBilgiByUsername(kullaniciAd)
+        },ioDispatcher)
+
+        when (kullaniciBilgiResponse) {
+            is BaseDataEvent.Success->{
+                yorumYapanKullanici.value = BaseResourceEvent.Success(kullaniciBilgiResponse.data!!);
+            }
+            is BaseDataEvent.Error->{
+                yorumYapanKullanici.value = BaseResourceEvent.Error(appContext.resources.getString(R.string.profilSayfaHata));
+            }
         }
-        yorumYapanKullanici.postValue(baseEvent);
     }
 
     fun kitapYorumKaydet(kitapYorum: KitapYorumModel){
-        val jsonObj: JSONObject = JSONObject();
-        jsonObj.put("yorum",kitapYorum.yorum);
+        viewModelScope.launch {
+            kitapYorumKayit.value = BaseResourceEvent.Loading();
+            val jsonObj: JSONObject = JSONObject();
+            jsonObj.put("yorum",kitapYorum.yorum);
 
-        val jsonKitapObj = JSONObject();
-        jsonKitapObj.put("id",kitapYorum.kitap?.kitapId);
+            val jsonKitapObj = JSONObject();
+            jsonKitapObj.put("id",kitapYorum.kitap?.kitapId);
 
-        jsonObj.put("kitap",jsonKitapObj);
+            jsonObj.put("kitap",jsonKitapObj);
 
-        disposible.add(
-            kitapService.kitapYorumKaydet(jsonObj.toString()) .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<ResponseStatusModel>(){
-                    override fun onSuccess(response: ResponseStatusModel) {
-                        val baseEvent = BaseEvent(response);
-                        baseEvent.hasBeenHandled = true;
-                        if(!response.statusCode.equals("200")){
-                            baseEvent.hasBeenError = true;
-                        }
-                        kitapYorumKayit.value = baseEvent;
-                    }
-                    override fun onError(e: Throwable) {
-                        val baseEvent = BaseEvent(ResponseStatusModel("500",e.localizedMessage));
-                        baseEvent.hasBeenError = true;
-                        baseEvent.hasBeenHandled = true;
-                        kitapYorumKayit.value = baseEvent;
-                    }
-                })
-        );
+            val kitapYorumResponse = serviceCall(
+                call = {
+                    kitapService.kitapYorumKaydet(jsonObj.toString())
+                },ioDispatcher
+            );
+            when(kitapYorumResponse){
+                is BaseDataEvent.Success->{
+                    kitapYorumKayit.value = BaseResourceEvent.Success(kitapYorumResponse.data!!);
+                }
+                is BaseDataEvent.Error->{
+                    kitapYorumKayit.value = BaseResourceEvent.Error(kitapYorumResponse.errMessage);
+                }
+            }
+        }
     }
 
     fun getKitapYorumListe(kitapId:Int){
-        disposible.add(
-            kitapService.getKitapYorumListe(kitapId)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<YorumListeModel>(){
-                    override fun onSuccess(response: YorumListeModel) {
-                        val baseEvent = BaseEvent(response.yorumListe);
-                        baseEvent.hasBeenHandled = true;
-                        kitapYorumListe.value = baseEvent;
-                    }
-
-                    override fun onError(e: Throwable) {
-                        val baseEvent = BaseEvent(listOf<KitapYorumModel>());
-                        baseEvent.hasBeenHandled = true;
-                        kitapYorumListe.value = baseEvent;
-                    }
-
-                }));
+        viewModelScope.launch {
+            kitapYorumListe.value = BaseResourceEvent.Loading();
+            val kitapYorumListeResponse = serviceCall(
+                call = {
+                    kitapService.getKitapYorumListe(kitapId)
+                },ioDispatcher
+            );
+            when(kitapYorumListeResponse){
+                is BaseDataEvent.Success->{
+                    kitapYorumListe.value = BaseResourceEvent.Success(kitapYorumListeResponse.data!!.yorumListe);
+                }
+                is BaseDataEvent.Error->{
+                    kitapYorumListe.value = BaseResourceEvent.Error(kitapYorumListeResponse.errMessage);
+                }
+            }
+        }
     }
 
     fun kitapPuanKaydet(kitapPuanModel: KitapPuanModel){
-        val jsonObj: JSONObject = JSONObject();
-        jsonObj.put("puan",kitapPuanModel.puan);
+        viewModelScope.launch {
+            kitapPuanKayit.value = BaseResourceEvent.Loading();
+            val jsonObj: JSONObject = JSONObject();
+            jsonObj.put("puan",kitapPuanModel.puan);
 
-        val jsonKitapObj = JSONObject();
-        jsonKitapObj.put("id",kitapPuanModel.kitap.kitapId);
-        jsonKitapObj.put("kitapPuan",kitapPuanModel.kitap.kitapPuan);
+            val jsonKitapObj = JSONObject();
+            jsonKitapObj.put("id",kitapPuanModel.kitap.kitapId);
+            jsonKitapObj.put("kitapPuan",kitapPuanModel.kitap.kitapPuan);
 
-        jsonObj.put("kitap",jsonKitapObj);
+            jsonObj.put("kitap",jsonKitapObj);
 
-        disposible.add(
-            kitapService.kitapPuanKaydet(jsonObj.toString()) .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<ResponseStatusModel>(){
-                    override fun onSuccess(response: ResponseStatusModel) {
-                        val baseEvent = BaseEvent(response);
-                        baseEvent.hasBeenHandled = true;
-                        if(!response.statusCode.equals("200")){
-                            baseEvent.hasBeenError = true;
-                        }
-                        kitapPuanKayit.value = baseEvent;
-                    }
-                    override fun onError(e: Throwable) {
-                        val baseEvent = BaseEvent(ResponseStatusModel("500",e.localizedMessage));
-                        baseEvent.hasBeenError = true;
-                        baseEvent.hasBeenHandled = true;
-                        kitapPuanKayit.value = baseEvent;
-                    }
-                })
-        );
+            val kitapPuanKaydetResponse = serviceCall(
+                call = {
+                    kitapService.kitapPuanKaydet(jsonObj.toString())
+                },ioDispatcher
+            );
+
+            when(kitapPuanKaydetResponse){
+                is BaseDataEvent.Success->{
+                    kitapPuanKayit.value = BaseResourceEvent.Success(kitapPuanKaydetResponse.data!!);
+                }
+                is BaseDataEvent.Error->{
+                    kitapPuanKayit.value = BaseResourceEvent.Error(kitapPuanKaydetResponse.errMessage);
+                }
+            }
+        }
     }
 }

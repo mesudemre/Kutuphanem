@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
@@ -15,13 +16,14 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.shape.MarkerEdgeTreatment
 import com.google.android.material.shape.OffsetEdgeTreatment
 import com.mesutemre.kutuphanem.R
+import com.mesutemre.kutuphanem.auth.profil.model.Kullanici
 import com.mesutemre.kutuphanem.base.BaseFragment
+import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.databinding.FragmentKitapDetayBinding
 import com.mesutemre.kutuphanem.kitap.detay.ui.dialog.KitapAciklamaBottomSheetDialogFragment
+import com.mesutemre.kutuphanem.kitap.liste.model.KitapModel
 import com.mesutemre.kutuphanem.kitap.yorum.ui.KitapYorumBottomSheetDialogFragment
 import com.mesutemre.kutuphanem.model.ERROR
-import com.mesutemre.kutuphanem.kitap.liste.model.KitapModel
-import com.mesutemre.kutuphanem.auth.profil.model.Kullanici
 import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.util.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,48 +57,49 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
         observeKitapArsivlenmisMi();
         if(!isFromArsiv){
             observeKitapDetay(view);
-            observeYorumYapanKullanici(view);
+            observeYorumYapanKullanici();
         }else{
             initializeValues(view);
         }
     }
 
-    private fun observeYorumYapanKullanici(view:View){
+    private fun observeYorumYapanKullanici(){
         viewModel.yorumYapanKullanici.observe(viewLifecycleOwner,Observer{
-           if(it.hasBeenHandled) {
-               it.hasBeenHandled = false;
-               if(it.hasBeenError){
-                   showSnackBar(requireView(),
-                       requireView().context.getString(R.string.profilSayfaHata),
-                       ERROR
-                   );
-               }else{
-                   kullanici = it.peekContent();
-                   binding.kitapYorumYazanImageViewId.let {
-                       it.getCircleImageFromUrl(kullanici.resim,it);
-                   }
-               }
-
-           }
+            when(it) {
+                is BaseResourceEvent.Error->{
+                    showSnackBar(requireView(),
+                        requireView().context.getString(R.string.profilSayfaHata),
+                        ERROR
+                    );
+                }
+                is BaseResourceEvent.Success->{
+                    kullanici = it.data!!;
+                    binding.kitapYorumYazanImageViewId.let {
+                        it.getCircleImageFromUrl(kullanici.resim,it);
+                    }
+                }
+            }
         });
     }
 
     private fun observeKitapDetay(view:View){
         viewModel.selectedKitap.observe(viewLifecycleOwner,Observer{
-            if(it.hasBeenHandled){
-                it.hasBeenHandled = false;
-                binding.kitapDetayProgresBar.showComponent();
-                if(it.hasBeenError){
+            when(it){
+                is BaseResourceEvent.Loading->{
+                    binding.kitapDetayProgresBar.showComponent();
+                }
+                is BaseResourceEvent.Error->{
                     binding.kitapDetayErrorLayoutId.showComponent();
-                    binding.kitapDetayPanelLayoutId.hideComponent();
-                    binding.kitapDetayGenelBilgilerCardId.hideComponent();
-                }else{
-                    selectedKitap = it.peekContent();
+                    getFragmentView().hideComponents(binding.kitapDetayPanelLayoutId,binding.kitapDetayGenelBilgilerCardId,binding.kitapDetayProgresBar);
+                }
+                is BaseResourceEvent.Success->{
+                    getFragmentView().showComponents(binding.kitapDetayPanelLayoutId,binding.kitapDetayGenelBilgilerCardId);
+                    getFragmentView().hideComponents(binding.kitapDetayProgresBar,binding.kitapDetayErrorLayoutId);
+                    selectedKitap = it.data!!
                     viewModel.kitapArsivlenmisMi(selectedKitap.kitapId!!);
                     observeKitapArsivlenmisMi();
                     initializeValues(view);
                 }
-                binding.kitapDetayProgresBar.hideComponent();
             }
         });
     }
@@ -147,17 +150,17 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
         }
 
         binding.shareImageViewId?.setOnClickListener {
-            viewModel.prepareShareKitap(selectedKitap,requireContext());
+            viewModel.prepareShareKitap(selectedKitap);
             observeShareUri();
         }
 
         binding.kitapArsivleImageViewId.setOnClickListener {
-            viewModel.kitapArsivle(selectedKitap,it.context);
+            viewModel.kitapArsivle(selectedKitap);
             observeKitapArsiv(it);
         }
 
         binding.kitapArsivCikarImageViewId.setOnClickListener {
-            viewModel.kitapArsivdenCikar(selectedKitap,it.context);
+            viewModel.kitapArsivdenCikar(selectedKitap);
             observeKitapArsivSilme(it);
         }
 
@@ -180,22 +183,28 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
     }
 
     private fun observeShareUri() {
-        viewModel.shareUri.observe(viewLifecycleOwner,Observer{
-            if(it.hasBeenHandled){
-                it.hasBeenHandled = false;
-                if(it.hasBeenError){
+        viewModel.shareKitapUri.observe(viewLifecycleOwner,Observer{
+            when(it){
+                is BaseResourceEvent.Loading->{
+                    binding.kitapDetayProgresBar.showComponent();
+                }
+                is BaseResourceEvent.Error->{
+                    binding.kitapDetayProgresBar.hideComponent();
                     showSnackBar(requireView(),
                         requireView().context.getString(R.string.kitapShareError),
                         ERROR
                     );
-                }else{
-                    sharedImageUri = it.peekContent();
+                }
+                is BaseResourceEvent.Success->{
                     val shareIntent = Intent(Intent.ACTION_SEND);
                     shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     shareIntent.setType("image/png");
                     shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     shareIntent.putExtra(Intent.EXTRA_TEXT,selectedKitap?.kitapAd+" "+requireContext().resources.getString(R.string.paylasimKitapAdText));
+                    sharedImageUri = FileProvider.getUriForFile(requireContext(),
+                    requireContext().applicationContext.packageName+".provider",it.data!!)
                     shareIntent.putExtra(Intent.EXTRA_STREAM, sharedImageUri);
+                    binding.kitapDetayProgresBar.hideComponent();
                     resultLauncher.launch(Intent.createChooser(shareIntent, requireContext().resources.getString(R.string.shareLabel)))
                 }
             }
@@ -204,49 +213,60 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
 
     private fun observeKitapArsiv(view:View){
         viewModel.arsivKitap.observe(viewLifecycleOwner,Observer{
-            if(it.hasBeenHandled) {
-                showSnackBar(view,it.peekContent(), SUCCESS);
-                binding.kitapArsivleImageViewId.hideComponent();
-                binding.kitapArsivCikarImageViewId.showComponent();
-                it.hasBeenHandled = false;
-            }
-        });
-
-        viewModel.kitapResimDownload.observe(viewLifecycleOwner,Observer{
-            if(it.hasBeenHandled) {
-                it.hasBeenHandled = false;
+            when(it){
+                is BaseResourceEvent.Error->{
+                    showSnackBar(view,it.message!!, ERROR);
+                }
+                is BaseResourceEvent.Success->{
+                    showSnackBar(view,it.data!!, SUCCESS);
+                    binding.kitapArsivleImageViewId.hideComponent();
+                    binding.kitapArsivCikarImageViewId.showComponent();
+                }
             }
         });
     }
 
     private fun observeKitapArsivlenmisMi(){
         viewModel.kitapArsivMevcut.observe(viewLifecycleOwner,Observer{
-            it.hasBeenHandled = true;
-            if(!it.hasBeenError) {
-                binding.kitapArsivCikarImageViewId.showComponent();
-                binding.kitapArsivleImageViewId.hideComponent();
+            when(it){
+                is BaseResourceEvent.Error->{
+                }
+                is BaseResourceEvent.Success->{
+                    binding.kitapArsivCikarImageViewId.showComponent();
+                    binding.kitapArsivleImageViewId.hideComponent();
+                }
             }
         });
     }
 
     private fun observeKitapArsivSilme(view: View) {
         viewModel.arsivKitapSil.observe(viewLifecycleOwner,Observer{
-            it.hasBeenHandled = true;
-            showSnackBar(view,it.peekContent(), SUCCESS);
-            binding.kitapArsivleImageViewId.showComponent();
-            binding.kitapArsivCikarImageViewId.hideComponent();
-            it.hasBeenHandled = false;
+            when(it){
+                is BaseResourceEvent.Error->{
+                    showSnackBar(getFragmentView(),it.message!!, ERROR);
+                }
+                is BaseResourceEvent.Success->{
+                    showSnackBar(view,it.data!!, SUCCESS);
+                    binding.kitapArsivleImageViewId.showComponent();
+                    binding.kitapArsivCikarImageViewId.hideComponent();
+                }
+            }
         });
     }
+
     private fun observeKitapBegenme(view:View){
         viewModel.kitapBegenme.observe(viewLifecycleOwner,Observer{
-            if(it.hasBeenHandled){
-                binding.kitapDetayProgresBar.showComponent();
-                if(it.hasBeenError){
-                    showSnackBar(view,it.peekContent().statusMessage, ERROR);
+            when(it){
+                is BaseResourceEvent.Loading->{
+                    binding.kitapDetayProgresBar.showComponent();
+                }
+                is BaseResourceEvent.Error->{
                     binding.kitapDetayProgresBar.hideComponent();
-                }else{
-                    showSnackBar(view,it.peekContent().statusMessage, SUCCESS);
+                    showSnackBar(view,it.data!!.statusMessage, ERROR);
+                }
+                is BaseResourceEvent.Success->{
+                    binding.kitapDetayProgresBar.hideComponent();
+                    showSnackBar(view,it.data!!.statusMessage, SUCCESS);
                     if(selectedKitap.kitapBegenilmis == 0){
                         binding.likeImageViewId.setTint(view.context.getColor(R.color.fistikYesil));
                         selectedKitap.kitapBegenilmis = 1;
@@ -254,9 +274,7 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
                         binding.likeImageViewId.setTint(view.context.getColor(R.color.white));
                         selectedKitap.kitapBegenilmis = 0;
                     }
-                    binding.kitapDetayProgresBar.hideComponent();
                 }
-                it.hasBeenHandled = false;
             }
         });
     }

@@ -25,7 +25,7 @@ import com.mesutemre.kutuphanem.auth.profil.ui.dialog.DogumTarihiDialogFragment
 import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.databinding.KitapEklemeFragmentBinding
-import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
+import com.mesutemre.kutuphanem.util.listener.TextInputErrorClearListener
 import com.mesutemre.kutuphanem.model.*
 import com.mesutemre.kutuphanem.parametre.kitaptur.model.KitapturModel
 import com.mesutemre.kutuphanem.parametre.yayinevi.model.YayineviModel

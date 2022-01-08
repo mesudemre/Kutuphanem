@@ -9,16 +9,14 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.google.gson.Gson
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem.base.BaseFragment
-import com.mesutemre.kutuphanem.databinding.ProfilIslemAdSoyadEpostaBinding
-import com.mesutemre.kutuphanem.listener.TextInputErrorClearListener
-import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.auth.profil.model.Kullanici
+import com.mesutemre.kutuphanem.base.BaseFragment
+import com.mesutemre.kutuphanem.base.BaseResourceEvent
+import com.mesutemre.kutuphanem.databinding.ProfilIslemAdSoyadEpostaBinding
+import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.model.SUCCESS
-import com.mesutemre.kutuphanem.util.hideComponent
-import com.mesutemre.kutuphanem.util.hideKeyboard
-import com.mesutemre.kutuphanem.util.showComponent
-import com.mesutemre.kutuphanem.util.showSnackBar
+import com.mesutemre.kutuphanem.util.*
+import com.mesutemre.kutuphanem.util.listener.TextInputErrorClearListener
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -87,28 +85,24 @@ class ProfilIslemAdSoyadEpostaFragment:BaseFragment<ProfilIslemAdSoyadEpostaBind
     }
 
     private fun observeKullaniciBilgiGuncelle(){
-        profilIslemViewModel.kullaniciGuncelleLoading.observe(viewLifecycleOwner, Observer {
-           if (it) {
-               binding.profilIslemAdSoyadEpostaProggressBar.showComponent();
-               binding.profilIslemAdSoyadEpostaMainLayoutId.hideComponent();
-           }
-        });
-
-        profilIslemViewModel.kullaniciGuncelleError.observe(viewLifecycleOwner, Observer {
-            if (it) {
-                binding.profilIslemAdSoyadEpostaProggressBar.hideComponent();
-                binding.profilIslemAdSoyadEpostaMainLayoutId.showComponent();
-                showSnackBar(getFragmentView(),getFragmentView().context.resources.getString(R.string.profilGuncellemeSunucuHata), ERROR);
+        profilIslemViewModel.kullaniciBilgiGuncelleResourceEvent.observe(viewLifecycleOwner,Observer {
+            when(it){
+                is BaseResourceEvent.Loading->{
+                    binding.profilIslemAdSoyadEpostaProggressBar.showComponent();
+                    binding.profilIslemAdSoyadEpostaMainLayoutId.hideComponent();
+                }
+                is BaseResourceEvent.Error->{
+                    binding.profilIslemAdSoyadEpostaProggressBar.hideComponent();
+                    binding.profilIslemAdSoyadEpostaMainLayoutId.showComponent();
+                    showSnackBar(getFragmentView(),it.message!!, ERROR);
+                }
+                is BaseResourceEvent.Success->{
+                    binding.profilIslemAdSoyadEpostaProggressBar.hideComponent();
+                    binding.profilIslemAdSoyadEpostaMainLayoutId.showComponent();
+                    showSnackBar(getFragmentView(),it.data!!.statusMessage, SUCCESS);
+                }
             }
         });
-        profilIslemViewModel.kullaniciGuncelleSonuc.observe(viewLifecycleOwner, Observer {
-            binding.profilIslemAdSoyadEpostaProggressBar.hideComponent();
-            binding.profilIslemAdSoyadEpostaMainLayoutId.showComponent();
-            showSnackBar(getFragmentView(),it.statusMessage, SUCCESS);
-        });
-        /*kullaniciGuncelleError.value = false;
-                            kullaniciGuncelleLoading.value = false;
-                            kullaniciGuncelleSonuc.value = response;*/
     }
 
     private fun addTextChangeListeners() {

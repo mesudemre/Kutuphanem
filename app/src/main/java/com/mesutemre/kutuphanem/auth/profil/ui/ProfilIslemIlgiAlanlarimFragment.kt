@@ -8,13 +8,14 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.chip.Chip
 import com.mesutemre.kutuphanem.R
+import com.mesutemre.kutuphanem.auth.profil.model.Kullanici
 import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.databinding.ProfilIslemIlgiAlanlarBinding
 import com.mesutemre.kutuphanem.parametre.kitaptur.model.KitapturModel
-import com.mesutemre.kutuphanem.auth.profil.model.Kullanici
 import com.mesutemre.kutuphanem.parametre.kitaptur.ui.ParametreKitapturViewModel
 import com.mesutemre.kutuphanem.util.hideComponent
+import com.mesutemre.kutuphanem.util.hideComponents
 import com.mesutemre.kutuphanem.util.showComponent
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -72,7 +73,17 @@ class ProfilIslemIlgiAlanlarimFragment:BaseFragment<ProfilIslemIlgiAlanlarBindin
 
     private fun observeKullaniciIlgiAlanlari(kitapTurListe:List<KitapturModel>){
         profilIslemViewModel.kullaniciIlgiAlanlar.observe(viewLifecycleOwner, Observer {kullaniciIlgiAlanlar->
-            /*val ilgiAlanSecili: (List<KitapturModel>,KitapturModel) ->Boolean = ilgiAlanSecili@ {ilgiAlanListe,ilgiliAlan ->
+            when(kullaniciIlgiAlanlar){
+                is BaseResourceEvent.Loading->{
+                    binding.profilIlgiAlanlarimProgressBar.showComponent();
+                    getFragmentView().hideComponents(binding.ilgiAlanlarimInfoErrorCardId, binding.ilgiAlanlarimInfoCardId);
+                }
+                is BaseResourceEvent.Error->{
+                    binding.ilgiAlanlarimInfoErrorCardId.showComponent();
+                    getFragmentView().hideComponents(binding.profilIlgiAlanlarimProgressBar, binding.ilgiAlanlarimInfoCardId);
+                }
+                is BaseResourceEvent.Success->{
+                    /*val ilgiAlanSecili: (List<KitapturModel>,KitapturModel) ->Boolean = ilgiAlanSecili@ {ilgiAlanListe,ilgiliAlan ->
                 for (ia in ilgiAlanListe){
                     if(ia.kitapTurId == ilgiliAlan.kitapTurId){
                         return@ilgiAlanSecili true;
@@ -80,30 +91,36 @@ class ProfilIslemIlgiAlanlarimFragment:BaseFragment<ProfilIslemIlgiAlanlarBindin
                 }
                 false;
             }*/
-            val ilgiAlanSeciliFixed : (List<KitapturModel>, KitapturModel) ->Boolean = { ilgiAlanListe, ilgiliAlan ->
-                ilgiAlanListe.any {
-                    it.kitapTurId == ilgiliAlan.kitapTurId
-                }
-            }
-            if(kitapTurListe != null && kitapTurListe.size>0) {
-                for (ia in kitapTurListe){
-                    val ilgiAlan: Chip = Chip(requireContext());
-                    ilgiAlan.text = ia.aciklama;
-                    ilgiAlan.setChipBackgroundColorResource(R.color.white);
-                    ilgiAlan.setChipStrokeColorResource(R.color.black);
-                    ilgiAlan.chipStrokeWidth = 1f;
-                    ilgiAlan.setTextColor(requireContext().getColor(R.color.black));
-                    ilgiAlan.isCheckable = true;
-                    ilgiAlan.setCheckedIconResource(R.drawable.ic_baseline_check_circle_outline_24);
-
-                    if(kullaniciIlgiAlanlar != null && kullaniciIlgiAlanlar.size>0){
-                        if(ilgiAlanSeciliFixed(kullaniciIlgiAlanlar,ia)){
-                            ilgiAlan.isChecked = true;
+                    getFragmentView().hideComponents(binding.ilgiAlanlarimInfoErrorCardId,binding.profilIlgiAlanlarimProgressBar)
+                    binding.ilgiAlanlarimInfoCardId.showComponent();
+                    val ilgiAlanSeciliFixed : (List<KitapturModel>, KitapturModel) ->Boolean = { ilgiAlanListe, ilgiliAlan ->
+                        ilgiAlanListe.any {
+                            it.kitapTurId == ilgiliAlan.kitapTurId
                         }
                     }
-                    binding.ilgiAlanChips.addView(ilgiAlan);
+                    if(kitapTurListe != null && kitapTurListe.size>0) {
+                        for (ia in kitapTurListe){
+                            val ilgiAlan: Chip = Chip(requireContext());
+                            ilgiAlan.text = ia.aciklama;
+                            ilgiAlan.setChipBackgroundColorResource(R.color.white);
+                            ilgiAlan.setChipStrokeColorResource(R.color.black);
+                            ilgiAlan.chipStrokeWidth = 1f;
+                            ilgiAlan.setTextColor(requireContext().getColor(R.color.black));
+                            ilgiAlan.isCheckable = true;
+                            ilgiAlan.setCheckedIconResource(R.drawable.ic_baseline_check_circle_outline_24);
+
+                            if(kullaniciIlgiAlanlar.data != null && kullaniciIlgiAlanlar.data.size>0){
+                                if(ilgiAlanSeciliFixed(kullaniciIlgiAlanlar.data,ia)){
+                                    ilgiAlan.isChecked = true;
+                                }
+                            }
+                            binding.ilgiAlanChips.addView(ilgiAlan);
+                        }
+                    }
                 }
             }
+
+
         });
     }
 }

@@ -59,7 +59,7 @@ class KitapDetayDeepFragment: BaseFragment<FragmentKitapDetayDeepBinding>() {
     }
 
     private fun observeKitapDetay(view:View){
-        viewModel.selectedKitap.observe(viewLifecycleOwner,Observer{
+        /*viewModel.selectedKitap.observe(viewLifecycleOwner,Observer{
             if(it.hasBeenHandled){
                 it.hasBeenHandled = false;
                 binding.kitapDetayProgresBar.showComponent();
@@ -75,7 +75,7 @@ class KitapDetayDeepFragment: BaseFragment<FragmentKitapDetayDeepBinding>() {
                 }
                 binding.kitapDetayProgresBar.hideComponent();
             }
-        });
+        });*/
     }
 
     private fun initializeValues(view: View) {
@@ -129,17 +129,17 @@ class KitapDetayDeepFragment: BaseFragment<FragmentKitapDetayDeepBinding>() {
         }
 
         binding.shareImageViewId?.setOnClickListener {
-            viewModel.prepareShareKitap(selectedKitap,requireContext());
+            //viewModel.prepareShareKitap(selectedKitap,requireContext());
             observeShareUri();
         }
 
         binding.kitapArsivleImageViewId.setOnClickListener {
-            viewModel.kitapArsivle(selectedKitap,it.context);
+            //viewModel.kitapArsivle(selectedKitap,it.context);
             observeKitapArsiv(it);
         }
 
         binding.kitapArsivCikarImageViewId.setOnClickListener {
-            viewModel.kitapArsivdenCikar(selectedKitap,it.context);
+            //viewModel.kitapArsivdenCikar(selectedKitap,it.context);
             observeKitapArsivSilme(it);
         }
 
@@ -157,34 +157,11 @@ class KitapDetayDeepFragment: BaseFragment<FragmentKitapDetayDeepBinding>() {
     }
 
     private fun observeShareUri() {
-        viewModel.shareUri.observe(viewLifecycleOwner,Observer{
-            if(it.hasBeenHandled){
-                it.hasBeenHandled = false;
-                if(it.hasBeenError){
-                    showSnackBar(requireView(),
-                        requireView().context.getString(R.string.kitapShareError),
-                        ERROR
-                    );
-                }else{
-                    sharedImageUri = it.peekContent();
-                    val shareIntent = Intent(Intent.ACTION_SEND);
-                    shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-                    //shareIntent.putExtra(Intent.EXTRA_TEXT,selectedKitap.kitapAd+" "+requireContext().resources.getString(R.string.paylasimKitapAdText));
-                    shareIntent.setType("*/*");
-                    //htmlBuilder.append(selectedKitap.kitapAd+" "+requireContext().resources.getString(R.string.paylasimKitapAdText));
-                    shareIntent.putExtra(Intent.EXTRA_TEXT,requireContext().resources.getString(R.string.kitapDetayDeepLinkUrl)+"${selectedKitap.kitapId}");
-                    //shareIntent.setType("image/png");
-                    shareIntent.putExtra(Intent.EXTRA_STREAM, sharedImageUri);
-                    resultLauncher.launch(Intent.createChooser(shareIntent, requireContext().resources.getString(R.string.shareLabel)))
-                }
-            }
-        });
     }
 
     private fun observeKitapArsiv(view:View){
-        viewModel.arsivKitap.observe(viewLifecycleOwner,Observer{
+        /*viewModel.arsivKitap.observe(viewLifecycleOwner,Observer{
             if(it.hasBeenHandled) {
                 showSnackBar(view,it.peekContent(), SUCCESS);
                 binding.kitapArsivleImageViewId.hideComponent();
@@ -197,30 +174,30 @@ class KitapDetayDeepFragment: BaseFragment<FragmentKitapDetayDeepBinding>() {
             if(it.hasBeenHandled) {
                 it.hasBeenHandled = false;
             }
-        });
+        });*/
     }
 
     private fun observeKitapArsivlenmisMi(){
-        viewModel.kitapArsivMevcut.observe(viewLifecycleOwner,Observer{
+        /*viewModel.kitapArsivMevcut.observe(viewLifecycleOwner,Observer{
             it.hasBeenHandled = true;
             if(!it.hasBeenError) {
                 binding.kitapArsivCikarImageViewId.showComponent();
                 binding.kitapArsivleImageViewId.hideComponent();
             }
-        });
+        });*/
     }
 
     private fun observeKitapArsivSilme(view: View) {
-        viewModel.arsivKitapSil.observe(viewLifecycleOwner,Observer{
+        /*viewModel.arsivKitapSil.observe(viewLifecycleOwner,Observer{
             it.hasBeenHandled = true;
             showSnackBar(view,it.peekContent(), SUCCESS);
             binding.kitapArsivleImageViewId.showComponent();
             binding.kitapArsivCikarImageViewId.hideComponent();
             it.hasBeenHandled = false;
-        });
+        });*/
     }
     private fun observeKitapBegenme(view:View){
-        viewModel.kitapBegenme.observe(viewLifecycleOwner,Observer{
+        /*viewModel.kitapBegenme.observe(viewLifecycleOwner,Observer{
             if(it.hasBeenHandled){
                 if(it.hasBeenError){
                     showSnackBar(view,it.peekContent().statusMessage, ERROR);
@@ -236,7 +213,7 @@ class KitapDetayDeepFragment: BaseFragment<FragmentKitapDetayDeepBinding>() {
                 }
                 it.hasBeenHandled = false;
             }
-        });
+        });*/
     }
 
     var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {

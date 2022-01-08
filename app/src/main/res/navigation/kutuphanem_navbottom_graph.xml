@@ -52,16 +52,20 @@
             app:enterAnim="@anim/slide_down" />
         <action
             android:id="@+id/action_profilIslemFragment_to_profilIslemAdSoyadEpostaFragment"
-            app:destination="@id/profilIslemAdSoyadEpostaFragment" />
+            app:destination="@id/profilIslemAdSoyadEpostaFragment"
+            app:enterAnim="@anim/slide_left"/>
         <action
             android:id="@+id/action_profilIslemFragment_to_profilIslemDogumTarCinsiyetFragment"
-            app:destination="@id/profilIslemDogumTarCinsiyetFragment" />
+            app:destination="@id/profilIslemDogumTarCinsiyetFragment"
+            app:enterAnim="@anim/slide_left"/>
         <action
             android:id="@+id/action_profilIslemFragment_to_profilIslemIlgiAlanlarimFragment"
-            app:destination="@id/profilIslemIlgiAlanlarimFragment" />
+            app:destination="@id/profilIslemIlgiAlanlarimFragment"
+            app:enterAnim="@anim/slide_left"/>
         <action
             android:id="@+id/action_profilIslemFragment_to_profilIslemIletisiTercihlerimFragment"
-            app:destination="@id/profilIslemIletisiTercihlerimFragment" />
+            app:destination="@id/profilIslemIletisiTercihlerimFragment"
+            app:enterAnim="@anim/slide_left"/>
     </fragment>
     <fragment
         android:id="@+id/parametreEklemeFragment"
@@ -78,7 +82,8 @@
     <fragment
         android:id="@+id/kitapEklemeFragment"
         android:name="com.mesutemre.kutuphanem.kitap.ekleme.ui.KitapEklemeFragment"
-        android:label="KitapEklemeFragment" />
+        android:label="KitapEklemeFragment"
+        />
     <fragment
         android:id="@+id/kitapDetayFragment"
         android:name="com.mesutemre.kutuphanem.kitap.detay.ui.KitapDetayFragment"

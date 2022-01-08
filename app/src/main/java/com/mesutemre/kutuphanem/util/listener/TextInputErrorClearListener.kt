@@ -1,4 +1,4 @@
-package com.mesutemre.kutuphanem.listener
+package com.mesutemre.kutuphanem.util.listener
 import android.text.Editable
 import android.text.TextWatcher
 import com.google.android.material.textfield.TextInputLayout
