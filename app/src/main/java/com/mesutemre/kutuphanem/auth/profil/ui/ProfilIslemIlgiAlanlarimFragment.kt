@@ -119,8 +119,6 @@ class ProfilIslemIlgiAlanlarimFragment:BaseFragment<ProfilIslemIlgiAlanlarBindin
                     }
                 }
             }
-
-
         });
     }
 }

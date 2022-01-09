@@ -12,7 +12,7 @@ import com.mesutemre.kutuphanem.auth.service.KullaniciService
 import com.mesutemre.kutuphanem.base.BaseDataEvent
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.base.BaseSingleLiveEvent
-import com.mesutemre.kutuphanem.base.BaseViewModelLast
+import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.di.IoDispatcher
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.parametre.kitaptur.model.KitapturModel
@@ -37,7 +37,7 @@ class ProfilIslemViewModel @Inject constructor(@IoDispatcher private val ioDispa
                                                @ApplicationContext private val appContext: Context,
                                                private val kullaniciService: KullaniciService,
                                                private val kullaniciDao: KullaniciDao,
-): BaseViewModelLast() {
+): BaseViewModel() {
 
     @Inject
     lateinit var customSharedPreferences: CustomSharedPreferences;

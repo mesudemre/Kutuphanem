@@ -14,9 +14,8 @@ import java.io.IOException
  * @Author: mesutemre.celenk
  * @Date: 15.09.2021
  */
-class KitapListeApiPagingSource(val kitapService: IKitapService, context: Context): PagingSource<Int, KitapModel>()  {
+class KitapListeApiPagingSource(val kitapService: IKitapService, val context: Context): PagingSource<Int, KitapModel>()  {
 
-    private val context: Context = context;
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, KitapModel> {
         var page = params.key ?: 0

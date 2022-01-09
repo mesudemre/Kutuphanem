@@ -9,7 +9,7 @@ import com.mesutemre.kutuphanem.auth.profil.model.Kullanici
 import com.mesutemre.kutuphanem.base.BaseDataEvent
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.base.BaseSingleLiveEvent
-import com.mesutemre.kutuphanem.base.BaseViewModelLast
+import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.di.IoDispatcher
 import com.mesutemre.kutuphanem.kitap.dao.KitapDao
 import com.mesutemre.kutuphanem.kitap.liste.model.KitapModel
@@ -38,7 +38,7 @@ constructor(
             private val kullaniciDao: KullaniciDao,
             @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
             @ApplicationContext private val appContext: Context
-): BaseViewModelLast() {
+): BaseViewModel() {
 
     val shareKitapUri = BaseSingleLiveEvent<BaseResourceEvent<File>>();
     val arsivKitap = BaseSingleLiveEvent<BaseResourceEvent<String>>();

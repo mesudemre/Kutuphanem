@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.base.BaseDataEvent
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.base.BaseSingleLiveEvent
-import com.mesutemre.kutuphanem.base.BaseViewModelLast
+import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.di.IoDispatcher
 import com.mesutemre.kutuphanem.kitap.service.IKitapService
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
@@ -38,7 +38,7 @@ constructor(@IoDispatcher private val ioDispatcher: CoroutineDispatcher,
             private val kitapService: IKitapService,
             private val parametreService: IParametreService,
             private val parametreRepository: ParametreRepository
-): BaseViewModelLast() {
+): BaseViewModel() {
 
     @Inject
     lateinit var customSharedPreferences: CustomSharedPreferences;

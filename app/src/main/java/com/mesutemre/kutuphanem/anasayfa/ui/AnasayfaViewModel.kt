@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.base.BaseDataEvent
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.base.BaseSingleLiveEvent
-import com.mesutemre.kutuphanem.base.BaseViewModelLast
+import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.di.IoDispatcher
 import com.mesutemre.kutuphanem.kitap.liste.model.KitapModel
 import com.mesutemre.kutuphanem.kitap.service.IKitapService
@@ -21,7 +21,7 @@ import javax.inject.Inject
 class AnasayfaViewModel @Inject constructor(@IoDispatcher private val ioDispatcher: CoroutineDispatcher,
                                             private val parametreService: IParametreService,
                                             private val kitapService: IKitapService
-): BaseViewModelLast() {
+): BaseViewModel() {
 
     val dashKategoriListeResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<List<KitapturModel>>>();
     val kitapSearchResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<List<KitapModel>>>();

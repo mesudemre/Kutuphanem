@@ -154,4 +154,8 @@
         <item name="thumbTint">@color/switch_thumb_selector</item>
         <item name="android:textColor">@color/transparent</item>
     </style>
+    <style name="ChipTextAppearance.Readable" parent="TextAppearance.MaterialComponents.Chip">
+        <item name="fontFamily">@font/alegreya_bold</item>
+        <item name="android:fontFamily">@font/alegreya_bold</item>
+    </style>
 </resources>
