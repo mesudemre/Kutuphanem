@@ -99,7 +99,17 @@
     <style name="PrimaryButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:backgroundTint">@color/lacivert</item>
     </style>
-
+    <style name="ProfilUpdateButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:background">@drawable/profil_guncelle_button_background</item>
+        <item name="android:text">@string/profilGuncelleButtonLabel</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">3dp</item>>
+        <item name="android:layout_marginLeft">3dp</item>>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:textColor">@color/whiteTextColor</item>
+    </style>
     <style name="LogoutButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:backgroundTint">@color/kirmizi</item>
     </style>
@@ -121,5 +131,31 @@
     </style>
     <style name="CustomHintApperance" parent="TextAppearance.Design.Hint">
         <item name="android:textColor">@color/transparent</item>
+    </style>
+    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name="searchHintIcon">@null</item>
+        <item name="queryHint">@string/searchHintText</item>
+        <item name="android:queryHint">@string/searchHintText</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
+
+    <style name="BottomSheetCollapseView" parent="">
+        <item name="android:background">@drawable/view_radius_corner</item>
+        <item name="android:layout_marginTop">3dp</item>
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">4dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
+    <style name="KutuphanemSwitchButtonStyle" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="trackTint">@color/switch_track_selector</item>
+        <item name="thumbTint">@color/switch_thumb_selector</item>
+        <item name="android:textColor">@color/transparent</item>
+    </style>
+    <style name="ChipTextAppearance.Readable" parent="TextAppearance.MaterialComponents.Chip">
+        <item name="fontFamily">@font/alegreya_bold</item>
+        <item name="android:fontFamily">@font/alegreya_bold</item>
     </style>
 </resources>

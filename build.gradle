@@ -2,7 +2,7 @@
 buildscript {
     ext.kotlin_version = "1.5.21"
     ext.lifeCycleExtensionVersion = "1.1.1"
-    ext.retrofitVersion = "2.3.0"
+    ext.retrofitVersion = "2.6.0"
     ext.glideVersion = "4.10.0"
     ext.rxJavaVersion = "2.1.9"
     ext.roomVersion = "2.3.0"
@@ -18,6 +18,9 @@ buildscript {
     ext.composeVM_version='1.0.0-alpha07'
     ext.composeMaterial_version='1.0.1'
     ext.google_service_version='4.3.10'
+    ext.PROD_API_URL=''
+    ext.DEV_ALPHA_BETA_API_URL='http://192.168.1.106:8080/KutuphaneSistemiWS/'
+    ext.okhttpLogging_version='4.2.1'
 
     repositories {
         google()

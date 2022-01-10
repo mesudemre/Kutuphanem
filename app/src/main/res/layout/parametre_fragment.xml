@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/parametreTabId"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:background="@color/whiteTextColor"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@color/lacivert"
+        app:tabMaxWidth="0dp"
+        app:tabSelectedTextColor="@color/lacivert"
+        app:tabTextAppearance="@style/ParametreTabLayoutTextStyle"
+        app:tabTextColor="@color/cardview_dark_background" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/parametreTabId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/whiteTextColor"
-            app:tabMaxWidth="0dp"
-            app:tabGravity="fill"
-            app:tabTextColor="@color/cardview_dark_background"
-            app:tabSelectedTextColor="@color/lacivert"
-            app:tabTextAppearance="@style/ParametreTabLayoutTextStyle"
-            app:tabIndicatorColor="@color/lacivert"/>
-
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/parametreViewPager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </LinearLayout>
-</layout>
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/parametreViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

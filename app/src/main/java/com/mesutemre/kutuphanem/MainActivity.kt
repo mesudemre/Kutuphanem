@@ -6,11 +6,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.google.android.material.bottomnavigation.LabelVisibilityMode
-import com.mesutemre.kutuphanem.customcomponents.CurvedBottomNavigationView
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.WRITE_EXTERNAL_STORAGE_REQUEST_CODE
+import com.mesutemre.kutuphanem.util.customcomponents.CurvedBottomNavigationView
 import com.mesutemre.kutuphanem.util.hideComponent
 import com.mesutemre.kutuphanem.util.showComponent
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,13 +53,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpNavigation(){
         navHostFragment = supportFragmentManager.findFragmentById(R.id.bottomFragmentId) as NavHostFragment;
-        val navController = navHostFragment.navController
         navHostFragment.navController.addOnDestinationChangedListener { controller, destination, arguments ->
             if(destination.id in arrayOf(
                     R.id.parametreEklemeFragment,
                     R.id.kitapEklemeFragment,
                     R.id.kitapDetayFragment,
-                    R.id.kitapDetayDeepFragment
+                    R.id.kitapDetayDeepFragment,
+                    R.id.splashFragment,
+                    R.id.loginFragment,
+                    R.id.profilIslemAdSoyadEpostaFragment,
+                    R.id.profilIslemDogumTarCinsiyetFragment,
+                    R.id.profilIslemIlgiAlanlarimFragment,
+                    R.id.profilIslemIletisiTercihlerimFragment
             )){
                 floatingActionButton3.hideComponent();
                 navBottomMenu.hideComponent();
@@ -68,7 +73,6 @@ class MainActivity : AppCompatActivity() {
                 navBottomMenu.showComponent();
             }
         }
-        //navHostFragment.navController.backStack.clear();
-        NavigationUI.setupWithNavController(navBottomMenu,navHostFragment.navController);
+        setupWithNavController(navBottomMenu,navHostFragment.navController);
     }
 }

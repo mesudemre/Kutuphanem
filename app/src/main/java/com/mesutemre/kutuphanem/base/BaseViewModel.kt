@@ -1,32 +1,56 @@
 package com.mesutemre.kutuphanem.base
 
-import android.app.Application
-import android.content.Context
-import androidx.lifecycle.AndroidViewModel
-import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlin.coroutines.CoroutineContext
+import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
+import retrofit2.Response
 
 /**
  * @Author: mesutemre.celenk
- * @Date: 17.08.2021
+ * @Date: 31.12.2021
  */
-abstract class BaseViewModel(application: Application)
-    :AndroidViewModel(application),CoroutineScope {
+abstract class BaseViewModel: ViewModel() {
+    inline suspend fun <T:Any> serviceCall(crossinline call: suspend() -> Response<T>,
+                                           dispatcher: CoroutineDispatcher
+    ):BaseDataEvent<T>{
+        return withContext(dispatcher){
+            val response: Response<T>;
+            try {
+                response = call.invoke();
+            }catch (t:Throwable){
+                return@withContext BaseDataEvent.Error(t.message!!);
+            }
 
-    val job = Job();
-    override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.Main;
+            return@withContext if (!response.isSuccessful){
+                val errorBody = response.errorBody();
+                BaseDataEvent.Error(errorBody.toString());
+            }else {
+                return@withContext if (response.body() == null) {
+                    BaseDataEvent.Error("Boş response");
+                }else {
+                    BaseDataEvent.Success(response.body());
+                }
+            }
+        }
 
-    open val context:Context = application.baseContext;
+    }
 
-    abstract val disposible: CompositeDisposable;
+    inline suspend fun <T:Any> dbCall(crossinline call: suspend() -> T,
+                                      dispatcher: CoroutineDispatcher
+    ):BaseDataEvent<T>{
+        return withContext(dispatcher) {
+            val response:T;
+            try {
+                response = call.invoke();
+            }catch (t:Throwable){
+                return@withContext BaseDataEvent.Error(t.message!!);
+            }
 
-    override fun onCleared() {
-        super.onCleared();
-        disposible.clear();
-        job.cancel();
+            return@withContext if (response == null){
+                BaseDataEvent.Error("Herhangi bir data bulunamadı!");
+            }else {
+                BaseDataEvent.Success(response);
+            }
+        }
     }
 }

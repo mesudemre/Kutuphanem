@@ -5,10 +5,10 @@
     <data>
         <variable
             name="yayinevi"
-            type="com.mesutemre.kutuphanem.model.YayineviModel" />
+            type="com.mesutemre.kutuphanem.parametre.yayinevi.model.YayineviModel" />
         <variable
             name="listener"
-            type="com.mesutemre.kutuphanem.listener.YayineviDeleteClickListener" />
+            type="com.mesutemre.kutuphanem.parametre.yayinevi.listener.YayineviDeleteClickListener" />
     </data>
     <androidx.cardview.widget.CardView
         android:id="@+id/yayinEviCw"

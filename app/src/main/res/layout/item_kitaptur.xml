@@ -5,10 +5,10 @@
     <data>
         <variable
             name="listener"
-            type="com.mesutemre.kutuphanem.listener.KitapturDeleteClickListener" />
+            type="com.mesutemre.kutuphanem.parametre.kitaptur.listener.KitapturDeleteClickListener" />
         <variable
             name="kitaptur"
-            type="com.mesutemre.kutuphanem.model.KitapturModel" />
+            type="com.mesutemre.kutuphanem.parametre.kitaptur.model.KitapturModel" />
     </data>
 
     <androidx.cardview.widget.CardView

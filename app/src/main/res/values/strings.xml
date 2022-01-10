@@ -24,6 +24,8 @@
     <string name="login_password_hint">Şifreniz</string>
     <string name="login_email_hint">Kullanıcı Adınız</string>
     <string name="girisButtonLabel">Giriş</string>
+    <string name="sifremiUnuttumLabel">Şifremi Unuttum</string>
+    <string name="hesapYokKayitLabel">Hesabınız yok mu? Hemen kaydolun.</string>
 
     <!--LoginActivity -->
     <string name="bosKullaniciAdiHata">Kullanıcı adı boş geçilemez!</string>
@@ -74,7 +76,7 @@
     <string name="profilDogumtarihLabel">Doğum Tarihiniz</string>
     <string name="profilSayfaHata">Profil bilgileriniz getirilemedi!</string>
     <string name="ilgiAlanlarinizLegendTitle">İlgi Alanlarınız</string>
-    <string name="ilgiAlanHata">İlgi alanlarınız geitirilemedi!</string>
+    <string name="ilgiAlanHata">İlgi alanlarınız getirilemedi!</string>
     <string name="profilGuncelleButtonLabel">Güncelle</string>
     <string name="cikisButtonLabel">Çıkış</string>
     <string name="guncelleAlertMessage">Üyelik bilgileriniz güncellenecektir. Devam etmek istiyor musunuz?</string>
@@ -90,6 +92,12 @@
     <string name="cinsiyetErkekValue">ERKEK</string>
     <string name="cinsiyetKadinValue">KADIN</string>
     <string name="profilGuncellemeSunucuHata">Sunucu ile bağlantı kurulamadı!</string>
+    <string name="profilGuncellemeAdSoyadBilgiLabel">Ad Soyad ve E-Posta Bilgilerim</string>
+    <string name="profilGuncellemeCinsiyetDogumTarLabel">Doğum Tarihi ve Cinsiyet</string>
+    <string name="profilGuncellemeCinsiyetDogumTarCinsiyetBilgiLabel">Doğum Tarihi ve Cinsiyet Bilgilerim</string>
+    <string name="profilGuncellemeIlgiAlanlariLabel">İlgi Alanlarım</string>
+    <string name="profilGuncellemeTercihlerLabel">Uygulama Tercihlerim</string>
+    <string name="cinsiyetLabel">Cinsiyetiniz</string>
 
     <!--profil_image_degistir_menu.xml -->
     <string name="itemPhotoCamera">Kamera</string>
@@ -128,8 +136,8 @@
     <string name="kitapKaydiBasarli">Kitap başarıyla kaydedildi</string>
     <string name="kitapKaydiHataText">Kitap kaydı esnasında hata meydana geldi!</string>
     <string name="kitapResmiYuklemeHata">Kitap resmi yüklenirken hata meydana geldi!</string>
-    <string name="kitapTurSecinizText">Kitap türü seçiniz</string>
-    <string name="yayinEviSecinizText">Yayınevi seçiniz</string>
+    <string name="kitapTurSecinizText">Kitap türü seçiniz...</string>
+    <string name="yayinEviSecinizText">Yayınevi seçiniz...</string>
 
     <!--KitapDetayFragment -->
     <string name="kitapAdLabelText">Kitap Adı</string>
@@ -156,4 +164,10 @@
     <string name="kitapYorumListeBos">Bu kitap hakkında henüz yorum yapılmamış</string>
     <string name="kitapYorumDevamGosterLabel">Devamını oku...</string>
     <string name="noComentKitapYet">Bu kitap henüz puanlanmamış.Yorumlardan kitabı puanlayabilirsiniz...</string>
+
+    <string name="kitapSelectionTurLabel">Kitap Türü Seçimi</string>
+    <string name="kitapSelectionYayineviLabel">Yayınevi Seçimi</string>
+
+    <string name="pleaseSearch">Ara...</string>
+    <string name="profilResimDegisiklik">Profil resminiz değiştirilecektir. Onaylıyor musunuz?</string>
 </resources>

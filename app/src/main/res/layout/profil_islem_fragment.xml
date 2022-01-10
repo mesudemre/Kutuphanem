@@ -1,392 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <data>
-
-        <import type="com.mesutemre.kutuphanem.converters.BindingConverters" />
-
-        <variable
-            name="kullanici"
-            type="com.mesutemre.kutuphanem.model.Kullanici" />
-
-        <variable
-            name="profilClickListener"
-            type="com.mesutemre.kutuphanem.listener.ProfilIslemFragmentClickListener" />
-    </data>
-
-
-
-    <androidx.constraintlayout.motion.widget.MotionLayout
-        android:id="@+id/profilBilgiLayoutCard"
+    <RelativeLayout
+        android:id="@+id/profilBilgiLayoutId"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutDescription="@xml/profil_islem_fragment_xml_profilbilgilayoutcard_scene">
+        android:layout_height="170dp"
+        android:background="@drawable/profil_gradient_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/profilTitleTextViewId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/alegreya_bold"
+            android:text="@string/profilGuncellemeLabel"
+            android:textColor="@color/whiteTextColor"
+            android:textSize="24sp" />
 
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/profilAdSoyadTextViewId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profilTitleTextViewId"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/alegreya_bold"
+            android:textColor="@color/whiteTextColor"
+            android:textSize="18sp" />
+    </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/profilEkranSurecId"
+    <RelativeLayout
+        android:id="@+id/profilResimLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="100dp"
+        app:layout_constraintBottom_toTopOf="@id/profilIslemlerItems"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/profilResimImage"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@color/transparent" />
+
+        <ImageView
+            android:id="@+id/profilResimChangeId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="65dp"
+            android:layout_marginTop="75dp"
+            android:clickable="true"
+            android:src="@drawable/ic_baseline_settings_32" />
+
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/profilBilgiProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:indeterminateTint="@color/lacivert"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/profilIslemlerItems"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profilResimLayout">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/profilErrorTextId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:text="@string/profilSayfaHata"
-                android:textColor="@color/kirmizi"
-                android:textSize="18sp"
-                android:visibility="gone" />
-
-            <ProgressBar
-                android:id="@+id/profilProgressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/profilErrorTextId"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
-                android:layout_marginTop="200dp"
-                android:indeterminate="true"
-                android:indeterminateDrawable="@drawable/wheel_progress_indeterminate"
-                android:visibility="gone" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/profilResimPanelLayoutId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <LinearLayout
-                android:id="@+id/profilResimPanelId"
-                android:layout_width="match_parent"
-                android:layout_height="220dp"
-                android:background="@drawable/profil_gradient_color"
-                android:orientation="vertical">
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center">
-
-                    <ImageView
-                        android:id="@+id/profilImage"
-                        android:layout_width="130dp"
-                        android:layout_height="130dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="35dp" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginLeft="80dp"
-                        android:layout_marginTop="145dp"
-                        android:clickable="true"
-                        android:onClick="@{(v) -> profilClickListener.openProfilResimDegistirme(v,profilImage)}"
-                        android:src="@drawable/ic_baseline_settings_32" />
-                </RelativeLayout>
-            </LinearLayout>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardView"
-                style="@style/CustomCardViewStyle"
+            <com.mesutemre.kutuphanem.util.customcomponents.CustomCardItem
+                android:id="@+id/adSoyadEpostaCardId"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_below="@id/profilResimPanelId"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="-30dp"
-                android:layout_marginRight="30dp">
+                app:custom_card_title="@string/profilGuncellemeAdSoyadBilgiLabel" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:weightSum="3">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:fontFamily="@font/alegreya"
-                        android:gravity="center"
-                        android:text="@string/profilGuncellemeLabel"
-                        android:textColor="@color/lacivert"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/profilLayoutIdEnd"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@drawable/profil_gradient_color"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/profilGuncelleEndBaslikId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center_vertical"
-                android:fontFamily="@font/alegreya"
-                android:text="@string/profilGuncellemeLabel"
-                android:textColor="@color/whiteTextColor"
-                android:textSize="22sp"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/profilImageEnd"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignEnd="@id/profilGuncelleEndBaslikId"
-                android:layout_alignParentEnd="true" />
-        </RelativeLayout>
-
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/detayLayoutId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profilResimPanelLayoutId">
-
-            <LinearLayout
+            <com.mesutemre.kutuphanem.util.customcomponents.CustomCardItem
+                android:id="@+id/dogumTarCinsiyetCardId"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="50dp"
+                app:custom_card_title="@string/profilGuncellemeCinsiyetDogumTarLabel" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputProfilKullaniciAd"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:enabled="false"
-                    app:boxStrokeColor="@color/primaryTextColor">
+            <com.mesutemre.kutuphanem.util.customcomponents.CustomCardItem
+                android:id="@+id/ilgiAlanlarimCardId"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:custom_card_title="@string/profilGuncellemeIlgiAlanlariLabel" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextProfilKullaniciAd"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/profilKullaniciAdiLabel"
-                        android:maxLines="1"
-                        android:text="@{kullanici.username}" />
-                </com.google.android.material.textfield.TextInputLayout>
+            <com.mesutemre.kutuphanem.util.customcomponents.CustomCardItem
+                android:id="@+id/uygulamaTercihlerimCardId"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:custom_card_title="@string/profilGuncellemeTercihlerLabel" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputProfilAd"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="20dp"
-                    android:clearStringValidation="@{kullanici.ad}"
-                    app:boxStrokeColor="@color/primaryTextColor"
-                    app:errorEnabled="true">
+            <com.mesutemre.kutuphanem.util.customcomponents.CustomCardItem
+                android:id="@+id/cikisCardId"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:custom_card_arrowTint="@color/white"
+                app:custom_card_backgroundColor="@color/acik_kirmizi"
+                app:custom_card_title="@string/cikisButtonLabel"
+                app:custom_card_titleColor="@color/whiteTextColor" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextProfilAd"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/profilAdLabel"
-                        android:maxLines="1"
-                        android:text="@={kullanici.ad}" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputProfilSoyad"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="20dp"
-                    android:clearStringValidation="@{kullanici.soyad}"
-                    app:boxStrokeColor="@color/primaryTextColor"
-                    app:errorEnabled="true">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextProfilSoyad"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/profilSoyadLabel"
-                        android:maxLines="1"
-                        android:text="@={kullanici.soyad}" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputProfilEposta"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="20dp"
-                    android:clearStringValidation="@{kullanici.eposta}"
-                    app:boxStrokeColor="@color/primaryTextColor"
-                    app:errorEnabled="true">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextProfilEposta"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/profilEpostaLabel"
-                        android:inputType="textEmailAddress"
-                        android:maxLines="1"
-                        android:text="@={kullanici.eposta}" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputProfilDogumtarih"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="20dp"
-                    app:boxStrokeColor="@color/primaryTextColor"
-                    app:errorEnabled="true">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextProfilDogumtarih"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:focusable="false"
-                        android:hint="@string/profilDogumtarihLabel"
-                        android:inputType="textEmailAddress"
-                        android:maxLines="1"
-                        android:onClick="@{(v) -> profilClickListener.openDatePicker(v,kullanici.dogumTarihi)}"
-                        android:text="@={BindingConverters.dateToString(kullanici.dogumTarihi)}" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    style="@style/KutuphanemCheckBoxStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="20dp"
-                    android:checked="@={kullanici.haberdarmi}"
-                    android:text="@string/gelismeHabderdarLabel" />
-
-                <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="20dp"
-                    android:checkedButton="@={BindingConverters.selectedCinsiyet(kullanici.cinsiyet)}"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.radiobutton.MaterialRadioButton
-                        android:id="@+id/erkekCinsiyetRadioButtonId"
-                        style="@style/KutuphanemRadioButtonStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/cinsiyetErkek" />
-
-                    <com.google.android.material.radiobutton.MaterialRadioButton
-                        android:id="@+id/kadinCinsiyetRadioButtonId"
-                        style="@style/KutuphanemRadioButtonStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/cinsiyetKadin" />
-                </RadioGroup>
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/ilgiAlanlarinizLegendTitle" />
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="20dp"
-                    app:cardElevation="2dp"
-                    app:strokeColor="@color/transparent"
-                    app:strokeWidth="1dp">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/ilgiAlanHataTextViewId"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:gravity="center"
-                            android:text="@string/ilgiAlanHata"
-                            android:textColor="@color/kirmizi"
-                            android:textSize="14sp"
-                            android:visibility="gone" />
-
-                        <ProgressBar
-                            android:id="@+id/ilgiAlanProgressBarId"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/ilgiAlanHataTextViewId"
-                            android:layout_centerInParent="true"
-                            android:indeterminate="true"
-                            android:indeterminateDrawable="@drawable/wheel_progress_indeterminate_small"
-                            android:visibility="gone" />
-
-                        <com.google.android.material.chip.ChipGroup
-                            android:id="@+id/ilgiAlanChips"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"></com.google.android.material.chip.ChipGroup>
-                    </RelativeLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.button.MaterialButton
-                    style="@style/PrimaryButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="20dp"
-                    android:onClick="@{(v) -> profilClickListener.kullaniciGuncelle(v)}"
-                    android:text="@string/profilGuncelleButtonLabel"
-                    android:textColor="@color/whiteTextColor" />
-
-                <com.google.android.material.button.MaterialButton
-                    style="@style/LogoutButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="20dp"
-                    android:onClick="@{(v) -> profilClickListener.logoutFromApplication(v)}"
-                    android:text="@string/cikisButtonLabel"
-                    android:textColor="@color/whiteTextColor"
-                    app:icon="@drawable/ic_baseline_exit_to_app_24"
-                    app:iconTint="@color/whiteTextColor" />
-
-            </LinearLayout>
-
-        </androidx.core.widget.NestedScrollView>
-
-    </androidx.constraintlayout.motion.widget.MotionLayout>
-
-
-</layout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

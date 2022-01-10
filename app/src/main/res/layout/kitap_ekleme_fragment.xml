@@ -15,25 +15,45 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/fotoCekButtonId"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
-            android:text="@string/takePhoto"
-            app:layout_constraintBottom_toTopOf="@+id/fotoCekIptalButtonId"
+            app:layout_constraintBottom_toBottomOf="@+id/kitapImageViewFinder"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/fotoCekIptalButtonId"
-            style="@style/LogoutButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/iptalLabel"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            <ImageView
+                android:id="@+id/switchCameraImageId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/ic_baseline_switch_camera_72" />
+
+            <ImageView
+                android:id="@+id/kitapResimPhotoCekImageId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/ic_baseline_photo_camera_72" />
+
+            <ImageView
+                android:id="@+id/kitapResimIptalImageId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/ic_baseline_cancel_72" />
+
+        </RelativeLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
     <LinearLayout
         android:id="@+id/kitapGenelBilgiLayoutId"
@@ -224,18 +244,26 @@
                         android:visibility="gone" />
 
                     <com.google.android.material.card.MaterialCardView
+                        android:clickable="true"
+                        android:id="@+id/selectKitapTurCardId"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="50dp"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
                         app:cardCornerRadius="4dp"
+                        android:visibility="visible"
                         app:strokeColor="@color/imageShadow"
                         app:strokeWidth="1dp">
 
-                        <Spinner
-                            android:id="@+id/kitapTurlerSpinnerId"
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/selectedKitapTurMaterialTextViewId"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/black"
+                            android:layout_marginLeft="10dp"
+                            android:text="@string/kitapTurSecinizText"
+                            android:textSize="16sp" />
                     </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
 
@@ -270,6 +298,7 @@
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
                         app:cardCornerRadius="4dp"
+                        android:visibility="gone"
                         app:strokeColor="@color/imageShadow"
                         app:strokeWidth="1dp">
 
@@ -277,6 +306,27 @@
                             android:id="@+id/yayinEviSpinnerId"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
+                    </com.google.android.material.card.MaterialCardView>
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/selectYayineviCardId"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        app:cardCornerRadius="4dp"
+                        android:visibility="visible"
+                        app:strokeColor="@color/imageShadow"
+                        app:strokeWidth="1dp">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/selectedYayineviMaterialTextViewId"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/black"
+                            android:layout_marginLeft="10dp"
+                            android:text="@string/yayinEviSecinizText"
+                            android:textSize="16sp" />
                     </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
 

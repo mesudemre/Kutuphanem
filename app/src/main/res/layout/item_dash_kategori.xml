@@ -5,7 +5,7 @@
     <data>
         <variable
             name="kategori"
-            type="com.mesutemre.kutuphanem.model.KitapturModel" />
+            type="com.mesutemre.kutuphanem.parametre.kitaptur.model.KitapturModel" />
     </data>
 
     <RelativeLayout

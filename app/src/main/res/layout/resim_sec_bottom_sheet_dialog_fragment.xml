@@ -56,13 +56,19 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <View
+        style="@style/BottomSheetCollapseView"
+        android:layout_centerHorizontal="true" />
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/profilFotografTitleTextViewId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:fontFamily="@font/alegreya"
         android:text="@string/profilPhotoTitle"
         android:textColor="#000000"
+        android:layout_marginTop="10dp"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -88,6 +94,8 @@
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/lacivert"
+                android:fontFamily="@font/alegreya_bold"
                 android:textSize="18sp"
                 android:text="@string/itemRemoveImage" />
 
@@ -97,6 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="4dp"
+                app:tint="@color/lacivert"
                 android:src="@drawable/ic_baseline_delete_24" />
         </LinearLayout>
 
@@ -114,7 +123,9 @@
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/lacivert"
                 android:textSize="18sp"
+                android:fontFamily="@font/alegreya_bold"
                 android:text="@string/itemPhotoCamera" />
 
             <ImageView
@@ -122,6 +133,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                app:tint="@color/lacivert"
                 android:layout_marginTop="4dp"
                 android:src="@drawable/ic_baseline_photo_camera_24" />
         </LinearLayout>
@@ -141,6 +153,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
+                android:fontFamily="@font/alegreya_bold"
+                android:textColor="@color/lacivert"
                 android:text="@string/itemPhotoLocalStorage"/>
 
             <ImageView
@@ -149,6 +163,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="4dp"
+                app:tint="@color/lacivert"
                 android:src="@drawable/ic_baseline_image_24" />
         </LinearLayout>
 

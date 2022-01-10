@@ -1,22 +1,20 @@
 package com.mesutemre.kutuphanem.di
 
 import android.content.Context
-import com.mesutemre.kutuphanem.service.IKitapService
-import com.mesutemre.kutuphanem.service.IParametreService
-import com.mesutemre.kutuphanem.service.KullaniciService
-import com.mesutemre.kutuphanem.util.API_URL
-import com.mesutemre.kutuphanem.util.APP_TOKEN_KEY
-import com.mesutemre.kutuphanem.util.CustomSharedPreferences
+import com.mesutemre.kutuphanem.BuildConfig
+import com.mesutemre.kutuphanem.interceptors.HeaderInterceptor
 import com.mesutemre.kutuphanem.interceptors.NetworkConnectionInterceptor
+import com.mesutemre.kutuphanem.kitap.service.IKitapService
+import com.mesutemre.kutuphanem.parametre.service.IParametreService
+import com.mesutemre.kutuphanem.auth.service.KullaniciService
+import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -31,11 +29,20 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class KutuphanemNetworkModule {
 
+    private val loggingInterceptor = run {
+        val httpLoggingInterceptor = HttpLoggingInterceptor()
+        httpLoggingInterceptor.apply {
+            if (BuildConfig.DEBUG) {
+                httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+            }
+        }
+    }
+
     @Singleton
     @Provides
     fun provideRetrofit(client: OkHttpClient): Retrofit =
         Retrofit.Builder()
-            .baseUrl(API_URL)
+            .baseUrl(BuildConfig.API_URL)
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
@@ -47,14 +54,10 @@ class KutuphanemNetworkModule {
     fun provideHttpClient(customSharedPreferences: CustomSharedPreferences,
                           @ApplicationContext context: Context
     ): OkHttpClient {
-        return OkHttpClient.Builder().addInterceptor(object: Interceptor {
-            override fun intercept(chain: Interceptor.Chain): Response {
-                val request: Request = chain.request().newBuilder().addHeader("Authorization",
-                    "Bearer "+customSharedPreferences.getStringFromSharedPreferences(APP_TOKEN_KEY).trim()).build();
-                return chain.proceed(request);
-            }
-        })
+        return OkHttpClient.Builder()
+            .addInterceptor(HeaderInterceptor(customSharedPreferences))
             .addInterceptor(NetworkConnectionInterceptor(context))
+            .addInterceptor(loggingInterceptor)
             .build();
     }
 

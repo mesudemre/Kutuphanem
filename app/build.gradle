@@ -14,8 +14,8 @@ android {
         applicationId "com.mesutemre.kutuphanem"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        versionCode 5
+        versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -31,8 +31,25 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            debuggable false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField 'String', 'API_URL', "\"${PROD_API_URL}\""
+        }
+
+        debug {
+            buildConfigField 'String', 'API_URL', "\"${DEV_ALPHA_BETA_API_URL}\""
+            debuggable true
+        }
+
+        alpha {
+            buildConfigField 'String', 'API_URL', "\"${DEV_ALPHA_BETA_API_URL}\""
+            debuggable true
+        }
+
+        beta {
+            buildConfigField 'String', 'API_URL', "\"${DEV_ALPHA_BETA_API_URL}\""
+            debuggable true
         }
     }
     compileOptions {
@@ -102,4 +119,6 @@ dependencies {
     implementation "com.google.android.material:compose-theme-adapter:$composeMaterial_version"
 
     implementation platform('com.google.firebase:firebase-bom:28.4.1')
+
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpLogging_version"
 }

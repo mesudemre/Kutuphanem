@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/iletisimTercihPanelLayoutId"
+        android:background="@drawable/profil_gradient_color"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iletisimTercihBackImageId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_chevron_left"
+                app:tint="@color/white" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/alegreya_bold"
+                android:text="@string/profilGuncellemeTercihlerLabel"
+                android:textColor="@color/whiteTextColor"
+                android:textSize="18sp" />
+        </RelativeLayout>
+    </FrameLayout>
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_below="@id/iletisimTercihPanelLayoutId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="10dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputProfilKullaniciAd"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                app:boxStrokeColor="@color/primaryTextColor"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextProfilKullaniciAd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/profilKullaniciAdiLabel"
+                    android:maxLines="1"
+                    android:text="mesutemre" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/haberdarSwitchId"
+                style="@style/KutuphanemSwitchButtonStyle"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:text="@string/gelismeHabderdarLabel"/>
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/iletisimTercihGuncelleButtonId"
+                app:backgroundTint="@null"
+                style="@style/ProfilUpdateButtonStyle"/>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</RelativeLayout>
