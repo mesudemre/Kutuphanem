@@ -1,25 +1,33 @@
 package com.mesutemre.kutuphanem.util
 
 import android.app.Activity
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.AudioAttributes
+import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.provider.Settings
 import android.text.SpannableStringBuilder
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
+import android.widget.RemoteViews
 import android.widget.TextView
-import androidx.core.content.FileProvider
+import androidx.core.app.NotificationCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
+import androidx.work.*
 import com.google.android.material.snackbar.Snackbar
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.kitap.liste.model.KitapModel
@@ -28,10 +36,9 @@ import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.model.SnackType
 import com.mesutemre.kutuphanem.model.WARNING
 import java.io.*
-import java.net.HttpURLConnection
-import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 const val APP_TOKEN_KEY:String = "APP_TOKEN";
 const val KULLANICI_ADI_KEY:String = "KULLANICI_ADI";
@@ -191,63 +198,6 @@ fun rippleEffect(view:View,value:Boolean){
     }
 }
 
-fun getBitmapFromUrl(url:String): Bitmap? {
-    var input: InputStream? = null;
-    var bitMap:Bitmap? = null;
-    var connection: HttpURLConnection? = null;
-    try {
-        val url: URL = URL(url);
-        connection = url.openConnection() as HttpURLConnection;
-        connection.setDoInput(true);
-        connection.connect();
-        input = connection.inputStream;
-        bitMap = BitmapFactory.decodeStream(input);
-    }
-    catch (e: Exception) {
-        e.printStackTrace();
-    }
-    finally {
-        input?.close();
-        if(connection != null){
-            connection.disconnect();
-        }
-    }
-    return bitMap;
-}
-
-/*fun File.deleteDirectory(): Boolean {
-    return if (exists()) {
-        listFiles()?.forEach {
-            if (it.isDirectory) {
-                it.deleteDirectory()
-            } else {
-                it.delete()
-            }
-        }
-        delete()
-    } else false
-}*/
-
-fun bitmapToFile(bitmap: Bitmap, fileNameToSave: String,requireContext: Context,folderName:String): File? {
-    var file: File? = null
-    return try {
-        file = File(createDownloadedOutputDirectory(requireContext,folderName),fileNameToSave);
-
-        val bos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos) // YOU can also save it in JPEG
-        val bitmapdata = bos.toByteArray()
-
-        val fos = FileOutputStream(file)
-        fos.write(bitmapdata)
-        fos.flush()
-        fos.close()
-        file
-    } catch (e: Exception) {
-        e.printStackTrace()
-        file // it will return null
-    }
-}
-
 fun createOutputDirectory(context: Context): File {
     val mediaDir = context.externalMediaDirs.firstOrNull()?.let {
         File(it, context.resources.getString(R.string.app_name)).apply { mkdirs() }
@@ -277,23 +227,6 @@ fun checkDeviceHasFronCamera(ctx:Context):Boolean{
     }
     return false;
 }
-fun downloadKitap(kitap: KitapModel, requireContext: Context, isArchive:Boolean):Uri{
-    val kitapResim = getBitmapFromUrl(kitap.kitapResimPath!!);
-    val bytes: ByteArrayOutputStream = ByteArrayOutputStream();
-    if(kitapResim != null){
-        kitapResim?.compress(Bitmap.CompressFormat.PNG, 100, bytes);
-        var providerAtuh:String = "com.mesutemre.kutuphanem.provider";
-        var folderName:String = "Kütüphanem";
-        var resimAd:String = kitap.kitapAd+"_"+kitap.kitapId
-        if(isArchive){
-            resimAd = kitap.kitapId.toString();
-        }
-        val photoFile = bitmapToFile(kitapResim!!,resimAd+".png",requireContext,folderName);
-        val imageUri: Uri = FileProvider.getUriForFile(requireContext,providerAtuh,photoFile!!);
-        return imageUri;
-    }
-    return Uri.EMPTY;
-}
 
 fun saveFile(kitap: KitapModel, requireContext: Context, isArchive:Boolean,arr:ByteArray): File? {
     val kitapResim =  BitmapFactory.decodeByteArray(arr,0,arr.size);
@@ -301,14 +234,43 @@ fun saveFile(kitap: KitapModel, requireContext: Context, isArchive:Boolean,arr:B
     var photoFile:File? = null;
     if (kitapResim != null) {
         kitapResim?.compress(Bitmap.CompressFormat.PNG, 100, bytes);
-        var folderName: String = "Kütüphanem";
         var resimAd: String = kitap.kitapAd + "_" + kitap.kitapId
         if (isArchive) {
             resimAd = kitap.kitapId.toString();
         }
-        photoFile = bitmapToFile(kitapResim!!, resimAd + ".png", requireContext, folderName);
+
+        photoFile = convertBitmapToFile(kitapResim!!, resimAd + ".png", requireContext);
     }
     return photoFile;
+}
+
+fun convertBitmapToFile(bitmap: Bitmap, fileNameToSave: String,requireContext: Context):File {
+    var photoFile:File? = null;
+    return try {
+        val imgPath:File = createArsivDirectory(requireContext);
+        photoFile = File(imgPath.absolutePath,fileNameToSave);
+
+        val bos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos) // YOU can also save it in JPEG
+        val bitmapdata = bos.toByteArray()
+
+        val fos = FileOutputStream(photoFile)
+        fos.write(bitmapdata)
+        fos.flush()
+        fos.close()
+        photoFile
+    } catch (e: Exception) {
+        e.printStackTrace()
+        photoFile!! // it will return null
+    }
+}
+
+fun createArsivDirectory(context: Context): File {
+    val mediaDir = context.filesDir.let {
+        File(it, "arsiv").apply { mkdirs() }
+    }
+    return if (mediaDir != null && mediaDir.exists())
+        mediaDir else context.filesDir
 }
 
 inline fun <reified T: Activity>
@@ -316,3 +278,76 @@ inline fun <reified T: Activity>
             val intent = Intent(this,T::class.java);
             startActivity(intent);
         }
+
+fun Context.arsivResimSil(kitapId:String) {
+    val directory = File(this.filesDir,"arsiv");
+    val f = File(directory.absolutePath+"/${kitapId}.png");
+    if(f.exists()){
+        f.delete();
+    }
+}
+
+inline fun <reified W:ListenableWorker>
+        Context.enqueeOneTimeWorkManager(constraints: Constraints = Constraints.Builder()
+                            .setRequiresBatteryNotLow(true)
+                            .build()) {
+            val otwr = OneTimeWorkRequestBuilder<W>()
+                .setConstraints(constraints)
+                .build()
+            WorkManager.getInstance(this).enqueue(otwr);
+        }
+
+inline fun <reified W:ListenableWorker>
+        Context.enqueePeriodicTimeWorkManager(workTag:String,
+                                              constraints: Constraints = Constraints.Builder()
+                        .setRequiresBatteryNotLow(true)
+                        .build()) {
+            val pwr = PeriodicWorkRequestBuilder<W>(1,TimeUnit.DAYS)
+                .setConstraints(constraints)
+                .build();
+            WorkManager.getInstance(this).enqueueUniquePeriodicWork(workTag,ExistingPeriodicWorkPolicy.KEEP,pwr);
+
+        }
+
+fun Context.showKutuphanemBasicNotification(baslik:String,
+                                            aciklama:String) {
+    val builder: NotificationCompat.Builder;
+    val bildirimYoneticisi = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager;
+    val notificationLayout = RemoteViews(this.packageName, R.layout.kutuphanem_basic_notification_layout);
+
+    notificationLayout.setTextViewText(R.id.notificationTitleTextView,baslik);
+    notificationLayout.setTextViewText(R.id.notificationDetailTextView,aciklama);
+
+    if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
+        val kanalId = this.getString(R.string.kutuphanem_notification_channel_id)
+        val kanalAd = this.getString(R.string.kutuphanem_notification_channel_name)
+        val kanalTanitim = this.getString(R.string.kutuphanem_notification_channel_advertise)
+
+        var kanal: NotificationChannel? = bildirimYoneticisi.getNotificationChannel(kanalId)
+
+        if(kanal == null){
+            kanal = NotificationChannel(kanalId,kanalAd, NotificationManager.IMPORTANCE_DEFAULT);
+            kanal.description = kanalTanitim;
+            kanal.vibrationPattern = longArrayOf(0, 200, 60, 200)
+
+            bildirimYoneticisi.createNotificationChannel(kanal);
+        }
+
+        builder = NotificationCompat.Builder(this,kanalId);
+        builder
+            .setSmallIcon(R.drawable.ic_stat_onesignal_default)
+            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            .setCustomContentView(notificationLayout)
+            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+            .setAutoCancel(true);
+    }else {
+        builder = NotificationCompat.Builder(this);
+        builder
+            .setSmallIcon(R.drawable.ic_stat_onesignal_default)
+            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            .setCustomContentView(notificationLayout)
+            .setAutoCancel(true)
+            .priority = Notification.PRIORITY_DEFAULT;
+    }
+    bildirimYoneticisi.notify(2,builder.build());
+}

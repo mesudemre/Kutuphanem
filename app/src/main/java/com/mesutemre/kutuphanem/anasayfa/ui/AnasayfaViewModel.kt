@@ -1,5 +1,6 @@
 package com.mesutemre.kutuphanem.anasayfa.ui
 
+import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.base.BaseDataEvent
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
@@ -11,6 +12,7 @@ import com.mesutemre.kutuphanem.kitap.service.IKitapService
 import com.mesutemre.kutuphanem.parametre.kitaptur.model.KitapturModel
 import com.mesutemre.kutuphanem.parametre.service.IParametreService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -20,8 +22,11 @@ import javax.inject.Inject
 @HiltViewModel
 class AnasayfaViewModel @Inject constructor(@IoDispatcher private val ioDispatcher: CoroutineDispatcher,
                                             private val parametreService: IParametreService,
-                                            private val kitapService: IKitapService
+                                            private val kitapService: IKitapService,
+                                            @ApplicationContext private val appContext: Context
+
 ): BaseViewModel() {
+
 
     val dashKategoriListeResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<List<KitapturModel>>>();
     val kitapSearchResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<List<KitapModel>>>();

@@ -25,13 +25,13 @@ import com.mesutemre.kutuphanem.auth.profil.ui.dialog.DogumTarihiDialogFragment
 import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.databinding.KitapEklemeFragmentBinding
-import com.mesutemre.kutuphanem.util.listener.TextInputErrorClearListener
 import com.mesutemre.kutuphanem.model.*
 import com.mesutemre.kutuphanem.parametre.kitaptur.model.KitapturModel
 import com.mesutemre.kutuphanem.parametre.yayinevi.model.YayineviModel
 import com.mesutemre.kutuphanem.util.*
 import com.mesutemre.kutuphanem.util.customcomponents.selection.model.SelectItemModel
 import com.mesutemre.kutuphanem.util.customcomponents.selection.ui.SelectionDialogFragment
+import com.mesutemre.kutuphanem.util.listener.TextInputErrorClearListener
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 import java.io.File

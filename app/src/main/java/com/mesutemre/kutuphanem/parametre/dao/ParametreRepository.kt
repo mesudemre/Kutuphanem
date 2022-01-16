@@ -1,6 +1,5 @@
 package com.mesutemre.kutuphanem.parametre.dao
 
-import com.mesutemre.kutuphanem.parametre.dao.ParametreDao
 import com.mesutemre.kutuphanem.parametre.kitaptur.model.KitapturModel
 import com.mesutemre.kutuphanem.parametre.yayinevi.model.YayineviModel
 import javax.inject.Inject

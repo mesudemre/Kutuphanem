@@ -1,7 +1,12 @@
 package com.mesutemre.kutuphanem
 
 import android.app.Application
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.Configuration
+import com.mesutemre.kutuphanem.job.ClearImageNotInArchiveWorker
+import com.mesutemre.kutuphanem.util.enqueePeriodicTimeWorkManager
 import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 
 /**
  * @author Mesut Emre Çelenk
@@ -9,5 +14,19 @@ import dagger.hilt.android.HiltAndroidApp
  * <b>Android'in tüm hilt(Dependency Injection) sürecini başlatan kod blogudur</b>
  */
 @HiltAndroidApp
-class KutuphanemApplication:Application() {
+class KutuphanemApplication:Application(),Configuration.Provider {
+
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
+
+    override fun getWorkManagerConfiguration() =
+        Configuration.Builder()
+            .setMinimumLoggingLevel(android.util.Log.DEBUG)
+            .setWorkerFactory(workerFactory)
+            .build()
+
+    override fun onCreate() {
+        super.onCreate()
+        enqueePeriodicTimeWorkManager<ClearImageNotInArchiveWorker>("imageClear")
+    }
 }

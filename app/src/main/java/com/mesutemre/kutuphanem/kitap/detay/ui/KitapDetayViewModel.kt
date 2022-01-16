@@ -1,7 +1,6 @@
 package com.mesutemre.kutuphanem.kitap.detay.ui
 
 import android.content.Context
-import android.os.Environment
 import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.auth.dao.KullaniciDao
@@ -108,8 +107,7 @@ constructor(
 
     fun kitapArsivdenCikar(kitap: KitapModel){
         viewModelScope.launch {
-            async { arsivdenCikar(kitap.kitapId!!) }
-            async { arsivKitapResimSil(kitap.kitapId) }
+            arsivdenCikar(kitap.kitapId!!)
         }
     }
 
@@ -139,16 +137,6 @@ constructor(
             }
             is BaseDataEvent.Error->{
                 arsivKitapSil.value = BaseResourceEvent.Error(appContext.resources.getString(R.string.kitapArsivKaldirma));
-            }
-        }
-    }
-
-    private suspend fun arsivKitapResimSil(kitapId: Int?) {
-        withContext(ioDispatcher){
-            val path:String = Environment.getExternalStorageDirectory().path;
-            val f = File(path+"/Android/media/com.mesutemre.kutuphanem/Kütüphanem/${kitapId.toString()}.png");
-            if(f.exists()){
-                f.delete();
             }
         }
     }

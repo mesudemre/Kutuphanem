@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.google.android.material.bottomnavigation.LabelVisibilityMode
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
             navHostFragment.navController.navigate(R.id.kitapEklemeFragment);
         }
     }
+
 
     private fun initNavBottomMenu(){
         navBottomMenu = findViewById(R.id.bottomNavigation);

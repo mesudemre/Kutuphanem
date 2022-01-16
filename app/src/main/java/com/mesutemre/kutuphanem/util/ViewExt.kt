@@ -3,10 +3,8 @@ package com.mesutemre.kutuphanem.util
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.PorterDuff
 import android.net.Uri
-import android.os.Environment
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
@@ -14,6 +12,7 @@ import android.widget.ImageView
 import androidx.annotation.ColorInt
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.widget.ImageViewCompat
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
@@ -23,6 +22,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
+import com.mesutemre.kutuphanem.BuildConfig
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.util.listener.TextInputErrorClearListener
 import java.io.File
@@ -36,7 +36,7 @@ fun ImageView.getImageFromUrl(url:String?, iv: ImageView){
     circularProgressDrawable.start()
     val options = RequestOptions()
         .placeholder(circularProgressDrawable)
-        .error(R.mipmap.kutuphanem_icon_round);
+        .error(R.mipmap.ic_launcher);
     Glide.with(context)
         .setDefaultRequestOptions(options)
         .load(url)
@@ -52,7 +52,7 @@ fun ImageView.getCircleImageFromUrl(url:String?, iv: ImageView){
         .placeholder(circularProgressDrawable)
         .diskCacheStrategy(DiskCacheStrategy.NONE)
         .skipMemoryCache(true)
-        .error(R.mipmap.kutuphanem_icon_round);
+        .error(R.mipmap.ic_launcher);
     Glide.with(context)
         .setDefaultRequestOptions(options)
         .load(url)
@@ -170,11 +170,12 @@ fun loadImageFromLocal(view: ImageView, kitapId:Int){
 }
 
 fun ImageView.getImageFromLocal(kitapId: Int, view: ImageView){
-    var path:String = Environment.getExternalStorageDirectory().path;
-    path = path+"/Android/media/com.mesutemre.kutuphanem/Kütüphanem/${kitapId.toString()}.png";
-    val f = File(path);
-    if(f.exists()){
-        view.setImageBitmap(BitmapFactory.decodeFile(path));
+    val imgPath = File(view.context.filesDir,"arsiv");
+    val file = File(imgPath,"${kitapId.toString()}.png");
+    if (file.exists()) {
+        val contentUri = FileProvider.getUriForFile(view.context,
+            BuildConfig.APPLICATION_ID + ".provider",file);
+        view.setImageURI(contentUri);
     }else{
         Glide.with(view.context)
             .load(R.mipmap.kutuphanem_icon_round)

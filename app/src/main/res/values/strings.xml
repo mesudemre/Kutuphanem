@@ -170,4 +170,14 @@
 
     <string name="pleaseSearch">Ara...</string>
     <string name="profilResimDegisiklik">Profil resminiz değiştirilecektir. Onaylıyor musunuz?</string>
+
+    <string name="fab_menu_manuel">Manuel Giriş</string>
+    <string name="fab_menu_isbn">ISBN</string>
+    <string name="fab_menu_isbn_cam">Kamera</string>
+    
+    <string name="kutuphanem_notification_channel_id">kutuphanemapp2021</string>
+    <string name="kutuphanem_notification_channel_name">kutuphanemapp</string>
+    <string name="kutuphanem_notification_channel_advertise">kutuphanemuygulamasi</string>
+
+    <string name="clear_arsiv_image_result">Arşivinizde olmayan kitapların resimlerini sizin için sildik. İyi günler dileriz...</string>
 </resources>

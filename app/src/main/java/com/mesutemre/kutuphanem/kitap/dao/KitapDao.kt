@@ -21,4 +21,7 @@ interface KitapDao {
     @Query("SELECT * FROM kitapmodel WHERE id=:kitapId")
     suspend fun getKitapById(kitapId: Int): KitapModel;
 
+    @Query("SELECT * FROM kitapmodel")
+    suspend fun getArsivKitapListe():MutableList<KitapModel>;
+
 }

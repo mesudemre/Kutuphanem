@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.Constraints
 import com.google.android.material.progressindicator.CircularDrawingDelegate
 import com.google.android.material.progressindicator.CircularIndeterminateAnimatorDelegate
 import com.google.android.material.progressindicator.IndeterminateDrawable
@@ -102,6 +103,11 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
         }
 
         prepareProggressForSearch();
+
+        //onCreate de ayağa kalk der , resource tüketimini engeller
+        /*viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+
+        }*/
 
         handler = Handler(object:Handler.Callback{
             override fun handleMessage(message: Message): Boolean {

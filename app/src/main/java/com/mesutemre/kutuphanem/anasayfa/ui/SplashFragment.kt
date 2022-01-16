@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.navigation.NavDirections
-import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.databinding.SplashFragmentBinding
 import com.mesutemre.kutuphanem.util.APP_TOKEN_KEY
@@ -50,7 +50,7 @@ class SplashFragment:BaseFragment<SplashFragmentBinding>() {
 
             override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
                 p0?.hideComponent();
-                Navigation.findNavController(binding.splashMainLayoutId).navigate(action);
+                findNavController().navigate(action);
             }
 
             override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {
