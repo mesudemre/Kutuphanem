@@ -60,8 +60,7 @@
             app:enterAnim="@anim/slide_left"/>
         <action
             android:id="@+id/action_profilIslemFragment_to_profilIslemIlgiAlanlarimFragment"
-            app:destination="@id/profilIslemIlgiAlanlarimFragment"
-            app:enterAnim="@anim/slide_left"/>
+            app:destination="@id/profilIslemIlgiAlanlarimFragment"/>
         <action
             android:id="@+id/action_profilIslemFragment_to_profilIslemIletisiTercihlerimFragment"
             app:destination="@id/profilIslemIletisiTercihlerimFragment"
@@ -104,7 +103,7 @@
             app:destination="@id/anasayfaFragment" />
         <deepLink
             android:id="@+id/deepLinkKitapDetay"
-            app:uri="http://192.168.1.105:8080/KutuphaneSistemiWS/api/kitap/nesne?kitapId={kitapId}" />
+            app:uri="http://192.168.1.106:8080/KutuphaneSistemiWS/api/kitap/nesne?kitapId={kitapId}" />
         <argument android:name="kitapId" app:argType="string"/>
     </fragment>
     <fragment

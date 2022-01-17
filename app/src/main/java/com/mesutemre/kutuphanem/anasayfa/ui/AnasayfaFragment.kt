@@ -6,6 +6,7 @@ import android.os.Message
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
@@ -14,7 +15,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.work.Constraints
 import com.google.android.material.progressindicator.CircularDrawingDelegate
 import com.google.android.material.progressindicator.CircularIndeterminateAnimatorDelegate
 import com.google.android.material.progressindicator.IndeterminateDrawable
@@ -103,11 +103,6 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
         }
 
         prepareProggressForSearch();
-
-        //onCreate de ayağa kalk der , resource tüketimini engeller
-        /*viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-
-        }*/
 
         handler = Handler(object:Handler.Callback{
             override fun handleMessage(message: Message): Boolean {

@@ -1,12 +1,14 @@
 package com.mesutemre.kutuphanem.anasayfa.ui
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.base.BaseDataEvent
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.base.BaseSingleLiveEvent
 import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.di.IoDispatcher
+import com.mesutemre.kutuphanem.exceptions.dao.KutuphanemGlobalExceptionHandlerDao
 import com.mesutemre.kutuphanem.kitap.liste.model.KitapModel
 import com.mesutemre.kutuphanem.kitap.service.IKitapService
 import com.mesutemre.kutuphanem.parametre.kitaptur.model.KitapturModel
@@ -23,6 +25,7 @@ import javax.inject.Inject
 class AnasayfaViewModel @Inject constructor(@IoDispatcher private val ioDispatcher: CoroutineDispatcher,
                                             private val parametreService: IParametreService,
                                             private val kitapService: IKitapService,
+                                            private val exceptionHandlerDao: KutuphanemGlobalExceptionHandlerDao,
                                             @ApplicationContext private val appContext: Context
 
 ): BaseViewModel() {
@@ -33,6 +36,11 @@ class AnasayfaViewModel @Inject constructor(@IoDispatcher private val ioDispatch
 
     fun getAnasayfaDashListe(){
         viewModelScope.launch {
+            val exList = exceptionHandlerDao.getExceptionList();
+            for (e in exList) {
+                Log.d("Exception Detay",e.detay!!)
+                Log.d("Exception Cihaz",e.cihazInfo);
+            }
             async { initDashKategoriListe() }
         }
     }

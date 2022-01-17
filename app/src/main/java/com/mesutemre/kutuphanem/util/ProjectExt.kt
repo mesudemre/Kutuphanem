@@ -51,6 +51,28 @@ const val READ_EXTERNAL_STORAGE_REQUEST_CODE:Int=1992;
 const val WRITE_EXTERNAL_STORAGE_REQUEST_CODE:Int=2019;
 const val SHARED_PREF_FILE:String = "KUTUPHANEM_SP";
 
+val DEVICE_NAME: String by lazy {
+    val manufacturer = Build.MANUFACTURER
+    val model = Build.MODEL
+    if (model.toLowerCase().startsWith(manufacturer.toLowerCase())) {
+        capitalize(model)
+    } else {
+        capitalize(manufacturer) + " " + model
+    }
+}
+
+private fun capitalize(s: String?): String {
+    if (s == null || s.isEmpty()) {
+        return ""
+    }
+    val first = s[0]
+    return if (Character.isUpperCase(first)) {
+        s
+    } else {
+        Character.toUpperCase(first) + s.substring(1)
+    }
+}
+
 fun showSnackBar(view:View, message:String,@SnackType type: Int){
     var builder:SpannableStringBuilder  = SpannableStringBuilder();
     val sb: Snackbar = Snackbar.make(view,message, Snackbar.LENGTH_SHORT);

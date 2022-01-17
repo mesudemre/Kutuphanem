@@ -42,4 +42,9 @@ class KutuphanemDBModule {
     @Singleton
     @Provides
     fun provideKitapDao(database: KutuphanemDatabase) = database.getKitapDao();
+
+    @Singleton
+    @Provides
+    fun provideKutuphanemGlobalExceptionHandlerDao(database: KutuphanemDatabase) = database.getGlobalExceptionDao();
+
 }

@@ -4,6 +4,9 @@ import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.mesutemre.kutuphanem.job.ClearImageNotInArchiveWorker
+import com.mesutemre.kutuphanem.job.GlobalExceptionCatchWorker
+import com.mesutemre.kutuphanem.job.SendExceptionToServerWorker
+import com.mesutemre.kutuphanem.util.enqueeOneTimeWorkManager
 import com.mesutemre.kutuphanem.util.enqueePeriodicTimeWorkManager
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
@@ -27,6 +30,8 @@ class KutuphanemApplication:Application(),Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
+        enqueeOneTimeWorkManager<GlobalExceptionCatchWorker>();
         enqueePeriodicTimeWorkManager<ClearImageNotInArchiveWorker>("imageClear")
+        enqueePeriodicTimeWorkManager<SendExceptionToServerWorker>("exceptionSender")
     }
 }
