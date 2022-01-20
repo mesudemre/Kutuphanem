@@ -1,6 +1,7 @@
 package com.mesutemre.kutuphanem.base
 
 import androidx.lifecycle.ViewModel
+import androidx.navigation.Navigation
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.Response
@@ -10,6 +11,8 @@ import retrofit2.Response
  * @Date: 31.12.2021
  */
 abstract class BaseViewModel: ViewModel() {
+
+    val navigateLiveData = BaseSingleLiveEvent<Int>()
 
     inline suspend fun <T:Any> serviceCall(crossinline call: suspend() -> Response<T>,
                                            dispatcher: CoroutineDispatcher

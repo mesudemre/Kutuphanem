@@ -3,6 +3,7 @@ package com.mesutemre.kutuphanem.anasayfa.ui
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.base.BaseDataEvent
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.base.BaseSingleLiveEvent
@@ -30,7 +31,6 @@ class AnasayfaViewModel @Inject constructor(@IoDispatcher private val ioDispatch
 
 ): BaseViewModel() {
 
-
     val dashKategoriListeResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<List<KitapturModel>>>();
     val kitapSearchResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<List<KitapModel>>>();
 
@@ -54,6 +54,7 @@ class AnasayfaViewModel @Inject constructor(@IoDispatcher private val ioDispatch
         when(kitapTurListeResponse){
             is BaseDataEvent.Success->{
                 dashKategoriListeResourceEvent.value = BaseResourceEvent.Success(kitapTurListeResponse.data!!);
+                navigateLiveData.value = R.id.kitapEklemeFragment
             }
             is BaseDataEvent.Error->{
                 dashKategoriListeResourceEvent.value = BaseResourceEvent.Error(kitapTurListeResponse.errMessage);

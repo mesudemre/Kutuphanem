@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.progressindicator.CircularDrawingDelegate
 import com.google.android.material.progressindicator.CircularIndeterminateAnimatorDelegate
@@ -99,7 +100,7 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
             val selectedKitap = kitapSearchResultAdapter?.getItem(position);
             binding.searchInputEditText.setText("");
             val action = AnasayfaFragmentDirections.actionAnasayfaFragmentToKitapDetayFragment(selectedKitap!!,false);
-            Navigation.findNavController(binding.root).navigate(action);
+            findNavController().navigate(action);
         }
 
         prepareProggressForSearch();
@@ -126,6 +127,8 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
         binding.dashKategoriRecyclerView.adapter = dashKategoriAdapter;
 
         observeLiveData()
+
+        observeNavigation()
     }
 
     private fun prepareTanitimPageAdapter() {
@@ -200,5 +203,13 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
         this.dashKategoriAdapter = null;
         this.tanitimPagerAdapter = null;
         this.kitapSearchResultAdapter = null;
+    }
+
+    private fun observeNavigation() {
+        viewModel.navigateLiveData.observe(viewLifecycleOwner, Observer {
+            if (it != 0) {
+                findNavController().navigate(it)
+            }
+        })
     }
 }
