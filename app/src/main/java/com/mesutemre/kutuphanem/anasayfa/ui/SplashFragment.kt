@@ -23,25 +23,25 @@ import javax.inject.Inject
 class SplashFragment:BaseFragment<SplashFragmentBinding>() {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> SplashFragmentBinding
-            = SplashFragmentBinding::inflate;
-    override val layoutName: String = "splash_fragment.xml";
+            = SplashFragmentBinding::inflate
+    override val layoutName: String = "splash_fragment.xml"
 
     @Inject
-    lateinit var customSharedPreferences: CustomSharedPreferences;
+    lateinit var customSharedPreferences: CustomSharedPreferences
 
-    private lateinit var token:String;
-    private lateinit var action:NavDirections;
+    private lateinit var token:String
+    private lateinit var action:NavDirections
 
     override fun onCreateFragment(savedInstanceState: Bundle?) {
-        token = customSharedPreferences.getStringFromSharedPreferences(APP_TOKEN_KEY);
+        token = customSharedPreferences.getStringFromSharedPreferences(APP_TOKEN_KEY)
     }
 
     override fun onStartFragment() {
         binding.splashMainLayoutId.addTransitionListener(object : MotionLayout.TransitionListener {
             override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
-                action = SplashFragmentDirections.actionSplashFragmentToAnasayfaFragment();
+                action = SplashFragmentDirections.actionSplashFragmentToAnasayfaFragment()
                 if(token == null || token.length == 0){
-                    action = SplashFragmentDirections.actionSplashFragmentToLoginFragment();
+                    action = SplashFragmentDirections.actionSplashFragmentToLoginFragment()
                 }
             }
 
@@ -49,8 +49,8 @@ class SplashFragment:BaseFragment<SplashFragmentBinding>() {
             }
 
             override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
-                p0?.hideComponent();
-                findNavController().navigate(action);
+                p0?.hideComponent()
+                findNavController().navigate(action)
             }
 
             override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {

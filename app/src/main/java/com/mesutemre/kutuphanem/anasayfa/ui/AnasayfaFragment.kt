@@ -6,14 +6,12 @@ import android.os.Message
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.progressindicator.CircularDrawingDelegate
@@ -26,7 +24,6 @@ import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.anasayfa.adapter.DashKategoriAdapter
 import com.mesutemre.kutuphanem.anasayfa.adapter.KitapSearchResultAdapter
 import com.mesutemre.kutuphanem.anasayfa.adapter.TanitimTabViewPagerAdapter
-import com.mesutemre.kutuphanem.anasayfa.ui.dialog.CloseApplicationDialogFragment
 import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.databinding.AnasayfaFragmentBinding
@@ -42,14 +39,14 @@ import javax.inject.Inject
 class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> AnasayfaFragmentBinding
-            = AnasayfaFragmentBinding::inflate;
-    override val layoutName: String = "anasayfa_fragment.xml";
+            = AnasayfaFragmentBinding::inflate
+    override val layoutName: String = "anasayfa_fragment.xml"
 
     private val viewModel: AnasayfaViewModel by viewModels()
-    private var dashKategoriAdapter: DashKategoriAdapter? = null;
-    private var tanitimPagerAdapter: TanitimTabViewPagerAdapter? = null;
-    private var kitapSearchResultAdapter: KitapSearchResultAdapter? = null;
-    private lateinit var handler:Handler;
+    private var dashKategoriAdapter: DashKategoriAdapter? = null
+    private var tanitimPagerAdapter: TanitimTabViewPagerAdapter? = null
+    private var kitapSearchResultAdapter: KitapSearchResultAdapter? = null
+    private lateinit var handler:Handler
 
     companion object{
         const val TRIGGER_AUTO_COMPLETE:Int = 100
@@ -65,9 +62,10 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
     override fun onStartFragment() {
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true){
             override fun handleOnBackPressed() {
-                CloseApplicationDialogFragment(parentFragment!!).show(requireFragmentManager(),null);
+                val action = AnasayfaFragmentDirections.actionAnasayfaFragmentToCloseApplicationDialogFragment()
+                findNavController().navigate(action)
             }
-        });
+        })
         viewLifecycleOwner.lifecycleScope.launch {
             async { prepareSearchProperties() }
             async { prepareAnasayfaDashListe() }
@@ -76,9 +74,9 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
     }
 
     private fun prepareSearchProperties() {
-        kitapSearchResultAdapter = KitapSearchResultAdapter(requireActivity(),R.layout.item_kitap_search, arrayListOf());
+        kitapSearchResultAdapter = KitapSearchResultAdapter(requireActivity(),R.layout.item_kitap_search, arrayListOf())
         binding.searchInputEditText.threshold = 2;
-        binding.searchInputEditText.setAdapter(kitapSearchResultAdapter);
+        binding.searchInputEditText.setAdapter(kitapSearchResultAdapter)
         binding.searchInputEditText.addTextChangedListener(object:TextWatcher{
 
             override fun afterTextChanged(p0: Editable?) {
@@ -94,16 +92,16 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
                     AUTO_COMPLETE_DELAY
                 )
             }
-        });
+        })
 
         binding.searchInputEditText.setOnItemClickListener { parent, view, position, id ->
-            val selectedKitap = kitapSearchResultAdapter?.getItem(position);
-            binding.searchInputEditText.setText("");
-            val action = AnasayfaFragmentDirections.actionAnasayfaFragmentToKitapDetayFragment(selectedKitap!!,false);
-            findNavController().navigate(action);
+            val selectedKitap = kitapSearchResultAdapter?.getItem(position)
+            binding.searchInputEditText.setText("")
+            val action = AnasayfaFragmentDirections.actionAnasayfaFragmentToKitapDetayFragment(selectedKitap!!,false)
+            findNavController().navigate(action)
         }
 
-        prepareProggressForSearch();
+        prepareProggressForSearch()
 
         handler = Handler(object:Handler.Callback{
             override fun handleMessage(message: Message): Boolean {
@@ -113,7 +111,7 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
                 }
                 return false
             }
-        });
+        })
     }
 
     private fun prepareAnasayfaDashListe() {
@@ -124,11 +122,9 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
         val dashKategoriLayout = LinearLayoutManager(getFragmentView().context,LinearLayoutManager.HORIZONTAL, false)
         binding.dashKategoriRecyclerView.setHasFixedSize(true)
         binding.dashKategoriRecyclerView.layoutManager = dashKategoriLayout
-        binding.dashKategoriRecyclerView.adapter = dashKategoriAdapter;
+        binding.dashKategoriRecyclerView.adapter = dashKategoriAdapter
 
         observeLiveData()
-
-        observeNavigation()
     }
 
     private fun prepareTanitimPageAdapter() {
@@ -143,17 +139,17 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
         viewModel.kitapSearchResourceEvent.observe(viewLifecycleOwner, Observer {
             when(it) {
                 is BaseResourceEvent.Loading->{
-                    binding.searchInputLayout.isEndIconVisible = true;
+                    binding.searchInputLayout.isEndIconVisible = true
                 }
                 is BaseResourceEvent.Error->{
-                    binding.searchInputLayout.isEndIconVisible = false;
+                    binding.searchInputLayout.isEndIconVisible = false
                 }
                 is BaseResourceEvent.Success->{
-                    binding.searchInputLayout.isEndIconVisible = false;
-                    kitapSearchResultAdapter?.updateKitapSearchListe(it.data!!);
+                    binding.searchInputLayout.isEndIconVisible = false
+                    kitapSearchResultAdapter?.updateKitapSearchListe(it.data!!)
                 }
             }
-        });
+        })
     }
 
     private fun observeLiveData(){
@@ -164,52 +160,44 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
         viewModel.dashKategoriListeResourceEvent.observe(viewLifecycleOwner, Observer {
            when(it) {
                is BaseResourceEvent.Loading->{
-                   binding.dashKategoriProgressBarId.showComponent();
+                   binding.dashKategoriProgressBarId.showComponent()
                    getFragmentView().hideComponents(binding.dashKategoriHataTextView,binding.dashKategoriRecyclerView)
                }
                is BaseResourceEvent.Error->{
-                   binding.dashKategoriHataTextView.showComponent();
+                   binding.dashKategoriHataTextView.showComponent()
                    getFragmentView().hideComponents(binding.dashKategoriProgressBarId,binding.dashKategoriRecyclerView)
                }
                is BaseResourceEvent.Success->{
                    getFragmentView().hideComponents(binding.dashKategoriProgressBarId,binding.dashKategoriHataTextView)
-                   binding.dashKategoriRecyclerView.showComponent();
+                   binding.dashKategoriRecyclerView.showComponent()
                    dashKategoriAdapter?.updateKategorListe(it.data!!)
                }
            }
-        });
+        })
     }
 
     private fun prepareProggressForSearch(){
-        val progressIndicatorSpec:ProgressIndicatorSpec = ProgressIndicatorSpec();
+        val progressIndicatorSpec:ProgressIndicatorSpec = ProgressIndicatorSpec()
         progressIndicatorSpec.loadFromAttributes(
             binding.searchInputEditText.context,
             null,
-            R.style.Widget_MaterialComponents_ProgressIndicator_Circular_Indeterminate);
+            R.style.Widget_MaterialComponents_ProgressIndicator_Circular_Indeterminate)
         progressIndicatorSpec.circularInset = 0
         progressIndicatorSpec.circularRadius = 20;
         val progressIndicatorDrawable:IndeterminateDrawable = IndeterminateDrawable(binding.searchInputEditText.context,
             progressIndicatorSpec,
             CircularDrawingDelegate(),
-            CircularIndeterminateAnimatorDelegate());
-        binding.searchInputLayout.endIconMode = TextInputLayout.END_ICON_CUSTOM;
-        binding.searchInputLayout.endIconDrawable = progressIndicatorDrawable;
-        binding.searchInputLayout.isEndIconVisible = false;
+            CircularIndeterminateAnimatorDelegate())
+        binding.searchInputLayout.endIconMode = TextInputLayout.END_ICON_CUSTOM
+        binding.searchInputLayout.endIconDrawable = progressIndicatorDrawable
+        binding.searchInputLayout.isEndIconVisible = false
     }
 
     override fun destroyOthers() {
-        super.destroyOthers();
-        handler.removeCallbacksAndMessages(null);
-        this.dashKategoriAdapter = null;
-        this.tanitimPagerAdapter = null;
-        this.kitapSearchResultAdapter = null;
-    }
-
-    private fun observeNavigation() {
-        viewModel.navigateLiveData.observe(viewLifecycleOwner, Observer {
-            if (it != 0) {
-                findNavController().navigate(it)
-            }
-        })
+        super.destroyOthers()
+        handler.removeCallbacksAndMessages(null)
+        this.dashKategoriAdapter = null
+        this.tanitimPagerAdapter = null
+        this.kitapSearchResultAdapter = null
     }
 }

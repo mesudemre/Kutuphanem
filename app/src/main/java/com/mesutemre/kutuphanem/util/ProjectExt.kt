@@ -373,3 +373,29 @@ fun Context.showKutuphanemBasicNotification(baslik:String,
     }
     bildirimYoneticisi.notify(2,builder.build());
 }
+
+fun downloadKitap( requireContext: Context,arr:ByteArray): File? {
+    var kitapFile:File? = null;
+
+    return try {
+        val imgPath:File = createKitapDirectory(requireContext);
+        kitapFile = File(imgPath.absolutePath,"kotlin.pdf");
+
+        val fos = FileOutputStream(kitapFile)
+        fos.write(arr)
+        fos.flush()
+        fos.close()
+        kitapFile
+    } catch (e: Exception) {
+        e.printStackTrace()
+        kitapFile!! // it will return null
+    }
+}
+
+fun createKitapDirectory(context: Context): File {
+    val mediaDir = context.filesDir.let {
+        File(it, "kitapdownloads").apply { mkdirs() }
+    }
+    return if (mediaDir != null && mediaDir.exists())
+        mediaDir else context.filesDir
+}

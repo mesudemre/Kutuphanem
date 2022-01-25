@@ -2,4 +2,5 @@
 <paths>
     <external-path name="Kütüphanem" path="/"/>
     <files-path name="kitap_arsiv" path="arsiv/"  />
+    <files-path name="kitap_downloads" path="kitapdownloads/"  />
 </paths>

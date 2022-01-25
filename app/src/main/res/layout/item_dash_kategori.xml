@@ -25,11 +25,8 @@
             android:layout_marginTop="2dp"
             android:layout_below="@id/dashKitapturImageViewId"
             android:layout_centerInParent="true"
-            android:fontFamily="@font/alegreya"
             android:text="@{kategori.aciklama}"
-            android:textColor="@color/transparent"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            style="@style/TextAppearance.Transparent.Normal.Alegrya.Bold"/>
 
     </RelativeLayout>
 </layout>

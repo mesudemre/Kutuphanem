@@ -20,8 +20,8 @@
 
         <ImageView
             android:id="@+id/kitapImageId"
-            android:layout_width="110dp"
-            android:layout_height="130dp"
+            android:layout_width="@dimen/_110sdp"
+            android:layout_height="@dimen/_130sdp"
             android:downloadUrl="@{kitap.kitapResimPath}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,30 +42,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:fontFamily="@font/alegreya_bold"
-                android:text="@{kitap.kitapAd.length()>40 ? kitap.kitapAd.substring(0,39)+`...` : kitap.kitapAd}"
-                android:textSize="16sp" />
+                style="@style/TextAppearance.Transparent.Normal.Alegrya.Bold"
+                android:text="@{kitap.kitapAd.length()>40 ? kitap.kitapAd.substring(0,39)+`...` : kitap.kitapAd}" />
 
             <TextView
                 android:id="@+id/kitapTurText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="@dimen/_4sdp"
                 android:gravity="left"
                 android:text="@{`Kitap Türü : ` + kitap.kitapTur.aciklama}"
-                android:textColor="#4E4E4E"
-                android:textSize="14sp" />
+                style="@style/TextAppearance.Transparent.Small"/>
 
             <TextView
                 android:id="@+id/kitapAciklamaTextId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:fontFamily="@font/alegreya"
+                android:layout_marginTop="@dimen/_4sdp"
+                style="@style/TextAppearance.Transparent.Thiny.Alegrya"
                 android:gravity="left"
-                android:text="@{kitap.kitapAciklama.length()>90 ? kitap.kitapAciklama.substring(0,90)+`...` : kitap.kitapAciklama}"
-                android:textColor="#515151"
-                android:textSize="12sp" />
+                android:text="@{kitap.kitapAciklama.length()>90 ? kitap.kitapAciklama.substring(0,90)+`...` : kitap.kitapAciklama}" />
         </LinearLayout>
 
         <ImageView
@@ -82,11 +78,10 @@
             android:id="@+id/kitapItemAlinmaTar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:fontFamily="@font/alegreya_font"
+            android:layout_marginTop="@dimen/kutuphanem_small_margin_top_space"
+            android:layout_marginEnd="@dimen/_4sdp"
             android:formatTarih="@{kitap.alinmatarihi}"
-            android:textColor="@color/transparent"
-            android:textSize="16sp"
+            style="@style/TextAppearance.Transparent.Normal.Alegrya"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

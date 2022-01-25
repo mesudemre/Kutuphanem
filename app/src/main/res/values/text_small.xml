@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TextAppearance.Lacivert.Small" parent="TextAppearance.Lacivert">
+        <item name="android:textSize">@dimen/_12sdp</item>
+    </style>
+
+    <style name="TextAppearance.Lacivert.Small.Bold" parent="TextAppearance.Lacivert.Small">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Lacivert.Small.Alegrya" parent="TextAppearance.Lacivert.Small">
+        <item name="android:fontFamily">@font/alegreya</item>
+    </style>
+
+    <style name="TextAppearance.Lacivert.Small.Alegrya.Bold" parent="TextAppearance.Lacivert.Small">
+        <item name="android:fontFamily">@font/alegreya_bold</item>
+    </style>
+
+    <style name="TextAppearance.Transparent.Small" parent="TextAppearance.Transparent">
+        <item name="android:textSize">@dimen/_12sdp</item>
+    </style>
+
+    <style name="TextAppearance.Transparent.Small.Bold" parent="TextAppearance.Transparent.Small">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Transparent.Small.Alegrya" parent="TextAppearance.Transparent.Small">
+        <item name="android:fontFamily">@font/alegreya</item>
+    </style>
+
+    <style name="TextAppearance.Transparent.Small.Alegrya.Bold" parent="TextAppearance.Transparent.Small">
+        <item name="android:fontFamily">@font/alegreya_bold</item>
+    </style>
+
+    <style name="TextAppearance.Black.Small" parent="TextAppearance.Black">
+        <item name="android:textSize">@dimen/_12sdp</item>
+    </style>
+
+    <style name="TextAppearance.Black.Small.Bold" parent="TextAppearance.Black.Small">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Black.Small.Alegrya" parent="TextAppearance.Black.Small">
+        <item name="android:fontFamily">@font/alegreya</item>
+    </style>
+
+    <style name="TextAppearance.Black.Small.Alegrya.Bold" parent="TextAppearance.Black.Small">
+        <item name="android:fontFamily">@font/alegreya_bold</item>
+    </style>
+
+    <style name="TextAppearance.White.Small" parent="TextAppearance.White">
+        <item name="android:textSize">@dimen/_12sdp</item>
+    </style>
+
+    <style name="TextAppearance.White.Small.Bold" parent="TextAppearance.White.Small">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.White.Small.Alegrya" parent="TextAppearance.White.Small">
+        <item name="android:fontFamily">@font/alegreya</item>
+    </style>
+
+    <style name="TextAppearance.White.Small.Alegrya.Bold" parent="TextAppearance.White.Small">
+        <item name="android:fontFamily">@font/alegreya_bold</item>
+    </style>
+
+    <style name="TextAppearance.Primary.Small" parent="TextAppearance.Primary">
+        <item name="android:textSize">@dimen/_12sdp</item>
+    </style>
+
+    <style name="TextAppearance.Primary.Small.Bold" parent="TextAppearance.Primary.Small">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Primary.Small.Alegrya" parent="TextAppearance.Primary.Small">
+        <item name="android:fontFamily">@font/alegreya</item>
+    </style>
+
+    <style name="TextAppearance.Primary.Small.Alegrya.Bold" parent="TextAppearance.Primary.Small">
+        <item name="android:fontFamily">@font/alegreya_bold</item>
+    </style>
+
+    <style name="TextAppearance.Error.Small" parent="TextAppearance.Error">
+        <item name="android:textSize">@dimen/_12sdp</item>
+    </style>
+
+    <style name="TextAppearance.Error.Small.Bold" parent="TextAppearance.Error.Small">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Error.Small.Alegrya" parent="TextAppearance.Error.Small">
+        <item name="android:fontFamily">@font/alegreya</item>
+    </style>
+
+    <style name="TextAppearance.Error.Small.Alegrya.Bold" parent="TextAppearance.Error.Small">
+        <item name="android:fontFamily">@font/alegreya_bold</item>
+    </style>
+</resources>

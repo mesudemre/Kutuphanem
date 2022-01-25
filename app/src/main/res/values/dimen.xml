@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="triangle_size">20dp</dimen>
+    <dimen name="kutuphanem_small_margin_top_space">@dimen/_2sdp</dimen>
+    <dimen name="kutuphanem_login_margin_padding">@dimen/_20sdp</dimen>
+    <dimen name="kutuphanem_general_margin_top">@dimen/_16sdp</dimen>
+    <dimen name="kutuphanem_general_left_right_margin">@dimen/_4sdp</dimen>
+    <dimen name="kutuphanem_general_cardview_radius">@dimen/_8sdp</dimen>
 </resources>

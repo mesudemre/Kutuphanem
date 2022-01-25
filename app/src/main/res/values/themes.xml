@@ -158,4 +158,32 @@
         <item name="fontFamily">@font/alegreya_bold</item>
         <item name="android:fontFamily">@font/alegreya_bold</item>
     </style>
+
+    <style name="TextAppearance">
+    </style>
+
+    <style name="TextAppearance.Lacivert">
+        <item name="android:textColor">@color/lacivert</item>
+    </style>
+
+    <style name="TextAppearance.Transparent">
+        <item name="android:textColor">@color/transparent</item>
+    </style>
+
+    <style name="TextAppearance.Black">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextAppearance.White">
+        <item name="android:textColor">@color/whiteTextColor</item>
+    </style>
+
+    <style name="TextAppearance.Primary">
+        <item name="android:textColor">@color/primaryTextColor</item>
+    </style>
+
+    <style name="TextAppearance.Error">
+        <item name="android:textColor">@color/design_default_color_error</item>
+    </style>
+
 </resources>

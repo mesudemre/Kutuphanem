@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.card.MaterialCardView
+            app:cardBackgroundColor="@color/design_default_color_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/kutuphanem_general_left_right_margin"
+            app:strokeWidth="@dimen/kutuphanem_small_margin_top_space"
+            app:strokeColor="@color/white"
+            app:cardCornerRadius="@dimen/kutuphanem_general_cardview_radius">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/customeErrorImageView"
+                    android:layout_width="@dimen/_48sdp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_baseline_error_white_24" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/customErrorTextId"
+                    style="@style/TextAppearance.White.Medium.Bold"
+                    android:layout_margin="@dimen/kutuphanem_general_margin_top"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/customeErrorImageView"
+                    android:gravity="center_horizontal" />
+            </RelativeLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </RelativeLayout>
+
+</merge>

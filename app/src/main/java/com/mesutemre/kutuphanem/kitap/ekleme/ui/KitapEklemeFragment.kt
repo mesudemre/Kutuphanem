@@ -119,16 +119,6 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
             startCamera();
         }
 
-        binding.yayinEviSpinnerId.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedYE = parent!!.getItemAtPosition(position) as YayineviModel;
-                selectedYayinevi = selectedYE.yayinEviId!!;
-            }
-        }
-
         if(savedKitapUri != null){
             binding.kitapImageCapId.setImageURI(savedKitapUri)
         }

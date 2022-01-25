@@ -260,10 +260,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
-                            android:textColor="@color/black"
                             android:layout_marginLeft="10dp"
-                            android:text="@string/kitapTurSecinizText"
-                            android:textSize="16sp" />
+                            style="@style/TextAppearance.Transparent.Normal"
+                            android:text="@string/kitapTurSecinizText"/>
                     </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
 
@@ -293,21 +292,6 @@
                         android:visibility="gone" />
 
                     <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        app:cardCornerRadius="4dp"
-                        android:visibility="gone"
-                        app:strokeColor="@color/imageShadow"
-                        app:strokeWidth="1dp">
-
-                        <Spinner
-                            android:id="@+id/yayinEviSpinnerId"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                    </com.google.android.material.card.MaterialCardView>
-                    <com.google.android.material.card.MaterialCardView
                         android:id="@+id/selectYayineviCardId"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
@@ -323,10 +307,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
-                            android:textColor="@color/black"
+                            style="@style/TextAppearance.Transparent.Normal"
                             android:layout_marginLeft="10dp"
-                            android:text="@string/yayinEviSecinizText"
-                            android:textSize="16sp" />
+                            android:text="@string/yayinEviSecinizText"/>
                     </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
 

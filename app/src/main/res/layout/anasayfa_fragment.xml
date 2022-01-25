@@ -98,11 +98,8 @@
                         android:layout_centerInParent="true"
                         android:layout_marginLeft="2dp"
                         android:layout_toRightOf="@id/yeniIconLeftId"
-                        android:fontFamily="@font/alegreya"
                         android:text="@string/yeniArayuzText"
-                        android:textColor="@color/whiteTextColor"
-                        android:textSize="17sp"
-                        android:textStyle="bold" />
+                        style="@style/TextAppearance.White.Normal.Alegrya.Bold" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -116,11 +113,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:fontFamily="@font/alegreya"
                         android:text="@string/dashKategoriText"
-                        android:textColor="@color/transparent"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
+                        style="@style/TextAppearance.Transparent.Large.Alegrya.Bold"/>
                 </RelativeLayout>
 
                 <LinearLayout

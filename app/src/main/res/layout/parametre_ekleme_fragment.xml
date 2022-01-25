@@ -24,19 +24,16 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/geri"
-                android:textColor="#000000"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                style="@style/TextAppearance.Black.Normal.Bold" />
         </LinearLayout>
 
     <TextView
         android:id="@+id/paramTurTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="75dp"
+        android:layout_marginTop="@dimen/kutuphanem_general_margin_top"
         android:gravity="center"
-        android:textColor="#3E3D3D"
-        android:textSize="16sp" />
+        style="@style/TextAppearance.Black.Normal"/>
 
 
         <com.google.android.material.textfield.TextInputLayout
@@ -44,9 +41,9 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp"
+            android:layout_marginTop="@dimen/kutuphanem_general_margin_top"
+            android:layout_marginRight="@dimen/kutuphanem_general_left_right_margin"
+            android:layout_marginLeft="@dimen/kutuphanem_general_left_right_margin"
             app:boxStrokeColor="@color/primaryTextColor"
             app:errorEnabled="true">
 
@@ -72,22 +69,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp"
+            android:layout_marginTop="@dimen/kutuphanem_general_margin_top"
+            android:layout_marginRight="@dimen/kutuphanem_general_left_right_margin"
+            android:layout_marginLeft="@dimen/kutuphanem_general_left_right_margin"
             android:text="@string/kaydet"
             android:textStyle="bold" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.mesutemre.kutuphanem.util.customcomponents.CustomErrorComponent
             android:id="@+id/parametreEklemeErrorTextView"
-            android:drawablePadding="2dp"
             android:visibility="gone"
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="@string/parametreEklemeHata"
-            android:drawableLeft="@drawable/ic_baseline_warning_24"
-            android:textColor="@color/design_default_color_error"/>
+            android:layout_marginTop="@dimen/kutuphanem_general_margin_top"
+            app:custom_error_message="@string/parametreEklemeHata"/>
 
     </LinearLayout>

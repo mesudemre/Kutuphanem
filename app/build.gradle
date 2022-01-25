@@ -128,4 +128,7 @@ dependencies {
 
     implementation "androidx.work:work-runtime-ktx:$work_manager_version"
     implementation "androidx.hilt:hilt-work:$work_manager_hilt_version"
+    implementation "com.intuit.sdp:sdp-android:$intuit_version"
+
+    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 }

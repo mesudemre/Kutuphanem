@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TextAppearance.Lacivert.Medium" parent="TextAppearance.Lacivert">
+        <item name="android:textSize">@dimen/_16sdp</item>
+    </style>
+
+    <style name="TextAppearance.Lacivert.Medium.Bold" parent="TextAppearance.Lacivert.Medium">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Lacivert.Medium.Alegrya" parent="TextAppearance.Lacivert.Medium">
+        <item name="android:fontFamily">@font/alegreya</item>
+    </style>
+
+    <style name="TextAppearance.Lacivert.Medium.Alegrya.Bold" parent="TextAppearance.Lacivert.Medium">
+        <item name="android:fontFamily">@font/alegreya_bold</item>
+    </style>
+
+    <style name="TextAppearance.Transparent.Medium" parent="TextAppearance.Transparent">
+        <item name="android:textSize">@dimen/_16sdp</item>
+    </style>
+
+    <style name="TextAppearance.Transparent.Medium.Bold" parent="TextAppearance.Transparent.Medium">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Transparent.Medium.Alegrya" parent="TextAppearance.Transparent.Medium">
+        <item name="android:fontFamily">@font/alegreya</item>
+    </style>
+
+    <style name="TextAppearance.Transparent.Medium.Alegrya.Bold" parent="TextAppearance.Transparent.Medium">
+        <item name="android:fontFamily">@font/alegreya_bold</item>
+    </style>
+
+    <style name="TextAppearance.Black.Medium" parent="TextAppearance.Black">
+        <item name="android:textSize">@dimen/_16sdp</item>
+    </style>
+
+    <style name="TextAppearance.Black.Medium.Bold" parent="TextAppearance.Black.Medium">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Black.Medium.Alegrya" parent="TextAppearance.Black.Medium">
+        <item name="android:fontFamily">@font/alegreya</item>
+    </style>
+
+    <style name="TextAppearance.Black.Medium.Alegrya.Bold" parent="TextAppearance.Black.Medium">
+        <item name="android:fontFamily">@font/alegreya_bold</item>
+    </style>
+
+    <style name="TextAppearance.White.Medium" parent="TextAppearance.White">
+        <item name="android:textSize">@dimen/_16sdp</item>
+    </style>
+
+    <style name="TextAppearance.White.Medium.Bold" parent="TextAppearance.White.Medium">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.White.Medium.Alegrya" parent="TextAppearance.White.Medium">
+        <item name="android:fontFamily">@font/alegreya</item>
+    </style>
+
+    <style name="TextAppearance.White.Medium.Alegrya.Bold" parent="TextAppearance.White.Medium">
+        <item name="android:fontFamily">@font/alegreya_bold</item>
+    </style>
+
+    <style name="TextAppearance.Primary.Medium" parent="TextAppearance.Primary">
+        <item name="android:textSize">@dimen/_16sdp</item>
+    </style>
+
+    <style name="TextAppearance.Primary.Medium.Bold" parent="TextAppearance.Primary.Medium">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Primary.Medium.Alegrya" parent="TextAppearance.Primary.Medium">
+        <item name="android:fontFamily">@font/alegreya</item>
+    </style>
+
+    <style name="TextAppearance.Primary.Medium.Alegrya.Bold" parent="TextAppearance.Primary.Medium">
+        <item name="android:fontFamily">@font/alegreya_bold</item>
+    </style>
+
+    <style name="TextAppearance.Error.Medium" parent="TextAppearance.Error">
+        <item name="android:textSize">@dimen/_16sdp</item>
+    </style>
+
+    <style name="TextAppearance.Error.Medium.Bold" parent="TextAppearance.Error.Medium">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Error.Medium.Alegrya" parent="TextAppearance.Error.Medium">
+        <item name="android:fontFamily">@font/alegreya</item>
+    </style>
+
+    <style name="TextAppearance.Error.Medium.Alegrya.Bold" parent="TextAppearance.Error.Medium">
+        <item name="android:fontFamily">@font/alegreya_bold</item>
+    </style>
+</resources>

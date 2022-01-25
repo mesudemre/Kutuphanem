@@ -1,6 +1,7 @@
 package com.mesutemre.kutuphanem.kitap.detay.ui
 
 import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.auth.dao.KullaniciDao
@@ -18,6 +19,7 @@ import com.mesutemre.kutuphanem.kitap.yorum.model.KitapYorumModel
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.KULLANICI_ADI_KEY
+import com.mesutemre.kutuphanem.util.downloadKitap
 import com.mesutemre.kutuphanem.util.saveFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -39,16 +41,18 @@ constructor(
             @ApplicationContext private val appContext: Context
 ): BaseViewModel() {
 
-    val shareKitapUri = BaseSingleLiveEvent<BaseResourceEvent<File>>();
-    val arsivKitap = BaseSingleLiveEvent<BaseResourceEvent<String>>();
-    val arsivKitapSil = BaseSingleLiveEvent<BaseResourceEvent<String>>();
-    val kitapArsivMevcut = BaseSingleLiveEvent<BaseResourceEvent<KitapModel>>();
-    val kitapBegenme = BaseSingleLiveEvent<BaseResourceEvent<ResponseStatusModel>>();
-    val selectedKitap = BaseSingleLiveEvent<BaseResourceEvent<KitapModel>>();
-    val yorumYapanKullanici = BaseSingleLiveEvent<BaseResourceEvent<Kullanici>>();
-    val kitapYorumKayit = BaseSingleLiveEvent<BaseResourceEvent<ResponseStatusModel>>();
-    val kitapYorumListe = BaseSingleLiveEvent<BaseResourceEvent<List<KitapYorumModel>>>();
-    val kitapPuanKayit = BaseSingleLiveEvent<BaseResourceEvent<ResponseStatusModel>>();
+    val shareKitapUri = BaseSingleLiveEvent<BaseResourceEvent<File>>()
+    val arsivKitap = BaseSingleLiveEvent<BaseResourceEvent<String>>()
+    val arsivKitapSil = BaseSingleLiveEvent<BaseResourceEvent<String>>()
+    val kitapArsivMevcut = BaseSingleLiveEvent<BaseResourceEvent<KitapModel>>()
+    val kitapBegenme = BaseSingleLiveEvent<BaseResourceEvent<ResponseStatusModel>>()
+    val selectedKitap = BaseSingleLiveEvent<BaseResourceEvent<KitapModel>>()
+    val yorumYapanKullanici = BaseSingleLiveEvent<BaseResourceEvent<Kullanici>>()
+    val kitapYorumKayit = BaseSingleLiveEvent<BaseResourceEvent<ResponseStatusModel>>()
+    val kitapYorumListe = BaseSingleLiveEvent<BaseResourceEvent<List<KitapYorumModel>>>()
+    val kitapPuanKayit = BaseSingleLiveEvent<BaseResourceEvent<ResponseStatusModel>>()
+
+    val kitapPdfFoo = BaseSingleLiveEvent<BaseResourceEvent<ByteArray>>()
 
     @Inject
     lateinit var customSharedPreferences: CustomSharedPreferences;
@@ -319,6 +323,33 @@ constructor(
                 }
                 is BaseDataEvent.Error->{
                     kitapPuanKayit.value = BaseResourceEvent.Error(kitapPuanKaydetResponse.errMessage);
+                }
+            }
+        }
+    }
+
+    fun downloadKitapPdf() {
+        viewModelScope.launch {
+            kitapPdfFoo.value = BaseResourceEvent.Loading();
+            val downloadKitapFooResponse = serviceCall(
+                call = {
+                    kitapService.downloadKitapFoo("http://192.168.1.105:8080/KutuphaneSistemiWS/api/kitap/indir")
+                },ioDispatcher
+            );
+            when(downloadKitapFooResponse){
+                is BaseDataEvent.Success->{
+                    val byteArr = downloadKitapFooResponse.data!!.bytes();
+                    //kitapPdfFoo.value = BaseResourceEvent.Success(Uri.parse(String(byteArr,Charsets.UTF_8)));
+                    kitapPdfFoo.value = BaseResourceEvent.Success(byteArr);
+                    /*val kitapSaved = withContext(ioDispatcher) {
+                        downloadKitap(appContext,byteArr);
+                    }
+                    if (kitapSaved != null && kitapSaved.exists()) {
+                        kitapPdfFoo.value = BaseResourceEvent.Success(kitapSaved);
+                    }*/
+                }
+                is BaseDataEvent.Error->{
+                    kitapPdfFoo.value = BaseResourceEvent.Error(downloadKitapFooResponse.errMessage);
                 }
             }
         }

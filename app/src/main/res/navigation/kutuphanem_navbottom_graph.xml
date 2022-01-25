@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_anasayfaFragment_to_kitapDetayFragment"
             app:destination="@id/kitapDetayFragment" />
+        <action
+            android:id="@+id/action_anasayfaFragment_to_closeApplicationDialogFragment"
+            app:destination="@id/closeApplicationDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/kitapListeFragment"
@@ -47,10 +50,6 @@
         android:name="com.mesutemre.kutuphanem.auth.profil.ui.ProfilIslemFragment"
         android:label="ProfilIslemFragment" >
         <action
-            android:id="@+id/action_profilIslemFragment_to_loginFragment"
-            app:destination="@id/loginFragment"
-            app:enterAnim="@anim/slide_down" />
-        <action
             android:id="@+id/action_profilIslemFragment_to_profilIslemAdSoyadEpostaFragment"
             app:destination="@id/profilIslemAdSoyadEpostaFragment"
             app:enterAnim="@anim/slide_left"/>
@@ -65,6 +64,9 @@
             android:id="@+id/action_profilIslemFragment_to_profilIslemIletisiTercihlerimFragment"
             app:destination="@id/profilIslemIletisiTercihlerimFragment"
             app:enterAnim="@anim/slide_left"/>
+        <action
+            android:id="@+id/action_profilIslemFragment_to_exitFromApplicationDialogFragment"
+            app:destination="@id/exitFromApplicationDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/parametreEklemeFragment"
@@ -93,6 +95,12 @@
         <argument
             android:name="fromArsiv"
             app:argType="boolean"/>
+        <action
+            android:id="@+id/action_kitapDetayFragment_to_kotlinKitapViewFooFragment"
+            app:destination="@id/kotlinKitapViewFooFragment" />
+        <action
+            android:id="@+id/action_kitapDetayFragment_to_kitapAciklamaBottomSheetDialogFragment"
+            app:destination="@id/kitapAciklamaBottomSheetDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/kitapDetayDeepFragment"
@@ -158,6 +166,29 @@
             android:name="kullaniciObj"
             app:argType="com.mesutemre.kutuphanem.auth.profil.model.Kullanici" />
     </fragment>
-
-
+    <fragment
+        android:id="@+id/kotlinKitapViewFooFragment"
+        android:name="com.mesutemre.kutuphanem.kitap.detay.ui.KotlinKitapViewFooFragment"
+        android:label="KotlinKitapViewFooFragment">
+        <argument android:name="fileInfo" app:argType="com.mesutemre.kutuphanem.kitap.detay.ui.FileDataModel"/>
+    </fragment>
+    <dialog
+        android:id="@+id/kitapAciklamaBottomSheetDialogFragment"
+        android:name="com.mesutemre.kutuphanem.kitap.detay.ui.dialog.KitapAciklamaBottomSheetDialogFragment"
+        android:label="KitapAciklamaBottomSheetDialogFragment">
+        <argument android:name="kitapAciklama" app:argType="string"/>
+    </dialog>
+    <dialog
+        android:id="@+id/closeApplicationDialogFragment"
+        android:name="com.mesutemre.kutuphanem.anasayfa.ui.dialog.CloseApplicationDialogFragment"
+        android:label="CloseApplicationDialogFragment" />
+    <dialog
+        android:id="@+id/exitFromApplicationDialogFragment"
+        android:name="com.mesutemre.kutuphanem.auth.profil.ui.dialog.ExitFromApplicationDialogFragment"
+        android:label="ExitFromApplicationDialogFragment">
+        <action
+            android:id="@+id/action_exitApplicationDialogFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/slide_down" />
+    </dialog>
 </navigation>

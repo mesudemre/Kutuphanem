@@ -21,43 +21,43 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var customSharedPreferences: CustomSharedPreferences;
+    lateinit var customSharedPreferences: CustomSharedPreferences
 
-    private lateinit var binding:ActivityMainBinding;
+    private lateinit var binding:ActivityMainBinding
 
-    private lateinit var navBottomMenu:CurvedBottomNavigationView;
-    private var writeExternalStorageIzin:Int = 0;
-    private lateinit var navHostFragment:NavHostFragment;
+    private lateinit var navBottomMenu:CurvedBottomNavigationView
+    private var writeExternalStorageIzin:Int = 0
+    private lateinit var navHostFragment:NavHostFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(layoutInflater);
-        val view = binding.root;
-        setContentView(view);
-        writeExternalStorageIzin = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+        writeExternalStorageIzin = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
         if(writeExternalStorageIzin != PackageManager.PERMISSION_GRANTED){
-            requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
+            requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
         }
-        this.initNavBottomMenu();
+        this.initNavBottomMenu()
 
         binding.floatingActionButton3.setOnClickListener {
-            navHostFragment.navController.navigate(R.id.kitapEklemeFragment);
+            navHostFragment.navController.navigate(R.id.kitapEklemeFragment)
         }
     }
 
 
     private fun initNavBottomMenu(){
-        this.navBottomMenu = binding.bottomNavigation;
-        binding.bottomNavigation.itemIconTintList = ContextCompat.getColorStateList(this,R.color.nav_icontint_colors);
-        binding.bottomNavigation.itemTextColor = ContextCompat.getColorStateList(this,R.color.nav_icontint_colors);
-        binding.bottomNavigation.labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_LABELED;
-        binding.bottomNavigation.menu.getItem(0).isVisible = false;
+        this.navBottomMenu = binding.bottomNavigation
+        binding.bottomNavigation.itemIconTintList = ContextCompat.getColorStateList(this,R.color.nav_icontint_colors)
+        binding.bottomNavigation.itemTextColor = ContextCompat.getColorStateList(this,R.color.nav_icontint_colors)
+        binding.bottomNavigation.labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_LABELED
+        binding.bottomNavigation.menu.getItem(0).isVisible = false
 
-        setUpNavigation();
+        setUpNavigation()
     }
 
     private fun setUpNavigation(){
-        navHostFragment = supportFragmentManager.findFragmentById(R.id.bottomFragmentId) as NavHostFragment;
+        navHostFragment = supportFragmentManager.findFragmentById(R.id.bottomFragmentId) as NavHostFragment
         navHostFragment.navController.addOnDestinationChangedListener { controller, destination, arguments ->
             if(destination.id in arrayOf(
                     R.id.parametreEklemeFragment,
@@ -71,13 +71,13 @@ class MainActivity : AppCompatActivity() {
                     R.id.profilIslemIlgiAlanlarimFragment,
                     R.id.profilIslemIletisiTercihlerimFragment
             )){
-                binding.floatingActionButton3.hideComponent();
-                navBottomMenu.hideComponent();
+                binding.floatingActionButton3.hideComponent()
+                navBottomMenu.hideComponent()
             }else{
-                binding.floatingActionButton3.showComponent();
-                navBottomMenu.showComponent();
+                binding.floatingActionButton3.showComponent()
+                navBottomMenu.showComponent()
             }
         }
-        setupWithNavController(navBottomMenu,navHostFragment.navController);
+        setupWithNavController(navBottomMenu,navHostFragment.navController)
     }
 }
