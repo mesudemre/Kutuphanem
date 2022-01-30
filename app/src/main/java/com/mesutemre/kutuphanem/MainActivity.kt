@@ -14,6 +14,9 @@ import com.mesutemre.kutuphanem.util.WRITE_EXTERNAL_STORAGE_REQUEST_CODE
 import com.mesutemre.kutuphanem.util.customcomponents.CurvedBottomNavigationView
 import com.mesutemre.kutuphanem.util.hideComponent
 import com.mesutemre.kutuphanem.util.showComponent
+import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionHelper
+import com.wangjie.rapidfloatingactionbutton.contentimpl.labellist.RFACLabelItem
+import com.wangjie.rapidfloatingactionbutton.contentimpl.labellist.RapidFloatingActionContentLabelList
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -39,10 +42,10 @@ class MainActivity : AppCompatActivity() {
             requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_EXTERNAL_STORAGE_REQUEST_CODE)
         }
         this.initNavBottomMenu()
-
-        binding.floatingActionButton3.setOnClickListener {
+        this.initFloatMenu()
+        /*binding.floatingActionButton3.setOnClickListener {
             navHostFragment.navController.navigate(R.id.kitapEklemeFragment)
-        }
+        }*/
     }
 
 
@@ -79,5 +82,21 @@ class MainActivity : AppCompatActivity() {
             }
         }
         setupWithNavController(navBottomMenu,navHostFragment.navController)
+    }
+
+    private fun initFloatMenu() {
+        val rfaContent = RapidFloatingActionContentLabelList(this)
+        val floatingItemList = mutableListOf<RFACLabelItem<Integer>>()
+        floatingItemList.add(RFACLabelItem<Integer>()
+            .setLabel("Normal Ekleme")
+            .setResId(R.drawable.ic_baseline_add_24))
+        floatingItemList.add(RFACLabelItem<Integer>()
+            .setLabel("ISBN ile Ekleme")
+            .setResId(R.drawable.ic_baseline_photo_camera_24))
+        rfaContent.setItems(floatingItemList.toList())
+        val rfabHelper = RapidFloatingActionHelper(this,
+            binding.rfaLayoutId,
+            binding.floatingActionButton3,
+        rfaContent).build()
     }
 }

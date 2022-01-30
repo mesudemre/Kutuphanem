@@ -130,5 +130,7 @@ dependencies {
     implementation "androidx.hilt:hilt-work:$work_manager_hilt_version"
     implementation "com.intuit.sdp:sdp-android:$intuit_version"
 
+    implementation "com.github.wangjiegulu:rfab:2.0.0"
+
     //implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 }
