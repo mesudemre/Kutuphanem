@@ -9,35 +9,33 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/customMaterialCardId"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginTop="@dimen/custom_card_margin"
+            android:layout_marginStart="@dimen/custom_card_margin"
+            android:layout_marginEnd="@dimen/custom_card_margin"
             android:layout_width="match_parent"
             app:strokeColor="@color/lacivert"
             app:rippleColor="@color/transparent"
             android:outlineAmbientShadowColor="@color/lacivert"
             android:outlineSpotShadowColor="@color/lacivert"
             app:strokeWidth="0.5dp"
-            android:layout_height="50dp"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="10dp">
+            android:layout_height="@dimen/_50sdp"
+            app:cardCornerRadius="@dimen/custom_card_radius"
+            app:cardElevation="@dimen/custom_card_margin">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/customCardTitleTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:fontFamily="@font/alegreya"
-                android:textSize="20sp"
+                android:layout_marginLeft="@dimen/_8sdp"
                 android:gravity="start"
-                android:text="Ad,Soyad ve E-Posta Bilgilerim"
-                android:textColor="@color/transparent" />
+                style="@style/TextAppearance.Transparent.Normal.Ubuntu"
+                android:text="Ad,Soyad ve E-Posta Bilgilerim" />
 
             <ImageView
                 android:id="@+id/customCardArrowImage"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="@dimen/_32sdp"
+                android:layout_height="@dimen/_32sdp"
                 android:layout_gravity="center_vertical|end"
                 android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
                 app:tint="@color/lacivert" />

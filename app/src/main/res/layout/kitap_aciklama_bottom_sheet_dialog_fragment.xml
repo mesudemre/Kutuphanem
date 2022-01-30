@@ -19,10 +19,9 @@
             android:id="@+id/kitapDetayAciklamaTextDialogId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:fontFamily="@font/alegreya"
-            android:textSize="16sp"
+            style="@style/TextAppearance.Transparent.Normal.Ubuntu"
+            android:layout_marginLeft="@dimen/kitap_detay_margin_top"
+            android:layout_marginRight="@dimen/kitap_detay_margin_top"
             android:layout_below="@id/closeKitapAciklamaDlgImageViewId"
             android:textIsSelectable="true"/>
 

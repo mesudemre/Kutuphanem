@@ -104,10 +104,10 @@
         <item name="android:text">@string/profilGuncelleButtonLabel</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginRight">3dp</item>>
-        <item name="android:layout_marginLeft">3dp</item>>
-        <item name="android:layout_marginTop">20dp</item>
-        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_marginRight">@dimen/kutuphanem_small_margin_top_space</item>>
+        <item name="android:layout_marginLeft">@dimen/kutuphanem_small_margin_top_space</item>>
+        <item name="android:layout_marginTop">@dimen/kutuphanem_general_margin_top</item>
+        <item name="android:layout_marginBottom">@dimen/profil_islem_ilgi_alan_margin_bottom</item>
         <item name="android:textColor">@color/whiteTextColor</item>
     </style>
     <style name="LogoutButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
@@ -152,7 +152,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="trackTint">@color/switch_track_selector</item>
         <item name="thumbTint">@color/switch_thumb_selector</item>
-        <item name="android:textColor">@color/transparent</item>
+        <item name="android:textAppearance">@style/TextAppearance.Transparent.Small.Ubuntu</item>
     </style>
     <style name="ChipTextAppearance.Readable" parent="TextAppearance.MaterialComponents.Chip">
         <item name="fontFamily">@font/alegreya_bold</item>

@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+        <import type="com.mesutemre.kutuphanem.R"/>
         <variable
             name="kitapSearch"
             type="com.mesutemre.kutuphanem.kitap.liste.model.KitapModel" />
@@ -18,8 +19,8 @@
 
             <ImageView
                 android:id="@+id/itemSearchKitapImageId"
-                android:layout_width="100dp"
-                android:layout_height="120dp"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_100sdp"
                 android:downloadUrl="@{kitapSearch.kitapResimPath}"/>
 
             <LinearLayout
@@ -32,28 +33,25 @@
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/alegreya"
+                    android:textFont="@{R.style.TextAppearance_Black_Normal_Alegrya_Bold}"
                     android:gravity="center"
                     android:text="@{kitapSearch.kitapAd.length()>55 ? kitapSearch.kitapAd.substring(0,54)+`...` : kitapSearch.kitapAd}"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:fontFamily="@font/alegreya"
+                    android:layout_marginTop="@dimen/kutuphanem_general_margin_top"
                     android:gravity="center"
                     android:text="@{kitapSearch.yazarAd}"
-                    android:textSize="14sp"
-                    android:textStyle="italic" />
+                    android:textFont="@{R.style.TextAppearance_Transparent_Small_Ubuntu}"
+                    />
             </LinearLayout>
         </RelativeLayout>
         <View
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="1dp"
-            android:background="@drawable/google_colors"/>
+            android:layout_height="@dimen/kutuphanem_small_margin_top_space"
+            android:layout_marginTop="@dimen/kutuphanem_small_margin_top_space"
+            android:background="@color/transparent"/>
     </LinearLayout>
 </layout>

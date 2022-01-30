@@ -9,11 +9,15 @@ import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.ColorInt
+import androidx.annotation.StyleRes
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.ImageViewCompat
+import androidx.core.widget.TextViewCompat
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
@@ -210,4 +214,9 @@ fun View.setDisplayFullHeight(){
     val layoutParams = this.layoutParams
     layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT
     this.layoutParams = layoutParams
+}
+
+@BindingAdapter(value = ["android:textFont"])
+fun setMaterialTextFont(mtw: MaterialTextView, styleRes: Int) {
+    TextViewCompat.setTextAppearance(mtw,styleRes)
 }

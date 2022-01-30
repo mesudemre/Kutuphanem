@@ -52,7 +52,7 @@ class ProfilIslemFragment() :BaseFragment<ProfilIslemFragmentBinding>() {
         }
         binding.dogumTarCinsiyetCardId.setOnClickListener {
             val action = ProfilIslemFragmentDirections.actionProfilIslemFragmentToProfilIslemDogumTarCinsiyetFragment(kullanici)
-           findNavController(this).navigate(action)
+            findNavController(this).navigate(action)
         }
 
         binding.ilgiAlanlarimCardId.setOnClickListener {
@@ -70,7 +70,7 @@ class ProfilIslemFragment() :BaseFragment<ProfilIslemFragmentBinding>() {
         }
     }
 
-    val loadProfilResimLambda: (Uri) ->Unit = ilgiAlanSecili@{ imageUri ->
+    val loadProfilResimLambda: (Uri) ->Unit = { imageUri ->
         if (imageUri != null) {
             binding.profilResimImage.getCircleImageFromUri(imageUri,binding.profilResimImage)
             val ad = AlertDialog.Builder(requireContext())

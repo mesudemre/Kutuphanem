@@ -73,7 +73,7 @@ class ResimSecBottomSheetDialogFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-            binding.cameraLayoutId.setOnClickListener {
+        binding.cameraLayoutId.setOnClickListener {
             camContext = requireParentFragment().requireContext()
             kameraIzin = ContextCompat.checkSelfPermission(requireParentFragment().requireContext(), Manifest.permission.CAMERA)
             if(kameraIzin != PackageManager.PERMISSION_GRANTED){

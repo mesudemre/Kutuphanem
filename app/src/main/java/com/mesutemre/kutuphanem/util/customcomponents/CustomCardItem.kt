@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.RelativeLayout
 import com.mesutemre.kutuphanem.R
+import com.mesutemre.kutuphanem.databinding.CustomCardItemBinding
 import com.mesutemre.kutuphanem.util.hideComponent
 import com.mesutemre.kutuphanem.util.setTint
 import kotlinx.android.synthetic.main.custom_card_item.view.*
@@ -20,14 +21,16 @@ class CustomCardItem  @JvmOverloads constructor(
     defStyleRes: Int = 0
 ):RelativeLayout(context, attrs, defStyle, defStyleRes) {
 
+    var binding:CustomCardItemBinding
+
     init {
-        LayoutInflater.from(context).inflate(R.layout.custom_card_item,this,true);
+        binding = CustomCardItemBinding.inflate(LayoutInflater.from(context), this)
 
         attrs?.let {
             val typedArray = context.obtainStyledAttributes(it,R.styleable.custom_card_item_attributes,0,0);
 
             val cardTitle = resources.getText(typedArray.getResourceId(R.styleable.custom_card_item_attributes_custom_card_title,R.string.evet));
-            customCardTitleTextView.setText(cardTitle);
+            binding.customCardTitleTextView.setText(cardTitle);
 
             val cardArrowable = typedArray.getBoolean(R.styleable.custom_card_item_attributes_custom_card_isArrowable,true);
             if(!cardArrowable){
@@ -35,13 +38,13 @@ class CustomCardItem  @JvmOverloads constructor(
             }
 
             val titleTextColor = resources.getColor(typedArray.getResourceId(R.styleable.custom_card_item_attributes_custom_card_titleColor,R.color.transparent))
-            customCardTitleTextView.setTextColor(titleTextColor);
+            binding.customCardTitleTextView.setTextColor(titleTextColor);
 
             val arrowImageTint = resources.getColor(typedArray.getResourceId(R.styleable.custom_card_item_attributes_custom_card_arrowTint,R.color.lacivert));
-            customCardArrowImage.setTint(arrowImageTint);
+            binding.customCardArrowImage.setTint(arrowImageTint);
 
             val cardBackgroundColor = resources.getColor(typedArray.getResourceId(R.styleable.custom_card_item_attributes_custom_card_backgroundColor,R.color.white));
-            customMaterialCardId.setCardBackgroundColor(cardBackgroundColor);
+            binding.customMaterialCardId.setCardBackgroundColor(cardBackgroundColor);
 
             typedArray.recycle()
         }

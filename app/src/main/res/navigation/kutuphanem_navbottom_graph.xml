@@ -191,4 +191,8 @@
             app:destination="@id/loginFragment"
             app:enterAnim="@anim/slide_down" />
     </dialog>
+    <dialog
+        android:id="@+id/resimSecBottomSheetDialogFragment"
+        android:name="com.mesutemre.kutuphanem.auth.profil.ui.dialog.ResimSecBottomSheetDialogFragment"
+        android:label="ResimSecBottomSheetDialogFragment" />
 </navigation>

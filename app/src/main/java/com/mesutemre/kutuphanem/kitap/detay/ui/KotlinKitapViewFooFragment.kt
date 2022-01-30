@@ -30,7 +30,7 @@ class KotlinKitapViewFooFragment: BaseFragment<FragmentKotlinFooBinding>() {
 
     override fun onStartFragment() {
         try {
-            binding.pdfView.fromBytes(args.fileInfo.fileByteArray).load()
+            //binding.pdfView.fromBytes(args.fileInfo.fileByteArray).load()
         }catch (e:Exception) {
             Log.d("HATA","hata meydana geldi!!!")
             e.printStackTrace()

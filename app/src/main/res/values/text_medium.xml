@@ -16,6 +16,14 @@
         <item name="android:fontFamily">@font/alegreya_bold</item>
     </style>
 
+    <style name="TextAppearance.Lacivert.Medium.Ubuntu" parent="TextAppearance.Lacivert.Medium">
+        <item name="android:fontFamily">@font/ubuntu</item>
+    </style>
+
+    <style name="TextAppearance.Lacivert.Medium.Ubuntu.Bold" parent="TextAppearance.Lacivert.Medium">
+        <item name="android:fontFamily">@font/ubuntu_bold</item>
+    </style>
+
     <style name="TextAppearance.Transparent.Medium" parent="TextAppearance.Transparent">
         <item name="android:textSize">@dimen/_16sdp</item>
     </style>
@@ -30,6 +38,14 @@
 
     <style name="TextAppearance.Transparent.Medium.Alegrya.Bold" parent="TextAppearance.Transparent.Medium">
         <item name="android:fontFamily">@font/alegreya_bold</item>
+    </style>
+
+    <style name="TextAppearance.Transparent.Medium.Ubuntu" parent="TextAppearance.Transparent.Medium">
+        <item name="android:fontFamily">@font/ubuntu</item>
+    </style>
+
+    <style name="TextAppearance.Transparent.Medium.Ubuntu.Bold" parent="TextAppearance.Transparent.Medium">
+        <item name="android:fontFamily">@font/ubuntu_bold</item>
     </style>
 
     <style name="TextAppearance.Black.Medium" parent="TextAppearance.Black">
@@ -48,6 +64,14 @@
         <item name="android:fontFamily">@font/alegreya_bold</item>
     </style>
 
+    <style name="TextAppearance.Black.Medium.Ubuntu" parent="TextAppearance.Black.Medium">
+        <item name="android:fontFamily">@font/ubuntu</item>
+    </style>
+
+    <style name="TextAppearance.Black.Medium.Ubuntu.Bold" parent="TextAppearance.Black.Medium">
+        <item name="android:fontFamily">@font/ubuntu_bold</item>
+    </style>
+
     <style name="TextAppearance.White.Medium" parent="TextAppearance.White">
         <item name="android:textSize">@dimen/_16sdp</item>
     </style>
@@ -62,6 +86,14 @@
 
     <style name="TextAppearance.White.Medium.Alegrya.Bold" parent="TextAppearance.White.Medium">
         <item name="android:fontFamily">@font/alegreya_bold</item>
+    </style>
+
+    <style name="TextAppearance.White.Medium.Ubuntu" parent="TextAppearance.White.Medium">
+        <item name="android:fontFamily">@font/ubuntu</item>
+    </style>
+
+    <style name="TextAppearance.White.Medium.Ubuntu.Bold" parent="TextAppearance.White.Medium">
+        <item name="android:fontFamily">@font/ubuntu_bold</item>
     </style>
 
     <style name="TextAppearance.Primary.Medium" parent="TextAppearance.Primary">
@@ -80,6 +112,14 @@
         <item name="android:fontFamily">@font/alegreya_bold</item>
     </style>
 
+    <style name="TextAppearance.Primary.Medium.Ubuntu" parent="TextAppearance.Primary.Medium">
+        <item name="android:fontFamily">@font/ubuntu</item>
+    </style>
+
+    <style name="TextAppearance.Primary.Medium.Ubuntu.Bold" parent="TextAppearance.Primary.Medium">
+        <item name="android:fontFamily">@font/ubuntu_bold</item>
+    </style>
+
     <style name="TextAppearance.Error.Medium" parent="TextAppearance.Error">
         <item name="android:textSize">@dimen/_16sdp</item>
     </style>
@@ -94,5 +134,13 @@
 
     <style name="TextAppearance.Error.Medium.Alegrya.Bold" parent="TextAppearance.Error.Medium">
         <item name="android:fontFamily">@font/alegreya_bold</item>
+    </style>
+
+    <style name="TextAppearance.Error.Medium.Ubuntu" parent="TextAppearance.Error.Medium">
+        <item name="android:fontFamily">@font/ubuntu</item>
+    </style>
+
+    <style name="TextAppearance.Error.Medium.Ubuntu.Bold" parent="TextAppearance.Error.Medium">
+        <item name="android:fontFamily">@font/ubuntu_bold</item>
     </style>
 </resources>

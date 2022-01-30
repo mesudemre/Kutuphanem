@@ -52,7 +52,6 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.itemTextColor = ContextCompat.getColorStateList(this,R.color.nav_icontint_colors)
         binding.bottomNavigation.labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_LABELED
         binding.bottomNavigation.menu.getItem(0).isVisible = false
-
         setUpNavigation()
     }
 
@@ -69,7 +68,8 @@ class MainActivity : AppCompatActivity() {
                     R.id.profilIslemAdSoyadEpostaFragment,
                     R.id.profilIslemDogumTarCinsiyetFragment,
                     R.id.profilIslemIlgiAlanlarimFragment,
-                    R.id.profilIslemIletisiTercihlerimFragment
+                    R.id.profilIslemIletisiTercihlerimFragment,
+                    R.id.kitapAciklamaBottomSheetDialogFragment
             )){
                 binding.floatingActionButton3.hideComponent()
                 navBottomMenu.hideComponent()

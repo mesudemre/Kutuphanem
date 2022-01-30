@@ -8,7 +8,7 @@
         android:id="@+id/ilgiAlanlarimPanelLayoutId"
         android:background="@drawable/profil_gradient_color"
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="@dimen/profil_islem_header_height">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -25,10 +25,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:fontFamily="@font/alegreya_bold"
-                android:text="@string/profilGuncellemeIlgiAlanlariLabel"
-                android:textColor="@color/whiteTextColor"
-                android:textSize="18sp" />
+                style="@style/TextAppearance.White.Large.Alegrya.Bold"
+                android:text="@string/profilGuncellemeIlgiAlanlariLabel" />
         </RelativeLayout>
     </FrameLayout>
 
@@ -45,12 +43,12 @@
         android:layout_below="@id/ilgiAlanlarimPanelLayoutId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-30dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginTop="@dimen/profil_islem_panel_margin_top"
+        android:layout_marginLeft="@dimen/kutuphanem_general_margin_top"
+        android:layout_marginRight="@dimen/kutuphanem_general_margin_top"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="10dp"
+        app:cardCornerRadius="@dimen/kutuphanem_general_left_right_margin"
+        app:cardElevation="@dimen/kutuphanem_general_cardview_radius"
         android:visibility="gone">
 
         <LinearLayout
@@ -65,9 +63,9 @@
                 android:layout_height="wrap_content"
                 android:enabled="false"
                 app:boxStrokeColor="@color/primaryTextColor"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="3dp">
+                android:layout_marginTop="@dimen/profil_islem_body_margin_top"
+                android:layout_marginLeft="@dimen/kutuphanem_small_margin_top_space"
+                android:layout_marginRight="@dimen/kutuphanem_small_margin_top_space">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextProfilKullaniciAd"
@@ -82,7 +80,7 @@
                 android:id="@+id/ilgiAlanChips"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"></com.google.android.material.chip.ChipGroup>
+                android:layout_marginTop="@dimen/profil_islem_body_component_margin_top"></com.google.android.material.chip.ChipGroup>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/ilgiAlanGuncelleButtonId"

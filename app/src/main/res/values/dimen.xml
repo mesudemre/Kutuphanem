@@ -6,4 +6,19 @@
     <dimen name="kutuphanem_general_margin_top">@dimen/_16sdp</dimen>
     <dimen name="kutuphanem_general_left_right_margin">@dimen/_4sdp</dimen>
     <dimen name="kutuphanem_general_cardview_radius">@dimen/_8sdp</dimen>
+    <dimen name="kitap_detay_card_corner_radius">@dimen/_20sdp</dimen>
+    <dimen name="kitap_detay_margin_top">@dimen/_8sdp</dimen>
+    <dimen name="kitap_detay_view_more">@dimen/_minus24sdp</dimen>
+    <dimen name="kitap_detay_view_more_image_margin_top">@dimen/_minus8sdp</dimen>
+    <dimen name="kitap_detay_image_margin">@dimen/_8sdp</dimen>
+    <dimen name="custom_card_margin">@dimen/_8sdp</dimen>
+    <dimen name="custom_card_radius">@dimen/_4sdp</dimen>
+    <dimen name="profil_islem_header_height">@dimen/_96sdp</dimen>
+    <dimen name="profil_islem_panel_margin_top">@dimen/_minus24sdp</dimen>
+    <dimen name="profil_islem_body_margin_top">@dimen/_8sdp</dimen>
+    <dimen name="profil_islem_body_component_margin_top">@dimen/_4sdp</dimen>
+    <dimen name="profil_islem_main_header_height">@dimen/_150sdp</dimen>
+    <dimen name="profil_islem_card_main_height">@dimen/_48sdp</dimen>
+    <dimen name="profil_islem_panel_adSoyadMargin">@dimen/_24sdp</dimen>
+    <dimen name="profil_islem_ilgi_alan_margin_bottom">@dimen/_8sdp</dimen>
 </resources>

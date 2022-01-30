@@ -15,21 +15,21 @@ abstract class BaseViewModel: ViewModel() {
                                            dispatcher: CoroutineDispatcher
     ):BaseDataEvent<T>{
         return withContext(dispatcher){
-            val response: Response<T>;
+            val response: Response<T>
             try {
-                response = call.invoke();
+                response = call.invoke()
             }catch (t:Throwable){
-                return@withContext BaseDataEvent.Error(t.message!!);
+                return@withContext BaseDataEvent.Error(t.message!!)
             }
 
             return@withContext if (!response.isSuccessful){
-                val errorBody = response.errorBody();
-                BaseDataEvent.Error(errorBody.toString());
+                val errorBody = response.errorBody()
+                BaseDataEvent.Error(errorBody.toString())
             }else {
                 return@withContext if (response.body() == null) {
-                    BaseDataEvent.Error("Boş response");
+                    BaseDataEvent.Error("Boş response")
                 }else {
-                    BaseDataEvent.Success(response.body());
+                    BaseDataEvent.Success(response.body())
                 }
             }
         }
@@ -40,17 +40,17 @@ abstract class BaseViewModel: ViewModel() {
                                       dispatcher: CoroutineDispatcher
     ):BaseDataEvent<T>{
         return withContext(dispatcher) {
-            val response:T;
+            val response:T
             try {
-                response = call.invoke();
+                response = call.invoke()
             }catch (t:Throwable){
-                return@withContext BaseDataEvent.Error(t.message!!);
+                return@withContext BaseDataEvent.Error(t.message!!)
             }
 
             return@withContext if (response == null){
-                BaseDataEvent.Error("Herhangi bir data bulunamadı!");
+                BaseDataEvent.Error("Herhangi bir data bulunamadı!")
             }else {
-                BaseDataEvent.Success(response);
+                BaseDataEvent.Success(response)
             }
         }
     }

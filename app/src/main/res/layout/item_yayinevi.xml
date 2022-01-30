@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="com.mesutemre.kutuphanem.R"/>
         <variable
             name="yayinevi"
             type="com.mesutemre.kutuphanem.parametre.yayinevi.model.YayineviModel" />
@@ -32,14 +33,13 @@
                 android:src="@drawable/ic_baseline_delete_24"
                 android:rippleEffect="@{true}"/>
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/yayinEviAdText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="@{yayinevi.aciklama}"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textFont="@{R.style.TextAppearance_Transparent_Normal_Ubuntu_Bold}"/>
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

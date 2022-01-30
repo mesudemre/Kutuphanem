@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="com.mesutemre.kutuphanem.R"/>
         <variable
             name="kitap"
             type="com.mesutemre.kutuphanem.kitap.liste.model.KitapModel" />
@@ -20,8 +21,8 @@
 
         <ImageView
             android:id="@+id/kitapImageId"
-            android:layout_width="@dimen/_110sdp"
-            android:layout_height="@dimen/_130sdp"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_120sdp"
             android:downloadUrl="@{kitap.kitapResimPath}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,30 +38,31 @@
             app:layout_constraintStart_toEndOf="@+id/kitapImageId"
             app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/kitapAdText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                style="@style/TextAppearance.Transparent.Normal.Alegrya.Bold"
+                android:textFont="@{R.style.TextAppearance_Transparent_Normal_Alegrya_Bold}"
                 android:text="@{kitap.kitapAd.length()>40 ? kitap.kitapAd.substring(0,39)+`...` : kitap.kitapAd}" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/kitapTurText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_4sdp"
                 android:gravity="left"
                 android:text="@{`Kitap Türü : ` + kitap.kitapTur.aciklama}"
-                style="@style/TextAppearance.Transparent.Small"/>
+                android:textFont="@{R.style.TextAppearance_Transparent_Small_Ubuntu_Bold}"
+                />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/kitapAciklamaTextId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_4sdp"
-                style="@style/TextAppearance.Transparent.Thiny.Alegrya"
                 android:gravity="left"
+                android:textFont="@{R.style.TextAppearance_Transparent_Small_Ubuntu}"
                 android:text="@{kitap.kitapAciklama.length()>90 ? kitap.kitapAciklama.substring(0,90)+`...` : kitap.kitapAciklama}" />
         </LinearLayout>
 
@@ -80,8 +82,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/kutuphanem_small_margin_top_space"
             android:layout_marginEnd="@dimen/_4sdp"
+            android:textFont="@{R.style.TextAppearance_Transparent_Small_Ubuntu}"
             android:formatTarih="@{kitap.alinmatarihi}"
-            style="@style/TextAppearance.Transparent.Normal.Alegrya"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

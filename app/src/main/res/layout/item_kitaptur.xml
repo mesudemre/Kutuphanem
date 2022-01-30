@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="com.mesutemre.kutuphanem.R"/>
         <variable
             name="listener"
             type="com.mesutemre.kutuphanem.parametre.kitaptur.listener.KitapturDeleteClickListener" />
@@ -33,14 +34,14 @@
                 android:onClick="@{(v) -> listener.onKitapturDeleteClicked(v,kitaptur)}"
                 android:src="@drawable/ic_baseline_delete_24" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/kitapTurAdText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="@{kitaptur.aciklama}"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textFont="@{R.style.TextAppearance_Transparent_Normal_Ubuntu_Bold}"
+                />
 
         </RelativeLayout>
 

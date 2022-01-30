@@ -20,7 +20,7 @@ class CustomErrorComponent @JvmOverloads constructor(
 ): RelativeLayout(context, attrs, defStyle, defStyleRes) {
 
 
-    lateinit var binding: ComponentCustomErrorBinding
+    var binding: ComponentCustomErrorBinding
 
     init {
         binding = ComponentCustomErrorBinding.inflate(LayoutInflater.from(context), this)
