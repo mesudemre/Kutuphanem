@@ -104,7 +104,7 @@ constructor(@IoDispatcher private val ioDispatcher: CoroutineDispatcher,
         withContext(ioDispatcher) {
             parametreRepository.deleteKitapTurListe();
             parametreRepository.kitapTurParametreKaydet(*kitapTurListe.toTypedArray());
-            customSharedPreferences.putBooleanToSharedPreferences(PARAM_KITAPTUR_DB_KEY,true);
+            customSharedPreferences.putToSharedPref(PARAM_KITAPTUR_DB_KEY,true);
         }
     }
 
@@ -157,7 +157,7 @@ constructor(@IoDispatcher private val ioDispatcher: CoroutineDispatcher,
         withContext(ioDispatcher) {
             parametreRepository.deleteYayinEviListe();
             parametreRepository.yayinEviParametreKaydet(*yayinEviListe.toTypedArray());
-            customSharedPreferences.putBooleanToSharedPreferences(PARAM_YAYINEVI_DB_KEY,true);
+            customSharedPreferences.putToSharedPref(PARAM_YAYINEVI_DB_KEY,true);
         }
     }
 

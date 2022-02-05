@@ -92,7 +92,7 @@ class ParametreKitapturViewModel  @Inject constructor(
         withContext(ioDispatcher) {
             parametreRepository.deleteKitapTurListe();
             parametreRepository.kitapTurParametreKaydet(*kitapTurListe.toTypedArray());
-            customSharedPreferences.putBooleanToSharedPreferences(PARAM_KITAPTUR_DB_KEY,true);
+            customSharedPreferences.putToSharedPref(PARAM_KITAPTUR_DB_KEY,true);
         }
     }
 

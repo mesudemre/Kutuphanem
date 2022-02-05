@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +15,7 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.google.android.material.textfield.TextInputEditText
@@ -24,7 +24,10 @@ import com.mesutemre.kutuphanem.auth.profil.ui.dialog.DogumTarihiDialogFragment
 import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.databinding.KitapEklemeFragmentBinding
-import com.mesutemre.kutuphanem.model.*
+import com.mesutemre.kutuphanem.model.ERROR
+import com.mesutemre.kutuphanem.model.KITAP_EKLEME_PHOTO
+import com.mesutemre.kutuphanem.model.SUCCESS
+import com.mesutemre.kutuphanem.model.WARNING
 import com.mesutemre.kutuphanem.parametre.kitaptur.model.KitapturModel
 import com.mesutemre.kutuphanem.parametre.yayinevi.model.YayineviModel
 import com.mesutemre.kutuphanem.util.*
@@ -60,6 +63,7 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
     private var selectYayineviList = mutableListOf<SelectItemModel>()
     private var isKitapTurDlgOpened = false
     private var isYayineviDlgOpened = false
+    private lateinit var photoFile:File
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> KitapEklemeFragmentBinding
             = KitapEklemeFragmentBinding::inflate
@@ -70,7 +74,7 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
             savedKitapUri = savedInstanceState.getParcelable("kitapImage")
         }
         cameraExecutor = Executors.newSingleThreadExecutor()
-        outputDirectory = createOutputDirectory(requireContext())
+        outputDirectory = requireContext().createOutputDirectory(KITAP_EKLEME_PHOTO)
     }
 
     override fun onStartFragment() {
@@ -276,6 +280,7 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
                     requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                     binding.kitapResimYukleProgressLayoutId.hideComponent()
                     showSnackBar(view,it.data!!.statusMessage,SUCCESS)
+                    photoFile.delete()
                     formTemizle()
                 }
             }
@@ -309,7 +314,7 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
 
     private fun takeKitapPhoto(){
         val imageCapture = imageCapture ?: return
-        val photoFile = File(
+         photoFile = File(
             outputDirectory,
             SimpleDateFormat(
                 "yyyy-MM-dd-HH-mm-ss-SSS", Locale.US
@@ -320,12 +325,12 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
             ContextCompat.getMainExecutor(requireContext()),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onError(exc: ImageCaptureException) {
-                    Log.e("HATA","Hata oldu!!! : "+exc.toString())
+                    showSnackBar(binding.root.rootView,exc.message!!, ERROR)
                 }
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     savedKitapUri = Uri.fromFile(photoFile)
-                    binding.kitapImageCapId.setImageURI(savedKitapUri)
+                    binding.kitapImageCapId.getImageFromFile(photoFile)
                     binding.photoCekLayoutId.hideComponent()
                     binding.kitapGenelBilgiLayoutId.showComponent()
                     cameraProvider.unbindAll()

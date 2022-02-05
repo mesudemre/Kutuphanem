@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
         <import type="com.mesutemre.kutuphanem.R"/>
@@ -8,50 +10,63 @@
             type="com.mesutemre.kutuphanem.kitap.liste.model.KitapModel" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/itemSearchKitapImageId"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_100sdp"
+            android:downloadUrl="@{kitapSearch.kitapResimPath}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/itemSearchKitapImageId"
-                android:layout_width="@dimen/_80sdp"
-                android:layout_height="@dimen/_100sdp"
-                android:downloadUrl="@{kitapSearch.kitapResimPath}"/>
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toStartOf="@+id/kitapDetayGitImageView"
+            app:layout_constraintStart_toEndOf="@+id/itemSearchKitapImageId"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/itemSearchKitapImageId"
-                android:orientation="vertical">
+                android:gravity="center"
+                android:layout_marginTop="@dimen/kitap_detay_margin_top"
+                android:text="@{kitapSearch.kitapAd.length()>55 ? kitapSearch.kitapAd.substring(0,54)+`...` : kitapSearch.kitapAd}"
+                android:textFont="@{R.style.TextAppearance_Black_Normal_Alegrya_Bold}" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textFont="@{R.style.TextAppearance_Black_Normal_Alegrya_Bold}"
-                    android:gravity="center"
-                    android:text="@{kitapSearch.kitapAd.length()>55 ? kitapSearch.kitapAd.substring(0,54)+`...` : kitapSearch.kitapAd}"
-                    />
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/kitap_detay_margin_top"
+                android:gravity="center"
+                android:text="@{kitapSearch.yazarAd}"
+                android:textFont="@{R.style.TextAppearance_Transparent_Small_Ubuntu}" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/kutuphanem_general_margin_top"
-                    android:gravity="center"
-                    android:text="@{kitapSearch.yazarAd}"
-                    android:textFont="@{R.style.TextAppearance_Transparent_Small_Ubuntu}"
-                    />
-            </LinearLayout>
-        </RelativeLayout>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/kitapDetayGitImageView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_arrow_forward_ios_48"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/transparent" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/kutuphanem_small_margin_top_space"
-            android:layout_marginTop="@dimen/kutuphanem_small_margin_top_space"
-            android:background="@color/transparent"/>
-    </LinearLayout>
+            android:background="@color/transparent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:layout_editor_absoluteX="0dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

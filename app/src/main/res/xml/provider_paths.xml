@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
-    <external-path name="Kütüphanem" path="/"/>
-    <files-path name="kitap_arsiv" path="arsiv/"  />
-    <files-path name="kitap_downloads" path="kitapdownloads/"  />
+    <external-path
+        name="Kütüphanem"
+        path="/" />
+
+    <files-path
+        name="kitap_arsiv"
+        path="arsiv/" />
+
+    <files-path
+        name="kitap_downloads"
+        path="kitapdownloads/" />
+
+    <files-path
+        name="kitap_ekleme_photo"
+        path="photoKitapEkleme/" />
+
+    <files-path
+        name="profil_resim_ekleme_photo"
+        path="photoProfilEkleme/" />
 </paths>

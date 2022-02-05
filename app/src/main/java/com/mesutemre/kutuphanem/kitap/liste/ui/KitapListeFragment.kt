@@ -156,7 +156,7 @@ class KitapListeFragment:BaseFragment<KitapListeFragmentBinding>() {
                     binding.kitapListeProgressBar.hideComponent();
 
                     errorState?.let{
-                        binding.kitapListeErrorTextId.text = it.error.localizedMessage;
+                        binding.kitapListeErrorTextId.setErrorMessage(it.error.localizedMessage)
                         binding.kitapListeErrorTextId.showComponent();
                     }
                 }
@@ -285,7 +285,7 @@ class KitapListeFragment:BaseFragment<KitapListeFragmentBinding>() {
                     binding.kitapListeProgressBar.hideComponent();
 
                     errorState?.let{
-                        binding.kitapListeErrorTextId.text = it.error.localizedMessage;
+                        binding.kitapListeErrorTextId.setErrorMessage(it.error.localizedMessage)
                         binding.kitapListeErrorTextId.showComponent();
                     }
                 }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/floatManuel"
+        android:icon="@drawable/ic_baseline_pending_actions_24"
+        android:menuCategory="secondary"
+        app:showAsAction="ifRoom"
+        android:title="@string/fab_menu_manuel"/>
+
+    <item
+        android:id="@+id/floatIsbn"
+        android:icon="@drawable/ic_baseline_document_scanner_24"
+        android:menuCategory="secondary"
+        app:showAsAction="ifRoom"
+        android:title="@string/fab_menu_isbn"/>
+
+    <item
+        android:id="@+id/floatIsbnCam"
+        android:icon="@drawable/ic_baseline_linked_camera_24"
+        android:menuCategory="secondary"
+        app:showAsAction="ifRoom"
+        android:title="@string/fab_menu_isbn_cam"/>
+
+</menu>

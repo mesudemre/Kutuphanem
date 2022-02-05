@@ -10,14 +10,12 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.media.AudioAttributes
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
-import android.provider.Settings
 import android.text.SpannableStringBuilder
 import android.util.Log
 import android.util.TypedValue
@@ -27,6 +25,7 @@ import android.widget.TextView
 import androidx.core.app.NotificationCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
+import androidx.fragment.app.Fragment
 import androidx.work.*
 import com.google.android.material.snackbar.Snackbar
 import com.mesutemre.kutuphanem.R
@@ -220,22 +219,6 @@ fun rippleEffect(view:View,value:Boolean){
     }
 }
 
-fun createOutputDirectory(context: Context): File {
-    val mediaDir = context.externalMediaDirs.firstOrNull()?.let {
-        File(it, context.resources.getString(R.string.app_name)).apply { mkdirs() }
-    }
-    return if (mediaDir != null && mediaDir.exists())
-        mediaDir else context.filesDir
-}
-
-fun createDownloadedOutputDirectory(context: Context,folder:String): File {
-    val mediaDir = context.externalMediaDirs.firstOrNull()?.let {
-        File(it, folder).apply { mkdirs() }
-    }
-    return if (mediaDir != null && mediaDir.exists())
-        mediaDir else context.filesDir
-}
-
 fun checkDeviceHasCamera(ctx:Context):Boolean{
     if(ctx.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)){
         return true;
@@ -269,8 +252,8 @@ fun saveFile(kitap: KitapModel, requireContext: Context, isArchive:Boolean,arr:B
 fun convertBitmapToFile(bitmap: Bitmap, fileNameToSave: String,requireContext: Context):File {
     var photoFile:File? = null;
     return try {
-        val imgPath:File = createArsivDirectory(requireContext);
-        photoFile = File(imgPath.absolutePath,fileNameToSave);
+        val imgPath:File = requireContext.createOutputDirectory("arsiv")
+        photoFile = File(imgPath.absolutePath,fileNameToSave)
 
         val bos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos) // YOU can also save it in JPEG
@@ -285,14 +268,6 @@ fun convertBitmapToFile(bitmap: Bitmap, fileNameToSave: String,requireContext: C
         e.printStackTrace()
         photoFile!! // it will return null
     }
-}
-
-fun createArsivDirectory(context: Context): File {
-    val mediaDir = context.filesDir.let {
-        File(it, "arsiv").apply { mkdirs() }
-    }
-    return if (mediaDir != null && mediaDir.exists())
-        mediaDir else context.filesDir
 }
 
 inline fun <reified T: Activity>
@@ -378,8 +353,8 @@ fun downloadKitap( requireContext: Context,arr:ByteArray): File? {
     var kitapFile:File? = null;
 
     return try {
-        val imgPath:File = createKitapDirectory(requireContext);
-        kitapFile = File(imgPath.absolutePath,"kotlin.pdf");
+        val imgPath:File = requireContext.createOutputDirectory("kitapdownloads")
+        kitapFile = File(imgPath.absolutePath,"kotlin.pdf")
 
         val fos = FileOutputStream(kitapFile)
         fos.write(arr)
@@ -392,10 +367,14 @@ fun downloadKitap( requireContext: Context,arr:ByteArray): File? {
     }
 }
 
-fun createKitapDirectory(context: Context): File {
-    val mediaDir = context.filesDir.let {
-        File(it, "kitapdownloads").apply { mkdirs() }
+fun Fragment.closeApplication() {
+    this.activity?.finish()
+}
+
+fun Context.createOutputDirectory(folderPath:String):File {
+    val mediaDir = this.filesDir.let {
+        File(it, folderPath).apply { mkdirs() }
     }
     return if (mediaDir != null && mediaDir.exists())
-        mediaDir else context.filesDir
+        mediaDir else this.filesDir
 }

@@ -108,6 +108,7 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
     private fun initializeValues(view: View) {
         if(isFromArsiv){
             view.kitapDetayImageId.getImageFromLocal(selectedKitap.kitapId!!,view.kitapDetayImageId)
+            view.hideComponents(view.kitapYorumPanel,view.shareImageViewId)
         }else{
             view.kitapDetayImageId.getImageFromUrl(selectedKitap.kitapResimPath,view.kitapDetayImageId)
         }

@@ -45,8 +45,8 @@ class LoginFragmentViewModel  @Inject constructor(@IoDispatcher private val ioDi
                     if (tokenRes.contains("sifre hatali")) {
                         loginSingleResourceEvent.value = BaseResourceEvent.Error(loginResponse.data)
                     }else{
-                        customSharedPreferences.putStringToSharedPreferences(APP_TOKEN_KEY,tokenRes)
-                        customSharedPreferences.putStringToSharedPreferences(KULLANICI_ADI_KEY,account.username!!)
+                        customSharedPreferences.putToSharedPref(APP_TOKEN_KEY,tokenRes)
+                        customSharedPreferences.putToSharedPref(KULLANICI_ADI_KEY,account.username!!)
                         loginSingleResourceEvent.value = BaseResourceEvent.Success(loginResponse.data)
                     }
                 }

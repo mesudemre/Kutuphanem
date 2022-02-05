@@ -1,6 +1,5 @@
 package com.mesutemre.kutuphanem.auth.login.ui
 
-import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -11,13 +10,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.mesutemre.kutuphanem.R
+import com.mesutemre.kutuphanem.auth.login.model.AccountCredentials
 import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.databinding.LoginFragmentBinding
-import com.mesutemre.kutuphanem.util.listener.TextInputErrorClearListener
-import com.mesutemre.kutuphanem.auth.login.model.AccountCredentials
 import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.util.*
+import com.mesutemre.kutuphanem.util.listener.TextInputErrorClearListener
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -41,12 +40,7 @@ class LoginFragment:BaseFragment<LoginFragmentBinding>() {
         super.onCreateViewFragment(view)
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true){
             override fun handleOnBackPressed() {
-                val isLollipopOrAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-                if(isLollipopOrAbove){
-                    activity!!.finishAndRemoveTask()
-                }else{
-                    activity!!.finishAffinity()
-                }
+                closeApplication()
             }
         })
     }

@@ -14,8 +14,8 @@ android {
         applicationId "com.mesutemre.kutuphanem"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 5
-        versionName "1.1"
+        versionCode 10
+        versionName "1.1.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -130,7 +130,7 @@ dependencies {
     implementation "androidx.hilt:hilt-work:$work_manager_hilt_version"
     implementation "com.intuit.sdp:sdp-android:$intuit_version"
 
-    implementation "com.github.wangjiegulu:rfab:2.0.0"
+    implementation "com.github.clans:fab:1.6.4"
 
     //implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 }

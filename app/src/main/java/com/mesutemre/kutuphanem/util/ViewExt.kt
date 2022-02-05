@@ -9,13 +9,10 @@ import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.ColorInt
-import androidx.annotation.StyleRes
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.core.widget.TextViewCompat
 import androidx.databinding.BindingAdapter
@@ -61,6 +58,12 @@ fun ImageView.getCircleImageFromUrl(url:String?, iv: ImageView){
         .setDefaultRequestOptions(options)
         .load(url)
         .circleCrop()
+        .into(this);
+}
+
+fun ImageView.getImageFromFile(file:File){
+    Glide.with(context)
+        .load(file)
         .into(this);
 }
 
@@ -143,14 +146,14 @@ fun View.hideComponent(){
 }
 
 fun View.hideComponents(vararg views:View) {
-    for (v in views){
-        v.hideComponent();
+    views.forEach {
+        it.hideComponent();
     }
 }
 
 fun View.showComponents(vararg views:View) {
-    for (v in views){
-        v.showComponent();
+    views.forEach {
+        it.showComponent();
     }
 }
 

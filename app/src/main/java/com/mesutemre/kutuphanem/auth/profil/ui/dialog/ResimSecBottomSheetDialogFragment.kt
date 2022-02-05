@@ -24,6 +24,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.databinding.KitapAciklamaBottomSheetDialogFragmentBinding
 import com.mesutemre.kutuphanem.databinding.ResimSecBottomSheetDialogFragmentBinding
+import com.mesutemre.kutuphanem.model.PROFIL_RESIM_EKLEME_PHOTO
 import com.mesutemre.kutuphanem.util.*
 import kotlinx.android.synthetic.main.resim_sec_bottom_sheet_dialog_fragment.*
 import java.io.File
@@ -52,7 +53,7 @@ class ResimSecBottomSheetDialogFragment(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         cameraExecutor = Executors.newSingleThreadExecutor()
-        outputDirectory = createOutputDirectory(requireContext())
+        outputDirectory = requireContext().createOutputDirectory(PROFIL_RESIM_EKLEME_PHOTO)
         if(checkDeviceHasCamera(requireParentFragment().requireContext()) && checkDeviceHasFronCamera(requireParentFragment().requireContext())){
             cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
         }else{

@@ -16,8 +16,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.progressindicator.CircularDrawingDelegate
 import com.google.android.material.progressindicator.CircularIndeterminateAnimatorDelegate
+//import com.google.android.material.progressindicator.CircularDrawingDelegate
+//import com.google.android.material.progressindicator.CircularIndeterminateAnimatorDelegate
 import com.google.android.material.progressindicator.IndeterminateDrawable
 import com.google.android.material.progressindicator.ProgressIndicatorSpec
+//import com.google.android.material.progressindicator.ProgressIndicatorSpec
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.textfield.TextInputLayout
 import com.mesutemre.kutuphanem.R
@@ -177,7 +180,7 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
     }
 
     private fun prepareProggressForSearch(){
-        val progressIndicatorSpec:ProgressIndicatorSpec = ProgressIndicatorSpec()
+        val progressIndicatorSpec: ProgressIndicatorSpec = ProgressIndicatorSpec()
         progressIndicatorSpec.loadFromAttributes(
             binding.searchInputEditText.context,
             null,
@@ -187,7 +190,8 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
         val progressIndicatorDrawable:IndeterminateDrawable = IndeterminateDrawable(binding.searchInputEditText.context,
             progressIndicatorSpec,
             CircularDrawingDelegate(),
-            CircularIndeterminateAnimatorDelegate())
+            CircularIndeterminateAnimatorDelegate()
+        )
         binding.searchInputLayout.endIconMode = TextInputLayout.END_ICON_CUSTOM
         binding.searchInputLayout.endIconDrawable = progressIndicatorDrawable
         binding.searchInputLayout.isEndIconVisible = false

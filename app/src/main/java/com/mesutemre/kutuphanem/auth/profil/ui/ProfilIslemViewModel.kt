@@ -116,7 +116,7 @@ class ProfilIslemViewModel @Inject constructor(@IoDispatcher private val ioDispa
 
     private suspend fun writeUserToDB(kullanici: Kullanici):Unit{
         withContext(ioDispatcher){
-            customSharedPreferences.putBooleanToSharedPreferences(KULLANICI_DB_MEVCUT,true)
+            customSharedPreferences.putToSharedPref(KULLANICI_DB_MEVCUT,true)
             kullaniciDao.kullaniciSil(kullanici.username)
             kullaniciDao.kullaniciKaydet(kullanici)
         }

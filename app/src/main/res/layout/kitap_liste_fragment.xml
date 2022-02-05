@@ -91,23 +91,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/kitapListeButtonGroup" />
 
-
-        <TextView
-            android:id="@+id/kitapListeErrorTextId"
+        <com.mesutemre.kutuphanem.util.customcomponents.CustomErrorComponent
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:fontFamily="@font/alegreya_bold"
-            android:gravity="center"
-            android:text="@string/kitapListeError"
-            android:textColor="@color/kirmizi"
-            android:textSize="38sp"
+            android:id="@+id/kitapListeErrorTextId"
             android:visibility="gone"
+            app:custom_error_message="@string/kitapListeError"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/kitapListeButtonGroup" />
+            app:layout_constraintTop_toBottomOf="@+id/kitapListeButtonGroup"/>
 
         <ProgressBar
             android:id="@+id/kitapListeProgressBar"
@@ -122,17 +116,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/kitapListeButtonGroup" />
 
+
         <TextView
             android:id="@+id/kitapArsivListeErrorTextId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:fontFamily="@font/alegreya_bold"
+            style="@style/TextAppearance.Error.Large.Alegrya.Bold"
             android:gravity="center"
             android:text="@string/kitapArsivMevcutDegil"
             android:textAlignment="center"
-            android:textColor="@color/acik_kirmizi"
-            android:textSize="32sp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -144,14 +137,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/kitapArsivListeErrorTextId"
-            android:fontFamily="@font/source_sans_pro"
             android:gravity="center"
             android:text="@string/kitapArsivNot"
             android:textAlignment="center"
-            android:textColor="@color/transparent"
-            android:textSize="16sp"
-            android:textStyle="italic"
             android:visibility="gone"
+            style="@style/TextAppearance.Transparent.Normal.Ubuntu"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/kitapArsivListeErrorTextId" />
