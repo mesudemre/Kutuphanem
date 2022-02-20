@@ -122,7 +122,7 @@
                     style="@style/TextAppearance.Black.Large.Alegrya.Bold"
                     android:gravity="center"
                     android:text="Mesut Emre ÇELENK"
-                    android:textColor="@color/kahverengi" />
+                    android:textColor="@color/google_dark_grey" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"

@@ -99,7 +99,6 @@
     <string name="profilGuncellemeTercihlerLabel">Uygulama Tercihlerim</string>
     <string name="cinsiyetLabel">Cinsiyetiniz</string>
 
-    <!--profil_image_degistir_menu.xml -->
     <string name="itemPhotoCamera">Kamera</string>
     <string name="itemPhotoLocalStorage">Galeri</string>
     <string name="itemRemoveImage">Resmi Kaldır</string>

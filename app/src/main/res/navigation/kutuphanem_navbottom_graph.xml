@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/kutuphanem_navbottom_graph"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/splashFragment">
+    app:startDestination="@id/anasayfaFragment">
 
     <fragment
         android:id="@+id/anasayfaFragment"
@@ -113,18 +113,6 @@
             android:id="@+id/deepLinkKitapDetay"
             app:uri="http://192.168.1.106:8080/KutuphaneSistemiWS/api/kitap/nesne?kitapId={kitapId}" />
         <argument android:name="kitapId" app:argType="string"/>
-    </fragment>
-    <fragment
-        android:id="@+id/splashFragment"
-        android:name="com.mesutemre.kutuphanem.anasayfa.ui.SplashFragment"
-        android:label="SplashFragment" >
-        <action
-            android:id="@+id/action_splashFragment_to_anasayfaFragment"
-            app:destination="@id/anasayfaFragment" />
-        <action
-            android:id="@+id/action_splashFragment_to_loginFragment"
-            app:destination="@id/loginFragment"
-            app:enterAnim="@anim/slide_down" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"

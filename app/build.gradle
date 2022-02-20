@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-//apply plugin: 'kotlin-android-extensions'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
@@ -130,7 +129,7 @@ dependencies {
     implementation "androidx.hilt:hilt-work:$work_manager_hilt_version"
     implementation "com.intuit.sdp:sdp-android:$intuit_version"
 
-    implementation "com.github.clans:fab:1.6.4"
+    implementation 'androidx.core:core-splashscreen:1.0.0-beta01'
 
     //implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 }
