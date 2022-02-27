@@ -11,7 +11,6 @@ import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.databinding.ParametreFragmentBinding
 import com.mesutemre.kutuphanem.parametre.kitaptur.ui.ParametreKitapturFragment
 import com.mesutemre.kutuphanem.parametre.yayinevi.ui.ParametreYayineviFragment
-import kotlinx.android.synthetic.main.parametre_fragment.*
 
 class ParametreFragment:BaseFragment<ParametreFragmentBinding>() {
 
@@ -34,9 +33,7 @@ class ParametreFragment:BaseFragment<ParametreFragmentBinding>() {
         fragmentBasliklar.add(resources.getString(R.string.yayinEviLabel));
         fragmentBasliklar.add(resources.getString(R.string.kitapTurLabel));
 
-        TabLayoutMediator(parametreTabId,parametreViewPager){tab, position ->
-            tab.setText(fragmentBasliklar.get(position));
-        }.attach();
+
     }
 
     private fun addFragments():Unit{

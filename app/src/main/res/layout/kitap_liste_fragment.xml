@@ -12,17 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.google.android.material.progressindicator.ProgressIndicator
-            android:id="@+id/kitapIslemProgresBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:visibility="gone"
-            app:indicatorColor="@color/sari"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:trackColor="@color/fistikYesil" />
+
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/kitapListeButtonGroup"

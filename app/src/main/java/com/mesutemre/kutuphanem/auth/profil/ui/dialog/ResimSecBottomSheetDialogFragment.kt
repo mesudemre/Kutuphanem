@@ -26,7 +26,6 @@ import com.mesutemre.kutuphanem.databinding.KitapAciklamaBottomSheetDialogFragme
 import com.mesutemre.kutuphanem.databinding.ResimSecBottomSheetDialogFragmentBinding
 import com.mesutemre.kutuphanem.model.PROFIL_RESIM_EKLEME_PHOTO
 import com.mesutemre.kutuphanem.util.*
-import kotlinx.android.synthetic.main.resim_sec_bottom_sheet_dialog_fragment.*
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -181,7 +180,7 @@ class ResimSecBottomSheetDialogFragment(
             val preview = Preview.Builder()
                 .build()
                 .also {
-                    it.setSurfaceProvider(profilResimImageViewFinder.surfaceProvider)
+                    //it.setSurfaceProvider(profilResimImageViewFinder.surfaceProvider)
                 }
             imageCapture = ImageCapture.Builder()
                 .build()
@@ -200,18 +199,18 @@ class ResimSecBottomSheetDialogFragment(
     }
 
     private fun startCameraViews(){
-        profilResimCekLayoutId.showComponent()
+        /*profilResimCekLayoutId.showComponent()
         profilFotografTitleTextViewId.hideComponent()
         seceneklerLayoutId.hideComponent()
         (dialog as? BottomSheetDialog)?.let {
             it.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-        }
+        }*/
     }
 
     private fun stopCameraViews(){
-        profilResimCekLayoutId.hideComponent()
+        /*profilResimCekLayoutId.hideComponent()
         profilFotografTitleTextViewId.showComponent()
-        seceneklerLayoutId.showComponent()
+        seceneklerLayoutId.showComponent()*/
     }
 
     override fun onDestroyView() {

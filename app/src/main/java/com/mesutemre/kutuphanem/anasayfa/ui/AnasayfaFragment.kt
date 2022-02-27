@@ -14,12 +14,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.progressindicator.CircularDrawingDelegate
-import com.google.android.material.progressindicator.CircularIndeterminateAnimatorDelegate
 //import com.google.android.material.progressindicator.CircularDrawingDelegate
 //import com.google.android.material.progressindicator.CircularIndeterminateAnimatorDelegate
-import com.google.android.material.progressindicator.IndeterminateDrawable
-import com.google.android.material.progressindicator.ProgressIndicatorSpec
+//import com.google.android.material.progressindicator.IndeterminateDrawable
 //import com.google.android.material.progressindicator.ProgressIndicatorSpec
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.textfield.TextInputLayout
@@ -104,7 +101,7 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
             findNavController().navigate(action)
         }
 
-        prepareProggressForSearch()
+        //prepareProggressForSearch()
 
         handler = Handler(object:Handler.Callback{
             override fun handleMessage(message: Message): Boolean {
@@ -179,7 +176,7 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
         })
     }
 
-    private fun prepareProggressForSearch(){
+    /*private fun prepareProggressForSearch(){
         val progressIndicatorSpec: ProgressIndicatorSpec = ProgressIndicatorSpec()
         progressIndicatorSpec.loadFromAttributes(
             binding.searchInputEditText.context,
@@ -195,7 +192,7 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
         binding.searchInputLayout.endIconMode = TextInputLayout.END_ICON_CUSTOM
         binding.searchInputLayout.endIconDrawable = progressIndicatorDrawable
         binding.searchInputLayout.isEndIconVisible = false
-    }
+    }*/
 
     override fun destroyOthers() {
         super.destroyOthers()

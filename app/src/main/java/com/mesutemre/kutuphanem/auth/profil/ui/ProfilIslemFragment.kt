@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.fragment.findNavController
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.auth.profil.model.Kullanici
@@ -43,26 +42,21 @@ class ProfilIslemFragment() :BaseFragment<ProfilIslemFragmentBinding>() {
 
         binding.adSoyadEpostaCardId.setOnClickListener {
             val action = ProfilIslemFragmentDirections.actionProfilIslemFragmentToProfilIslemAdSoyadEpostaFragment(kullanici)
-            findNavController(this).navigate(action)
         }
 
         binding.cikisCardId.setOnClickListener {
             val action = ProfilIslemFragmentDirections.actionProfilIslemFragmentToExitFromApplicationDialogFragment()
-            findNavController().navigate(action)
         }
         binding.dogumTarCinsiyetCardId.setOnClickListener {
             val action = ProfilIslemFragmentDirections.actionProfilIslemFragmentToProfilIslemDogumTarCinsiyetFragment(kullanici)
-            findNavController(this).navigate(action)
         }
 
         binding.ilgiAlanlarimCardId.setOnClickListener {
             val action = ProfilIslemFragmentDirections.actionProfilIslemFragmentToProfilIslemIlgiAlanlarimFragment(kullanici)
-            findNavController(this).navigate(action)
         }
 
         binding.uygulamaTercihlerimCardId.setOnClickListener {
             val action = ProfilIslemFragmentDirections.actionProfilIslemFragmentToProfilIslemIletisiTercihlerimFragment(kullanici)
-            findNavController(this).navigate(action)
         }
 
         binding.profilResimChangeId.setOnClickListener {

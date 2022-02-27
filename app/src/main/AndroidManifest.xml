@@ -24,7 +24,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Kutuphanem"
+        android:theme="@style/SplashTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
         <activity
@@ -35,7 +35,8 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <nav-graph android:value="@navigation/kutuphanem_navbottom_graph" />
+            <!--<nav-graph android:value="@navigation/kutuphanem_navbottom_graph" /> -->
+
         </activity>
         <meta-data
             android:name="preloaded_fonts"
@@ -53,7 +54,6 @@
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
-            tools:node="remove">
-        </provider>
+            tools:node="remove"></provider>
     </application>
 </manifest>

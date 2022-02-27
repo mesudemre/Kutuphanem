@@ -21,14 +21,12 @@ import com.mesutemre.kutuphanem.auth.profil.model.Kullanici
 import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.databinding.FragmentKitapDetayBinding
-import com.mesutemre.kutuphanem.kitap.detay.ui.dialog.KitapAciklamaBottomSheetDialogFragment
 import com.mesutemre.kutuphanem.kitap.liste.model.KitapModel
 import com.mesutemre.kutuphanem.kitap.yorum.ui.KitapYorumBottomSheetDialogFragment
 import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.util.*
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_kitap_detay.view.*
 
 @AndroidEntryPoint
 class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
@@ -87,15 +85,15 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
         viewModel.selectedKitap.observe(viewLifecycleOwner,Observer{
             when(it){
                 is BaseResourceEvent.Loading->{
-                    binding.kitapDetayProgresBar.showComponent()
+                    //binding.kitapDetayProgresBar.showComponent()
                 }
                 is BaseResourceEvent.Error->{
                     binding.kitapDetayErrorLayoutId.showComponent()
-                    getFragmentView().hideComponents(binding.kitapDetayPanelLayoutId,binding.kitapDetayGenelBilgilerCardId,binding.kitapDetayProgresBar)
+                    //getFragmentView().hideComponents(binding.kitapDetayPanelLayoutId,binding.kitapDetayGenelBilgilerCardId,binding.kitapDetayProgresBar)
                 }
                 is BaseResourceEvent.Success->{
                     getFragmentView().showComponents(binding.kitapDetayPanelLayoutId,binding.kitapDetayGenelBilgilerCardId)
-                    getFragmentView().hideComponents(binding.kitapDetayProgresBar,binding.kitapDetayErrorLayoutId)
+                    //getFragmentView().hideComponents(binding.kitapDetayProgresBar,binding.kitapDetayErrorLayoutId)
                     selectedKitap = it.data!!
                     viewModel.kitapArsivlenmisMi(selectedKitap.kitapId!!)
                     observeKitapArsivlenmisMi()
@@ -106,7 +104,7 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
     }
 
     private fun initializeValues(view: View) {
-        if(isFromArsiv){
+        /*if(isFromArsiv){
             view.kitapDetayImageId.getImageFromLocal(selectedKitap.kitapId!!,view.kitapDetayImageId)
             view.hideComponents(view.kitapYorumPanel,view.shareImageViewId)
         }else{
@@ -142,7 +140,7 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
                 }
                 return true
             }
-        })
+        })*/
     }
 
     override fun onStartFragment() {
@@ -195,10 +193,10 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
         viewModel.shareKitapUri.observe(viewLifecycleOwner,Observer{
             when(it){
                 is BaseResourceEvent.Loading->{
-                    binding.kitapDetayProgresBar.showComponent()
+                    //binding.kitapDetayProgresBar.showComponent()
                 }
                 is BaseResourceEvent.Error->{
-                    binding.kitapDetayProgresBar.hideComponent()
+                    //binding.kitapDetayProgresBar.hideComponent()
                     showSnackBar(requireView(),
                         requireView().context.getString(R.string.kitapShareError),
                         ERROR
@@ -213,7 +211,7 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
                     sharedImageUri = FileProvider.getUriForFile(requireContext(),
                     requireContext().applicationContext.packageName+".provider",it.data!!)
                     shareIntent.putExtra(Intent.EXTRA_STREAM, sharedImageUri)
-                    binding.kitapDetayProgresBar.hideComponent()
+                    //binding.kitapDetayProgresBar.hideComponent()
                     resultLauncher.launch(Intent.createChooser(shareIntent, requireContext().resources.getString(R.string.shareLabel)))
                 }
             }
@@ -267,14 +265,14 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
         viewModel.kitapBegenme.observe(viewLifecycleOwner,Observer{
             when(it){
                 is BaseResourceEvent.Loading->{
-                    binding.kitapDetayProgresBar.showComponent()
+                    //binding.kitapDetayProgresBar.showComponent()
                 }
                 is BaseResourceEvent.Error->{
-                    binding.kitapDetayProgresBar.hideComponent()
+                    //binding.kitapDetayProgresBar.hideComponent()
                     showSnackBar(view,it.data!!.statusMessage, ERROR)
                 }
                 is BaseResourceEvent.Success->{
-                    binding.kitapDetayProgresBar.hideComponent()
+                    //binding.kitapDetayProgresBar.hideComponent()
                     showSnackBar(view,it.data!!.statusMessage, SUCCESS)
                     if(selectedKitap.kitapBegenilmis == 0){
                         binding.likeImageViewId.setTint(view.context.getColor(R.color.fistikYesil))
@@ -305,13 +303,13 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
         viewModel.kitapPdfFoo.observe(viewLifecycleOwner,Observer{
             when(it){
                 is BaseResourceEvent.Loading->{
-                    binding.kitapDetayProgresBar.showComponent()
+                    //binding.kitapDetayProgresBar.showComponent()
                 }
                 is BaseResourceEvent.Error->{
 
                 }
                 is BaseResourceEvent.Success->{
-                    binding.kitapDetayProgresBar.hideComponent()
+                    //binding.kitapDetayProgresBar.hideComponent()
                     val action = KitapDetayFragmentDirections.actionKitapDetayFragmentToKotlinKitapViewFooFragment(
                         FileDataModel(it.data!!,"kotlininaction")
                     )

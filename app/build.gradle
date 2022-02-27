@@ -3,7 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
-apply plugin: 'kotlin-android-extensions'
+//apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'com.google.gms.google-services'
 
 android {
@@ -17,6 +18,9 @@ android {
         versionName "1.1.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
     }
 
     dataBinding{
@@ -65,7 +69,12 @@ android {
         disable 'RestrictedApi'
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.0.1'
+        kotlinCompilerExtensionVersion = '1.1.1'
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
     }
 }
 
@@ -77,6 +86,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -114,12 +124,21 @@ dependencies {
     implementation 'id.zelory:compressor:3.0.1'
 
     //Jetpack compose libs
-    implementation "androidx.activity:activity-compose:$compose_version"
-    implementation "androidx.compose.material:material:$composeUI_version"
-    implementation "androidx.compose.animation:animation:$composeUI_version"
-    implementation "androidx.compose.ui:ui-tooling:$composeUI_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$composeVM_version"
-    implementation "com.google.android.material:compose-theme-adapter:$composeMaterial_version"
+    implementation "androidx.compose.ui:ui:$compose_ui_version"
+    implementation "androidx.compose.ui:ui-tooling:$compose_tooling_version"
+    implementation "androidx.compose.foundation:foundation:$compose_foundation_version"
+    implementation "androidx.compose.material:material:$compose_material_version"
+    implementation "androidx.compose.material:material-icons-core:$compose_material_icon_version_core"
+    implementation "androidx.compose.material:material-icons-extended:$compose_material_icon_extended"
+    implementation "androidx.activity:activity-compose:$compose_activity_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$compose_view_model_version"
+    implementation "androidx.compose.runtime:runtime-livedata:$compose_live_data_version"
+    implementation "androidx.compose.runtime:runtime-rxjava2:$compose_rxjava_version"
+    implementation "androidx.navigation:navigation-compose:$compose_nav_version"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_junit_version"
+    implementation "androidx.compose.compiler:compiler:1.2.0-alpha04"
+    implementation "androidx.hilt:hilt-navigation-compose:$compose_hilt_version"
+
 
     implementation platform('com.google.firebase:firebase-bom:28.4.1')
 

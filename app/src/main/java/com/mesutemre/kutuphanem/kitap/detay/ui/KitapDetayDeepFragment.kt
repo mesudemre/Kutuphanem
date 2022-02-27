@@ -20,7 +20,6 @@ import com.mesutemre.kutuphanem.kitap.liste.model.KitapModel
 import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.util.*
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_kitap_detay.view.*
 
 /**
  * @Author: mesutemre.celenk
@@ -79,33 +78,7 @@ class KitapDetayDeepFragment: BaseFragment<FragmentKitapDetayDeepBinding>() {
     }
 
     private fun initializeValues(view: View) {
-        if(isFromArsiv){
-            view.kitapDetayImageId.getImageFromLocal(selectedKitap.kitapId!!,view.kitapDetayImageId)
-        }else{
-            view.kitapDetayImageId.getImageFromUrl(selectedKitap.kitapResimPath,view.kitapDetayImageId);
-        }
 
-        if(selectedKitap.kitapBegenilmis>0){
-            view.likeImageViewId.setTint(view.context.getColor(R.color.fistikYesil));
-        }
-
-        view.kitapAdTextViewId.setText(selectedKitap.kitapAd);
-        view.yazarAdTextViewId.setText(selectedKitap.yazarAd);
-        view.kitapTurTextViewId.setText(selectedKitap.kitapTur?.aciklama);
-        view.yayinEviTextViewId.setText(selectedKitap.yayineviModel?.aciklama);
-        view.kitapDetayAciklamaTextId.setText(selectedKitap.kitapAciklama);
-        view.alinmaTarTextViewId.setText(formatDate(selectedKitap.alinmatarihi!!,"dd.MM.yyyy"));
-        view.kitapDetayAciklamaTextId.viewTreeObserver.addOnPreDrawListener(object: ViewTreeObserver.OnPreDrawListener{
-            override fun onPreDraw(): Boolean {
-                view.kitapDetayAciklamaTextId.viewTreeObserver.removeOnPreDrawListener(this);
-                if(view.kitapDetayAciklamaTextId.lineCount>10){
-                    view.kitapDetayAciklamaTextId.maxLines = 10;
-                    view.viewMoreImageIdLayout.showComponent();
-                    view.viewMoreImageId.showComponent();
-                }
-                return true;
-            }
-        });
     }
 
     override fun onStartFragment() {

@@ -17,7 +17,6 @@ import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.parametre.ui.ParametreFragmentDirections
 import com.mesutemre.kutuphanem.util.*
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.parametre_kitaptur_fragment.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -53,7 +52,7 @@ class ParametreKitapturFragment:BaseFragment<ParametreKitapturFragmentBinding>()
             viewModel.kitapTurListeGetir(true);
         }
 
-        kitapTurEkleFloatingActionButton.setOnClickListener {
+        binding.kitapTurEkleFloatingActionButton.setOnClickListener {
             val action = ParametreFragmentDirections.actionParametreFragmentToParametreEklemeFragment("kitaptur");
             Navigation.findNavController(it).navigate(action);
         }

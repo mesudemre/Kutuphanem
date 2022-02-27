@@ -16,7 +16,6 @@ import com.mesutemre.kutuphanem.util.listener.TextInputErrorClearListener
 import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.util.*
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.parametre_ekleme_fragment.*
 
 @AndroidEntryPoint
 class ParametreEklemeFragment: BaseFragment<ParametreEklemeFragmentBinding>() {
@@ -45,7 +44,7 @@ class ParametreEklemeFragment: BaseFragment<ParametreEklemeFragmentBinding>() {
             Navigation.findNavController(it).navigate(action)
         }
 
-        parametreKaydetButton.setOnClickListener {
+        binding.parametreKaydetButton.setOnClickListener {
             val aciklama = binding.editTextParametreAciklama.text.toString().trim()
             binding.editTextParametreAciklama.hideKeyboard(binding.editTextParametreAciklama)
             if(TextUtils.isEmpty(aciklama)){

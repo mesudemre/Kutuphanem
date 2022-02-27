@@ -16,14 +16,7 @@
             android:visibility="gone"
             app:custom_error_message="@string/kitapDetayHata"/>
 
-        <com.google.android.material.progressindicator.ProgressIndicator
-            android:id="@+id/kitapDetayProgresBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:visibility="gone"
-            app:indicatorColor="@color/sari"
-            app:trackColor="@color/fistikYesil" />
+
 
 
         <RelativeLayout
