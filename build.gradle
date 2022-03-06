@@ -27,6 +27,7 @@ buildscript {
     ext.compose_junit_version = '1.0.5'
     ext.compose_nav_version = '2.4.1'
     ext.compose_hilt_version = '1.0.0'
+    ext.compose_constraint_layout = '1.0.0-beta02'
 
     ext.google_service_version='4.3.10'
     ext.PROD_API_URL=''
@@ -35,6 +36,16 @@ buildscript {
     ext.work_manager_version='2.7.0'
     ext.work_manager_hilt_version='1.0.0'
     ext.intuit_version='1.0.6'
+
+    //Accompanist Pager
+    ext.accompanist_pager = '0.23.1'
+    ext.accompanist_systemuicontroller = '0.23.1'
+    ext.accompanist_insets = '0.23.1'
+    ext.accompanist_insetsui = '0.23.1'
+    ext.accompanist_flowlayout = '0.23.1'
+    ext.accompanist_pagerindicators = '0.23.1'
+    ext.accompanist_swiperefresh='0.23.1'
+
 
     repositories {
         google()

@@ -7,6 +7,9 @@ import com.mesutemre.kutuphanem.interceptors.NetworkConnectionInterceptor
 import com.mesutemre.kutuphanem.kitap.service.IKitapService
 import com.mesutemre.kutuphanem.parametre.service.IParametreService
 import com.mesutemre.kutuphanem.auth.service.KullaniciService
+import com.mesutemre.kutuphanem.login.data.remote.LoginService
+import com.mesutemre.kutuphanem.login.data.repository.LoginRepository
+import com.mesutemre.kutuphanem.login.domain.repository.ILoginRepository
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import dagger.Module
 import dagger.Provides
@@ -73,4 +76,12 @@ class KutuphanemNetworkModule {
     @Singleton
     @Provides
     fun provideKitapApi(retrofit: Retrofit): IKitapService = retrofit.create(IKitapService::class.java);
+
+
+    /*-------------------- Compose --------------------*/
+
+    @Singleton
+    @Provides
+    fun provideLoginAPI(retrofit: Retrofit):LoginService = retrofit.create(LoginService::class.java);
+
 }

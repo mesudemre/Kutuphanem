@@ -77,7 +77,7 @@ fun showSnackBar(view:View, message:String,@SnackType type: Int){
     val sb: Snackbar = Snackbar.make(view,message, Snackbar.LENGTH_SHORT);
     val tv =sb.view.findViewById(com.google.android.material.R.id.snackbar_text) as TextView;
     tv.textSize = 16f;
-    tv.typeface = ResourcesCompat.getFont(view.context,R.font.source_sans_pro);
+    tv.typeface = ResourcesCompat.getFont(view.context,R.font.source_sans_pro_regular);
     tv.setTextColor(view.resources.getColor(R.color.whiteTextColor,null))
 
     when(type){

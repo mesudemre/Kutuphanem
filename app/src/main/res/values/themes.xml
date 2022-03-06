@@ -18,13 +18,13 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="NoActionBar" parent="Theme.MaterialComponents.Light.DarkActionBar">
+    <style name="NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-
-        <item name="colorPrimary">@color/primaryTextColor</item>
-        <item name="colorPrimaryVariant">#314AEC</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:opacity">opaque</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:fitsSystemWindows">false</item>
     </style>
 
     <style name="generalParent">

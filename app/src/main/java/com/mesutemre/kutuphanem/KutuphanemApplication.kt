@@ -19,6 +19,11 @@ import javax.inject.Inject
 @HiltAndroidApp
 class KutuphanemApplication:Application(),Configuration.Provider {
 
+    companion object {
+        lateinit var instance:KutuphanemApplication
+        private set
+    }
+
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
 
@@ -30,6 +35,7 @@ class KutuphanemApplication:Application(),Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
+        instance = this
         enqueeOneTimeWorkManager<GlobalExceptionCatchWorker>();
         enqueePeriodicTimeWorkManager<ClearImageNotInArchiveWorker>("imageClear")
         enqueePeriodicTimeWorkManager<SendExceptionToServerWorker>("exceptionSender")

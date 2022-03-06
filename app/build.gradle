@@ -138,6 +138,7 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_junit_version"
     implementation "androidx.compose.compiler:compiler:1.2.0-alpha04"
     implementation "androidx.hilt:hilt-navigation-compose:$compose_hilt_version"
+    implementation "androidx.constraintlayout:constraintlayout-compose:$compose_constraint_layout"
 
 
     implementation platform('com.google.firebase:firebase-bom:28.4.1')
@@ -149,6 +150,16 @@ dependencies {
     implementation "com.intuit.sdp:sdp-android:$intuit_version"
 
     implementation 'androidx.core:core-splashscreen:1.0.0-beta01'
+
+    //Compose accompanist
+    implementation "com.google.accompanist:accompanist-pager:$accompanist_pager"
+    implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_systemuicontroller"
+    implementation "com.google.accompanist:accompanist-insets:$accompanist_insets"
+    implementation "com.google.accompanist:accompanist-insets-ui:$accompanist_insetsui"
+    implementation "com.google.accompanist:accompanist-flowlayout:$accompanist_flowlayout"
+    implementation "com.google.accompanist:accompanist-pager-indicators:$accompanist_pagerindicators"
+    implementation  "com.google.accompanist:accompanist-swiperefresh:$accompanist_swiperefresh"
+
 
     //implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 }
