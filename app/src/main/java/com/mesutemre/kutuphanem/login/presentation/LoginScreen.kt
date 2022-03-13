@@ -1,19 +1,18 @@
 package com.mesutemre.kutuphanem.login.presentation
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import com.mesutemre.kutuphanem.R
+import androidx.navigation.NavController
 import com.mesutemre.kutuphanem.login.presentation.components.LoginForm
 import com.mesutemre.kutuphanem.login.presentation.components.LoginHeader
-import com.mesutemre.kutuphanem.ui.theme.*
+import com.mesutemre.kutuphanem.ui.theme.colorPalette
+import com.mesutemre.kutuphanem.ui.theme.sdp
 
 @Composable
 fun LoginScreen() {
@@ -23,7 +22,7 @@ fun LoginScreen() {
             .background(color = MaterialTheme.colorPalette.loginBackColor)
     ) {
         LoginHeader()
-        Column(modifier = Modifier.padding(top=96.sdp)) {
+        Column(modifier = Modifier.padding(top=108.sdp)) {
             LoginForm()
         }
     }

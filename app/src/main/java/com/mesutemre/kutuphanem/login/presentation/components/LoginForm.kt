@@ -9,14 +9,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.login.presentation.LoginFormState
 import com.mesutemre.kutuphanem.login.presentation.LoginViewModel
@@ -25,11 +25,12 @@ import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.largeAllegraPrimaryBold
 import com.mesutemre.kutuphanem.ui.theme.sdp
 import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemBaseInput
+import com.mesutemre.kutuphanem.util.navigation.KutuphanemNavigationConst
 
 @Composable
 fun LoginForm(loginViewModel: LoginViewModel = hiltViewModel()) {
-    val loginState by loginViewModel.loginState.observeAsState(initial = LoginFormState())
-    //val loginPasswordState by loginViewModel.loginPasswordState.observeAsState(initial = PasswordState())
+    val loginState = loginViewModel.state.collectAsState()
+
     Card(
         shape = RoundedCornerShape(20.sdp), elevation = 20.sdp,
         modifier = Modifier
@@ -52,24 +53,21 @@ fun LoginForm(loginViewModel: LoginViewModel = hiltViewModel()) {
                     .padding(top = 20.sdp)
             )
 
-            UserName(loginUserState = loginState,loginViewModel = loginViewModel)
-            UserPassword(loginPasswordState = loginState,loginViewModel = loginViewModel)
+            UserName(loginUserState = loginState.value,loginViewModel = loginViewModel)
+            UserPassword(loginPasswordState = loginState.value,loginViewModel = loginViewModel)
             Button(modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 20.sdp), onClick = {
-                loginViewModel.validateUsername()
+                    loginViewModel.validateUsername()
             }) {
                 Text(text = "Tıkla")
             }
-
         }
-
     }
 }
 
 @Composable
 private fun UserName (loginUserState:LoginFormState,loginViewModel: LoginViewModel) {
-
     KutuphanemBaseInput(
         text = loginUserState.username,
         singleLine = true,

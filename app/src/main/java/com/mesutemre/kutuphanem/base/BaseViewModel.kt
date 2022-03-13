@@ -2,6 +2,7 @@ package com.mesutemre.kutuphanem.base
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 
@@ -51,6 +52,16 @@ abstract class BaseViewModel: ViewModel() {
                 BaseDataEvent.Error("Herhangi bir data bulunamadı!")
             }else {
                 BaseDataEvent.Success(response)
+            }
+        }
+    }
+
+    inline fun <T> MutableStateFlow<T>.updateState(function: (T) -> T) {
+        while (true) {
+            val prevValue = value
+            val nextValue = function(prevValue)
+            if (compareAndSet(prevValue, nextValue)) {
+                return
             }
         }
     }

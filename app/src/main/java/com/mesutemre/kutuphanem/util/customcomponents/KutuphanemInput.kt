@@ -69,7 +69,6 @@ fun KutuphanemBaseInput(
                             trailingIcon()
                         }
                     }
-
                 }
             },
             leadingIcon = leadingIcon,

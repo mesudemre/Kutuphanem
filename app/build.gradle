@@ -158,7 +158,8 @@ dependencies {
     implementation "com.google.accompanist:accompanist-insets-ui:$accompanist_insetsui"
     implementation "com.google.accompanist:accompanist-flowlayout:$accompanist_flowlayout"
     implementation "com.google.accompanist:accompanist-pager-indicators:$accompanist_pagerindicators"
-    implementation  "com.google.accompanist:accompanist-swiperefresh:$accompanist_swiperefresh"
+    implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_swiperefresh"
+    implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_navigationAnimate"
 
 
     //implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'

@@ -2,12 +2,12 @@ package com.mesutemre.kutuphanem.login.presentation
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem.base.BaseSingleLiveEvent
+import com.mesutemre.kutuphanem.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 /**
@@ -17,47 +17,51 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    @ApplicationContext private val appContext: Context,
-    private val savedStateHandle: SavedStateHandle
-) : ViewModel() {
+    @ApplicationContext private val appContext: Context
+) : BaseViewModel() {
 
-    val loginState = BaseSingleLiveEvent<LoginFormState>()
-
-    init {
-        loginState.value = LoginFormState()
-    }
+    private val _state = MutableStateFlow(LoginFormState())
+    val state:StateFlow<LoginFormState> = _state
 
     fun validateUsername() {
-        if (loginState.value?.username.isNullOrEmpty()) {
-            loginState.value = loginState.value?.copy(
-                usernameError = true,
-                usernameErrorMessage = appContext.getString(R.string.bosKullaniciAdiHata)
-            )
+        if (_state.value?.username.isNullOrEmpty()) {
+            _state.updateState {
+                it.copy(usernameError = true,
+                    usernameErrorMessage = appContext.getString(R.string.bosKullaniciAdiHata))
+            }
         }
 
-        if (loginState.value?.password.isNullOrEmpty()) {
-            loginState.value = loginState.value?.copy(
-                passwordError = true,
-                passwordErrorMessage = appContext.getString(R.string.bosSifreHata)
-            )
+        if (_state.value.password.isNullOrEmpty()) {
+            _state.updateState {
+                it.copy(passwordError = true,
+                    passwordErrorMessage = appContext.getString(R.string.bosSifreHata))
+            }
         }
-        Log.d("UserName",loginState.value!!.username)
-        Log.d("UserPassword",loginState.value!!.password)
+        Log.d("UserName",_state.value.username)
+        Log.d("UserPassword",_state.value.password)
     }
 
     fun onChangeUsername(value:String) {
-        loginState.value = loginState.value?.copy(username = value,usernameError = false)
+        _state.updateState {
+            it.copy(username = value,usernameError = false)
+        }
     }
 
     fun onChangePassword(value:String) {
-        loginState.value = loginState.value?.copy(password = value,passwordError = false)
+        _state.updateState {
+            it.copy(password = value,passwordError = false)
+        }
     }
 
     fun onUsernameFocusedChange() {
-        loginState.value = loginState.value?.copy(usernameError = false)
+        _state.updateState {
+            it.copy(usernameError = false)
+        }
     }
 
     fun onPasswordFocusedChange() {
-        loginState.value = loginState.value?.copy(passwordError = false)
+        _state.updateState {
+            it.copy(passwordError = false)
+        }
     }
 }

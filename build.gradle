@@ -45,6 +45,7 @@ buildscript {
     ext.accompanist_flowlayout = '0.23.1'
     ext.accompanist_pagerindicators = '0.23.1'
     ext.accompanist_swiperefresh='0.23.1'
+    ext.accompanist_navigationAnimate='0.23.1'
 
 
     repositories {
