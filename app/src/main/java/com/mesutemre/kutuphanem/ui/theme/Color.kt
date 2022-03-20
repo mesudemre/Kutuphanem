@@ -1,5 +1,6 @@
 package com.mesutemre.kutuphanem.ui.theme
 
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 val loginShapeBackground = Color(0xFF00A5FF)
@@ -32,3 +33,11 @@ val acikGri = Color(0xFFFAFAFA)
 val ratingYellow = Color(0xFFFFC107)
 val acikLacivert = Color(0xFF1D5CFD)
 val googleDarkGray = Color(0xFF2D2E30)
+val koyuMavi = Color(0XFF005092)
+
+val buttonGradientBrush = Brush.horizontalGradient(
+    listOf(koyuMavi,Color(0XFF02BCF8))
+)
+
+val SecondaryGray = Color(0XFF8294A8)
+val OtherGrayLight = Color(0xFFB4BFCB)

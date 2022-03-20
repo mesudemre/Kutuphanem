@@ -8,11 +8,11 @@ import retrofit2.Response
  * @Author: mesutemre.celenk
  * @Date: 27.02.2022
  */
-open class BaseUseCase {
+open class BaseUseCase{
 
     inline fun <T : Any> serviceCall(
         crossinline call: suspend () -> Response<T>
-    ): Flow<BaseResourceEvent<out T?>> = flow {
+    ): Flow<BaseResourceEvent<T?>> = flow {
         emit(BaseResourceEvent.Loading())
         var response: Response<T>? = null
         try {

@@ -23,7 +23,7 @@
     <string name="girisLabel">Giriş</string>
     <string name="login_password_hint">Şifreniz</string>
     <string name="login_email_hint">Kullanıcı Adınız</string>
-    <string name="girisButtonLabel">Giriş</string>
+    <string name="girisButtonLabel">GİRİŞ</string>
     <string name="sifremiUnuttumLabel">Şifremi Unuttum</string>
     <string name="hesapYokKayitLabel">Hesabınız yok mu? Hemen kaydolun.</string>
 

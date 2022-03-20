@@ -38,6 +38,8 @@ data class ColorPalette(
     val acikGri:Color,
     val ratingYellow:Color,
     val acikLacivert:Color,
-    val googleDarkGray:Color
+    val googleDarkGray:Color,
+    val secondaryGray:Color,
+    val otherGrayLight:Color
 ) {
 }

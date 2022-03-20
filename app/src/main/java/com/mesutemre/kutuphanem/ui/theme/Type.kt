@@ -16,7 +16,7 @@ val sourceSans = FontFamily(
 )
 
 val fontAllegra = FontFamily(
-    Font(R.font.alegreya),
+    Font(R.font.alegreya_regular),
     Font(R.font.alegreya_bold, weight = FontWeight.Bold)
 )
 

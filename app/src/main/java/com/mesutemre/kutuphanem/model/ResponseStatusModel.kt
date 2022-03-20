@@ -12,5 +12,4 @@ data class ResponseStatusModel(
         @Expose
         var statusMessage:String
 
-) {
-}
+)
