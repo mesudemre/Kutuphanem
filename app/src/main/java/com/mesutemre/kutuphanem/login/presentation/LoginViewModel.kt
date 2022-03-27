@@ -12,8 +12,11 @@ import com.mesutemre.kutuphanem.login.data.remote.dto.AccountCredentialsDto
 import com.mesutemre.kutuphanem.login.domain.use_case.do_login.DoLoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -66,9 +69,11 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun doLogin() {
-        val accountCredentialsDto = AccountCredentialsDto(_state.value.username,_state.value.password)
-        doLoginUseCase(accountCredentialsDto).onEach {result->
-            _state.value = _state.value.copy(loginResourceEvent = result)
-        }.launchIn(viewModelScope)
+        viewModelScope.launch {
+            val accountCredentialsDto = AccountCredentialsDto(_state.value.username,_state.value.password)
+            doLoginUseCase(accountCredentialsDto).collect {
+                _state.value = _state.value.copy(loginResourceEvent = it)
+            }
+        }
     }
 }

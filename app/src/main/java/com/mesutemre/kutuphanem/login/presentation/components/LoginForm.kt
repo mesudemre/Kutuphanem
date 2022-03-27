@@ -1,9 +1,7 @@
 package com.mesutemre.kutuphanem.login.presentation.components
 
 import android.util.Log
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -12,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
@@ -28,6 +27,7 @@ import com.mesutemre.kutuphanem.login.presentation.LoginViewModel
 import com.mesutemre.kutuphanem.ui.theme.*
 import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemBaseInput
 import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemMainMaterialButton
+import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemProgressIndicator
 
 @Composable
 fun LoginForm(loginViewModel: LoginViewModel = hiltViewModel()) {
@@ -40,47 +40,60 @@ fun LoginForm(loginViewModel: LoginViewModel = hiltViewModel()) {
             .fillMaxWidth(),
         backgroundColor = MaterialTheme.colorPalette.white
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 20.sdp, end = 20.sdp)
-        ) {
-
-            Text(
-                text = stringResource(id = R.string.girisLabel),
-                style = Typography.largeAllegraPrimaryBold,
-                textAlign = TextAlign.Center,
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(start = 20.sdp, end = 20.sdp)) {
+            if (loginState.loginResourceEvent is BaseResourceEvent.Loading) {
+                KutuphanemProgressIndicator(
+                    modifier = Modifier
+                        .width(30.sdp)
+                        .height(30.sdp)
+                        .align(Alignment.Center)
+                )
+            }
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 20.sdp)
-            )
+            ) {
+                Text(
+                    text = stringResource(id = R.string.girisLabel),
+                    style = Typography.largeAllegraPrimaryBold,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.sdp)
+                )
 
-            UserName(loginUserState = loginState,loginViewModel = loginViewModel)
-            UserPassword(loginPasswordState = loginState,loginViewModel = loginViewModel)
-            ForgotPasswordArea()
-            KutuphanemMainMaterialButton(modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 20.sdp), text = stringResource(id = R.string.girisButtonLabel),
-                iconId = R.drawable.ic_baseline_login_24,
-            textStyle = MaterialTheme.typography.smallUbuntuWhiteBold) {
-                loginViewModel.validateUsername()
-            }
-            Text(text = stringResource(id = R.string.hesapYokKayitLabel),
-                style = MaterialTheme.typography.thinyAllegraPrimary,
-            modifier = Modifier
-                .padding(bottom = 20.sdp)
-                .fillMaxWidth(),
-            textAlign = TextAlign.Center)
+                UserName(loginUserState = loginState, loginViewModel = loginViewModel)
 
-            when(loginState.loginResourceEvent) {
-                is BaseResourceEvent.Loading ->{
-                    CircularProgressIndicator(color = MaterialTheme.colorPalette.googleDarkGray)
+                UserPassword(loginPasswordState = loginState, loginViewModel = loginViewModel)
+                ForgotPasswordArea()
+                KutuphanemMainMaterialButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 20.sdp),
+                    text = stringResource(id = R.string.girisButtonLabel),
+                    iconId = R.drawable.ic_baseline_login_24,
+                    textStyle = MaterialTheme.typography.smallUbuntuWhiteBold
+                ) {
+                    loginViewModel.validateUsername()
                 }
-                is BaseResourceEvent.Success-> {
-                    Log.d("Login Token",loginState.loginResourceEvent.data!!)
-                }
-                is BaseResourceEvent.Error -> {
-                    Log.e("Login Error",loginState.loginResourceEvent.message!!)
+                Text(
+                    text = stringResource(id = R.string.hesapYokKayitLabel),
+                    style = MaterialTheme.typography.thinyAllegraPrimary,
+                    modifier = Modifier
+                        .padding(bottom = 20.sdp)
+                        .fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+
+                when (loginState.loginResourceEvent) {
+                    is BaseResourceEvent.Success -> {
+                        Log.d("Login Token", loginState.loginResourceEvent.data!!)
+                    }
+                    is BaseResourceEvent.Error -> {
+                        Log.e("Login Error", loginState.loginResourceEvent.message!!)
+                    }
                 }
             }
         }
@@ -89,7 +102,7 @@ fun LoginForm(loginViewModel: LoginViewModel = hiltViewModel()) {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun UserName (loginUserState:LoginFormState,loginViewModel: LoginViewModel) {
+private fun UserName(loginUserState: LoginFormState, loginViewModel: LoginViewModel) {
     val keyboardController = LocalSoftwareKeyboardController.current
     KutuphanemBaseInput(
         text = loginUserState.username,
@@ -107,8 +120,9 @@ private fun UserName (loginUserState:LoginFormState,loginViewModel: LoginViewMod
         errorMessage = loginUserState.usernameErrorMessage ?: "",
         hint = stringResource(id = R.string.login_email_hint),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-        keyboardActions = KeyboardActions( onDone = {
-            keyboardController?.hide()}
+        keyboardActions = KeyboardActions(onDone = {
+            keyboardController?.hide()
+        }
         ),
         trailingIcon = {
             Icon(
@@ -122,7 +136,7 @@ private fun UserName (loginUserState:LoginFormState,loginViewModel: LoginViewMod
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun UserPassword (loginPasswordState:LoginFormState,loginViewModel: LoginViewModel) {
+private fun UserPassword(loginPasswordState: LoginFormState, loginViewModel: LoginViewModel) {
     val keyboardController = LocalSoftwareKeyboardController.current
     KutuphanemBaseInput(
         text = loginPasswordState.password,
@@ -141,8 +155,9 @@ private fun UserPassword (loginPasswordState:LoginFormState,loginViewModel: Logi
         hint = stringResource(id = R.string.login_password_hint),
         visualTransformation = PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-        keyboardActions = KeyboardActions( onDone = {
-            keyboardController?.hide()}
+        keyboardActions = KeyboardActions(onDone = {
+            keyboardController?.hide()
+        }
         ),
         trailingIcon = {
             Icon(

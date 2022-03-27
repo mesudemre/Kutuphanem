@@ -38,7 +38,8 @@ class MainActivity : ComponentActivity() {
                 if(viewModel.tokenState.value.length>0) {
                     KutuphanemNavigation(startDestinition = KutuphanemNavigationConst.LOGIN_SCREEN)
                 }else {
-                    KutuphanemNavigation(startDestinition = KutuphanemNavigationConst.MAIN_SCREEN)
+                    KutuphanemNavigation(startDestinition = KutuphanemNavigationConst.LOGIN_SCREEN)
+                    //KutuphanemNavigation(startDestinition = KutuphanemNavigationConst.MAIN_SCREEN)
                 }
             }
         }
