@@ -27,11 +27,11 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     @ApplicationContext private val appContext: Context,
-    private val doLoginUseCase:DoLoginUseCase
+    private val doLoginUseCase: DoLoginUseCase
 ) : BaseViewModel() {
 
     private val _state = mutableStateOf(LoginFormState())
-    val state:State<LoginFormState> = _state
+    val state: State<LoginFormState> = _state
 
     fun validateUsername() {
         if (_state.value?.username.isNullOrEmpty()) {
@@ -52,12 +52,12 @@ class LoginViewModel @Inject constructor(
         doLogin()
     }
 
-    fun onChangeUsername(value:String) {
-        _state.value = _state.value.copy(username = value,usernameError = false)
+    fun onChangeUsername(value: String) {
+        _state.value = _state.value.copy(username = value, usernameError = false)
     }
 
-    fun onChangePassword(value:String) {
-        _state.value = _state.value.copy(password = value,passwordError = false)
+    fun onChangePassword(value: String) {
+        _state.value = _state.value.copy(password = value, passwordError = false)
     }
 
     fun onUsernameFocusedChange() {
@@ -70,10 +70,15 @@ class LoginViewModel @Inject constructor(
 
     private fun doLogin() {
         viewModelScope.launch {
-            val accountCredentialsDto = AccountCredentialsDto(_state.value.username,_state.value.password)
+            val accountCredentialsDto =
+                AccountCredentialsDto(_state.value.username, _state.value.password)
             doLoginUseCase(accountCredentialsDto).collect {
                 _state.value = _state.value.copy(loginResourceEvent = it)
             }
         }
+    }
+
+    fun setStateOfSnackbarType(type: Int) {
+        _state.value = _state.value.copy(snackBarState = type)
     }
 }

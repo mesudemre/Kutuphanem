@@ -1,6 +1,5 @@
 package com.mesutemre.kutuphanem.login.presentation.components
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -10,6 +9,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -24,15 +25,21 @@ import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.login.presentation.LoginFormState
 import com.mesutemre.kutuphanem.login.presentation.LoginViewModel
+import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.ui.theme.*
 import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemBaseInput
-import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemMainMaterialButton
 import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemProgressIndicator
+import com.mesutemre.kutuphanem.util.customcomponents.button.KutuphanemMainMaterialButton
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun LoginForm(loginViewModel: LoginViewModel = hiltViewModel()) {
+fun LoginForm(
+    snackBarHostState: SnackbarHostState,
+    loginViewModel: LoginViewModel = hiltViewModel()
+) {
     val loginState = loginViewModel.state.value
-
+    val keyboardController = LocalSoftwareKeyboardController.current
     Card(
         shape = RoundedCornerShape(20.sdp),
         modifier = Modifier
@@ -40,9 +47,12 @@ fun LoginForm(loginViewModel: LoginViewModel = hiltViewModel()) {
             .fillMaxWidth(),
         backgroundColor = MaterialTheme.colorPalette.white
     ) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(start = 20.sdp, end = 20.sdp)) {
+        val coroutineScope = rememberCoroutineScope()
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(start = 20.sdp, end = 20.sdp)
+        ) {
             if (loginState.loginResourceEvent is BaseResourceEvent.Loading) {
                 KutuphanemProgressIndicator(
                     modifier = Modifier
@@ -89,10 +99,27 @@ fun LoginForm(loginViewModel: LoginViewModel = hiltViewModel()) {
 
                 when (loginState.loginResourceEvent) {
                     is BaseResourceEvent.Success -> {
-                        Log.d("Login Token", loginState.loginResourceEvent.data!!)
+                        if (loginState.loginResourceEvent.data!!.contains("500")) {
+                            loginViewModel.setStateOfSnackbarType(ERROR)
+                            keyboardController?.hide()
+                            LaunchedEffect(Unit) {
+                                coroutineScope.launch {
+                                    snackBarHostState.showSnackbar("Kullanıcı adı ya da şifre hatalı")
+                                }
+                            }
+                        } else {
+                            //loginViewModel.writeTokenToPref(loginState.loginResourceEvent.data!!)
+                            //TODO : anasayfaya navigation yapılacak...
+                        }
                     }
                     is BaseResourceEvent.Error -> {
-                        Log.e("Login Error", loginState.loginResourceEvent.message!!)
+                        loginViewModel.setStateOfSnackbarType(ERROR)
+                        keyboardController?.hide()
+                        LaunchedEffect(Unit) {
+                            coroutineScope.launch {
+                                snackBarHostState.showSnackbar(loginState.loginResourceEvent.message!!)
+                            }
+                        }
                     }
                 }
             }

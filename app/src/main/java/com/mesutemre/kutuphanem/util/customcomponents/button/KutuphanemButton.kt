@@ -1,4 +1,4 @@
-package com.mesutemre.kutuphanem.util.customcomponents
+package com.mesutemre.kutuphanem.util.customcomponents.button
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
