@@ -9,8 +9,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -30,16 +28,14 @@ import com.mesutemre.kutuphanem.ui.theme.*
 import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemBaseInput
 import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemProgressIndicator
 import com.mesutemre.kutuphanem.util.customcomponents.button.KutuphanemMainMaterialButton
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LoginForm(
-    snackBarHostState: SnackbarHostState,
+    showSnackbar: (String, SnackbarDuration, Int) -> Unit,
     loginViewModel: LoginViewModel = hiltViewModel()
 ) {
     val loginState = loginViewModel.state.value
-    val keyboardController = LocalSoftwareKeyboardController.current
     Card(
         shape = RoundedCornerShape(20.sdp),
         modifier = Modifier
@@ -47,7 +43,6 @@ fun LoginForm(
             .fillMaxWidth(),
         backgroundColor = MaterialTheme.colorPalette.white
     ) {
-        val coroutineScope = rememberCoroutineScope()
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -100,26 +95,22 @@ fun LoginForm(
                 when (loginState.loginResourceEvent) {
                     is BaseResourceEvent.Success -> {
                         if (loginState.loginResourceEvent.data!!.contains("500")) {
-                            loginViewModel.setStateOfSnackbarType(ERROR)
-                            keyboardController?.hide()
-                            LaunchedEffect(Unit) {
-                                coroutineScope.launch {
-                                    snackBarHostState.showSnackbar("Kullanıcı adı ya da şifre hatalı")
-                                }
-                            }
+                            showSnackbar(
+                                stringResource(id = R.string.hataliLogin),
+                                SnackbarDuration.Long,
+                                ERROR
+                            )
                         } else {
                             //loginViewModel.writeTokenToPref(loginState.loginResourceEvent.data!!)
                             //TODO : anasayfaya navigation yapılacak...
                         }
                     }
                     is BaseResourceEvent.Error -> {
-                        loginViewModel.setStateOfSnackbarType(ERROR)
-                        keyboardController?.hide()
-                        LaunchedEffect(Unit) {
-                            coroutineScope.launch {
-                                snackBarHostState.showSnackbar(loginState.loginResourceEvent.message!!)
-                            }
-                        }
+                        showSnackbar(
+                            loginState.loginResourceEvent.message ?: "",
+                            SnackbarDuration.Short,
+                            ERROR
+                        )
                     }
                 }
             }
@@ -146,7 +137,7 @@ private fun UserName(loginUserState: LoginFormState, loginViewModel: LoginViewMo
         isError = loginUserState.usernameError,
         errorMessage = loginUserState.usernameErrorMessage ?: "",
         hint = stringResource(id = R.string.login_email_hint),
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         keyboardActions = KeyboardActions(onDone = {
             keyboardController?.hide()
         }

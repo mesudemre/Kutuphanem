@@ -1,20 +1,21 @@
 package com.mesutemre.kutuphanem.navigation
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.material.SnackbarDuration
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.mesutemre.kutuphanem.MainScreen
 import com.mesutemre.kutuphanem.login.presentation.LoginScreen
 import com.mesutemre.kutuphanem.util.navigation.KutuphanemNavigationConst
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun KutuphanemNavigation(startDestinition:String) {
+fun KutuphanemNavigation(navController:NavHostController,
+                         startDestinition:String,
+                         showSnackbar: (String, SnackbarDuration, Int) -> Unit) {
     //TODO : Bu kısımda sealed class kullanılabilir.
-
-    val navController = rememberAnimatedNavController()
 
     /*
         composable(
@@ -32,7 +33,7 @@ fun KutuphanemNavigation(startDestinition:String) {
         }
 
         composable(route = KutuphanemNavigationConst.LOGIN_SCREEN){
-            LoginScreen()
+            LoginScreen(showSnackbar = showSnackbar)
         }
     }
 }

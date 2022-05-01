@@ -21,67 +21,66 @@ import com.mesutemre.kutuphanem.ui.theme.smallUbuntuWhiteBold
 
 @Composable
 fun KutuphanemSnackBarHost(
-    snackbarHostState: SnackbarHostState,
-    type: Int,
+    state: KutuphanemSnackbarState
 ) {
-        SnackbarHost(hostState = snackbarHostState
+    SnackbarHost(
+        hostState = state.snackbarHostState
+    ) {
+        Card(
+            shape = MaterialTheme.shapes.medium,
+            backgroundColor = when (state.currentSnackbarType) {
+                SUCCESS ->
+                    MaterialTheme.colorPalette.fistikYesil
+                WARNING ->
+                    MaterialTheme.colorPalette.acikTuruncu
+                ERROR ->
+                    MaterialTheme.colorPalette.kirmizi
+                else -> MaterialTheme.colorPalette.fistikYesil
+            },
+            modifier = Modifier
+                .padding(start = 24.sdp, end = 24.sdp, bottom = 24.sdp)
+                .height(50.sdp)
+                .fillMaxWidth()
         ) {
-            Card(
-                shape = MaterialTheme.shapes.medium,
-                backgroundColor = when (type) {
-                    SUCCESS ->
-                        MaterialTheme.colorPalette.fistikYesil
-                    WARNING ->
-                        MaterialTheme.colorPalette.acikTuruncu
-                    ERROR ->
-                        MaterialTheme.colorPalette.kirmizi
-                    else -> MaterialTheme.colorPalette.fistikYesil
-                },
+            Row(
                 modifier = Modifier
-                    .padding(start = 24.sdp,end = 24.sdp,bottom = 24.sdp)
-                    .height(50.sdp).fillMaxWidth()
+                    .fillMaxWidth()
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    when (type) {
-                        SUCCESS ->
-                            Icon(
-                                Icons.Filled.Check, contentDescription = it.message,
-                                modifier = Modifier
-                                    .padding(start = 8.sdp)
-                                    .align(alignment = Alignment.CenterVertically),
-                                tint = MaterialTheme.colorPalette.white
-                            )
-                        WARNING ->
-                            Icon(
-                                Icons.Filled.Warning, contentDescription = it.message,
-                                modifier = Modifier
-                                    .padding(start = 8.sdp)
-                                    .align(alignment = Alignment.CenterVertically),
-                                tint = MaterialTheme.colorPalette.white
-                            )
-                        ERROR ->
-                            Icon(
-                                Icons.Filled.Error, contentDescription = it.message,
-                                modifier = Modifier
-                                    .padding(start = 8.sdp)
-                                    .align(alignment = Alignment.CenterVertically),
-                                tint = MaterialTheme.colorPalette.white
-                            )
-                    }
-
-                    Text(
-                        text = it.message,
-                        style = MaterialTheme.typography.smallUbuntuWhiteBold,
-                        modifier = Modifier
-                            .padding(end = 8.sdp,start = 8.sdp)
-                            .align(alignment = Alignment.CenterVertically)
-                    )
+                when (state.currentSnackbarType) {
+                    SUCCESS ->
+                        Icon(
+                            Icons.Filled.Check, contentDescription = it.message,
+                            modifier = Modifier
+                                .padding(start = 8.sdp)
+                                .align(alignment = Alignment.CenterVertically),
+                            tint = MaterialTheme.colorPalette.white
+                        )
+                    WARNING ->
+                        Icon(
+                            Icons.Filled.Warning, contentDescription = it.message,
+                            modifier = Modifier
+                                .padding(start = 8.sdp)
+                                .align(alignment = Alignment.CenterVertically),
+                            tint = MaterialTheme.colorPalette.white
+                        )
+                    ERROR ->
+                        Icon(
+                            Icons.Filled.Error, contentDescription = it.message,
+                            modifier = Modifier
+                                .padding(start = 8.sdp)
+                                .align(alignment = Alignment.CenterVertically),
+                            tint = MaterialTheme.colorPalette.white
+                        )
                 }
+
+                Text(
+                    text = it.message,
+                    style = MaterialTheme.typography.smallUbuntuWhiteBold,
+                    modifier = Modifier
+                        .padding(end = 8.sdp, start = 8.sdp)
+                        .align(alignment = Alignment.CenterVertically)
+                )
             }
         }
-
-
+    }
 }
