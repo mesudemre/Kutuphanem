@@ -1,8 +1,13 @@
 package com.mesutemre.kutuphanem.base
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.mesutemre.kutuphanem.model.SnackbarMessageEvent
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 
@@ -11,6 +16,15 @@ import retrofit2.Response
  * @Date: 31.12.2021
  */
 abstract class BaseViewModel: ViewModel() {
+
+    val snackBarErrorMessageChannel = Channel<SnackbarMessageEvent>()
+    val snackBarErrorMessage = snackBarErrorMessageChannel.receiveAsFlow()
+
+    open fun sendSnackbarMessage(event:SnackbarMessageEvent) {
+        viewModelScope.launch {
+            snackBarErrorMessageChannel.send(event)
+        }
+    }
 
     inline suspend fun <T:Any> serviceCall(crossinline call: suspend() -> Response<T>,
                                            dispatcher: CoroutineDispatcher

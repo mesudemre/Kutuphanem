@@ -110,13 +110,11 @@ fun KutuphanemTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Compos
     val systemUiController = rememberSystemUiController()
     if (darkTheme) {
         systemUiController.setSystemBarsColor(
-            color = Color.White,
-            darkIcons = true
+            color = Color.Transparent
         )
     } else {
         systemUiController.setSystemBarsColor(
-            color = Color.Black,
-            darkIcons = false
+            color = Color.Transparent
         )
     }
 

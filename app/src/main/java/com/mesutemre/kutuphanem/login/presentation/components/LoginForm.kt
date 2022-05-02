@@ -9,9 +9,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -48,6 +50,7 @@ fun LoginForm(
                 .fillMaxSize()
                 .padding(start = 20.sdp, end = 20.sdp)
         ) {
+
             if (loginState.loginResourceEvent is BaseResourceEvent.Loading) {
                 KutuphanemProgressIndicator(
                     modifier = Modifier
@@ -59,6 +62,7 @@ fun LoginForm(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .alpha(if (loginState.loginResourceEvent is BaseResourceEvent.Loading) 0.4f else 1f)
             ) {
                 Text(
                     text = stringResource(id = R.string.girisLabel),
@@ -70,7 +74,6 @@ fun LoginForm(
                 )
 
                 UserName(loginUserState = loginState, loginViewModel = loginViewModel)
-
                 UserPassword(loginPasswordState = loginState, loginViewModel = loginViewModel)
                 ForgotPasswordArea()
                 KutuphanemMainMaterialButton(
@@ -79,7 +82,8 @@ fun LoginForm(
                         .padding(vertical = 20.sdp),
                     text = stringResource(id = R.string.girisButtonLabel),
                     iconId = R.drawable.ic_baseline_login_24,
-                    textStyle = MaterialTheme.typography.smallUbuntuWhiteBold
+                    textStyle = MaterialTheme.typography.smallUbuntuWhiteBold,
+                    isEnabled = if (loginState.loginResourceEvent is BaseResourceEvent.Loading) false else true
                 ) {
                     loginViewModel.validateUsername()
                 }
@@ -95,22 +99,27 @@ fun LoginForm(
                 when (loginState.loginResourceEvent) {
                     is BaseResourceEvent.Success -> {
                         if (loginState.loginResourceEvent.data!!.contains("500")) {
-                            showSnackbar(
-                                stringResource(id = R.string.hataliLogin),
-                                SnackbarDuration.Long,
-                                ERROR
-                            )
+                            val message = stringResource(id = R.string.hataliLogin)
+                            LaunchedEffect(key1 = Unit) {
+                                showSnackbar(
+                                    message,
+                                    SnackbarDuration.Long,
+                                    ERROR
+                                )
+                            }
                         } else {
                             //loginViewModel.writeTokenToPref(loginState.loginResourceEvent.data!!)
                             //TODO : anasayfaya navigation yapılacak...
                         }
                     }
                     is BaseResourceEvent.Error -> {
-                        showSnackbar(
-                            loginState.loginResourceEvent.message ?: "",
-                            SnackbarDuration.Short,
-                            ERROR
-                        )
+                        LaunchedEffect(key1 = Unit) {
+                            showSnackbar(
+                                loginState.loginResourceEvent.message ?: "",
+                                SnackbarDuration.Short,
+                                ERROR
+                            )
+                        }
                     }
                 }
             }
@@ -135,7 +144,7 @@ private fun UserName(loginUserState: LoginFormState, loginViewModel: LoginViewMo
                 loginViewModel.onUsernameFocusedChange()
             },
         isError = loginUserState.usernameError,
-        errorMessage = loginUserState.usernameErrorMessage ?: "",
+        errorMessage = if (loginUserState.usernameErrorMessage != null) stringResource(id = loginUserState.usernameErrorMessage!!) else "",
         hint = stringResource(id = R.string.login_email_hint),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         keyboardActions = KeyboardActions(onDone = {
@@ -169,7 +178,7 @@ private fun UserPassword(loginPasswordState: LoginFormState, loginViewModel: Log
                 loginViewModel.onPasswordFocusedChange()
             },
         isError = loginPasswordState.passwordError,
-        errorMessage = loginPasswordState.passwordErrorMessage ?: "",
+        errorMessage = if (loginPasswordState.passwordErrorMessage != null) stringResource(id = loginPasswordState.passwordErrorMessage!!) else "",
         hint = stringResource(id = R.string.login_password_hint),
         visualTransformation = PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),

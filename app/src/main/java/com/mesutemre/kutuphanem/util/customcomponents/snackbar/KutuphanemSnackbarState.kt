@@ -27,7 +27,7 @@ class KutuphanemSnackbarState(
     suspend fun showSnackbar(
         message: String,
         actionLabel: String? = null,
-        duration: SnackbarDuration = SnackbarDuration.Long,
+        duration: SnackbarDuration,
         type: Int
     ): SnackbarResult = mutex.withLock {
         try {

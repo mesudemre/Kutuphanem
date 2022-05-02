@@ -27,7 +27,7 @@ class KutuphanemAppState(
 
     fun showSnackbar(
         message: String,
-        duration: SnackbarDuration = SnackbarDuration.Long,
+        duration: SnackbarDuration,
         type: Int
     ) {
         snackbarScope.launch {
