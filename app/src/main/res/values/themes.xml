@@ -18,13 +18,12 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
+    <style name="NoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="android:opacity">opaque</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:fitsSystemWindows">false</item>
     </style>
 
     <style name="generalParent">
