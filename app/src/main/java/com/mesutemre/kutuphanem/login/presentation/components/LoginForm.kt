@@ -24,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.login.presentation.LoginFormState
+import com.mesutemre.kutuphanem.login.presentation.LoginValidationEvent
 import com.mesutemre.kutuphanem.login.presentation.LoginViewModel
 import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.ui.theme.*
@@ -85,7 +86,7 @@ fun LoginForm(
                     textStyle = MaterialTheme.typography.smallUbuntuWhiteBold,
                     isEnabled = if (loginState.loginResourceEvent is BaseResourceEvent.Loading) false else true
                 ) {
-                    loginViewModel.validateUsername()
+                    loginViewModel.onLoginFormEvent(LoginValidationEvent.Submit)
                 }
                 Text(
                     text = stringResource(id = R.string.hesapYokKayitLabel),
@@ -135,7 +136,8 @@ private fun UserName(loginUserState: LoginFormState, loginViewModel: LoginViewMo
         text = loginUserState.username,
         singleLine = true,
         onChange = {
-            loginViewModel.onChangeUsername(it)
+            //loginViewModel.onChangeUsername(it)
+            loginViewModel.onLoginFormEvent(LoginValidationEvent.UsernameChanged(it))
         },
         modifier = Modifier
             .fillMaxWidth()
@@ -169,7 +171,8 @@ private fun UserPassword(loginPasswordState: LoginFormState, loginViewModel: Log
         text = loginPasswordState.password,
         singleLine = true,
         onChange = {
-            loginViewModel.onChangePassword(it)
+            //loginViewModel.onChangePassword(it)
+            loginViewModel.onLoginFormEvent(LoginValidationEvent.PasswordChanged(it))
         },
         modifier = Modifier
             .fillMaxWidth()
