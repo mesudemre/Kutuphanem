@@ -2,7 +2,6 @@ package com.mesutemre.kutuphanem.ui.theme
 
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-
 val loginShapeBackground = Color(0xFF00A5FF)
 val black = Color(0xFF000000)
 val white = Color(0xFFFFFFFF)
@@ -41,3 +40,4 @@ val buttonGradientBrush = Brush.horizontalGradient(
 
 val SecondaryGray = Color(0XFF8294A8)
 val OtherGrayLight = Color(0xFFB4BFCB)
+val iconGrayTint = Color(0xFF6A686E)

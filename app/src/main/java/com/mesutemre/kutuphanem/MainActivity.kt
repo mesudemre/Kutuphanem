@@ -4,27 +4,29 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Scaffold
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
 import com.mesutemre.kutuphanem.navigation.KutuphanemNavigation
-import com.mesutemre.kutuphanem.ui.theme.KutuphanemTheme
+import com.mesutemre.kutuphanem.navigation.KutuphanemNavigationItem
+import com.mesutemre.kutuphanem.ui.theme.*
 import com.mesutemre.kutuphanem.util.KutuphanemAppState
 import com.mesutemre.kutuphanem.util.customcomponents.snackbar.KutuphanemSnackBarHost
-import com.mesutemre.kutuphanem.util.navigation.KutuphanemNavigationConst
 import com.mesutemre.kutuphanem.util.rememberKutuphanemAppState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -46,27 +48,28 @@ class MainActivity : ComponentActivity() {
                 ProvideWindowInsets {
                     val kutuphanemAppState: KutuphanemAppState = rememberKutuphanemAppState()
 
-
                     Scaffold(
                         modifier = Modifier.navigationBarsPadding(),
                         scaffoldState = kutuphanemAppState.scaffoldState,
+                        floatingActionButton = {
+                            if (viewModel.checkTokenExist()) {
+                                KutuphanemNavigationBottomFloatingActionButton()
+                            }
+                        },
+                        isFloatingActionButtonDocked = true,
+                        floatingActionButtonPosition = FabPosition.Center,
+                        bottomBar = {
+                            if (viewModel.checkTokenExist()) {
+                                KutuphanemBottomNavigationBar(navController = kutuphanemAppState.navController)
+                            }
+                        },
                         snackbarHost = {
                             KutuphanemSnackBarHost(state = kutuphanemAppState.kutuphanemSnackbarState)
                         }) {
-
-                        if (viewModel.tokenState.value.isNotEmpty()) {
-                            LaunchedEffect(key1 = Unit) {
-                                viewModel.snackBarErrorMessage.collect {
-                                    kutuphanemAppState.showSnackbar(
-                                        it.message,
-                                        it.duration,
-                                        it.type
-                                    )
-                                }
-                            }
+                        if (viewModel.checkTokenExist()) {
                             KutuphanemNavigation(
                                 navController = kutuphanemAppState.navController,
-                                startDestinition = KutuphanemNavigationConst.LOGIN_SCREEN,
+                                startDestinition = KutuphanemNavigationItem.MainScreen,
                                 showSnackbar = { message, duration, type ->
                                     kutuphanemAppState.showSnackbar(
                                         message = message,
@@ -78,7 +81,7 @@ class MainActivity : ComponentActivity() {
                         } else {
                             KutuphanemNavigation(
                                 navController = kutuphanemAppState.navController,
-                                startDestinition = KutuphanemNavigationConst.LOGIN_SCREEN,
+                                startDestinition = KutuphanemNavigationItem.LoginScreen,
                                 showSnackbar = { message, duration, type ->
                                     kutuphanemAppState.showSnackbar(
                                         message = message,
@@ -87,7 +90,6 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
                             )
-                            //KutuphanemNavigation(startDestinition = KutuphanemNavigationConst.MAIN_SCREEN)
                         }
                     }
                 }
@@ -95,16 +97,61 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-
 }
 
 @Composable
-fun MainScreen(
-    viewModel: MainActivityViewModel = hiltViewModel(),
+private fun KutuphanemBottomNavigationBar(
     navController: NavController
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+    val bottomNavItems = listOf(
+        KutuphanemNavigationItem.MainScreen,
+        KutuphanemNavigationItem.BookListScreen,
+        KutuphanemNavigationItem.ParameterScreen,
+        KutuphanemNavigationItem.ProfileScreen
+    )
+    BottomAppBar(
+        backgroundColor = MaterialTheme.colorPalette.white,
+        contentColor = MaterialTheme.colorPalette.lacivert,
+        cutoutShape = RoundedCornerShape(50.sdp)
+    ) {
+        bottomNavItems.forEach {
+            BottomNavigationItem(
+                selected = currentRoute == it.screenRoute,
+                icon = {
+                    Icon(
+                        painter = painterResource(id = it.icon ?: R.drawable.ic_baseline_home_24),
+                        contentDescription = stringResource(id = R.string.anasayfaItem)
+                    )
+                },
+                label = {
+                    Text(
+                        text = stringResource(id = it.title ?: R.string.anasayfaItem),
+                        style = if (currentRoute == it.screenRoute) MaterialTheme.typography.smallAllegraLacivertBold else MaterialTheme.typography.smallAllegraTransparent
+                    )
+                },
+                selectedContentColor = MaterialTheme.colorPalette.lacivert,
+                unselectedContentColor = MaterialTheme.colorPalette.transparent,
+                alwaysShowLabel = true,
+                onClick = {
+
+                })
+        }
     }
 }
 
+@Composable
+private fun KutuphanemNavigationBottomFloatingActionButton() {
+    FloatingActionButton(
+        shape = RoundedCornerShape(50.sdp),
+        onClick = {},
+        backgroundColor = MaterialTheme.colorPalette.lacivert
+    ) {
+        Icon(
+            Icons.Filled.Add,
+            contentDescription = stringResource(id = R.string.kitapEklemeTitle),
+            tint = MaterialTheme.colorPalette.white
+        )
+    }
+}

@@ -8,31 +8,23 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.mesutemre.kutuphanem.MainScreen
 import com.mesutemre.kutuphanem.login.presentation.LoginScreen
-import com.mesutemre.kutuphanem.util.navigation.KutuphanemNavigationConst
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun KutuphanemNavigation(navController:NavHostController,
-                         startDestinition:String,
-                         showSnackbar: (String, SnackbarDuration, Int) -> Unit) {
-    //TODO : Bu kısımda sealed class kullanılabilir.
-
-    /*
-        composable(
-            route = KutuphanemNavigationConst.LOGIN2_SCREEN,
-            enterTransition = {
-                slideInVertically(tween(1000))
-            }
-        ){
-            Login2Screen()
-        }*/
-
-    AnimatedNavHost(navController = navController, startDestination = startDestinition ) {
-        composable(route = KutuphanemNavigationConst.MAIN_SCREEN) {
+fun KutuphanemNavigation(
+    navController: NavHostController,
+    startDestinition: KutuphanemNavigationItem,
+    showSnackbar: (String, SnackbarDuration, Int) -> Unit
+) {
+    AnimatedNavHost(
+        navController = navController,
+        startDestination = startDestinition.screenRoute
+    ) {
+        composable(route = KutuphanemNavigationItem.MainScreen.screenRoute) {
             MainScreen(navController = navController)
         }
 
-        composable(route = KutuphanemNavigationConst.LOGIN_SCREEN){
+        composable(route = KutuphanemNavigationItem.LoginScreen.screenRoute) {
             LoginScreen(showSnackbar = showSnackbar)
         }
     }

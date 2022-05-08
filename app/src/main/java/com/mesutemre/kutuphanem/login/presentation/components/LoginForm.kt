@@ -15,6 +15,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -22,23 +23,34 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.login.presentation.LoginFormState
 import com.mesutemre.kutuphanem.login.presentation.LoginValidationEvent
 import com.mesutemre.kutuphanem.login.presentation.LoginViewModel
-import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.ui.theme.*
 import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemBaseInput
 import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemProgressIndicator
 import com.mesutemre.kutuphanem.util.customcomponents.button.KutuphanemMainMaterialButton
+import kotlinx.coroutines.flow.collect
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LoginForm(
     showSnackbar: (String, SnackbarDuration, Int) -> Unit,
     loginViewModel: LoginViewModel = hiltViewModel()
 ) {
     val loginState = loginViewModel.state.value
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = Unit) {
+        loginViewModel.loginErrorMessage.collect {
+            showSnackbar(
+                if (it.message != null) it.message else context.getString(
+                    it.messageId ?: R.string.app_name
+                ),
+                it.duration,
+                it.type
+            )
+        }
+    }
     Card(
         shape = RoundedCornerShape(20.sdp),
         modifier = Modifier
@@ -52,7 +64,7 @@ fun LoginForm(
                 .padding(start = 20.sdp, end = 20.sdp)
         ) {
 
-            if (loginState.loginResourceEvent is BaseResourceEvent.Loading) {
+            if (loginState.isLoading) {
                 KutuphanemProgressIndicator(
                     modifier = Modifier
                         .width(30.sdp)
@@ -60,10 +72,13 @@ fun LoginForm(
                         .align(Alignment.Center)
                 )
             }
+            if (loginState.isSuccess) {
+                //Navigation sağlanacak...
+            }
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .alpha(if (loginState.loginResourceEvent is BaseResourceEvent.Loading) 0.4f else 1f)
+                    .alpha(if (loginState.isLoading) 0.4f else 1f)
             ) {
                 Text(
                     text = stringResource(id = R.string.girisLabel),
@@ -84,7 +99,7 @@ fun LoginForm(
                     text = stringResource(id = R.string.girisButtonLabel),
                     iconId = R.drawable.ic_baseline_login_24,
                     textStyle = MaterialTheme.typography.smallUbuntuWhiteBold,
-                    isEnabled = if (loginState.loginResourceEvent is BaseResourceEvent.Loading) false else true
+                    isEnabled = if (loginState.isLoading) false else true
                 ) {
                     loginViewModel.onLoginFormEvent(LoginValidationEvent.Submit)
                 }
@@ -96,33 +111,6 @@ fun LoginForm(
                         .fillMaxWidth(),
                     textAlign = TextAlign.Center
                 )
-
-                when (loginState.loginResourceEvent) {
-                    is BaseResourceEvent.Success -> {
-                        if (loginState.loginResourceEvent.data!!.contains("500")) {
-                            val message = stringResource(id = R.string.hataliLogin)
-                            LaunchedEffect(key1 = Unit) {
-                                showSnackbar(
-                                    message,
-                                    SnackbarDuration.Long,
-                                    ERROR
-                                )
-                            }
-                        } else {
-                            //loginViewModel.writeTokenToPref(loginState.loginResourceEvent.data!!)
-                            //TODO : anasayfaya navigation yapılacak...
-                        }
-                    }
-                    is BaseResourceEvent.Error -> {
-                        LaunchedEffect(key1 = Unit) {
-                            showSnackbar(
-                                loginState.loginResourceEvent.message ?: "",
-                                SnackbarDuration.Short,
-                                ERROR
-                            )
-                        }
-                    }
-                }
             }
         }
     }
@@ -136,7 +124,6 @@ private fun UserName(loginUserState: LoginFormState, loginViewModel: LoginViewMo
         text = loginUserState.username,
         singleLine = true,
         onChange = {
-            //loginViewModel.onChangeUsername(it)
             loginViewModel.onLoginFormEvent(LoginValidationEvent.UsernameChanged(it))
         },
         modifier = Modifier
@@ -171,7 +158,6 @@ private fun UserPassword(loginPasswordState: LoginFormState, loginViewModel: Log
         text = loginPasswordState.password,
         singleLine = true,
         onChange = {
-            //loginViewModel.onChangePassword(it)
             loginViewModel.onLoginFormEvent(LoginValidationEvent.PasswordChanged(it))
         },
         modifier = Modifier

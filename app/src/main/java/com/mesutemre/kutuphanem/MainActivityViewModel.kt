@@ -34,4 +34,6 @@ class MainActivityViewModel @Inject constructor(
             splashLoadingState.value = false
         }
     }
+
+    fun checkTokenExist(): Boolean = _tokenState.value.isNotEmpty()
 }

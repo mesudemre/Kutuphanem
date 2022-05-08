@@ -40,6 +40,7 @@ data class ColorPalette(
     val acikLacivert:Color,
     val googleDarkGray:Color,
     val secondaryGray:Color,
-    val otherGrayLight:Color
+    val otherGrayLight:Color,
+    val iconGrayTint:Color
 ) {
 }

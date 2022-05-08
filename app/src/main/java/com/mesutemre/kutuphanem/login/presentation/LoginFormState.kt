@@ -1,7 +1,6 @@
 package com.mesutemre.kutuphanem.login.presentation
 
 import androidx.annotation.StringRes
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
 
 data class LoginFormState(
     var username: String = "",
@@ -10,5 +9,6 @@ data class LoginFormState(
     var password: String = "",
     var passwordError: Boolean = false,
     @StringRes var passwordErrorMessage: Int? = null,
-    var loginResourceEvent: BaseResourceEvent<String?> = BaseResourceEvent.Nothing()
+    val isLoading:Boolean = false,
+    val isSuccess:Boolean = false
 )
