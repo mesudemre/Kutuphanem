@@ -45,4 +45,10 @@ sealed class KutuphanemNavigationItem(
         title = R.string.profilimItem,
         showBottomBar = true
     )
+
+    object ParameterYayinEviScreen : KutuphanemNavigationItem(
+        screenRoute = "kutuphanem_parameter_yayinevi_screen",
+        showTopBar = true,
+        pageTitle = R.string.yayinEviLabel
+    )
 }

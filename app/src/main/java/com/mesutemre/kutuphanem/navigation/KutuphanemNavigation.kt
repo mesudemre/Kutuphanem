@@ -10,6 +10,7 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.mesutemre.kutuphanem.login.presentation.LoginScreen
 import com.mesutemre.kutuphanem.mainscreen.MainScreen
+import com.mesutemre.kutuphanem.parameter.ParametreScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -28,6 +29,10 @@ fun KutuphanemNavigation(
 
         composable(route = KutuphanemNavigationItem.LoginScreen.screenRoute) {
             LoginScreen(showSnackbar = showSnackbar)
+        }
+
+        composable(route = KutuphanemNavigationItem.ParameterScreen.screenRoute) {
+            ParametreScreen()
         }
     }
 }

@@ -35,6 +35,8 @@
     <!--ParametreFragment -->
     <string name="yayinEviLabel">Yayınevi</string>
     <string name="kitapTurLabel">Kitap Tür</string>
+    <string name="parametreScreenInfo">Bu ekranda aşağıdaki seçeneklerden birini seçerek Yayınevi, Kitap Türü ve bu parametrelerden birini ekleme işlemini gerçekleştirebilirsiniz.</string>
+    <string name="parameterAddLabel">Parametre Kaydı</string>
 
     <!--ParametreYayineviFragment -->
     <string name="yayinEviListeHataLabel">Yayınevi listesi yüklenemedi!</string>

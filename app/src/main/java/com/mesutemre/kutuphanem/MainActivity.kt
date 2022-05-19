@@ -179,7 +179,15 @@ private fun KutuphanemBottomNavigationBar(
                 unselectedContentColor = MaterialTheme.colorPalette.transparent,
                 alwaysShowLabel = true,
                 onClick = {
-                    Log.d("NavigationScreen", it.screenRoute)
+                    navController.navigate(it.screenRoute) {
+                        navController.graph.startDestinationRoute?.let { screen_route ->
+                            popUpTo(screen_route) {
+                                saveState = true
+                            }
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 })
         }
     }
