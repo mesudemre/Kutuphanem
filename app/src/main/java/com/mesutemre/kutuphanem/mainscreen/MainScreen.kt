@@ -1,4 +1,4 @@
-package com.mesutemre.kutuphanem.main_screen
+package com.mesutemre.kutuphanem.mainscreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

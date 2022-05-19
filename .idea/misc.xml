@@ -10,6 +10,7 @@
         <entry key="app/src/main/res/drawable/detay_textview_background.xml" value="0.1265625" />
         <entry key="app/src/main/res/drawable/ic_baseline_archive_48.xml" value="0.1265625" />
         <entry key="app/src/main/res/drawable/ic_baseline_archive_white.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_baseline_chevron_left.xml" value="0.148" />
         <entry key="app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_baseline_person_24.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_baseline_share_24.xml" value="0.1" />

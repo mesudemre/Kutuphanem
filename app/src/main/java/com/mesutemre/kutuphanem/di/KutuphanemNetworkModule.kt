@@ -10,6 +10,7 @@ import com.mesutemre.kutuphanem.auth.service.KullaniciService
 import com.mesutemre.kutuphanem.login.data.remote.LoginService
 import com.mesutemre.kutuphanem.login.data.repository.LoginRepository
 import com.mesutemre.kutuphanem.login.domain.repository.ILoginRepository
+import com.mesutemre.kutuphanem.parameter.yayinevi.data.remote.dto.IYayinEviApi
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import dagger.Module
 import dagger.Provides
@@ -82,6 +83,10 @@ class KutuphanemNetworkModule {
 
     @Singleton
     @Provides
-    fun provideLoginAPI(retrofit: Retrofit):LoginService = retrofit.create(LoginService::class.java);
+    fun provideLoginAPI(retrofit: Retrofit):LoginService = retrofit.create(LoginService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideParametreYayinEviAPI(retrofit: Retrofit): IYayinEviApi = retrofit.create(IYayinEviApi::class.java)
 
 }

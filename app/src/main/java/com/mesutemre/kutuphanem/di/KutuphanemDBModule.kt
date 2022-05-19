@@ -47,4 +47,8 @@ class KutuphanemDBModule {
     @Provides
     fun provideKutuphanemGlobalExceptionHandlerDao(database: KutuphanemDatabase) = database.getGlobalExceptionDao();
 
+    @Singleton
+    @Provides
+    fun provideKutuphanemYayinEviDao(database: KutuphanemDatabase) = database.getYayinEviDao()
+
 }

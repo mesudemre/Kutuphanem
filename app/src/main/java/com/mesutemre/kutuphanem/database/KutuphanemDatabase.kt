@@ -11,6 +11,8 @@ import com.mesutemre.kutuphanem.auth.profil.model.KullaniciKitapTurModel
 import com.mesutemre.kutuphanem.exceptions.dao.KutuphanemGlobalExceptionHandlerDao
 import com.mesutemre.kutuphanem.exceptions.model.KutuphanemGlobalExceptionHandlerModel
 import com.mesutemre.kutuphanem.kitap.liste.model.KitapModel
+import com.mesutemre.kutuphanem.parameter.yayinevi.data.dao.entity.IYayinEviDao
+import com.mesutemre.kutuphanem.parameter.yayinevi.data.dao.entity.YayinEviEntity
 import com.mesutemre.kutuphanem.parametre.dao.ParametreDao
 import com.mesutemre.kutuphanem.parametre.kitaptur.model.KitapturModel
 import com.mesutemre.kutuphanem.parametre.yayinevi.model.YayineviModel
@@ -22,7 +24,8 @@ import com.mesutemre.kutuphanem.parametre.yayinevi.model.YayineviModel
                 Kullanici::class,
                 KullaniciKitapTurModel::class,
                 KitapModel::class,
-                KutuphanemGlobalExceptionHandlerModel::class
+                KutuphanemGlobalExceptionHandlerModel::class,
+                YayinEviEntity::class
             ),
             exportSchema = false)
 @TypeConverters(Converters::class)
@@ -32,5 +35,5 @@ abstract class KutuphanemDatabase:RoomDatabase() {
     abstract fun getKullaniciDao(): KullaniciDao
     abstract fun getKitapDao(): KitapDao
     abstract fun getGlobalExceptionDao():KutuphanemGlobalExceptionHandlerDao
-
+    abstract fun getYayinEviDao(): IYayinEviDao
 }
