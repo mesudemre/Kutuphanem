@@ -8,8 +8,6 @@ import com.mesutemre.kutuphanem.kitap.service.IKitapService
 import com.mesutemre.kutuphanem.parametre.service.IParametreService
 import com.mesutemre.kutuphanem.auth.service.KullaniciService
 import com.mesutemre.kutuphanem.login.data.remote.LoginService
-import com.mesutemre.kutuphanem.login.data.repository.LoginRepository
-import com.mesutemre.kutuphanem.login.domain.repository.ILoginRepository
 import com.mesutemre.kutuphanem.parameter.yayinevi.data.remote.dto.IYayinEviApi
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import dagger.Module

@@ -157,7 +157,7 @@ fun KutuphanemSearchInput(
     BasicTextField(value = text,
         modifier = modifier
             .border(
-                BorderStroke(1.sdp, MaterialTheme.colorPalette.secondaryGray),
+                BorderStroke((1/2).sdp, MaterialTheme.colorPalette.secondaryGray),
                 shape = MaterialTheme.shapes.medium
             )
             .height(32.sdp),
@@ -176,6 +176,7 @@ fun KutuphanemSearchInput(
                     tint = leadingIconColor,
                     modifier = Modifier
                         .clip(CircleShape)
+                        .padding(horizontal = 4.sdp)
                         .clickable {
                             onLeadingIconClick.invoke()
                         }

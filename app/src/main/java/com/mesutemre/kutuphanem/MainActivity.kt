@@ -1,7 +1,6 @@
 package com.mesutemre.kutuphanem
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -63,7 +62,9 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.navigationBarsPadding(),
                         scaffoldState = kutuphanemAppState.scaffoldState,
                         floatingActionButton = {
-                            if (viewModel.checkTokenExist()) {
+                            if (viewModel.checkTokenExist() && kutuphanemAppState.navController.isBottomNavigationTopBarVisible(
+                                    isBottomNavigation = true
+                            )) {
                                 KutuphanemNavigationBottomFloatingActionButton()
                             }
                         },
@@ -83,14 +84,6 @@ class MainActivity : ComponentActivity() {
                             }
                         },
                         bottomBar = {
-                            val navBackStackEntry by kutuphanemAppState.navController.currentBackStackEntryAsState()
-                            val route = navBackStackEntry?.destination?.route
-                            val list = KutuphanemNavigationItem::class.nestedClasses.map {
-                                it.objectInstance as KutuphanemNavigationItem
-                            }
-                            val pageItem = list.filter {
-                                it.screenRoute == route
-                            }
                             if (viewModel.checkTokenExist() && kutuphanemAppState.navController.isBottomNavigationTopBarVisible(
                                     isBottomNavigation = true
                                 )
