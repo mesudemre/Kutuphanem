@@ -22,7 +22,8 @@ import javax.inject.Inject
 class GetYayinEviListUseCase @Inject constructor(
     private val yayinEviRepository: YayinEviRepository,
     private val customSharedPreferences: CustomSharedPreferences,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    private val storeYayinEviParametre: StoreYayinEviParametre
 ): BaseUseCase(){
 
     operator fun invoke(isSwipeRefresh: Boolean): Flow<BaseResourceEvent<List<YayinEviItem>>> = flow{
@@ -38,7 +39,7 @@ class GetYayinEviListUseCase @Inject constructor(
                         it.toYayinEviItem()
                     }!!
                 ))
-                storeYayinEviListInDB(serviceList.data!!)
+                storeYayinEviParametre(serviceList.data)
             }else if (serviceList is BaseResourceEvent.Error) {
                 emit(BaseResourceEvent.Error(serviceList.message))
             }
@@ -56,13 +57,5 @@ class GetYayinEviListUseCase @Inject constructor(
                 emit(BaseResourceEvent.Error(dbList.message))
             }
         }
-    }
-
-    /* parametreRepository.deleteYayinEviListe();
-            parametreRepository.yayinEviParametreKaydet(*yayinEviListe.toTypedArray());
-            customSharedPreferences.putToSharedPref(PARAM_YAYINEVI_DB_KEY,true);*/
-
-    suspend fun storeYayinEviListInDB(list: List<YayinEviDto>) {
-        //Silme işlemi olacak...
     }
 }
