@@ -7,7 +7,7 @@ import androidx.room.Query
 @Dao
 interface IYayinEviDao {
 
-    @Query("SELECT id,aciklama FROM YayinEviEntity")
+    @Query("SELECT id,aciklama FROM YayinEviEntity ORDER BY aciklama")
     suspend fun getYayinEviListe(): List<YayinEviEntity>
 
     @Insert
