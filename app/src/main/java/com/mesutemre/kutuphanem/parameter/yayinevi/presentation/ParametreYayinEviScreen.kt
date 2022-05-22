@@ -4,12 +4,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.parameter.components.ParametreRowItem
@@ -60,9 +64,25 @@ fun ParametreYayinEviScreen(viewModel: ParametreYayinEviViewModel = hiltViewMode
                     )
                 }
                 is BaseResourceEvent.Success -> {
-                    LazyColumn(contentPadding = PaddingValues(4.sdp)) {
-                        items(state.yayinEviList.data!!) {yayinEvi->
-                            ParametreRowItem(detail = yayinEvi.aciklama)
+                    SwipeRefresh(state = rememberSwipeRefreshState(isRefreshing = state.swipeRefreshing),
+                        onRefresh = {
+                            viewModel.initYayinEviList(true)
+                        },
+                        indicator = { state, trigger ->
+                            SwipeRefreshIndicator(
+                                state = state,
+                                refreshTriggerDistance = trigger,
+                                scale = true,
+                                backgroundColor = MaterialTheme.colorPalette.white,
+                                contentColor = MaterialTheme.colorPalette.lacivert,
+                                shape = RoundedCornerShape(50.sdp),
+                            )
+                        }
+                    ) {
+                        LazyColumn(contentPadding = PaddingValues(4.sdp)) {
+                            items(state.yayinEviList.data!!) {yayinEvi->
+                                ParametreRowItem(detail = yayinEvi.aciklama)
+                            }
                         }
                     }
                 }

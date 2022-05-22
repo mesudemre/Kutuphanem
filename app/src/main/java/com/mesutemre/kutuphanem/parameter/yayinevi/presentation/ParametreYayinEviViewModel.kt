@@ -26,7 +26,7 @@ class ParametreYayinEviViewModel @Inject constructor(
         initYayinEviList(false)
     }
 
-    private fun initYayinEviList(isSwipe: Boolean) {
+    fun initYayinEviList(isSwipe: Boolean) {
         viewModelScope.launch {
             getYayinEviListUseCase(isSwipe).collect {
                 _state.value = _state.value.copy(
