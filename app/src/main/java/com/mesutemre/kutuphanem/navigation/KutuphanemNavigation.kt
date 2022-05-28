@@ -32,7 +32,7 @@ fun KutuphanemNavigation(
         }
 
         composable(route = KutuphanemNavigationItem.LoginScreen.screenRoute) {
-            LoginScreen(showSnackbar = showSnackbar)
+            LoginScreen(showSnackbar = showSnackbar, navController = navController)
         }
 
         composable(route = KutuphanemNavigationItem.ParameterScreen.screenRoute,

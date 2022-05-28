@@ -22,10 +22,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.login.presentation.LoginFormState
 import com.mesutemre.kutuphanem.login.presentation.LoginValidationEvent
 import com.mesutemre.kutuphanem.login.presentation.LoginViewModel
+import com.mesutemre.kutuphanem.navigation.KutuphanemNavigationItem
 import com.mesutemre.kutuphanem.ui.theme.*
 import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemBaseInput
 import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemProgressIndicator
@@ -35,7 +37,8 @@ import kotlinx.coroutines.flow.collect
 @Composable
 fun LoginForm(
     showSnackbar: (String, SnackbarDuration, Int) -> Unit,
-    loginViewModel: LoginViewModel = hiltViewModel()
+    loginViewModel: LoginViewModel = hiltViewModel(),
+    navController: NavController
 ) {
     val loginState = loginViewModel.state.value
     val context = LocalContext.current
@@ -73,7 +76,7 @@ fun LoginForm(
                 )
             }
             if (loginState.isSuccess) {
-                //Navigation sağlanacak...
+                navController.navigate(KutuphanemNavigationItem.MainScreen.screenRoute)
             }
             Column(
                 modifier = Modifier

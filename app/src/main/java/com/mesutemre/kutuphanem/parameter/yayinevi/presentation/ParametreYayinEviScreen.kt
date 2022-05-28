@@ -60,7 +60,10 @@ fun ParametreYayinEviScreen(viewModel: ParametreYayinEviViewModel = hiltViewMode
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(100.sdp),
-                        errorText = state.yayinEviList.message ?: ""
+                        errorText = if (state.yayinEviList.messageId != null)
+                            stringResource(id = state.yayinEviList.messageId)
+                    else
+                            state.yayinEviList.message ?: ""
                     )
                 }
                 is BaseResourceEvent.Success -> {

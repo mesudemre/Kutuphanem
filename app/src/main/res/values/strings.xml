@@ -139,6 +139,7 @@
     <string name="kitapResmiYuklemeHata">Kitap resmi yüklenirken hata meydana geldi!</string>
     <string name="kitapTurSecinizText">Kitap türü seçiniz...</string>
     <string name="yayinEviSecinizText">Yayınevi seçiniz...</string>
+    <string name="yayinEviNotFounCriteria">Aradığınız isimde bir yayınevi bulunmamaktadır...</string>
 
     <!--KitapDetayFragment -->
     <string name="kitapAdLabelText">Kitap Adı</string>

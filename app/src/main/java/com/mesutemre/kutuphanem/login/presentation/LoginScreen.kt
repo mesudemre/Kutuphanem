@@ -11,6 +11,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import com.mesutemre.kutuphanem.login.presentation.components.LoginForm
 import com.mesutemre.kutuphanem.login.presentation.components.LoginHeader
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
@@ -18,7 +19,9 @@ import com.mesutemre.kutuphanem.ui.theme.sdp
 
 @Composable
 fun LoginScreen(
-    showSnackbar: (String, SnackbarDuration, Int) -> Unit) {
+    showSnackbar: (String, SnackbarDuration, Int) -> Unit,
+    navController: NavController
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -30,7 +33,7 @@ fun LoginScreen(
                 .padding(top = 108.sdp)
                 .verticalScroll(rememberScrollState())
         ) {
-            LoginForm(showSnackbar = showSnackbar)
+            LoginForm(showSnackbar = showSnackbar, navController = navController)
         }
     }
 }

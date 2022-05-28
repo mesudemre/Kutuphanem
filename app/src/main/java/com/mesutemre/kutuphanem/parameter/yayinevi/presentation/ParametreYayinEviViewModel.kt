@@ -2,10 +2,17 @@ package com.mesutemre.kutuphanem.parameter.yayinevi.presentation
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.toUpperCase
 import androidx.lifecycle.viewModelScope
+import com.mesutemre.kutuphanem.R
+import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.base.BaseViewModel
+import com.mesutemre.kutuphanem.di.DefaultDispatcher
+import com.mesutemre.kutuphanem.parameter.yayinevi.domain.model.YayinEviItem
 import com.mesutemre.kutuphanem.parameter.yayinevi.domain.use_case.GetYayinEviListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,7 +23,8 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class ParametreYayinEviViewModel @Inject constructor(
-    private val getYayinEviListUseCase: GetYayinEviListUseCase
+    private val getYayinEviListUseCase: GetYayinEviListUseCase,
+    @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher
 ) : BaseViewModel() {
 
     private val _state = mutableStateOf(ParametreYayinEviState())
@@ -30,13 +38,42 @@ class ParametreYayinEviViewModel @Inject constructor(
         viewModelScope.launch {
             getYayinEviListUseCase(isSwipe).collect {
                 _state.value = _state.value.copy(
-                    yayinEviList = it
+                    yayinEviList = it,
+                    defaultYayineviList = it.data
                 )
             }
         }
     }
 
-    fun onSearchTextChangeValue(text:String) {
-        _state.value = _state.value.copy(yayinEviFilterText = text)
+    fun onSearchTextChangeValue(text: String) {
+        var filterResult: BaseResourceEvent<List<YayinEviItem>> = BaseResourceEvent.Nothing()
+        val listToSearch = _state.value.defaultYayineviList
+
+        viewModelScope.launch(defaultDispatcher) {
+            if (text.isEmpty()) {
+                filterResult = BaseResourceEvent.Success(data = listToSearch!!)
+                _state.value = _state.value.copy(
+                    yayinEviFilterText = text,
+                    yayinEviList = filterResult
+                )
+                return@launch
+            }
+            val results = listToSearch?.filter {
+                it.aciklama.toUpperCase(Locale.current)
+                    .contains(text.trim().toUpperCase(Locale.current), ignoreCase = true)
+            }
+            if (results.isNullOrEmpty()) {
+                filterResult = BaseResourceEvent.Error(
+                    messageId = R.string.yayinEviNotFounCriteria,
+                    message = null
+                )
+            } else {
+                filterResult = BaseResourceEvent.Success(data = results!!)
+            }
+            _state.value = _state.value.copy(
+                yayinEviFilterText = text,
+                yayinEviList = filterResult,
+            )
+        }
     }
 }
