@@ -10,6 +10,7 @@ import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.di.DefaultDispatcher
 import com.mesutemre.kutuphanem.parameter.yayinevi.domain.model.YayinEviItem
+import com.mesutemre.kutuphanem.parameter.yayinevi.domain.use_case.DeleteYayinEviUseCase
 import com.mesutemre.kutuphanem.parameter.yayinevi.domain.use_case.GetYayinEviListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -24,7 +25,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ParametreYayinEviViewModel @Inject constructor(
     private val getYayinEviListUseCase: GetYayinEviListUseCase,
-    @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher
+    @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
+    private val deleteYayinEviUseCase: DeleteYayinEviUseCase
 ) : BaseViewModel() {
 
     private val _state = mutableStateOf(ParametreYayinEviState())
@@ -74,6 +76,35 @@ class ParametreYayinEviViewModel @Inject constructor(
                 yayinEviFilterText = text,
                 yayinEviList = filterResult,
             )
+        }
+    }
+
+    fun openDeleteConfirmDialog(selectedYayinEvi: YayinEviItem) {
+        _state.value = _state.value.copy(
+            isPopUpShow = true,
+            selectedYayinevi = selectedYayinEvi
+        )
+    }
+
+    fun onDismissParameterDeleteDialog() {
+        _state.value = _state.value.copy(
+            isPopUpShow = false,
+            selectedYayinevi = null
+        )
+    }
+
+    fun onClickDeleteYayinevi() {
+        viewModelScope.launch {
+            deleteYayinEviUseCase(_state.value.selectedYayinevi!!).collect {
+                if (it is BaseResourceEvent.Success) {
+                    initYayinEviList(true)
+                }
+                _state.value = _state.value.copy(
+                    isPopUpShow = false,
+                    yayinEviDelete = it,
+                    selectedYayinevi = null
+                )
+            }
         }
     }
 }

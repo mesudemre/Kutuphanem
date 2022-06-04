@@ -1,5 +1,6 @@
 package com.mesutemre.kutuphanem.parameter.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -13,7 +14,7 @@ import androidx.compose.ui.Modifier
 import com.mesutemre.kutuphanem.ui.theme.*
 
 @Composable
-fun ParametreRowItem(detail: String) {
+fun ParametreRowItem(detail: String,onDeleteParameter:()->Unit) {
     Column(modifier = Modifier.fillMaxWidth().height(40.sdp)) {
         Row(
             modifier = Modifier.weight(1f),
@@ -31,7 +32,10 @@ fun ParametreRowItem(detail: String) {
                 modifier = Modifier
                     .padding(horizontal = 2.sdp)
                     .weight(0.1f)
-                    .align(alignment = Alignment.CenterVertically),
+                    .align(alignment = Alignment.CenterVertically)
+                    .clickable {
+                        onDeleteParameter.invoke()
+                    },
                 contentDescription = detail,
                 tint = MaterialTheme.colorPalette.transparent
             )

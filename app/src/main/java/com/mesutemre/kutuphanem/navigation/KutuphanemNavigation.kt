@@ -52,7 +52,7 @@ fun KutuphanemNavigation(
             exitTransition = {
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
             }) {
-            ParametreYayinEviScreen()
+            ParametreYayinEviScreen(showSnackbar = showSnackbar)
         }
     }
 }

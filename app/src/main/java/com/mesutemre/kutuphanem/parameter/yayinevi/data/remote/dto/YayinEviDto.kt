@@ -2,7 +2,6 @@ package com.mesutemre.kutuphanem.parameter.yayinevi.data.remote.dto
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import com.mesutemre.kutuphanem.parameter.yayinevi.data.dao.entity.toYayinEviItem
 import com.mesutemre.kutuphanem.parameter.yayinevi.domain.model.YayinEviItem
 import java.io.Serializable
 
@@ -14,7 +13,12 @@ data class YayinEviDto(
 
     @SerializedName("aciklama")
     @Expose
-    var aciklama: String?
+    val aciklama: String?,
+
+    @SerializedName("durum")
+    @Expose
+    val durum:YayinEviDurum?
+
 ) : Serializable
 
 fun YayinEviDto.toYayinEviItem(): YayinEviItem {

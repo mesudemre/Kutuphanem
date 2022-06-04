@@ -12,6 +12,7 @@
     <string name="shareLabel">Paylaş</string>
     <string name="archiveLabel">Arşivle</string>
     <string name="noNetworkConnection">İnternet bağlantınız bulunmamaktadır!</string>
+    <string name="vazgecLabel">Vazgeç</string>
 
     <!--Bottom Navigation Menu -->
     <string name="anasayfaItem">Anasayfa</string>
@@ -42,6 +43,7 @@
     <string name="yayinEviListeHataLabel">Yayınevi listesi yüklenemedi!</string>
     <string name="yayinEviSilmekIstiyormusunuz">adlı yayınevini silmek istiyor musunuz?</string>
     <string name="yayinEviSilmeHata">Yayınevi silinirken hata meydana geldi!</string>
+    <string name="yayilEviSilmeTitle">Yayınevi Silme</string>
 
     <!--ParametreKitapturFragment -->
     <string name="kitapTurListeHata">Kitap türü listesi yüklenemedi!</string>

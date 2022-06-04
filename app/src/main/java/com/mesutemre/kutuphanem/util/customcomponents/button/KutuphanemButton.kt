@@ -3,6 +3,7 @@ package com.mesutemre.kutuphanem.util.customcomponents.button
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -129,7 +130,7 @@ fun KutuphanemMainMaterialButton(
             modifier = Modifier
                 .fillMaxSize()
                 .background(backgroundColor)
-                .padding(start = 12.sdp , end = 12.sdp)
+                .padding(start = 12.sdp, end = 12.sdp)
         ) {
             if (iconId != null) {
                 Icon(
@@ -175,4 +176,28 @@ fun KutuphanemFormButton(
         textStyle = textStyle,
         onClick = onClick
     )
+}
+
+@Composable
+fun KutuphanemTerritaryButton(buttonText:String,modifier:Modifier,onClick: () -> Unit) {
+    Card(
+        modifier = modifier.height(ButtonSize.MEDIUM.buttonSize).
+        clickable {
+                  onClick.invoke()
+        },
+        shape = MaterialTheme.shapes.small,
+        border = BorderStroke(width = 1.sdp, color = MaterialTheme.colorPalette.lacivert),
+        elevation = 2.sdp,
+        backgroundColor = MaterialTheme.colorPalette.white
+    ) {
+        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+            Text(
+                text = buttonText,
+                modifier = Modifier
+                    .align(Alignment.Center),
+                style = MaterialTheme.typography.mediumUbuntuLacivert,
+                textAlign = TextAlign.Center
+            )
+        }
+    }
 }

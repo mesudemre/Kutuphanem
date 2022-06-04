@@ -53,6 +53,7 @@ class MainActivity : ComponentActivity() {
             })
         }
         WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
             KutuphanemTheme {
                 ProvideWindowInsets {
@@ -71,7 +72,6 @@ class MainActivity : ComponentActivity() {
                         isFloatingActionButtonDocked = true,
                         floatingActionButtonPosition = FabPosition.Center,
                         topBar = {
-
                             if (viewModel.checkTokenExist() && kutuphanemAppState.navController.isBottomNavigationTopBarVisible()) {
                                 val currentPage: KutuphanemNavigationItem? =
                                     kutuphanemAppState.navController.getCurrentNavigationItem()

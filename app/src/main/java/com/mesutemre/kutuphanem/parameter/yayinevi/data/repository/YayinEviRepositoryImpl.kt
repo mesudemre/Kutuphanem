@@ -1,5 +1,6 @@
 package com.mesutemre.kutuphanem.parameter.yayinevi.data.repository
 
+import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.parameter.yayinevi.data.dao.entity.IYayinEviDao
 import com.mesutemre.kutuphanem.parameter.yayinevi.data.dao.entity.YayinEviEntity
 import com.mesutemre.kutuphanem.parameter.yayinevi.data.remote.dto.IYayinEviApi
@@ -31,5 +32,9 @@ class YayinEviRepositoryImpl @Inject constructor(
 
     override suspend fun deleteYayinEviList() {
         dao.deleteYayinEviList()
+    }
+
+    override suspend fun yayinEviKaydet(yayinEviDto: YayinEviDto): Response<ResponseStatusModel> {
+        return service.yayinEviKaydet(yayinEviDto)
     }
 }
