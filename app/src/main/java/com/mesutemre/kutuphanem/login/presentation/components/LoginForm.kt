@@ -30,7 +30,7 @@ import com.mesutemre.kutuphanem.login.presentation.LoginViewModel
 import com.mesutemre.kutuphanem.navigation.KutuphanemNavigationItem
 import com.mesutemre.kutuphanem.ui.theme.*
 import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemBaseInput
-import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemProgressIndicator
+import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemLoader
 import com.mesutemre.kutuphanem.util.customcomponents.button.KutuphanemMainMaterialButton
 import kotlinx.coroutines.flow.collect
 
@@ -68,10 +68,10 @@ fun LoginForm(
         ) {
 
             if (loginState.isLoading) {
-                KutuphanemProgressIndicator(
+                KutuphanemLoader(
                     modifier = Modifier
-                        .width(30.sdp)
-                        .height(30.sdp)
+                        .width(220.sdp)
+                        .height(220.sdp)
                         .align(Alignment.Center)
                 )
             }

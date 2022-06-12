@@ -12,6 +12,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.Layout
+import com.airbnb.lottie.compose.*
+import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
 import kotlinx.coroutines.CoroutineScope
@@ -146,4 +148,20 @@ private fun Dot(
             .clip(shape = CircleShape)
             .background(color = color)
     )
+}
+
+@Composable
+fun KutuphanemLoader(modifier: Modifier) {
+    val compositionResult: LottieCompositionResult = rememberLottieComposition(
+        spec = LottieCompositionSpec.RawRes(
+            R.raw.book
+        )
+    )
+    val progress by animateLottieCompositionAsState(
+        composition = compositionResult.value,
+        isPlaying = true,
+        iterations = LottieConstants.IterateForever,
+        speed = 1.0f
+    )
+    LottieAnimation(composition = compositionResult.value, progress, modifier)
 }

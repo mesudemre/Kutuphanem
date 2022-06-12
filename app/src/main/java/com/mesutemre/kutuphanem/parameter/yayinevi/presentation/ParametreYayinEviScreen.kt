@@ -25,11 +25,10 @@ import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.parameter.components.ParametreRowItem
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
-import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemProgressIndicator
+import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemLoader
 import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemSearchInput
 import com.mesutemre.kutuphanem.util.customcomponents.dialog.CustomKutuphanemDialog
 import com.mesutemre.kutuphanem.util.customcomponents.error.KutuphanemErrorView
-import kotlinx.coroutines.flow.collect
 
 @Composable
 fun ParametreYayinEviScreen(viewModel: ParametreYayinEviViewModel = hiltViewModel(),
@@ -75,10 +74,11 @@ fun ParametreYayinEviScreen(viewModel: ParametreYayinEviViewModel = hiltViewMode
 
     if (state.yayinEviDelete is BaseResourceEvent.Loading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            KutuphanemProgressIndicator(
+            KutuphanemLoader(
                 modifier = Modifier
-                    .width(40.sdp)
-                    .height(40.sdp)
+                    .width(220.sdp)
+                    .height(220.sdp)
+                    .align(Alignment.Center)
             )
         }
     }
@@ -105,10 +105,10 @@ fun ParametreYayinEviScreen(viewModel: ParametreYayinEviViewModel = hiltViewMode
         ) {
             when (state.yayinEviList) {
                 is BaseResourceEvent.Loading -> {
-                    KutuphanemProgressIndicator(
+                    KutuphanemLoader(
                         modifier = Modifier
-                            .width(40.sdp)
-                            .height(40.sdp)
+                            .width(220.sdp)
+                            .height(220.sdp)
                             .align(Alignment.Center)
                     )
                 }
