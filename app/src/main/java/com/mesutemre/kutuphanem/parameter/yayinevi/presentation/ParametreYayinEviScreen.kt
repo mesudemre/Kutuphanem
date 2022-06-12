@@ -5,8 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.SnackbarDuration
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -22,6 +21,7 @@ import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.model.QA_DLG
 import com.mesutemre.kutuphanem.model.SUCCESS
+import com.mesutemre.kutuphanem.parameter.components.ParametreDeleteSwipeBackground
 import com.mesutemre.kutuphanem.parameter.components.ParametreRowItem
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
@@ -30,13 +30,16 @@ import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemSearchInput
 import com.mesutemre.kutuphanem.util.customcomponents.dialog.CustomKutuphanemDialog
 import com.mesutemre.kutuphanem.util.customcomponents.error.KutuphanemErrorView
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ParametreYayinEviScreen(viewModel: ParametreYayinEviViewModel = hiltViewModel(),
-                            showSnackbar: (String, SnackbarDuration, Int) -> Unit) {
+fun ParametreYayinEviScreen(
+    viewModel: ParametreYayinEviViewModel = hiltViewModel(),
+    showSnackbar: (String, SnackbarDuration, Int) -> Unit
+) {
     val state = viewModel.state.value
 
-    when(state.yayinEviDelete) {
-        is BaseResourceEvent.Success-> {
+    when (state.yayinEviDelete) {
+        is BaseResourceEvent.Success -> {
             LaunchedEffect(key1 = Unit) {
                 showSnackbar(
                     state.yayinEviDelete.data?.statusMessage ?: "",
@@ -45,7 +48,7 @@ fun ParametreYayinEviScreen(viewModel: ParametreYayinEviViewModel = hiltViewMode
                 )
             }
         }
-        is BaseResourceEvent.Error-> {
+        is BaseResourceEvent.Error -> {
             LaunchedEffect(key1 = Unit) {
                 showSnackbar(
                     state.yayinEviDelete.message ?: "",
@@ -141,8 +144,24 @@ fun ParametreYayinEviScreen(viewModel: ParametreYayinEviViewModel = hiltViewMode
                     ) {
                         LazyColumn(contentPadding = PaddingValues(4.sdp)) {
                             items(state.yayinEviList.data!!) { yayinEvi ->
-                                ParametreRowItem(detail = yayinEvi.aciklama) {
-                                    viewModel.openDeleteConfirmDialog(yayinEvi)
+                                val dismissState = rememberDismissState()
+                                SwipeToDismiss(state = dismissState,
+                                    modifier = Modifier.padding(vertical = 2.sdp),
+                                    directions = setOf(
+                                        DismissDirection.EndToStart
+                                    ),
+                                    dismissThresholds = { direction ->
+                                        FractionalThreshold(0.2f)
+                                    },
+                                    background = {
+                                        ParametreDeleteSwipeBackground(
+                                            dismissState = dismissState,
+                                            iconContentDescription = yayinEvi.aciklama
+                                        ) {
+                                            viewModel.openDeleteConfirmDialog(yayinEvi)
+                                        }
+                                    }) {
+                                    ParametreRowItem(detail = yayinEvi.aciklama)
                                 }
                             }
                         }

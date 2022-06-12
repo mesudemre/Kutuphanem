@@ -1,20 +1,19 @@
 package com.mesutemre.kutuphanem.parameter.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.mesutemre.kutuphanem.ui.theme.*
 
 @Composable
-fun ParametreRowItem(detail: String,onDeleteParameter:()->Unit) {
+fun ParametreRowItem(detail: String) {
     Column(modifier = Modifier.fillMaxWidth().height(40.sdp)) {
         Row(
             modifier = Modifier.weight(1f),
@@ -24,20 +23,17 @@ fun ParametreRowItem(detail: String,onDeleteParameter:()->Unit) {
                 text = detail, modifier = Modifier
                     .padding(end = 4.sdp)
                     .weight(0.9f),
-                style = MaterialTheme.typography.normalUbuntuTransparent
+                style = MaterialTheme.typography.normalUbuntuBlack
             )
 
             Icon(
-                Icons.Filled.Delete,
+                Icons.Filled.ChevronRight,
                 modifier = Modifier
                     .padding(horizontal = 2.sdp)
                     .weight(0.1f)
-                    .align(alignment = Alignment.CenterVertically)
-                    .clickable {
-                        onDeleteParameter.invoke()
-                    },
+                    .align(alignment = Alignment.CenterVertically),
                 contentDescription = detail,
-                tint = MaterialTheme.colorPalette.transparent
+                tint = MaterialTheme.colorPalette.lacivert
             )
         }
         Divider(
