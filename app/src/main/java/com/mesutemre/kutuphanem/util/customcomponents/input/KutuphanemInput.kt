@@ -2,6 +2,7 @@ package com.mesutemre.kutuphanem.util.customcomponents
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -156,6 +157,8 @@ fun KutuphanemSearchInput(
     }
     BasicTextField(value = text,
         modifier = modifier
+            .clip(MaterialTheme.shapes.medium)
+            .background(MaterialTheme.colorPalette.white)
             .border(
                 BorderStroke((1/2).sdp, MaterialTheme.colorPalette.secondaryGray),
                 shape = MaterialTheme.shapes.medium
