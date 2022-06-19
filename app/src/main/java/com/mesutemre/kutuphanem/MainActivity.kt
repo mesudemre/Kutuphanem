@@ -1,6 +1,7 @@
 package com.mesutemre.kutuphanem
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -15,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
@@ -58,12 +60,12 @@ class MainActivity : ComponentActivity() {
             KutuphanemTheme {
                 ProvideWindowInsets {
                     val kutuphanemAppState: KutuphanemAppState = rememberKutuphanemAppState()
-
+                    val tokenState = viewModel.tokenState.collectAsState()
                     Scaffold(
                         modifier = Modifier.navigationBarsPadding(),
                         scaffoldState = kutuphanemAppState.scaffoldState,
                         floatingActionButton = {
-                            if (viewModel.checkTokenExist() && kutuphanemAppState.navController.isBottomNavigationTopBarVisible(
+                            if (kutuphanemAppState.navController.isBottomNavigationTopBarVisible(
                                     isBottomNavigation = true
                             )) {
                                 KutuphanemNavigationBottomFloatingActionButton()
@@ -72,7 +74,7 @@ class MainActivity : ComponentActivity() {
                         isFloatingActionButtonDocked = true,
                         floatingActionButtonPosition = FabPosition.Center,
                         topBar = {
-                            if (viewModel.checkTokenExist() && kutuphanemAppState.navController.isBottomNavigationTopBarVisible()) {
+                            if (kutuphanemAppState.navController.isBottomNavigationTopBarVisible()) {
                                 val currentPage: KutuphanemNavigationItem? =
                                     kutuphanemAppState.navController.getCurrentNavigationItem()
                                 KutuphanemTopBar(
@@ -84,7 +86,7 @@ class MainActivity : ComponentActivity() {
                             }
                         },
                         bottomBar = {
-                            if (viewModel.checkTokenExist() && kutuphanemAppState.navController.isBottomNavigationTopBarVisible(
+                            if (kutuphanemAppState.navController.isBottomNavigationTopBarVisible(
                                     isBottomNavigation = true
                                 )
                             ) {
@@ -94,11 +96,10 @@ class MainActivity : ComponentActivity() {
                         snackbarHost = {
                             KutuphanemSnackBarHost(state = kutuphanemAppState.kutuphanemSnackbarState)
                         }) {
-                        if (viewModel.checkTokenExist()) {
+                        if (tokenState.value.isNotEmpty()) {
                             KutuphanemNavigation(
                                 navController = kutuphanemAppState.navController,
                                 startDestinition = KutuphanemNavigationItem.MainScreen,
-                                //startDestinition = KutuphanemNavigationItem.LoginScreen,
                                 showSnackbar = { message, duration, type ->
                                     kutuphanemAppState.showSnackbar(
                                         message = message,

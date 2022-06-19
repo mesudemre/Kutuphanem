@@ -1,14 +1,11 @@
 package com.mesutemre.kutuphanem
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.util.APP_TOKEN_KEY
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,6 +31,4 @@ class MainActivityViewModel @Inject constructor(
             splashLoadingState.value = false
         }
     }
-
-    fun checkTokenExist(): Boolean = _tokenState.value.isNotEmpty()
 }
