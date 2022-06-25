@@ -7,7 +7,9 @@ import androidx.compose.animation.core.tween
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -85,4 +87,10 @@ fun NavHostController.getCurrentNavigationItem(): KutuphanemNavigationItem? {
     if (pageItem != null && pageItem.size>0)
         return pageItem[0]
     return null
+}
+
+fun NavOptionsBuilder.popUpToTop(navController: NavController) {
+    popUpTo(navController.currentBackStackEntry?.destination?.route ?: return) {
+        inclusive =  true
+    }
 }

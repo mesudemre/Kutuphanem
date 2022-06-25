@@ -28,6 +28,7 @@ import com.mesutemre.kutuphanem.login.presentation.LoginFormState
 import com.mesutemre.kutuphanem.login.presentation.LoginValidationEvent
 import com.mesutemre.kutuphanem.login.presentation.LoginViewModel
 import com.mesutemre.kutuphanem.navigation.KutuphanemNavigationItem
+import com.mesutemre.kutuphanem.navigation.popUpToTop
 import com.mesutemre.kutuphanem.ui.theme.*
 import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemBaseInput
 import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemLoader
@@ -76,7 +77,9 @@ fun LoginForm(
                 )
             }
             if (loginState.isSuccess) {
-                navController.navigate(KutuphanemNavigationItem.MainScreen.screenRoute)
+                navController.navigate(KutuphanemNavigationItem.MainScreen.screenRoute) {
+                    popUpToTop(navController)
+                }
             }
             Column(
                 modifier = Modifier

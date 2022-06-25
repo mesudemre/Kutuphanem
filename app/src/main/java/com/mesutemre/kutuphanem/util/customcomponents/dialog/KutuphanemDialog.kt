@@ -1,24 +1,30 @@
 package com.mesutemre.kutuphanem.util.customcomponents.dialog
 
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.model.*
-import com.mesutemre.kutuphanem.ui.theme.*
+import com.mesutemre.kutuphanem.ui.theme.colorPalette
+import com.mesutemre.kutuphanem.ui.theme.mediumAllegraBlackBold
+import com.mesutemre.kutuphanem.ui.theme.normalUbuntuBlack
+import com.mesutemre.kutuphanem.ui.theme.sdp
 import com.mesutemre.kutuphanem.util.customcomponents.button.KutuphanemMainMaterialButton
 import com.mesutemre.kutuphanem.util.customcomponents.button.KutuphanemTerritaryButton
 
@@ -31,6 +37,21 @@ fun CustomKutuphanemDialog(
     onDismissDialog: () -> Unit,
     onConfirmDialog: () -> Unit
 ) {
+    val animateShape = remember { Animatable(0f) }
+    LaunchedEffect(animateShape) {
+        animateShape.animateTo(
+            targetValue = 360f,
+            animationSpec = repeatable(
+                animation = tween(
+                    durationMillis = 1000,
+                    easing = FastOutLinearInEasing
+                ),
+                repeatMode = RepeatMode.Restart,
+                iterations = 1
+            )
+        )
+    }
+
     Dialog(
         onDismissRequest = { onDismissDialog.invoke() }
     ) {
@@ -56,56 +77,52 @@ fun CustomKutuphanemDialog(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(40.sdp),
+                            .height(48.sdp) ,
                         contentAlignment = Alignment.Center
                     ) {
                         when (type) {
                             QA_DLG -> {
                                 Icon(
-                                    Icons.Filled.QuestionAnswer,
+                                    painterResource(id = R.drawable.ic_popup_question),
                                     contentDescription = title,
-                                    modifier = Modifier.height(40.sdp),
-                                    tint = MaterialTheme.colorPalette.lacivert
+                                    tint = Color.Unspecified,
+                                    modifier = Modifier.rotate(animateShape.value)
                                 )
                             }
                             WARNING_DLG -> {
                                 Icon(
-                                    Icons.Filled.Warning,
+                                    painterResource(id = R.drawable.ic_popup_warning),
                                     contentDescription = title,
-                                    modifier = Modifier.height(40.sdp),
-                                    tint = MaterialTheme.colorPalette.turuncu
+                                    tint = Color.Unspecified
                                 )
                             }
                             INFO_DLG -> {
                                 Icon(
-                                    Icons.Filled.Info,
+                                    painterResource(id = R.drawable.ic_popup_info),
                                     contentDescription = title,
-                                    modifier = Modifier.height(40.sdp),
-                                    tint = MaterialTheme.colorPalette.primaryTextColor
+                                    tint = Color.Unspecified,
+                                    modifier = Modifier.rotate(animateShape.value)
                                 )
                             }
                             SUCCESS_DLG -> {
                                 Icon(
-                                    Icons.Filled.CheckCircleOutline,
+                                    painterResource(id = R.drawable.ic_popup_success),
                                     contentDescription = title,
-                                    modifier = Modifier.height(40.sdp),
-                                    tint = MaterialTheme.colorPalette.fistikYesil
+                                    tint = Color.Unspecified
                                 )
                             }
                             ERROR_DLG -> {
                                 Icon(
-                                    Icons.Filled.ErrorOutline,
+                                    painterResource(id = R.drawable.ic_popup_error),
                                     contentDescription = title,
-                                    modifier = Modifier.height(40.sdp),
-                                    tint = MaterialTheme.colorPalette.kirmizi
+                                    tint = Color.Unspecified
                                 )
                             }
                             else -> {
                                 Icon(
-                                    Icons.Filled.Info,
+                                    painterResource(id = R.drawable.ic_popup_info),
                                     contentDescription = title,
-                                    modifier = Modifier.height(40.sdp),
-                                    tint = MaterialTheme.colorPalette.primaryTextColor
+                                    tint = Color.Unspecified
                                 )
                             }
                         }
