@@ -51,4 +51,7 @@ class KutuphanemDBModule {
     @Provides
     fun provideKutuphanemYayinEviDao(database: KutuphanemDatabase) = database.getYayinEviDao()
 
+    @Singleton
+    @Provides
+    fun provideKutuphanemKitapTUrDao(database: KutuphanemDatabase) = database.getKitapTurDao()
 }

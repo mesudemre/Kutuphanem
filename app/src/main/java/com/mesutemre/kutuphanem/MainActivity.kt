@@ -1,7 +1,6 @@
 package com.mesutemre.kutuphanem
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -220,7 +219,7 @@ fun KutuphanemTopBar(navController: NavController, pageTitle: String) {
                 }
                 .padding(horizontal = 8.sdp)
                 .clickable {
-                    //navController.popBackStack()
+                    navController.popBackStack()
                 },
             contentDescription = pageTitle,
             tint = MaterialTheme.colorPalette.white
