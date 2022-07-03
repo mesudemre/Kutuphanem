@@ -1,7 +1,6 @@
 package com.mesutemre.kutuphanem.navigation
 
 import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.material.SnackbarDuration
@@ -16,6 +15,7 @@ import com.google.accompanist.navigation.animation.composable
 import com.mesutemre.kutuphanem.login.presentation.LoginScreen
 import com.mesutemre.kutuphanem.mainscreen.MainScreen
 import com.mesutemre.kutuphanem.parameter.ParametreScreen
+import com.mesutemre.kutuphanem.parameter.kitaptur.presentation.ParametreKitapTurScreen
 import com.mesutemre.kutuphanem.parameter.yayinevi.presentation.ParametreYayinEviScreen
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -55,6 +55,16 @@ fun KutuphanemNavigation(
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
             }) {
             ParametreYayinEviScreen(showSnackbar = showSnackbar)
+        }
+
+        composable(route = KutuphanemNavigationItem.ParameterKitapTurScreen.screenRoute,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
+            }) {
+            ParametreKitapTurScreen(showSnackbar = showSnackbar)
         }
     }
 }

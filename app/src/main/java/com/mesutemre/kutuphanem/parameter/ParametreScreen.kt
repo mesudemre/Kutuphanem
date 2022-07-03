@@ -31,7 +31,7 @@ fun ParametreScreen(navController: NavController) {
         }
         Spacer(modifier = Modifier.height(16.sdp))
         KutuphanemMenuItem(label = stringResource(id = R.string.kitapTurLabel)) {
-
+            navController.navigate(KutuphanemNavigationItem.ParameterKitapTurScreen.screenRoute)
         }
         Spacer(modifier = Modifier.height(16.sdp))
         KutuphanemMenuItem(label = stringResource(id = R.string.parameterAddLabel)) {

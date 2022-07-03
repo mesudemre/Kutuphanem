@@ -51,4 +51,10 @@ sealed class KutuphanemNavigationItem(
         showTopBar = true,
         pageTitle = R.string.yayinEviLabel
     )
+
+    object ParameterKitapTurScreen: KutuphanemNavigationItem(
+        screenRoute = "kutuphanem_parameter_kitaptur_screen",
+        showTopBar = true,
+        pageTitle = R.string.kitapTurLabel
+    )
 }

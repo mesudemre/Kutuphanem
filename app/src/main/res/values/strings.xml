@@ -49,6 +49,7 @@
     <string name="kitapTurListeHata">Kitap türü listesi yüklenemedi!</string>
     <string name="kitapTurSilmekIstiyormusunuz">adlı kitap türünü silmek istiyor musunuz?</string>
     <string name="kitapTurSilmeHata">Kitap türü silinirken hata meydana geldi!</string>
+    <string name="kitapTurSilmeTitle">Kitap Türü Silme</string>
 
     <!--ParametreEklemeFragment -->
     <string name="parametreAciklamaHint">Açıklama</string>
@@ -142,6 +143,7 @@
     <string name="kitapTurSecinizText">Kitap türü seçiniz...</string>
     <string name="yayinEviSecinizText">Yayınevi seçiniz...</string>
     <string name="yayinEviNotFounCriteria">Aradığınız isimde bir yayınevi bulunmamaktadır...</string>
+    <string name="kitapTurNotFounCriteria">Aradığınız isimde bir kitap türü bulunmamaktadır...</string>
 
     <!--KitapDetayFragment -->
     <string name="kitapAdLabelText">Kitap Adı</string>

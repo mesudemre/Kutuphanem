@@ -1,14 +1,14 @@
-package com.mesutemre.kutuphanem.parameter.yayinevi.domain.use_case
+package com.mesutemre.kutuphanem.parameter.kitaptur.domain.use_case
 
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.base.BaseUseCase
 import com.mesutemre.kutuphanem.di.IoDispatcher
-import com.mesutemre.kutuphanem.parameter.yayinevi.data.dao.entity.toYayinEviItem
-import com.mesutemre.kutuphanem.parameter.yayinevi.data.remote.dto.toYayinEviItem
-import com.mesutemre.kutuphanem.parameter.yayinevi.domain.model.YayinEviItem
-import com.mesutemre.kutuphanem.parameter.yayinevi.domain.repository.YayinEviRepository
+import com.mesutemre.kutuphanem.parameter.kitaptur.data.dao.entity.toKitapTurItem
+import com.mesutemre.kutuphanem.parameter.kitaptur.data.remote.dto.toKitapTurItem
+import com.mesutemre.kutuphanem.parameter.kitaptur.data.repository.KitapTurRepository
+import com.mesutemre.kutuphanem.parameter.kitaptur.domain.model.KitapTurItem
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
-import com.mesutemre.kutuphanem.util.PARAM_YAYINEVI_DB_KEY
+import com.mesutemre.kutuphanem.util.PARAM_KITAPTUR_DB_KEY
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -16,40 +16,42 @@ import javax.inject.Inject
 
 /**
  * @Author: mesutemre.celenk
- * @Date: 15.05.2022
+ * @Date: 3.07.2022
  */
-class GetYayinEviListUseCase @Inject constructor(
-    private val yayinEviRepository: YayinEviRepository,
+class GetKitapTurListUseCase @Inject constructor(
+    private val kitapTurRepository: KitapTurRepository,
     private val customSharedPreferences: CustomSharedPreferences,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    private val storeYayinEviParametre: StoreYayinEviParametre
-): BaseUseCase(){
+    private val storeKitapTurParametre: StoreKitapTurParametre
+): BaseUseCase() {
 
-    operator fun invoke(isSwipeRefresh: Boolean): Flow<BaseResourceEvent<List<YayinEviItem>>> = flow{
+    operator fun invoke(isSwipeRefresh: Boolean) : Flow<BaseResourceEvent<List<KitapTurItem>>> = flow{
         emit(BaseResourceEvent.Loading())
-        val isDbKayit = customSharedPreferences.getBooleanFromSharedPreferences(PARAM_YAYINEVI_DB_KEY)
+        val isDbKayit = customSharedPreferences.getBooleanFromSharedPreferences(
+            PARAM_KITAPTUR_DB_KEY
+        )
         if (isSwipeRefresh || !isDbKayit) {
             val serviceList = nonFlowServiceCall(ioDispatcher) {
-                yayinEviRepository.getYayinEviLisetByAPI()
+                kitapTurRepository.getKitapTurListeByAPI()
             }
             if (serviceList is BaseResourceEvent.Success) {
                 emit(BaseResourceEvent.Success(
                     data = serviceList.data?.map {
-                        it.toYayinEviItem()
+                        it.toKitapTurItem()
                     }!!
                 ))
-                storeYayinEviParametre(serviceList.data)
+                storeKitapTurParametre(serviceList.data)
             }else if (serviceList is BaseResourceEvent.Error) {
                 emit(BaseResourceEvent.Error(serviceList.message))
             }
-        }else {
+        } else {
             val dbList = nonFlowDbCall(ioDispatcher) {
-                yayinEviRepository.getYayinEviListeByDAO()
+                kitapTurRepository.getKitapTurListeByDAO()
             }
             if (dbList is BaseResourceEvent.Success) {
                 emit(BaseResourceEvent.Success(
                     data = dbList.data?.map {
-                        it.toYayinEviItem()
+                        it.toKitapTurItem()
                     }!!
                 ))
             }else if (dbList is BaseResourceEvent.Error) {

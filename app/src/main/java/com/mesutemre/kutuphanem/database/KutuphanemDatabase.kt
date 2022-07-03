@@ -19,7 +19,7 @@ import com.mesutemre.kutuphanem.parametre.kitaptur.model.KitapturModel
 import com.mesutemre.kutuphanem.parametre.yayinevi.model.YayineviModel
 import com.mesutemre.kutuphanem.util.converters.Converters
 
-@Database(  version = 2_2,
+@Database(  version = 2_3,
             entities = arrayOf(
                 YayineviModel::class,
                 KitapturModel::class,
