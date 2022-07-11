@@ -40,9 +40,7 @@
         <action
             android:id="@+id/action_parametreFragment_to_profilIslemFragment"
             app:destination="@id/profilIslemFragment" />
-        <action
-            android:id="@+id/action_parametreFragment_to_parametreEklemeFragment"
-            app:destination="@id/parametreEklemeFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/profilIslemFragment"
@@ -68,18 +66,7 @@
             android:id="@+id/action_profilIslemFragment_to_exitFromApplicationDialogFragment"
             app:destination="@id/exitFromApplicationDialogFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/parametreEklemeFragment"
-        android:name="com.mesutemre.kutuphanem.parametre.ekleme.ui.ParametreEklemeFragment"
-        android:label="ParametreEklemeFragment" >
-        <argument
-            android:name="paramTur"
-            app:argType="string"
-            app:nullable="true" />
-        <action
-            android:id="@+id/action_parametreEklemeFragment_to_parametreFragment"
-            app:destination="@id/parametreFragment" />
-    </fragment>
+
     <fragment
         android:id="@+id/kitapEklemeFragment"
         android:name="com.mesutemre.kutuphanem.kitap.ekleme.ui.KitapEklemeFragment"
@@ -114,14 +101,7 @@
             app:uri="http://192.168.1.106:8080/KutuphaneSistemiWS/api/kitap/nesne?kitapId={kitapId}" />
         <argument android:name="kitapId" app:argType="string"/>
     </fragment>
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.mesutemre.kutuphanem.auth.login.ui.LoginFragment"
-        android:label="LoginFragment" >
-        <action
-            android:id="@+id/action_loginFragment_to_anasayfaFragment"
-            app:destination="@id/anasayfaFragment" />
-    </fragment>
+
     <fragment
         android:id="@+id/profilIslemAdSoyadEpostaFragment"
         android:name="com.mesutemre.kutuphanem.auth.profil.ui.ProfilIslemAdSoyadEpostaFragment"
@@ -174,10 +154,6 @@
         android:id="@+id/exitFromApplicationDialogFragment"
         android:name="com.mesutemre.kutuphanem.auth.profil.ui.dialog.ExitFromApplicationDialogFragment"
         android:label="ExitFromApplicationDialogFragment">
-        <action
-            android:id="@+id/action_exitApplicationDialogFragment_to_loginFragment"
-            app:destination="@id/loginFragment"
-            app:enterAnim="@anim/slide_down" />
     </dialog>
     <dialog
         android:id="@+id/resimSecBottomSheetDialogFragment"

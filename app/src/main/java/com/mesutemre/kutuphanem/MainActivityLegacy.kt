@@ -62,7 +62,7 @@ class MainActivityLegacy : AppCompatActivity() {
                     this.enter = R.anim.slide_down
                 }
             })*/
-            navHostFragment.navController.navigate(R.id.loginFragment)
+            //navHostFragment.navController.navigate(R.id.loginFragment)
         }else {
             navHostFragment.navController.navigate(R.id.anasayfaFragment)
         }
@@ -85,11 +85,9 @@ class MainActivityLegacy : AppCompatActivity() {
         navHostFragment = supportFragmentManager.findFragmentById(R.id.bottomFragmentId) as NavHostFragment
         navHostFragment.navController.addOnDestinationChangedListener { controller, destination, arguments ->
             if(destination.id in arrayOf(
-                    R.id.parametreEklemeFragment,
                     R.id.kitapEklemeFragment,
                     R.id.kitapDetayFragment,
                     R.id.kitapDetayDeepFragment,
-                    R.id.loginFragment,
                     R.id.profilIslemAdSoyadEpostaFragment,
                     R.id.profilIslemDogumTarCinsiyetFragment,
                     R.id.profilIslemIlgiAlanlarimFragment,

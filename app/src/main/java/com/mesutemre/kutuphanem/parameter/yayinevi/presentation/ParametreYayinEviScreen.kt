@@ -95,7 +95,13 @@ fun ParametreYayinEviScreen(
     ) {
         KutuphanemSearchInput(
             text = state.yayinEviFilterText, modifier = Modifier
-                .fillMaxWidth(), onValueChange = {
+                .fillMaxWidth(),
+            trailingIconId = if (state.yayinEviFilterText.isNotEmpty())  R.drawable.ic_circle_delete else null,
+            trailingIconColor = MaterialTheme.colorPalette.secondaryGray,
+            onTrailingIconClick = {
+
+            },
+            onValueChange = {
                 viewModel.onSearchTextChangeValue(it)
             },
             placeholderText = stringResource(id = R.string.yayinEviLabel)

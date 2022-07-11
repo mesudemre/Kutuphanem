@@ -57,4 +57,10 @@ sealed class KutuphanemNavigationItem(
         showTopBar = true,
         pageTitle = R.string.kitapTurLabel
     )
+
+    object ParameterEklemeScreen: KutuphanemNavigationItem(
+        screenRoute = "kutuphanem_parameter_ekleme",
+        showTopBar = true,
+        pageTitle = R.string.parameterAddLabel
+    )
 }

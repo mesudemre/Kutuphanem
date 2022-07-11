@@ -53,8 +53,6 @@ class ParametreKitapturFragment:BaseFragment<ParametreKitapturFragmentBinding>()
         }
 
         binding.kitapTurEkleFloatingActionButton.setOnClickListener {
-            val action = ParametreFragmentDirections.actionParametreFragmentToParametreEklemeFragment("kitaptur");
-            Navigation.findNavController(it).navigate(action);
         }
     }
 

@@ -51,8 +51,6 @@ class ParametreYayineviFragment: BaseFragment<ParametreYayineviFragmentBinding>(
         }
 
         binding.yayinEviEkleFloatingActionButton.setOnClickListener {
-            val action = ParametreFragmentDirections.actionParametreFragmentToParametreEklemeFragment("yayinevi");
-            Navigation.findNavController(it).navigate(action);
         }
     }
 

@@ -198,6 +198,7 @@ fun KutuphanemSearchInput(
                         contentDescription = "",
                         tint = trailingIconColor,
                         modifier = Modifier
+                            .padding(horizontal = 4.sdp)
                             .clip(CircleShape)
                             .clickable {
                                 onTrailingIconClick.invoke()

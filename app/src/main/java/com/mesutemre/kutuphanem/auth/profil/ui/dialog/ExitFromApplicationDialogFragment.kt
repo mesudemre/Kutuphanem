@@ -26,9 +26,6 @@ class ExitFromApplicationDialogFragment:DialogFragment() {
         val ad = AlertDialog.Builder(requireContext())
         ad.setMessage(requireContext().getString(R.string.exitFromApplicationMessage))
         ad.setPositiveButton(requireContext().getString(R.string.evet)){ dialogInterface, i ->
-            customSharedPreferences.clearAllSharedPreferencesData()
-            val action = ExitFromApplicationDialogFragmentDirections.actionExitApplicationDialogFragmentToLoginFragment()
-            findNavController().navigate(action)
         }
         ad.setNegativeButton(requireContext().getString(R.string.hayir)){ dialogInterface, i ->
         }

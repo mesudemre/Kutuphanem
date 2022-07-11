@@ -15,6 +15,7 @@ import com.google.accompanist.navigation.animation.composable
 import com.mesutemre.kutuphanem.login.presentation.LoginScreen
 import com.mesutemre.kutuphanem.mainscreen.MainScreen
 import com.mesutemre.kutuphanem.parameter.ParametreScreen
+import com.mesutemre.kutuphanem.parameter.ekleme.presentation.ParametreEklemeScreen
 import com.mesutemre.kutuphanem.parameter.kitaptur.presentation.ParametreKitapTurScreen
 import com.mesutemre.kutuphanem.parameter.yayinevi.presentation.ParametreYayinEviScreen
 
@@ -65,6 +66,16 @@ fun KutuphanemNavigation(
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
             }) {
             ParametreKitapTurScreen(showSnackbar = showSnackbar)
+        }
+
+        composable(route = KutuphanemNavigationItem.ParameterEklemeScreen.screenRoute,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
+            }) {
+            ParametreEklemeScreen(showSnackbar = showSnackbar)
         }
     }
 }
