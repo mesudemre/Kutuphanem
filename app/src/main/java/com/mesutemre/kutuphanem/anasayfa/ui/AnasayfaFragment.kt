@@ -19,9 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 //import com.google.android.material.progressindicator.IndeterminateDrawable
 //import com.google.android.material.progressindicator.ProgressIndicatorSpec
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.android.material.textfield.TextInputLayout
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem.anasayfa.adapter.DashKategoriAdapter
 import com.mesutemre.kutuphanem.anasayfa.adapter.KitapSearchResultAdapter
 import com.mesutemre.kutuphanem.anasayfa.adapter.TanitimTabViewPagerAdapter
 import com.mesutemre.kutuphanem.base.BaseFragment
@@ -43,7 +41,6 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
     override val layoutName: String = "anasayfa_fragment.xml"
 
     private val viewModel: AnasayfaViewModel by viewModels()
-    private var dashKategoriAdapter: DashKategoriAdapter? = null
     private var tanitimPagerAdapter: TanitimTabViewPagerAdapter? = null
     private var kitapSearchResultAdapter: KitapSearchResultAdapter? = null
     private lateinit var handler:Handler
@@ -115,14 +112,12 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
     }
 
     private fun prepareAnasayfaDashListe() {
-        dashKategoriAdapter = DashKategoriAdapter(arrayListOf())
 
         viewModel.getAnasayfaDashListe()
 
         val dashKategoriLayout = LinearLayoutManager(getFragmentView().context,LinearLayoutManager.HORIZONTAL, false)
         binding.dashKategoriRecyclerView.setHasFixedSize(true)
         binding.dashKategoriRecyclerView.layoutManager = dashKategoriLayout
-        binding.dashKategoriRecyclerView.adapter = dashKategoriAdapter
 
         observeLiveData()
     }
@@ -157,47 +152,12 @@ class AnasayfaFragment:BaseFragment<AnasayfaFragmentBinding>() {
     }
 
     private fun observeDashKategoriListe(){
-        viewModel.dashKategoriListeResourceEvent.observe(viewLifecycleOwner, Observer {
-           when(it) {
-               is BaseResourceEvent.Loading->{
-                   binding.dashKategoriProgressBarId.showComponent()
-                   getFragmentView().hideComponents(binding.dashKategoriHataTextView,binding.dashKategoriRecyclerView)
-               }
-               is BaseResourceEvent.Error->{
-                   binding.dashKategoriHataTextView.showComponent()
-                   getFragmentView().hideComponents(binding.dashKategoriProgressBarId,binding.dashKategoriRecyclerView)
-               }
-               is BaseResourceEvent.Success->{
-                   getFragmentView().hideComponents(binding.dashKategoriProgressBarId,binding.dashKategoriHataTextView)
-                   binding.dashKategoriRecyclerView.showComponent()
-                   dashKategoriAdapter?.updateKategorListe(it.data!!)
-               }
-           }
-        })
-    }
 
-    /*private fun prepareProggressForSearch(){
-        val progressIndicatorSpec: ProgressIndicatorSpec = ProgressIndicatorSpec()
-        progressIndicatorSpec.loadFromAttributes(
-            binding.searchInputEditText.context,
-            null,
-            R.style.Widget_MaterialComponents_ProgressIndicator_Circular_Indeterminate)
-        progressIndicatorSpec.circularInset = 0
-        progressIndicatorSpec.circularRadius = 20;
-        val progressIndicatorDrawable:IndeterminateDrawable = IndeterminateDrawable(binding.searchInputEditText.context,
-            progressIndicatorSpec,
-            CircularDrawingDelegate(),
-            CircularIndeterminateAnimatorDelegate()
-        )
-        binding.searchInputLayout.endIconMode = TextInputLayout.END_ICON_CUSTOM
-        binding.searchInputLayout.endIconDrawable = progressIndicatorDrawable
-        binding.searchInputLayout.isEndIconVisible = false
-    }*/
+    }
 
     override fun destroyOthers() {
         super.destroyOthers()
         handler.removeCallbacksAndMessages(null)
-        this.dashKategoriAdapter = null
         this.tanitimPagerAdapter = null
         this.kitapSearchResultAdapter = null
     }

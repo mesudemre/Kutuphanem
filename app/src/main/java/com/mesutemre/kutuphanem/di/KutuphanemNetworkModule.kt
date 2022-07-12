@@ -9,7 +9,6 @@ import com.mesutemre.kutuphanem.kitap.service.IKitapService
 import com.mesutemre.kutuphanem.login.data.remote.LoginService
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.remote.dto.IKitapTurApi
 import com.mesutemre.kutuphanem.parameter.yayinevi.data.remote.dto.IYayinEviApi
-import com.mesutemre.kutuphanem.parametre.service.IParametreService
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import dagger.Module
 import dagger.Provides
@@ -64,10 +63,6 @@ class KutuphanemNetworkModule {
             .build();
     }
 
-    @Singleton
-    @Provides
-    fun provideParametreApi(retrofit: Retrofit): IParametreService = retrofit.create(
-        IParametreService::class.java);
 
     @Singleton
     @Provides

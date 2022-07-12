@@ -48,15 +48,7 @@
                 android:textFont="@{R.style.TextAppearance_Transparent_Normal_Alegrya_Bold}"
                 android:text="@{kitap.kitapAd.length()>40 ? kitap.kitapAd.substring(0,39)+`...` : kitap.kitapAd}" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/kitapTurText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_4sdp"
-                android:gravity="left"
-                android:text="@{`Kitap Türü : ` + kitap.kitapTur.aciklama}"
-                android:textFont="@{R.style.TextAppearance_Transparent_Small_Ubuntu_Bold}"
-                />
+
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/kitapAciklamaTextId"

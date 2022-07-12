@@ -2,8 +2,6 @@ package com.mesutemre.kutuphanem.util.converters
 
 import androidx.room.TypeConverter
 import com.mesutemre.kutuphanem.auth.profil.model.CinsiyetModel
-import com.mesutemre.kutuphanem.parametre.kitaptur.model.KitapturModel
-import com.mesutemre.kutuphanem.parametre.yayinevi.model.YayineviModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -49,28 +47,5 @@ class Converters {
             return cinsiyetModel;
         }
 
-        @TypeConverter
-        @JvmStatic
-        fun kitapTurToString(value: KitapturModel):String?{
-            return value.toString();
-        }
-
-        @TypeConverter
-        @JvmStatic
-        fun stringToKitapTur(value: String): KitapturModel?{
-            return KitapturModel(0,value);
-        }
-
-        @TypeConverter
-        @JvmStatic
-        fun yayinEviToString(value: YayineviModel):String?{
-            return value.toString();
-        }
-
-        @TypeConverter
-        @JvmStatic
-        fun stringToYayinEvi(value: String): YayineviModel?{
-            return YayineviModel(0,value);
-        }
     }
 }

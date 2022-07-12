@@ -273,7 +273,6 @@ constructor(
             is BaseDataEvent.Success->{
                 yorumYapanKullanici.value = BaseResourceEvent.Success(kullaniciResponse.data!!)
                 writeUserToDB(kullaniciResponse.data)
-                writeIlgiAlanlarToDB(kullaniciResponse.data)
             }
             is BaseDataEvent.Error->{
                 yorumYapanKullanici.value = BaseResourceEvent.Error(kullaniciResponse.errMessage)
@@ -289,19 +288,6 @@ constructor(
         }
     }
 
-    private suspend fun writeIlgiAlanlarToDB(kullanici: Kullanici) {
-        withContext(ioDispatcher){
-            kullaniciDao.kullaniciIlgiAlanSil(kullanici.username)
-            val ilgiAlanListe = kullanici.ilgiAlanlari
-            if(ilgiAlanListe != null && ilgiAlanListe.size>0){
-                for (ia in ilgiAlanListe){
-                    var ilgiAlan: KullaniciKitapTurModel =
-                        KullaniciKitapTurModel(ia.kitapTurId!!,ia.aciklama!!,kullanici.username)
-                    kullaniciDao.kullaniciIlgialanKaydet(ilgiAlan)
-                }
-            }
-        }
-    }
 
     fun kitapYorumKaydet(kitapYorum: KitapYorumModel){
         viewModelScope.launch {

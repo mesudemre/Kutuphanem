@@ -31,9 +31,6 @@ class KutuphanemDBModule {
         .addMigrations(MIGRATION_2TO2_1)
         .build();
 
-    @Singleton
-    @Provides
-    fun provideParametreDao(database: KutuphanemDatabase) = database.getParametreDao();
 
     @Singleton
     @Provides

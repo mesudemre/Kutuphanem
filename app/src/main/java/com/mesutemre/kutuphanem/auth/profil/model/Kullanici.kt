@@ -4,7 +4,6 @@ import androidx.annotation.Keep
 import androidx.room.*
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName;
-import com.mesutemre.kutuphanem.parametre.kitaptur.model.KitapturModel
 import java.io.Serializable
 import java.util.*
 
@@ -53,8 +52,8 @@ data class Kullanici(
     @Expose
     var haberdarmi:Boolean
 ): Serializable {
-    @Ignore
+    /*@Ignore
     @SerializedName("ilgiAlanlari")
     @Expose
-    var ilgiAlanlari:List<KitapturModel>?=null
+    var ilgiAlanlari:List<KitapturModel>?=null*/
 }

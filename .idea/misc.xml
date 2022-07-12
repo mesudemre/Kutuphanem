@@ -33,10 +33,12 @@
         <entry key="app/src/main/res/layout/fragment_kitap_detay_deep.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_splash.xml" value="0.11770833333333333" />
         <entry key="app/src/main/res/layout/fragment_tanitim.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/item_arsiv_kitap.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_dash_kategori.xml" value="0.11927083333333334" />
         <entry key="app/src/main/res/layout/item_kitap.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_kitap_search.xml" value="0.1308876811594203" />
         <entry key="app/src/main/res/layout/item_kitaptur.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/item_selection.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_yayinevi.xml" value="0.11927083333333334" />
         <entry key="app/src/main/res/layout/kitap_ekleme_fragment.xml" value="0.25" />
         <entry key="app/src/main/res/layout/kitap_item_swipe_layout.xml" value="0.22" />

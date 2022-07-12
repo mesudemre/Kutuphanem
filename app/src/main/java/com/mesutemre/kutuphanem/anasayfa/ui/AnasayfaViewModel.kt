@@ -1,6 +1,5 @@
 package com.mesutemre.kutuphanem.anasayfa.ui
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -12,11 +11,8 @@ import com.mesutemre.kutuphanem.di.IoDispatcher
 import com.mesutemre.kutuphanem.exceptions.dao.KutuphanemGlobalExceptionHandlerDao
 import com.mesutemre.kutuphanem.kitap.liste.model.KitapModel
 import com.mesutemre.kutuphanem.kitap.service.IKitapService
-import com.mesutemre.kutuphanem.parametre.kitaptur.model.KitapturModel
-import com.mesutemre.kutuphanem.parametre.service.IParametreService
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -25,7 +21,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AnasayfaViewModel @Inject constructor(@IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-                                            private val parametreService: IParametreService,
                                             private val kitapService: IKitapService,
                                             private val exceptionHandlerDao: KutuphanemGlobalExceptionHandlerDao,
                                             private val state: SavedStateHandle
@@ -35,7 +30,6 @@ class AnasayfaViewModel @Inject constructor(@IoDispatcher private val ioDispatch
     @Inject
     lateinit var customSharedPreferences: CustomSharedPreferences
 
-    val dashKategoriListeResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<List<KitapturModel>>>()
     val kitapSearchResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<List<KitapModel>>>()
 
     fun getAnasayfaDashListe(){
@@ -51,19 +45,7 @@ class AnasayfaViewModel @Inject constructor(@IoDispatcher private val ioDispatch
     }
 
     private suspend fun initDashKategoriListe(){
-        dashKategoriListeResourceEvent.value = BaseResourceEvent.Loading()
-        val kitapTurListeResponse = serviceCall(
-            call = {
-                parametreService.getKitapTurListe()
-            },ioDispatcher)
-        when(kitapTurListeResponse){
-            is BaseDataEvent.Success->{
-                dashKategoriListeResourceEvent.value = BaseResourceEvent.Success(kitapTurListeResponse.data!!)
-            }
-            is BaseDataEvent.Error->{
-                dashKategoriListeResourceEvent.value = BaseResourceEvent.Error(kitapTurListeResponse.errMessage)
-            }
-        }
+
     }
 
     fun searchKitapYazar(searchText:String){

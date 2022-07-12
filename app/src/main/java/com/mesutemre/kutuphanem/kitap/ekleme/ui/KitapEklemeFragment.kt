@@ -28,8 +28,6 @@ import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.model.KITAP_EKLEME_PHOTO
 import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.model.WARNING
-import com.mesutemre.kutuphanem.parametre.kitaptur.model.KitapturModel
-import com.mesutemre.kutuphanem.parametre.yayinevi.model.YayineviModel
 import com.mesutemre.kutuphanem.util.*
 import com.mesutemre.kutuphanem.util.customcomponents.selection.model.SelectItemModel
 import com.mesutemre.kutuphanem.util.customcomponents.selection.ui.SelectionDialogFragment
@@ -56,8 +54,6 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
     private var kameraIzin:Int = 0
     private var selectedKitapTur:Int = 0
     private var selectedYayinevi:Int = 0
-    private lateinit var kitapTurler:List<KitapturModel>
-    private lateinit var yayinEvler:List<YayineviModel>
     private var cameraSelector:CameraSelector? = null
     private var selectKitapTurList = mutableListOf<SelectItemModel>()
     private var selectYayineviList = mutableListOf<SelectItemModel>()
@@ -350,45 +346,7 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
     }
 
     private fun observeSpinnerList(){
-        viewModel.kitapTurListeResourceEvent.observe(viewLifecycleOwner,Observer{
-            when(it){
-                is BaseResourceEvent.Loading->{
-                    binding.kitapEklemeKitapTurProgressBarId.showComponent()
-                    binding.kitapEklemeKitapTurHataTextView.hideComponent()
-                }
-                is BaseResourceEvent.Error->{
-                    binding.kitapEklemeKitapTurProgressBarId.hideComponent()
-                    binding.kitapEklemeKitapTurHataTextView.showComponent()
-                }
-                is BaseResourceEvent.Success->{
-                    getFragmentView().hideComponents(binding.kitapEklemeKitapTurProgressBarId,binding.kitapEklemeKitapTurHataTextView)
-                    kitapTurler = it.data!!
-                    for (kt in kitapTurler) {
-                        selectKitapTurList.add(SelectItemModel(kt.kitapTurId!!,kt.aciklama!!))
-                    }
-                }
-            }
-        })
 
-        viewModel.yayinEviListeResourceEvent.observe(viewLifecycleOwner,Observer{
-            when(it){
-                is BaseResourceEvent.Loading->{
-                    binding.kitapEklemeYayinEviProgressBarId.showComponent()
-                    binding.kitapEklemeYayinEviHataTextView.hideComponent()
-                }
-                is BaseResourceEvent.Error->{
-                    binding.kitapEklemeYayinEviProgressBarId.hideComponent()
-                    binding.kitapEklemeYayinEviHataTextView.showComponent()
-                }
-                is BaseResourceEvent.Success->{
-                    yayinEvler = it.data!!
-                    getFragmentView().hideComponents(binding.kitapEklemeYayinEviProgressBarId,binding.kitapEklemeYayinEviHataTextView)
-                    for (ye in yayinEvler) {
-                        selectYayineviList.add(SelectItemModel(ye.yayinEviId!!,ye.aciklama!!))
-                    }
-                }
-            }
-        })
     }
 
     override fun onRequestPermissionsResult(

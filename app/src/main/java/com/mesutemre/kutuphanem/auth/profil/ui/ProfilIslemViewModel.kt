@@ -15,7 +15,6 @@ import com.mesutemre.kutuphanem.base.BaseSingleLiveEvent
 import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.di.IoDispatcher
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
-import com.mesutemre.kutuphanem.parametre.kitaptur.model.KitapturModel
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.KULLANICI_ADI_KEY
 import com.mesutemre.kutuphanem.util.KULLANICI_DB_MEVCUT
@@ -43,7 +42,6 @@ class ProfilIslemViewModel @Inject constructor(@IoDispatcher private val ioDispa
     lateinit var customSharedPreferences: CustomSharedPreferences
 
     val kullaniciBilgiResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<Kullanici>>()
-    val kullaniciIlgiAlanlar = BaseSingleLiveEvent<BaseResourceEvent<List<KitapturModel>>>()
     val kullaniciBilgiGuncelleResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<ResponseStatusModel>>()
 
     fun getKullaniciInfo(){ //Async şekilde türler ve kullanıcı biller alınacak...
@@ -73,28 +71,7 @@ class ProfilIslemViewModel @Inject constructor(@IoDispatcher private val ioDispa
         }
     }
 
-    fun getKullaniciIlgiAlanlarFromDB(kullaniciAd: String){
-        viewModelScope.launch {
-            kullaniciIlgiAlanlar.value = BaseResourceEvent.Loading()
-            val kullaniciIlgiAlanlariResponse = dbCall( call = {
-                kullaniciDao.getKullaniciIlgiAlanListe(kullaniciAd)
-            },ioDispatcher)
-            when(kullaniciIlgiAlanlariResponse) {
-                is BaseDataEvent.Success->{
-                    var ilgiAlanListe = mutableListOf<KitapturModel>()
-                    if(kullaniciIlgiAlanlariResponse.data != null && kullaniciIlgiAlanlariResponse.data.size>0){
-                        for (ia in kullaniciIlgiAlanlariResponse.data){
-                            ilgiAlanListe.add(KitapturModel(ia.aciklamaId,ia.aciklama))
-                        }
-                    }
-                    kullaniciIlgiAlanlar.value = BaseResourceEvent.Success(ilgiAlanListe)
-                }
-                is BaseDataEvent.Error->{
-                    kullaniciIlgiAlanlar.value = BaseResourceEvent.Error(appContext.resources.getString(R.string.profilGuncellemeSunucuHata))
-                }
-            }
-        }
-    }
+
 
     private suspend fun getKullaniciBilgiFromAPI(){
         kullaniciBilgiResourceEvent.value = BaseResourceEvent.Loading()
@@ -106,7 +83,6 @@ class ProfilIslemViewModel @Inject constructor(@IoDispatcher private val ioDispa
             is BaseDataEvent.Success->{
                 kullaniciBilgiResourceEvent.value = BaseResourceEvent.Success(kullaniciResponse.data!!)
                 writeUserToDB(kullaniciResponse.data!!)
-                writeIlgiAlanlarToDB(kullaniciResponse.data!!)
             }
             is BaseDataEvent.Error->{
                 kullaniciBilgiResourceEvent.value = BaseResourceEvent.Error(kullaniciResponse.errMessage)
@@ -122,19 +98,6 @@ class ProfilIslemViewModel @Inject constructor(@IoDispatcher private val ioDispa
         }
     }
 
-    private suspend fun writeIlgiAlanlarToDB(kullanici: Kullanici):Unit{
-        withContext(ioDispatcher){
-            kullaniciDao.kullaniciIlgiAlanSil(kullanici.username)
-            val ilgiAlanListe = kullanici.ilgiAlanlari
-            if(ilgiAlanListe != null && ilgiAlanListe.size>0){
-                for (ia in ilgiAlanListe){
-                    var ilgiAlan: KullaniciKitapTurModel =
-                        KullaniciKitapTurModel(ia.kitapTurId!!,ia.aciklama!!,kullanici.username)
-                    kullaniciDao.kullaniciIlgialanKaydet(ilgiAlan)
-                }
-            }
-        }
-    }
 
     fun kullaniciBilgiUpdate(jsonStr:String,resimGuncellenecek:Boolean,selectedImageUri:Uri,username:String,context:Context){
         viewModelScope.launch {
