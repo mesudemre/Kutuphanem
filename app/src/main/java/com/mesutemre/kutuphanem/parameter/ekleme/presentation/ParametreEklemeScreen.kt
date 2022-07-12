@@ -1,30 +1,38 @@
 package com.mesutemre.kutuphanem.parameter.ekleme.presentation
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mesutemre.kutuphanem.R
+import com.mesutemre.kutuphanem.base.BaseResourceEvent
+import com.mesutemre.kutuphanem.model.ERROR
+import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.parameter.ekleme.presentation.components.ParameterTypeSelection
 import com.mesutemre.kutuphanem.parameter.ekleme.presentation.components.SelectedParameterType
+import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
 import com.mesutemre.kutuphanem.ui.theme.smallUbuntuWhiteBold
-import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemBaseInput
 import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemFormInput
+import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemLoader
 import com.mesutemre.kutuphanem.util.customcomponents.button.KutuphanemMainMaterialButton
 import com.mesutemre.kutuphanem.util.customcomponents.menuitem.KutuphanemMenuInfo
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ParametreEklemeScreen(
     viewModel: ParametreEklemeViewModel = hiltViewModel(),
@@ -33,8 +41,47 @@ fun ParametreEklemeScreen(
 
     val state: ParametreEklemeState = viewModel.parametreEklemeState.value
 
-    ConstraintLayout(modifier = Modifier.fillMaxSize().padding(bottom = 24.sdp,top = 16.sdp)) {
+    when (state.parametreKayit) {
+        is BaseResourceEvent.Success -> {
+            LaunchedEffect(key1 = Unit) {
+                showSnackbar(
+                    state.parametreKayit.data?.statusMessage ?: "",
+                    SnackbarDuration.Long,
+                    SUCCESS
+                )
+            }
+        }
+        is BaseResourceEvent.Error -> {
+            LaunchedEffect(key1 = Unit) {
+                showSnackbar(
+                    state.parametreKayit.message ?: "",
+                    SnackbarDuration.Long,
+                    ERROR
+                )
+            }
+        }
+
+        is BaseResourceEvent.Loading -> {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                KutuphanemLoader(
+                    modifier = Modifier
+                        .width(220.sdp)
+                        .height(220.sdp)
+                        .align(Alignment.Center)
+                )
+            }
+        }
+    }
+
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+            .alpha(if (state.parametreKayit is BaseResourceEvent.Loading) 0.4f else 1f)
+            .background(color = MaterialTheme.colorPalette.loginBackColor)
+            .padding(bottom = 24.sdp, top = 16.sdp)
+    ) {
         val (formContent, saveButton) = createRefs()
+        val keyboardController = LocalSoftwareKeyboardController.current
 
         Column(modifier = Modifier
             .fillMaxWidth()
@@ -45,37 +92,37 @@ fun ParametreEklemeScreen(
             }) {
             KutuphanemMenuInfo(info = stringResource(id = R.string.parametreEklemeInfo))
             ParameterTypeSelection(
-                modifier = Modifier.padding(top = 16.sdp,start = 16.sdp,end = 16.sdp).fillMaxWidth(),
+                modifier = Modifier
+                    .padding(top = 16.sdp, start = 16.sdp, end = 16.sdp)
+                    .fillMaxWidth(),
                 selectedParameterType = state.selectedParameterType,
                 onSelectType = {
-                    viewModel.onChangeParameterType(it)
+                    viewModel.onChangeEvent(ParametreEklemeValidationEvent.ParametreTypeChanged(it))
                 }
             )
             KutuphanemFormInput(
                 text = state.parametreText,
                 singleLine = true,
                 onChange = {
-                    //loginViewModel.onLoginFormEvent(LoginValidationEvent.UsernameChanged(it))
+                    viewModel.onChangeEvent(ParametreEklemeValidationEvent.ParametreTextChanged(it))
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.sdp,start = 16.sdp,end = 16.sdp)
+                    .padding(top = 16.sdp, start = 16.sdp, end = 16.sdp)
                     .onFocusChanged {
-                        //loginViewModel.onUsernameFocusedChange()
+                        viewModel.onChangeEvent(ParametreEklemeValidationEvent.ParametreFocusChanged)
                     },
-                isError = state.parametreTextError,
-                errorMessage = "",//if (loginUserState.usernameErrorMessage != null) stringResource(id = loginUserState.usernameErrorMessage!!) else "",
-                hint = if (state.selectedParameterType == SelectedParameterType.YAYINEVI) stringResource(
-                    id = R.string.yayinEviLabel
-                ) else stringResource(id = R.string.kitapTurLabel),
+                isError = state.parametreTextErrorMessage != null,
+                errorMessage = if (state.parametreTextErrorMessage != null) stringResource(id = state.parametreTextErrorMessage) else "",
                 label = if (state.selectedParameterType == SelectedParameterType.YAYINEVI) stringResource(
                     id = R.string.yayinEviLabel
                 ) else stringResource(id = R.string.kitapTurLabel),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(onDone = {
-                    //keyboardController?.hide()
+                    keyboardController?.hide()
                 }
-                )
+                ),
+                enabled = if (state.parametreKayit is BaseResourceEvent.Loading) false else true
             )
         }
 
@@ -91,9 +138,9 @@ fun ParametreEklemeScreen(
             text = stringResource(id = R.string.kaydet),
             iconId = R.drawable.ic_baseline_login_24,
             textStyle = MaterialTheme.typography.smallUbuntuWhiteBold,
-            //isEnabled = if (loginState.isLoading) false else true
+            isEnabled = if (state.parametreKayit is BaseResourceEvent.Loading) false else true
         ) {
-            //loginViewModel.onLoginFormEvent(LoginValidationEvent.Submit)
+            viewModel.onChangeEvent(ParametreEklemeValidationEvent.Submit)
         }
     }
 }

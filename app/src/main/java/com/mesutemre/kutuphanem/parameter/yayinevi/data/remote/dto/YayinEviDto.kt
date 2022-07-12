@@ -9,7 +9,7 @@ data class YayinEviDto(
 
     @SerializedName("id")
     @Expose
-    val id: Int?,
+    val id: Int? = null,
 
     @SerializedName("aciklama")
     @Expose
@@ -17,7 +17,7 @@ data class YayinEviDto(
 
     @SerializedName("durum")
     @Expose
-    val durum:YayinEviDurum?
+    val durum:YayinEviDurum? = null
 
 ) : Serializable
 

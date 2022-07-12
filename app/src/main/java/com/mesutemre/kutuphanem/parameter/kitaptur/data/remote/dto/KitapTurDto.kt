@@ -8,7 +8,7 @@ import java.io.Serializable
 data class KitapTurDto(
     @SerializedName("id")
     @Expose
-    val id: Int?,
+    val id: Int? = null,
 
     @SerializedName("aciklama")
     @Expose
@@ -16,11 +16,11 @@ data class KitapTurDto(
 
     @SerializedName("resim")
     @Expose
-    val resim: String?,
+    val resim: String? = null,
 
     @SerializedName("durum")
     @Expose
-    val durum: KitapTurDurum?
+    val durum: KitapTurDurum? = null
 ) : Serializable
 
 fun KitapTurDto.toKitapTurItem(): KitapTurItem {

@@ -22,7 +22,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -53,11 +52,11 @@ fun KutuphanemBaseInput(
     hintStyle: TextStyle = Typography.smallUbuntuTransparent,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions:KeyboardActions = KeyboardActions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     enabled: Boolean = true,
     readOnly: Boolean = false,
     errorMessage: String = "",
-    maxCharacter:Int? = null,
+    maxCharacter: Int? = null,
 ) {
     var textState by remember {
         mutableStateOf(TextFieldValue(text))
@@ -70,7 +69,7 @@ fun KutuphanemBaseInput(
             textStyle = textStyle,
             maxLines = maxLine,
             singleLine = singleLine,
-            onValueChange = {newText->
+            onValueChange = { newText ->
                 maxCharacter?.let {
                     if (newText.text.length <= maxCharacter) {
                         textState = newText
@@ -160,7 +159,7 @@ fun KutuphanemSearchInput(
             .clip(MaterialTheme.shapes.medium)
             .background(MaterialTheme.colorPalette.white)
             .border(
-                BorderStroke((1/2).sdp, MaterialTheme.colorPalette.secondaryGray),
+                BorderStroke((1 / 2).sdp, MaterialTheme.colorPalette.secondaryGray),
                 shape = MaterialTheme.shapes.medium
             )
             .height(32.sdp),
@@ -222,7 +221,7 @@ fun KutuphanemSearchInput(
 
 @Composable
 fun KutuphanemFormInput(
-    text:String,
+    text: String,
     onChange: (String) -> Unit,
     modifier: Modifier,
     maxLine: Int = 1,
@@ -243,24 +242,36 @@ fun KutuphanemFormInput(
     hintStyle: TextStyle = Typography.smallUbuntuTransparent,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions:KeyboardActions = KeyboardActions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     enabled: Boolean = true,
     readOnly: Boolean = false,
     errorMessage: String = "",
-    maxCharacter:Int? = null,
-    label:String? = null,
+    maxCharacter: Int? = null,
+    label: String? = null,
     labelStyle: TextStyle = Typography.smallUbuntuTransparent
 ) {
     var textState by remember {
         mutableStateOf(TextFieldValue(text))
     }
-    Column {
-        OutlinedTextField(value = textState,
-            modifier = modifier,
+
+    Column(modifier = modifier) {
+        TextField(
+            value = textState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(MaterialTheme.shapes.medium)
+                .background(
+                    color = MaterialTheme.colorPalette.white,
+                    shape = MaterialTheme.shapes.medium
+                )
+                .border(
+                    BorderStroke((1).sdp, MaterialTheme.colorPalette.otherGrayLight),
+                    shape = MaterialTheme.shapes.medium
+                ),
             textStyle = textStyle,
             maxLines = maxLine,
             singleLine = singleLine,
-            onValueChange = {newText->
+            onValueChange = { newText ->
                 maxCharacter?.let {
                     if (newText.text.length <= maxCharacter) {
                         textState = newText
@@ -296,12 +307,12 @@ fun KutuphanemFormInput(
                     )
             },
             label = {
-                    if (label != null) {
-                        Text(
-                            text = label,
-                            style = labelStyle
-                        )
-                    }
+                if (label != null) {
+                    Text(
+                        text = label,
+                        style = labelStyle
+                    )
+                }
             },
             isError = isError,
             keyboardOptions = keyboardOptions,
@@ -311,16 +322,19 @@ fun KutuphanemFormInput(
             readOnly = readOnly
         )
         if (isError) {
-            Row(
+            ConstraintLayout(
                 modifier = Modifier
                     .padding(top = 4.sdp)
                     .fillMaxWidth()
             ) {
+                val (errorText) = createRefs()
                 Text(
                     text = errorMessage!!,
                     style = textStyle,
                     color = MaterialTheme.colorPalette.kirmizi,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.constrainAs(errorText) {
+                        start.linkTo(parent.start)
+                    }
                 )
             }
         }

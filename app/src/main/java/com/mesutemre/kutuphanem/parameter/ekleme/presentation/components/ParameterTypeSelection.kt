@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -32,6 +33,7 @@ fun ParameterTypeSelection(
     selectedParameterType: SelectedParameterType,
     onSelectType: (SelectedParameterType) -> Unit
 ) {
+
     Row(
         modifier = modifier
     ) {
@@ -40,10 +42,10 @@ fun ParameterTypeSelection(
                 .height(20.sdp)
                 .weight(0.5f)
                 .fillMaxWidth()
-                .clip(MaterialTheme.shapes.small)
+                .clip(RoundedCornerShape(4.sdp,0.sdp,0.sdp,4.sdp))
                 .border(
                     BorderStroke(1.sdp, MaterialTheme.colorPalette.primaryTextColor),
-                    shape = MaterialTheme.shapes.medium
+                    shape = RoundedCornerShape(4.sdp,0.sdp,0.sdp,4.sdp)
                 )
                 .background(if (selectedParameterType == SelectedParameterType.YAYINEVI) MaterialTheme.colorPalette.primaryTextColor else MaterialTheme.colorPalette.white)
                 .clickable {
@@ -58,16 +60,17 @@ fun ParameterTypeSelection(
                 style = if (selectedParameterType == SelectedParameterType.YAYINEVI) MaterialTheme.typography.smallAllegraWhiteBold else MaterialTheme.typography.smallAllegraBlack,
                 textAlign = TextAlign.Center,
             )
+
         }
         Box(
             modifier = Modifier
                 .height(20.sdp)
-                .clip(MaterialTheme.shapes.small)
+                .clip(RoundedCornerShape(0.sdp,4.sdp,4.sdp,0.sdp))
                 .fillMaxWidth()
                 .weight(0.5f)
                 .border(
                     BorderStroke(1.sdp, MaterialTheme.colorPalette.primaryTextColor),
-                    shape = MaterialTheme.shapes.medium
+                    shape = RoundedCornerShape(0.sdp,4.sdp,4.sdp,0.sdp)
                 )
                 .background(if (selectedParameterType == SelectedParameterType.KITAPTUR) MaterialTheme.colorPalette.primaryTextColor else MaterialTheme.colorPalette.white)
                 .clickable {

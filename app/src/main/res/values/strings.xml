@@ -58,6 +58,9 @@
     <string name="parametreParamYayinevi">Yayınevi Parametresi Ekleme</string>
     <string name="parametreAciklamaHata">Açıklama boş geçilemez!</string>
     <string name="parametreEklemeHata">Parametre eklenirken hata meydana geldi!</string>
+    <string name="parametreEklemeKitapTurHata">Lütfen kitap türünü giriniz!</string>
+    <string name="parametreEklemeYayinEviHata">Lütfen yayın evinin adını giriniz!</string>
+    <string name="parametreEklemeLengthHata">En az 3 karakter girmelisiniz!</string>
 
     <!--KitapListeFragment -->
     <string name="kitapListeError">Kitap listesi getirilemedi!Tekrar deneyiniz...</string>
