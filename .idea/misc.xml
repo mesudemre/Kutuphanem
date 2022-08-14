@@ -5,6 +5,7 @@
       <map>
         <entry key="../../../../../layout/custom_preview.xml" value="0.12239583333333333" />
         <entry key="app/src/main/res/drawable-v24/fill_heart.xml" value="0.10364583333333334" />
+        <entry key="app/src/main/res/drawable/bg_gradient_splash.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/capsule_shape.xml" value="0.1015625" />
         <entry key="app/src/main/res/drawable/capsule_shape_unselect.xml" value="0.1015625" />
         <entry key="app/src/main/res/drawable/detay_textview_background.xml" value="0.1265625" />
@@ -24,6 +25,7 @@
         <entry key="app/src/main/res/drawable/like_heart_checked_to_unchecked.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/like_heart_unchecked_to_checked.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/like_heart_vector.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/splash_background.xml" value="0.1" />
         <entry key="app/src/main/res/font/alegreya.xml" value="0.10208333333333333" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.17481884057971014" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.1" />

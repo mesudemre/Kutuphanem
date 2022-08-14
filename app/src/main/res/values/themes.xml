@@ -1,9 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="SplashTheme" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/lacivert</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_bg_icon</item>
-        <item name="windowSplashScreenAnimationDuration">200</item>
+        <item name="android:windowBackground">@drawable/splash_background</item>
         <item name="postSplashScreenTheme">@style/NoActionBar</item>
     </style>
     <!-- Base application theme. -->
