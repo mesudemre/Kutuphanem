@@ -7,7 +7,7 @@
     <RelativeLayout
         android:id="@+id/profilBilgiLayoutId"
         android:layout_width="match_parent"
-        android:layout_height="170dp"
+        android:layout_height="@dimen/profil_islem_main_header_height"
         android:background="@drawable/profil_gradient_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,10 +18,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:fontFamily="@font/alegreya_bold"
-            android:text="@string/profilGuncellemeLabel"
-            android:textColor="@color/whiteTextColor"
-            android:textSize="24sp" />
+            style="@style/TextAppearance.White.XLarge.Alegrya.Bold"
+            android:text="@string/profilGuncellemeLabel" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/profilAdSoyadTextViewId"
@@ -29,10 +27,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/profilTitleTextViewId"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"
-            android:fontFamily="@font/alegreya_bold"
-            android:textColor="@color/whiteTextColor"
-            android:textSize="18sp" />
+            android:layout_marginTop="@dimen/profil_islem_panel_adSoyadMargin"
+            style="@style/TextAppearance.White.Medium.Ubuntu.Bold"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -40,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="@dimen/profil_islem_header_height"
         app:layout_constraintBottom_toTopOf="@id/profilIslemlerItems"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,8 +44,8 @@
 
         <ImageView
             android:id="@+id/profilResimImage"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="@dimen/profil_islem_header_height"
+            android:layout_height="@dimen/profil_islem_header_height"
             android:src="@color/transparent" />
 
         <ImageView
@@ -57,8 +53,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="65dp"
-            android:layout_marginTop="75dp"
+            android:layout_marginLeft="@dimen/_65sdp"
+            android:layout_marginTop="@dimen/_75sdp"
             android:clickable="true"
             android:src="@drawable/ic_baseline_settings_32" />
 
@@ -92,31 +88,31 @@
             <com.mesutemre.kutuphanem.util.customcomponents.CustomCardItem
                 android:id="@+id/adSoyadEpostaCardId"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/profil_islem_card_main_height"
                 app:custom_card_title="@string/profilGuncellemeAdSoyadBilgiLabel" />
 
             <com.mesutemre.kutuphanem.util.customcomponents.CustomCardItem
                 android:id="@+id/dogumTarCinsiyetCardId"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/profil_islem_card_main_height"
                 app:custom_card_title="@string/profilGuncellemeCinsiyetDogumTarLabel" />
 
             <com.mesutemre.kutuphanem.util.customcomponents.CustomCardItem
                 android:id="@+id/ilgiAlanlarimCardId"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/profil_islem_card_main_height"
                 app:custom_card_title="@string/profilGuncellemeIlgiAlanlariLabel" />
 
             <com.mesutemre.kutuphanem.util.customcomponents.CustomCardItem
                 android:id="@+id/uygulamaTercihlerimCardId"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/profil_islem_card_main_height"
                 app:custom_card_title="@string/profilGuncellemeTercihlerLabel" />
 
             <com.mesutemre.kutuphanem.util.customcomponents.CustomCardItem
                 android:id="@+id/cikisCardId"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/profil_islem_card_main_height"
                 app:custom_card_arrowTint="@color/white"
                 app:custom_card_backgroundColor="@color/acik_kirmizi"
                 app:custom_card_title="@string/cikisButtonLabel"

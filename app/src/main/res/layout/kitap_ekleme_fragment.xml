@@ -82,11 +82,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_toRightOf="@id/kitapEklemeBackImageId"
-                android:fontFamily="@font/alegreya"
-                android:text="@string/kitapEklemeTitle"
-                android:textColor="@color/whiteTextColor"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                style="@style/TextAppearance.White.Normal.Alegrya.Bold"
+                android:text="@string/kitapEklemeTitle" />
 
         </RelativeLayout>
 
@@ -106,11 +103,11 @@
 
                     <ImageView
                         android:id="@+id/kitapImageCapId"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
+                        android:layout_width="@dimen/_150sdp"
+                        android:layout_height="@dimen/_150sdp"
                         android:layout_centerHorizontal="true"
                         android:clickable="true"
-                        android:elevation="2dp"
+                        android:elevation="@dimen/kutuphanem_small_margin_top_space"
                         android:focusable="true"
                         android:foreground="?attr/selectableItemBackground"
                         android:src="@drawable/ic_baseline_photo_camera_48" />
@@ -121,9 +118,9 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="@dimen/kutuphanem_general_margin_top"
+                    android:layout_marginTop="@dimen/kutuphanem_general_left_right_margin"
+                    android:layout_marginRight="@dimen/kutuphanem_general_margin_top"
                     app:boxStrokeColor="@color/primaryTextColor"
                     app:errorEnabled="true">
 
@@ -140,9 +137,9 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="@dimen/kutuphanem_general_margin_top"
+                    android:layout_marginTop="@dimen/kutuphanem_general_left_right_margin"
+                    android:layout_marginRight="@dimen/kutuphanem_general_margin_top"
                     app:boxStrokeColor="@color/primaryTextColor"
                     app:errorEnabled="true">
 
@@ -203,9 +200,9 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="@dimen/kutuphanem_general_margin_top"
+                    android:layout_marginTop="@dimen/kutuphanem_general_left_right_margin"
+                    android:layout_marginRight="@dimen/kutuphanem_general_margin_top"
                     app:boxStrokeColor="@color/primaryTextColor"
                     app:errorEnabled="true">
 
@@ -221,18 +218,15 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="@dimen/kitap_detay_margin_top"
                     android:orientation="vertical">
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/kitapEklemeKitapTurHataTextView"
+                    <com.mesutemre.kutuphanem.util.customcomponents.CustomErrorComponent
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/kitapEklemeKitapTurListeHata"
-                        android:textColor="@color/design_default_color_error"
-                        android:textSize="16sp"
-                        android:visibility="gone" />
+                        android:id="@+id/kitapEklemeKitapTurHataTextView"
+                        android:visibility="gone"
+                        app:custom_error_message="@string/kitapEklemeKitapTurListeHata"/>
 
                     <ProgressBar
                         android:id="@+id/kitapEklemeKitapTurProgressBarId"
@@ -247,41 +241,37 @@
                         android:clickable="true"
                         android:id="@+id/selectKitapTurCardId"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        app:cardCornerRadius="4dp"
+                        android:layout_height="@dimen/_50sdp"
+                        android:layout_marginLeft="@dimen/kutuphanem_general_margin_top"
+                        android:layout_marginRight="@dimen/kutuphanem_general_margin_top"
+                        app:cardCornerRadius="@dimen/_4sdp"
                         android:visibility="visible"
                         app:strokeColor="@color/imageShadow"
-                        app:strokeWidth="1dp">
+                        app:strokeWidth="@dimen/_1sdp">
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/selectedKitapTurMaterialTextViewId"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
-                            android:textColor="@color/black"
-                            android:layout_marginLeft="10dp"
-                            android:text="@string/kitapTurSecinizText"
-                            android:textSize="16sp" />
+                            android:layout_marginLeft="@dimen/kitap_detay_margin_top"
+                            style="@style/TextAppearance.Transparent.Normal"
+                            android:text="@string/kitapTurSecinizText"/>
                     </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="@dimen/kutuphanem_general_margin_top"
                     android:orientation="vertical">
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/kitapEklemeYayinEviHataTextView"
+                    <com.mesutemre.kutuphanem.util.customcomponents.CustomErrorComponent
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/kitapEklemeYayineviListeHata"
-                        android:textColor="@color/design_default_color_error"
-                        android:textSize="16sp"
-                        android:visibility="gone" />
+                        android:id="@+id/kitapEklemeYayinEviHataTextView"
+                        android:visibility="gone"
+                        app:custom_error_message="@string/kitapEklemeYayineviListeHata"/>
 
                     <ProgressBar
                         android:id="@+id/kitapEklemeYayinEviProgressBarId"
@@ -293,40 +283,24 @@
                         android:visibility="gone" />
 
                     <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        app:cardCornerRadius="4dp"
-                        android:visibility="gone"
-                        app:strokeColor="@color/imageShadow"
-                        app:strokeWidth="1dp">
-
-                        <Spinner
-                            android:id="@+id/yayinEviSpinnerId"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                    </com.google.android.material.card.MaterialCardView>
-                    <com.google.android.material.card.MaterialCardView
                         android:id="@+id/selectYayineviCardId"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        app:cardCornerRadius="4dp"
+                        android:layout_height="@dimen/_50sdp"
+                        android:layout_marginLeft="@dimen/kutuphanem_general_margin_top"
+                        android:layout_marginRight="@dimen/kutuphanem_general_margin_top"
+                        app:cardCornerRadius="@dimen/kutuphanem_general_left_right_margin"
                         android:visibility="visible"
                         app:strokeColor="@color/imageShadow"
-                        app:strokeWidth="1dp">
+                        app:strokeWidth="@dimen/_1sdp">
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/selectedYayineviMaterialTextViewId"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
-                            android:textColor="@color/black"
-                            android:layout_marginLeft="10dp"
-                            android:text="@string/yayinEviSecinizText"
-                            android:textSize="16sp" />
+                            style="@style/TextAppearance.Transparent.Normal"
+                            android:layout_marginLeft="@dimen/kitap_detay_margin_top"
+                            android:text="@string/yayinEviSecinizText"/>
                     </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
 
@@ -335,9 +309,9 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="@dimen/kutuphanem_general_margin_top"
+                    android:layout_marginTop="@dimen/kitap_detay_margin_top"
+                    android:layout_marginRight="@dimen/kutuphanem_general_margin_top"
                     app:boxStrokeColor="@color/primaryTextColor"
                     app:errorEnabled="true">
 
@@ -359,10 +333,10 @@
                     style="@style/PrimaryButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="@dimen/kutuphanem_general_margin_top"
+                    android:layout_marginTop="@dimen/kitap_detay_margin_top"
+                    android:layout_marginRight="@dimen/kutuphanem_general_margin_top"
+                    android:layout_marginBottom="@dimen/kitap_detay_margin_top"
                     android:text="@string/kaydet"
                     android:textColor="@color/whiteTextColor" />
             </LinearLayout>

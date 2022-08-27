@@ -9,30 +9,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <com.mesutemre.kutuphanem.util.customcomponents.CustomErrorComponent
             android:id="@+id/kitapDetayErrorLayoutId"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone">
-
-            <TextView
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/alegreya_bold"
-                android:text="@string/kitapDetayHata"
-                android:textColor="@color/kirmizi"
-                android:textSize="38sp" />
-        </RelativeLayout>
-
-        <com.google.android.material.progressindicator.ProgressIndicator
-            android:id="@+id/kitapDetayProgresBar"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:indeterminate="true"
             android:visibility="gone"
-            app:indicatorColor="@color/sari"
-            app:trackColor="@color/fistikYesil" />
+            app:custom_error_message="@string/kitapDetayHata"/>
+
+
 
 
         <RelativeLayout
@@ -56,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="@dimen/kutuphanem_general_left_right_margin"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -73,7 +57,7 @@
                     android:id="@+id/shareImageViewId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="@dimen/kutuphanem_general_margin_top"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
@@ -85,8 +69,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="@dimen/kutuphanem_general_margin_top"
+                    android:layout_marginRight="@dimen/kitap_detay_image_margin"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
@@ -98,8 +82,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="@dimen/kutuphanem_general_margin_top"
+                    android:layout_marginRight="@dimen/kitap_detay_image_margin"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
@@ -113,11 +97,11 @@
             android:id="@+id/kitapDetayGenelBilgilerCardId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="-30dp"
-            android:layout_marginRight="15dp"
+            android:layout_marginLeft="@dimen/kutuphanem_general_margin_top"
+            android:layout_marginTop="@dimen/_minus30sdp"
+            android:layout_marginRight="@dimen/kutuphanem_general_margin_top"
             android:background="@color/white"
-            app:cardCornerRadius="20dp">
+            app:cardCornerRadius="@dimen/kitap_detay_card_corner_radius">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -128,21 +112,20 @@
                     android:id="@+id/kitapAdTextViewId"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/alegreya_bold"
+                    style="@style/TextAppearance.Black.Large.Alegrya.Bold"
                     android:gravity="center"
                     android:text="Mesut Emre ÇELENK"
-                    android:textColor="@color/kahverengi"
-                    android:textSize="20sp" />
+                    android:textColor="@color/google_dark_grey" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="@dimen/kitap_detay_margin_top">
 
                     <ImageView
                         android:id="@+id/kitapDetayImageId"
-                        android:layout_width="180dp"
-                        android:layout_height="180dp"
+                        android:layout_width="@dimen/_160sdp"
+                        android:layout_height="@dimen/_160sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -150,7 +133,7 @@
                         android:id="@+id/kitapDetayGenelBilgiler"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
+                        android:layout_marginLeft="@dimen/kutuphanem_general_left_right_margin"
                         android:orientation="vertical"
                         app:layout_constraintEnd_toStartOf="@+id/kitapDetayImageId"
                         app:layout_constraintStart_toStartOf="parent"
@@ -160,130 +143,119 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/yazarLabel"
-                            android:textColor="@color/transparent"
-                            android:textSize="12sp"
-                            android:textStyle="italic" />
+                            style="@style/TextAppearance.Transparent.Thiny.Ubuntu"/>
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/yazarAdTextViewId"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="3dp"
-                            android:fontFamily="@font/alegreya"
-                            android:text="Mesut Emre Çelenk "
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
+                            android:layout_marginTop="@dimen/kutuphanem_small_margin_top_space"
+                            style="@style/TextAppearance.Black.Small.Ubuntu"
+                            android:text="Mesut Emre Çelenk asd" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
+                            android:layout_marginTop="@dimen/kutuphanem_general_left_right_margin"
                             android:text="@string/turLabel"
-                            android:textColor="@color/transparent"
-                            android:textSize="12sp"
-                            android:textStyle="italic" />
+                            style="@style/TextAppearance.Transparent.Thiny.Ubuntu"/>
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/kitapTurTextViewId"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="3dp"
-                            android:fontFamily="@font/alegreya"
-                            android:text="Mesut Emre Çelenk "
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
+                            android:layout_marginTop="@dimen/kutuphanem_small_margin_top_space"
+                            style="@style/TextAppearance.Black.Small.Ubuntu"
+                            android:text="Mesut Emre Çelenk "/>
 
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
+                            android:layout_marginTop="@dimen/kutuphanem_general_left_right_margin"
                             android:text="@string/yayinEviLabelDetay"
-                            android:textColor="@color/transparent"
-                            android:textSize="12sp"
-                            android:textStyle="italic" />
+                            style="@style/TextAppearance.Transparent.Thiny.Ubuntu" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/yayinEviTextViewId"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="3dp"
-                            android:fontFamily="@font/alegreya"
+                            android:layout_marginTop="@dimen/kutuphanem_small_margin_top_space"
+                            style="@style/TextAppearance.Black.Small.Ubuntu"
                             android:text="Mesut Emre Çelenk "
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
+                             />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
+                            android:layout_marginTop="@dimen/kutuphanem_general_left_right_margin"
                             android:text="@string/alinmaTarDetay"
-                            android:textColor="@color/transparent"
-                            android:textSize="12sp"
-                            android:textStyle="italic" />
+                            style="@style/TextAppearance.Transparent.Thiny.Ubuntu"/>
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/alinmaTarTextViewId"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="3dp"
-                            android:fontFamily="@font/alegreya"
-                            android:text="26.01.1991"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
+                            android:layout_marginTop="@dimen/kutuphanem_small_margin_top_space"
+                            style="@style/TextAppearance.Black.Small.Ubuntu"
+                            android:text="26.01.1991" />
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <com.google.android.material.button.MaterialButton
+                    android:visibility="gone"
+                    android:id="@+id/pdfGosterFoo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Pdf Göster"/>
+
                 <RelativeLayout
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="@dimen/kitap_detay_margin_top"
                     android:id="@+id/puanPanel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <RatingBar
                         android:id="@+id/ratingBarKitapPuan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
                         android:isIndicator="true"
-                        android:stepSize="0.1"
-                        android:secondaryProgressTint="@color/white"
                         android:numStars="5"
                         android:progressTint="@color/ratingYellow"
-                        android:layout_alignParentStart="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:secondaryProgressTint="@color/white"
+                        android:stepSize="0.1" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/yorumPuanTextViewId"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:layout_marginRight="5dp"
-                        android:fontFamily="@font/alegreya_bold"
-                        android:textSize="36sp" />
+                        android:layout_marginRight="@dimen/kutuphanem_general_left_right_margin"
+                        style="@style/TextAppearance.Black.XXLarge.Alegrya.Bold" />
 
                     <LinearLayout
                         android:id="@+id/yorumNoPuanCardViewId"
                         android:visibility="gone"
                         android:clipChildren="false"
                         android:clipToPadding="false"
-                        android:padding="10dp"
+                        android:padding="@dimen/kutuphanem_general_cardview_radius"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <com.google.android.material.card.MaterialCardView
                             android:id="@+id/noCommentCard"
-                            app:cardElevation="10dp"
+                            app:cardElevation="@dimen/kutuphanem_general_cardview_radius"
                             app:cardBackgroundColor="@color/white"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:cardCornerRadius="10dp">
+                            app:cardCornerRadius="@dimen/kutuphanem_general_cardview_radius">
                             <com.google.android.material.textview.MaterialTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerHorizontal="true"
-                                android:layout_marginRight="5dp"
+                                android:layout_marginRight="@dimen/kutuphanem_general_left_right_margin"
                                 android:gravity="center"
-                                android:textColor="@color/transparent"
-                                android:fontFamily="@font/alegreya_bold"
-                                android:text="@string/noComentKitapYet"
-                                android:textSize="16sp" />
+                                style="@style/TextAppearance.Transparent.Small.Alegrya.Bold"
+                                android:text="@string/noComentKitapYet"/>
                         </com.google.android.material.card.MaterialCardView>
                     </LinearLayout>
                 </RelativeLayout>
@@ -297,20 +269,19 @@
                         android:id="@+id/kitapDetayAciklamaTextId"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="@dimen/kutuphanem_general_cardview_radius"
+                        android:layout_marginTop="@dimen/kutuphanem_general_cardview_radius"
+                        android:layout_marginRight="@dimen/kutuphanem_general_cardview_radius"
+                        style="@style/TextAppearance.Transparent.Normal.Ubuntu"
                         android:ellipsize="marquee"
-                        android:fontFamily="@font/alegreya"
-                        android:textIsSelectable="true"
-                        android:textSize="16sp" />
+                        android:textIsSelectable="true" />
 
                     <RelativeLayout
                         android:id="@+id/viewMoreImageIdLayout"
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
+                        android:layout_height="@dimen/_24sdp"
                         android:layout_below="@+id/kitapDetayAciklamaTextId"
-                        android:layout_marginTop="-30dp"
+                        android:layout_marginTop="@dimen/kitap_detay_view_more"
                         android:background="@drawable/detay_textview_background"
                         android:visibility="gone" />
                 </RelativeLayout>
@@ -319,19 +290,19 @@
                     android:id="@+id/viewMoreImageId"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="-10dp"
+                    android:layout_marginTop="@dimen/kitap_detay_view_more_image_margin_top"
                     android:src="@drawable/ic_baseline_expand_more_48"
                     android:visibility="gone" />
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="@dimen/_1sdp"
                     android:background="@color/transparent"/>
                 <RelativeLayout
                     android:id="@+id/kitapYorumPanel"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="@dimen/_8sdp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -351,7 +322,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:visibility="gone"
-                            android:layout_marginLeft="5dp"
+                            android:layout_marginLeft="@dimen/kutuphanem_general_left_right_margin"
                             android:layout_toRightOf="@id/kitapDetayYorumlarTextId"
                             android:gravity="center"
                             android:text="12" />
@@ -360,20 +331,20 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
-                            android:layout_marginRight="5dp"
+                            android:layout_marginRight="@dimen/kutuphanem_general_left_right_margin"
                             android:src="@drawable/ic_baseline_comment_24" />
                     </RelativeLayout>
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_below="@id/yorumLabelPanelId"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="@dimen/kitap_detay_margin_top"
+                        android:layout_marginBottom="@dimen/kitap_detay_margin_top"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
                         <ImageView
                             android:id="@+id/kitapYorumYazanImageViewId"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="@dimen/_40sdp"
+                            android:layout_height="@dimen/_40sdp"
                             android:src="@drawable/ic_baseline_comment_24"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -381,11 +352,11 @@
 
                         <com.google.android.material.card.MaterialCardView
                             android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:layout_marginRight="5dp"
-                            android:layout_marginLeft="5dp"
+                            android:layout_height="@dimen/_40sdp"
+                            android:layout_marginRight="@dimen/kutuphanem_general_left_right_margin"
+                            android:layout_marginLeft="@dimen/kutuphanem_general_left_right_margin"
                             app:cardBackgroundColor="@color/shrim_grey"
-                            app:cardCornerRadius="4dp"
+                            app:cardCornerRadius="@dimen/kutuphanem_general_left_right_margin"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/kitapYorumYazanImageViewId"
@@ -394,7 +365,7 @@
                             <com.google.android.material.textview.MaterialTextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="3dp"
+                                android:layout_marginLeft="@dimen/kutuphanem_small_margin_top_space"
                                 android:layout_gravity="center_vertical"
                                 android:text="@string/kitapDetayYorumHint" />
                         </com.google.android.material.card.MaterialCardView>

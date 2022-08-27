@@ -23,7 +23,6 @@ import com.mesutemre.kutuphanem.databinding.KitapListeFragmentBinding
 import com.mesutemre.kutuphanem.kitap.liste.adapter.KitapArsivListeAdapter
 import com.mesutemre.kutuphanem.kitap.liste.adapter.KitapBegeniListeAdapter
 import com.mesutemre.kutuphanem.kitap.liste.adapter.KitapListeAdapter
-import com.mesutemre.kutuphanem.kitap.liste.adapter.PagingLoadStateAdapter
 import com.mesutemre.kutuphanem.kitap.liste.model.API_LISTE
 import com.mesutemre.kutuphanem.kitap.liste.model.ARSIV
 import com.mesutemre.kutuphanem.kitap.liste.model.BEGENILENLER
@@ -130,9 +129,7 @@ class KitapListeFragment:BaseFragment<KitapListeFragmentBinding>() {
             }
         }
 
-        listeAdapter?.withLoadStateFooter(
-            footer = PagingLoadStateAdapter(listeAdapter!!)
-        )
+
         listeAdapter?.addLoadStateListener { combinedLoadStates ->
             val errorState =
                 when {
@@ -156,7 +153,7 @@ class KitapListeFragment:BaseFragment<KitapListeFragmentBinding>() {
                     binding.kitapListeProgressBar.hideComponent();
 
                     errorState?.let{
-                        binding.kitapListeErrorTextId.text = it.error.localizedMessage;
+                        binding.kitapListeErrorTextId.setErrorMessage(it.error.localizedMessage)
                         binding.kitapListeErrorTextId.showComponent();
                     }
                 }
@@ -259,9 +256,7 @@ class KitapListeFragment:BaseFragment<KitapListeFragmentBinding>() {
             }
         }
 
-        begeniAdapter?.withLoadStateFooter(
-            footer = PagingLoadStateAdapter(begeniAdapter!!)
-        )
+
         begeniAdapter?.addLoadStateListener { combinedLoadStates ->
             val errorState =
                 when {
@@ -285,7 +280,7 @@ class KitapListeFragment:BaseFragment<KitapListeFragmentBinding>() {
                     binding.kitapListeProgressBar.hideComponent();
 
                     errorState?.let{
-                        binding.kitapListeErrorTextId.text = it.error.localizedMessage;
+                        binding.kitapListeErrorTextId.setErrorMessage(it.error.localizedMessage)
                         binding.kitapListeErrorTextId.showComponent();
                     }
                 }
@@ -297,10 +292,10 @@ class KitapListeFragment:BaseFragment<KitapListeFragmentBinding>() {
         viewModel.shareKitapUri.observe(viewLifecycleOwner,Observer{
             when(it){
                 is BaseResourceEvent.Loading->{
-                    binding.kitapIslemProgresBar.showComponent();
+                   //binding.kitapIslemProgresBar.showComponent();
                 }
                 is BaseResourceEvent.Error->{
-                    binding.kitapIslemProgresBar.hideComponent();
+                    //binding.kitapIslemProgresBar.hideComponent();
                     showSnackBar(requireView(),
                         requireView().context.getString(R.string.kitapShareError),
                         ERROR
@@ -315,7 +310,7 @@ class KitapListeFragment:BaseFragment<KitapListeFragmentBinding>() {
                     val sharedImageUri = FileProvider.getUriForFile(requireContext(),
                         requireContext().applicationContext.packageName+".provider",it.data!!)
                     shareIntent.putExtra(Intent.EXTRA_STREAM, sharedImageUri);
-                    binding.kitapIslemProgresBar.hideComponent();
+                    //binding.kitapIslemProgresBar.hideComponent();
                     resultLauncher.launch(Intent.createChooser(shareIntent, requireContext().resources.getString(R.string.shareLabel)))
                 }
             }
@@ -341,15 +336,15 @@ class KitapListeFragment:BaseFragment<KitapListeFragmentBinding>() {
         viewModel.kitapArsivlenmisResourceEvent.observe(viewLifecycleOwner, Observer {
             when(it){
                 is BaseResourceEvent.Loading->{
-                    binding.kitapIslemProgresBar.showComponent();
+                    //binding.kitapIslemProgresBar.showComponent();
                 }
                 is BaseResourceEvent.Error->{
-                    binding.kitapIslemProgresBar.hideComponent();
+                    //binding.kitapIslemProgresBar.hideComponent();
                     viewModel.kitapArsivle(kitap);
                     observeKitapArsivKayit();
                 }
                 is BaseResourceEvent.Success->{
-                    binding.kitapIslemProgresBar.hideComponent();
+                    //binding.kitapIslemProgresBar.hideComponent();
                     showSnackBar(getFragmentView(),getFragmentView().context.getString(R.string.kitapArsivdeMevcut), WARNING);
                 }
             }
@@ -360,14 +355,14 @@ class KitapListeFragment:BaseFragment<KitapListeFragmentBinding>() {
         viewModel.arsivKitap.observe(viewLifecycleOwner,Observer{
             when(it){
                 is BaseResourceEvent.Loading->{
-                    binding.kitapIslemProgresBar.showComponent();
+                    //binding.kitapIslemProgresBar.showComponent();
                 }
                 is BaseResourceEvent.Error->{
-                    binding.kitapIslemProgresBar.hideComponent();
+                    //binding.kitapIslemProgresBar.hideComponent();
                     showSnackBar(getFragmentView(),it.message!!, ERROR);
                 }
                 is BaseResourceEvent.Success->{
-                    binding.kitapIslemProgresBar.hideComponent();
+                    //binding.kitapIslemProgresBar.hideComponent();
                     showSnackBar(getFragmentView(),it.data!!, SUCCESS);
                 }
             }

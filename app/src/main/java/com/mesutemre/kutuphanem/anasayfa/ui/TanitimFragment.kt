@@ -20,7 +20,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
-import com.google.android.material.composethemeadapter.MdcTheme
 import com.mesutemre.kutuphanem.R
 
 class TanitimFragment : Fragment() {
@@ -32,14 +31,14 @@ class TanitimFragment : Fragment() {
         index = arguments?.getInt(ARG_SECTION_NUMBER) ?: 1;
     }
 
-    @ExperimentalAnimationApi
+    //@ExperimentalAnimationApi
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_tanitim, container, false);
         val tanitimTextView = root.findViewById<ComposeView>(R.id.tanitimTextView);
-        when(index){
+        /*when(index){
             0->{
                 tanitimTextView.setContent {
                     MdcTheme {
@@ -63,7 +62,7 @@ class TanitimFragment : Fragment() {
 
             }
 
-        }
+        }*/
         return root;
     }
 

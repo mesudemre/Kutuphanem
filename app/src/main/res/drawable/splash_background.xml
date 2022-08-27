@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<shape
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-
-    <gradient
-        android:type="linear"
-        android:startColor="#D5D55D"
-        android:centerColor="#FFFFFF"
-        android:endColor="#F7F7F7"
-        android:angle="270"
-        />
-
-</shape>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@drawable/bg_splash"/>
+    <item>
+        <bitmap android:gravity="center"
+            android:src="@drawable/splash_bg_icon"/>
+    </item>
+</layer-list>

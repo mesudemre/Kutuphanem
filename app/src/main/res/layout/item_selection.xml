@@ -15,12 +15,12 @@
     </data>
 
     <com.google.android.material.card.MaterialCardView
-        app:cardCornerRadius="4dp"
+        app:cardCornerRadius="@dimen/_4sdp"
         app:strokeColor="@color/imageShadow"
         app:strokeWidth="0.5dp"
         android:onClick="@{() -> onSelectItem.invoke(selectItem)}"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="@dimen/_48sdp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -30,11 +30,9 @@
                 android:id="@+id/materialTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/alegreya"
+                android:layout_marginStart="@dimen/_8sdp"
                 android:text="@{selectItem.selectedItemLabel}"
-                android:textColor="@color/black"
-                android:textSize="16sp"
+                style="@style/TextAppearance.Black.Normal.Alegrya"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/kitapDetayGitImageView"
                 app:layout_constraintStart_toStartOf="parent"

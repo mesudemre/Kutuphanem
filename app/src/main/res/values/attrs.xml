@@ -7,4 +7,8 @@
         <attr name="custom_card_arrowTint" format="color"/>
         <attr name="custom_card_backgroundColor" format="color"/>
     </declare-styleable>
+
+    <declare-styleable name="custom_error_component_attributes">
+        <attr name="custom_error_message" format="string"/>
+    </declare-styleable>
 </resources>

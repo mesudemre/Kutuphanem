@@ -1,22 +1,21 @@
-package com.mesutemre.kutuphanem.kitap.ekleme.ui;
+package com.mesutemre.kutuphanem.kitap.ekleme.ui
 
 import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.AdapterView
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.google.android.material.textfield.TextInputEditText
@@ -25,13 +24,14 @@ import com.mesutemre.kutuphanem.auth.profil.ui.dialog.DogumTarihiDialogFragment
 import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.databinding.KitapEklemeFragmentBinding
-import com.mesutemre.kutuphanem.util.listener.TextInputErrorClearListener
-import com.mesutemre.kutuphanem.model.*
-import com.mesutemre.kutuphanem.parametre.kitaptur.model.KitapturModel
-import com.mesutemre.kutuphanem.parametre.yayinevi.model.YayineviModel
+import com.mesutemre.kutuphanem.model.ERROR
+import com.mesutemre.kutuphanem.model.KITAP_EKLEME_PHOTO
+import com.mesutemre.kutuphanem.model.SUCCESS
+import com.mesutemre.kutuphanem.model.WARNING
 import com.mesutemre.kutuphanem.util.*
 import com.mesutemre.kutuphanem.util.customcomponents.selection.model.SelectItemModel
 import com.mesutemre.kutuphanem.util.customcomponents.selection.ui.SelectionDialogFragment
+import com.mesutemre.kutuphanem.util.listener.TextInputErrorClearListener
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 import java.io.File
@@ -54,34 +54,33 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
     private var kameraIzin:Int = 0
     private var selectedKitapTur:Int = 0
     private var selectedYayinevi:Int = 0
-    private lateinit var kitapTurler:List<KitapturModel>;
-    private lateinit var yayinEvler:List<YayineviModel>;
-    private var cameraSelector:CameraSelector? = null;
-    private var selectKitapTurList = mutableListOf<SelectItemModel>();
-    private var selectYayineviList = mutableListOf<SelectItemModel>();
-    private var isKitapTurDlgOpened = false;
-    private var isYayineviDlgOpened = false;
+    private var cameraSelector:CameraSelector? = null
+    private var selectKitapTurList = mutableListOf<SelectItemModel>()
+    private var selectYayineviList = mutableListOf<SelectItemModel>()
+    private var isKitapTurDlgOpened = false
+    private var isYayineviDlgOpened = false
+    private lateinit var photoFile:File
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> KitapEklemeFragmentBinding
             = KitapEklemeFragmentBinding::inflate
-    override val layoutName = "kitap_ekleme_fragment.xml";
+    override val layoutName = "kitap_ekleme_fragment.xml"
 
     override fun onCreateFragment(savedInstanceState: Bundle?) {
         if(savedInstanceState != null){
             savedKitapUri = savedInstanceState.getParcelable("kitapImage")
         }
         cameraExecutor = Executors.newSingleThreadExecutor()
-        outputDirectory = createOutputDirectory(requireContext());
+        outputDirectory = requireContext().createOutputDirectory(KITAP_EKLEME_PHOTO)
     }
 
     override fun onStartFragment() {
-        cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA;
+        cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
         viewModel.initKitapEklemeSpinnerListe()
-        observeSpinnerList();
+        observeSpinnerList()
 
         binding.kitapEklemeBackImageId.setOnClickListener {
-            onBackPressed();
+            onBackPressed()
         }
 
         binding.editTextAlinmaTar.setOnClickListener {
@@ -94,9 +93,9 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
             if(kameraIzin != PackageManager.PERMISSION_GRANTED){
                 requestPermissions(arrayOf(Manifest.permission.CAMERA), CAMERA_REQUEST_CODE)
             }else{
-                binding.photoCekLayoutId.showComponent();
-                binding.kitapGenelBilgiLayoutId.hideComponent();
-                startCamera();
+                binding.photoCekLayoutId.showComponent()
+                binding.kitapGenelBilgiLayoutId.hideComponent()
+                startCamera()
             }
         }
 
@@ -105,28 +104,18 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
         }
 
         binding.kitapResimIptalImageId.setOnClickListener {
-            binding.photoCekLayoutId.hideComponent();
-            binding.kitapGenelBilgiLayoutId.showComponent();
+            binding.photoCekLayoutId.hideComponent()
+            binding.kitapGenelBilgiLayoutId.showComponent()
             cameraProvider.unbindAll()
         }
 
         binding.switchCameraImageId.setOnClickListener {
             if(cameraSelector == CameraSelector.DEFAULT_FRONT_CAMERA){
-                cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA;
+                cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
             }else if(checkDeviceHasFronCamera(it.context)){
-                cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA;
+                cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
             }
-            startCamera();
-        }
-
-        binding.yayinEviSpinnerId.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedYE = parent!!.getItemAtPosition(position) as YayineviModel;
-                selectedYayinevi = selectedYE.yayinEviId!!;
-            }
+            startCamera()
         }
 
         if(savedKitapUri != null){
@@ -142,7 +131,7 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
                     ,::onSelectKitapTur
                     ,::onCloseKitapTurDlg)
                     .show(requireFragmentManager(),null)
-                isKitapTurDlgOpened = true;
+                isKitapTurDlgOpened = true
             }
         }
 
@@ -153,8 +142,8 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
                     true,
                     selectYayineviList,
                     ::onSelectYayinevi,
-                    ::onCloseYayineviDlg).show(requireFragmentManager(),null);
-                isYayineviDlgOpened = true;
+                    ::onCloseYayineviDlg).show(requireFragmentManager(),null)
+                isYayineviDlgOpened = true
             }
         }
 
@@ -216,79 +205,82 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
             yayinEviObj.put("id",selectedYayinevi)
             jsonObj.put("yayinEvi",yayinEviObj)
 
-            val alinmaTarSon = alinmaTar.split(".")[2]+"-"+alinmaTar.split(".")[1]+"-"+alinmaTar.split(".")[0];
+            val alinmaTarSon = alinmaTar.split(".")[2]+"-"+alinmaTar.split(".")[1]+"-"+alinmaTar.split(".")[0]
             jsonObj.put("alinmatarihi",alinmaTarSon)
             jsonObj.put("kitapAciklama",kitapAciklama)
 
-            viewModel.kitapKaydet(jsonObj.toString(),savedKitapUri!!,it.context);
+            viewModel.kitapKaydet(jsonObj.toString(),savedKitapUri!!,it.context)
             observeKitapKaydi(it)
             observeKitapResimYukleme(it)
         }
     }
 
     private fun onSelectKitapTur(selectedItem: SelectItemModel){
-        binding.selectedKitapTurMaterialTextViewId.setText(selectedItem.selectedItemLabel);
-        selectedKitapTur = selectedItem.selectedItemValue;
-        isKitapTurDlgOpened = false;
+        binding.selectedKitapTurMaterialTextViewId.setTextAppearance(R.style.TextAppearance_Black_Normal)
+        binding.selectedKitapTurMaterialTextViewId.setText(selectedItem.selectedItemLabel)
+        selectedKitapTur = selectedItem.selectedItemValue
+        isKitapTurDlgOpened = false
     }
 
     private fun onCloseKitapTurDlg(){
-        isKitapTurDlgOpened = false;
+        isKitapTurDlgOpened = false
     }
 
     private fun onSelectYayinevi(selectedItem: SelectItemModel){
-        binding.selectedYayineviMaterialTextViewId.setText(selectedItem.selectedItemLabel);
-        selectedYayinevi = selectedItem.selectedItemValue;
-        isYayineviDlgOpened = false;
+        binding.selectedYayineviMaterialTextViewId.setTextAppearance(R.style.TextAppearance_Black_Normal)
+        binding.selectedYayineviMaterialTextViewId.setText(selectedItem.selectedItemLabel)
+        selectedYayinevi = selectedItem.selectedItemValue
+        isYayineviDlgOpened = false
     }
 
     private fun onCloseYayineviDlg(){
-        isYayineviDlgOpened = false;
+        isYayineviDlgOpened = false
     }
 
     private fun observeKitapKaydi(view:View){
         viewModel.kitapKaydetResourceEvent.observe(viewLifecycleOwner, Observer {
             when(it){
                 is BaseResourceEvent.Loading->{
-                    binding.kitapKayitProgressLayoutId.showComponent();
+                    binding.kitapKayitProgressLayoutId.showComponent()
                     requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 }
                 is BaseResourceEvent.Error->{
-                    binding.kitapKayitProgressLayoutId.hideComponent();
+                    binding.kitapKayitProgressLayoutId.hideComponent()
                     requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                     showSnackBar(view,view.context.resources.getString(R.string.kitapKaydiHataText),ERROR)
                 }
                 is BaseResourceEvent.Success->{
-                    binding.kitapKayitProgressLayoutId.hideComponent();
+                    binding.kitapKayitProgressLayoutId.hideComponent()
                     requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                     showSnackBar(view,view.context.resources.getString(R.string.kitapKaydiBasarli),SUCCESS)
                 }
             }
-        });
+        })
     }
 
     private fun observeKitapResimYukleme(view:View){
         viewModel.kitapResimYukleResourceEvent.observe(viewLifecycleOwner, Observer {
             when(it){
                 is BaseResourceEvent.Loading->{
-                    binding.kitapResimYukleProgressLayoutId.showComponent();
+                    binding.kitapResimYukleProgressLayoutId.showComponent()
                     requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                        WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                        WindowManager.LayoutParams.FLAG_DIM_BEHIND)
                 }
                 is BaseResourceEvent.Error->{
                     requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                    binding.kitapResimYukleProgressLayoutId.hideComponent();
+                    binding.kitapResimYukleProgressLayoutId.hideComponent()
                     showSnackBar(view,view.context.resources.getString(R.string.kitapResmiYuklemeHata),ERROR)
                 }
                 is BaseResourceEvent.Success->{
                     requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                    binding.kitapResimYukleProgressLayoutId.hideComponent();
-                    showSnackBar(view,it.data!!.statusMessage,SUCCESS);
-                    formTemizle();
+                    binding.kitapResimYukleProgressLayoutId.hideComponent()
+                    showSnackBar(view,it.data!!.statusMessage,SUCCESS)
+                    photoFile.delete()
+                    formTemizle()
                 }
             }
-        });
+        })
     }
 
     private fun startCamera() {
@@ -318,83 +310,43 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
 
     private fun takeKitapPhoto(){
         val imageCapture = imageCapture ?: return
-        val photoFile = File(
+         photoFile = File(
             outputDirectory,
             SimpleDateFormat(
                 "yyyy-MM-dd-HH-mm-ss-SSS", Locale.US
-            ).format(System.currentTimeMillis()) + ".jpg");
+            ).format(System.currentTimeMillis()) + ".jpg")
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
         imageCapture.takePicture(
             outputOptions,
             ContextCompat.getMainExecutor(requireContext()),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onError(exc: ImageCaptureException) {
-                    Log.e("HATA","Hata oldu!!! : "+exc.toString())
+                    showSnackBar(binding.root.rootView,exc.message!!, ERROR)
                 }
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     savedKitapUri = Uri.fromFile(photoFile)
-                    binding.kitapImageCapId.setImageURI(savedKitapUri)
-                    binding.photoCekLayoutId.hideComponent();
-                    binding.kitapGenelBilgiLayoutId.showComponent();
+                    binding.kitapImageCapId.getImageFromFile(photoFile)
+                    binding.photoCekLayoutId.hideComponent()
+                    binding.kitapGenelBilgiLayoutId.showComponent()
                     cameraProvider.unbindAll()
                 }
             })
     }
 
     private fun formTemizle(){
-        savedKitapUri = null;
-        binding.kitapImageCapId.setImageDrawable(binding.kitapImageCapId.context.getDrawable(R.drawable.ic_baseline_photo_camera_48));
-        binding.editTextKitapAd.clearContent(binding.editTextKitapAd);
-        binding.editTextYazarAd.clearContent(binding.editTextYazarAd);
-        binding.editTextAlinmaTar.clearContent(binding.editTextAlinmaTar);
-        binding.editTextKitapAciklama.clearContent(binding.editTextKitapAciklama);
-        selectedKitapTur = 0;
-        //binding.kitapTurlerSpinnerId.setSelection(selectedKitapTur);
-        selectedYayinevi = 0;
-        //binding.yayinEviSpinnerId.setSelection(selectedYayinevi);
+        savedKitapUri = null
+        binding.kitapImageCapId.setImageDrawable(binding.kitapImageCapId.context.getDrawable(R.drawable.ic_baseline_photo_camera_48))
+        binding.editTextKitapAd.clearContent(binding.editTextKitapAd)
+        binding.editTextYazarAd.clearContent(binding.editTextYazarAd)
+        binding.editTextAlinmaTar.clearContent(binding.editTextAlinmaTar)
+        binding.editTextKitapAciklama.clearContent(binding.editTextKitapAciklama)
+        selectedKitapTur = 0
+        selectedYayinevi = 0
     }
 
     private fun observeSpinnerList(){
-        viewModel.kitapTurListeResourceEvent.observe(viewLifecycleOwner,Observer{
-            when(it){
-                is BaseResourceEvent.Loading->{
-                    binding.kitapEklemeKitapTurProgressBarId.showComponent();
-                    binding.kitapEklemeKitapTurHataTextView.hideComponent();
-                }
-                is BaseResourceEvent.Error->{
-                    binding.kitapEklemeKitapTurProgressBarId.hideComponent();
-                    binding.kitapEklemeKitapTurHataTextView.showComponent();
-                }
-                is BaseResourceEvent.Success->{
-                    getFragmentView().hideComponents(binding.kitapEklemeKitapTurProgressBarId,binding.kitapEklemeKitapTurHataTextView);
-                    kitapTurler = it.data!!;
-                    for (kt in kitapTurler) {
-                        selectKitapTurList.add(SelectItemModel(kt.kitapTurId!!,kt.aciklama!!));
-                    }
-                }
-            }
-        });
 
-        viewModel.yayinEviListeResourceEvent.observe(viewLifecycleOwner,Observer{
-            when(it){
-                is BaseResourceEvent.Loading->{
-                    binding.kitapEklemeYayinEviProgressBarId.showComponent();
-                    binding.kitapEklemeYayinEviHataTextView.hideComponent();
-                }
-                is BaseResourceEvent.Error->{
-                    binding.kitapEklemeYayinEviProgressBarId.hideComponent();
-                    binding.kitapEklemeYayinEviHataTextView.showComponent();
-                }
-                is BaseResourceEvent.Success->{
-                    yayinEvler = it.data!!;
-                    getFragmentView().hideComponents(binding.kitapEklemeYayinEviProgressBarId,binding.kitapEklemeYayinEviHataTextView);
-                    for (ye in yayinEvler) {
-                        selectYayineviList.add(SelectItemModel(ye.yayinEviId!!,ye.aciklama!!));
-                    }
-                }
-            }
-        });
     }
 
     override fun onRequestPermissionsResult(
@@ -406,8 +358,8 @@ class KitapEklemeFragment: BaseFragment<KitapEklemeFragmentBinding>() {
         if(requestCode == CAMERA_REQUEST_CODE){
             kameraIzin = ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.CAMERA)
             if(grantResults.size>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                binding.photoCekLayoutId.showComponent();
-                binding.kitapGenelBilgiLayoutId.hideComponent();
+                binding.photoCekLayoutId.showComponent()
+                binding.kitapGenelBilgiLayoutId.hideComponent()
                 startCamera()
             }
         }

@@ -31,9 +31,6 @@ class KutuphanemDBModule {
         .addMigrations(MIGRATION_2TO2_1)
         .build();
 
-    @Singleton
-    @Provides
-    fun provideParametreDao(database: KutuphanemDatabase) = database.getParametreDao();
 
     @Singleton
     @Provides
@@ -42,4 +39,16 @@ class KutuphanemDBModule {
     @Singleton
     @Provides
     fun provideKitapDao(database: KutuphanemDatabase) = database.getKitapDao();
+
+    @Singleton
+    @Provides
+    fun provideKutuphanemGlobalExceptionHandlerDao(database: KutuphanemDatabase) = database.getGlobalExceptionDao();
+
+    @Singleton
+    @Provides
+    fun provideKutuphanemYayinEviDao(database: KutuphanemDatabase) = database.getYayinEviDao()
+
+    @Singleton
+    @Provides
+    fun provideKutuphanemKitapTUrDao(database: KutuphanemDatabase) = database.getKitapTurDao()
 }

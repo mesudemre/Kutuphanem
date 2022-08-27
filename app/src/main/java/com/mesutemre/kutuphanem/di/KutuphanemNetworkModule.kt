@@ -2,11 +2,13 @@ package com.mesutemre.kutuphanem.di
 
 import android.content.Context
 import com.mesutemre.kutuphanem.BuildConfig
+import com.mesutemre.kutuphanem.auth.service.KullaniciService
 import com.mesutemre.kutuphanem.interceptors.HeaderInterceptor
 import com.mesutemre.kutuphanem.interceptors.NetworkConnectionInterceptor
 import com.mesutemre.kutuphanem.kitap.service.IKitapService
-import com.mesutemre.kutuphanem.parametre.service.IParametreService
-import com.mesutemre.kutuphanem.auth.service.KullaniciService
+import com.mesutemre.kutuphanem.login.data.remote.LoginService
+import com.mesutemre.kutuphanem.parameter.kitaptur.data.remote.dto.IKitapTurApi
+import com.mesutemre.kutuphanem.parameter.yayinevi.data.remote.dto.IYayinEviApi
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import dagger.Module
 import dagger.Provides
@@ -61,10 +63,6 @@ class KutuphanemNetworkModule {
             .build();
     }
 
-    @Singleton
-    @Provides
-    fun provideParametreApi(retrofit: Retrofit): IParametreService = retrofit.create(
-        IParametreService::class.java);
 
     @Singleton
     @Provides
@@ -73,4 +71,20 @@ class KutuphanemNetworkModule {
     @Singleton
     @Provides
     fun provideKitapApi(retrofit: Retrofit): IKitapService = retrofit.create(IKitapService::class.java);
+
+
+    /*-------------------- Compose --------------------*/
+
+    @Singleton
+    @Provides
+    fun provideLoginAPI(retrofit: Retrofit):LoginService = retrofit.create(LoginService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideParametreYayinEviAPI(retrofit: Retrofit): IYayinEviApi = retrofit.create(IYayinEviApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideParametreKitapTurAPI(retrofit: Retrofit): IKitapTurApi = retrofit.create(IKitapTurApi::class.java)
+
 }

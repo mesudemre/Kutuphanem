@@ -1,5 +1,6 @@
 package com.mesutemre.kutuphanem.base
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
+import com.mesutemre.kutuphanem.R
 
 /**
  * @Author: mesutemre.celenk
@@ -15,17 +17,17 @@ import androidx.viewbinding.ViewBinding
  */
 abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
-    private var viewbinding:ViewBinding? = null;
-    abstract val bindingInflater:(LayoutInflater,ViewGroup?,Boolean)->VB;
-    abstract val layoutName:String;
+    private var viewbinding:ViewBinding? = null
+    abstract val bindingInflater:(LayoutInflater,ViewGroup?,Boolean)->VB
+    abstract val layoutName:String
 
     @Suppress("UNCHECKED_CAST")
     protected val binding: VB
-        get() = viewbinding as VB;
+        get() = viewbinding as VB
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState);
-        onCreateFragment(savedInstanceState);
+        super.onCreate(savedInstanceState)
+        onCreateFragment(savedInstanceState)
     }
 
     override fun onCreateView(
@@ -33,38 +35,39 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewbinding = bindingInflater.invoke(inflater,container,false);
-        onCreateViewFragment((viewbinding as VB).root);
+        viewbinding = bindingInflater.invoke(inflater,container,false)
+        onCreateViewFragment((viewbinding as VB).root)
         return requireNotNull(viewbinding).root;
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState);
-        setFragmentInfo();
-        onStartFragment();
+        super.onViewCreated(view, savedInstanceState)
+        setFragmentInfo()
+        onStartFragment()
     }
 
-    abstract fun onCreateFragment(savedInstanceState: Bundle?);
-    abstract fun onStartFragment();
-    open fun destroyOthers(){};
-    open fun onCreateViewFragment(view:View){};
+    abstract fun onCreateFragment(savedInstanceState: Bundle?)
+    abstract fun onStartFragment()
+    open fun destroyOthers(){}
+    open fun onCreateViewFragment(view:View){}
     open fun getFragmentView():View{
         return binding.root
     }
 
     override fun onDestroyView() {
-        super.onDestroyView();
-        viewbinding = null;
-        destroyOthers();
+        super.onDestroyView()
+        viewbinding = null
+        destroyOthers()
     }
 
     private fun setFragmentInfo():Unit{
-        val fragment = findNavController()?.currentDestination;
-        Log.d("Fragment", fragment?.label?.toString().toString());
-        Log.d("Fragment Layout",layoutName);
+        val fragment = findNavController()?.currentDestination
+        Log.d("Fragment", fragment?.label?.toString().toString())
+        Log.d("Fragment Layout",layoutName)
     }
 
     open fun onBackPressed() {
-        requireActivity().onBackPressed();
+        requireActivity().onBackPressed()
     }
+
 }

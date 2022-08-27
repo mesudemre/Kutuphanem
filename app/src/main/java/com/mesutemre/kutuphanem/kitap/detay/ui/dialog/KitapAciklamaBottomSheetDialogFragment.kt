@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -15,13 +16,14 @@ import com.mesutemre.kutuphanem.util.setDisplayFullHeight
  * @Author: mesutemre.celenk
  * @Date: 26.09.2021
  */
-class KitapAciklamaBottomSheetDialogFragment(val kitapAciklama:String): BottomSheetDialogFragment() {
+class KitapAciklamaBottomSheetDialogFragment: BottomSheetDialogFragment() {
 
-    private lateinit var binding:KitapAciklamaBottomSheetDialogFragmentBinding;
+    private lateinit var binding:KitapAciklamaBottomSheetDialogFragmentBinding
+    private val args:KitapAciklamaBottomSheetDialogFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState);
-        retainInstance = true;
+        super.onCreate(savedInstanceState)
+        retainInstance = true
     }
 
     override fun onCreateView(
@@ -29,29 +31,29 @@ class KitapAciklamaBottomSheetDialogFragment(val kitapAciklama:String): BottomSh
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = KitapAciklamaBottomSheetDialogFragmentBinding.inflate(inflater);
-        return binding.root;
+        binding = KitapAciklamaBottomSheetDialogFragmentBinding.inflate(inflater)
+        return binding.root
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = BottomSheetDialog(requireContext(), theme);
+        val dialog = BottomSheetDialog(requireContext(), theme)
         dialog.setOnShowListener {
             val bottomSheetDialog = it as BottomSheetDialog
             val parentLayout =
                 bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
             parentLayout?.let { it ->
                 val behaviour = BottomSheetBehavior.from(it)
-                it.setDisplayFullHeight();
+                it.setDisplayFullHeight()
                 behaviour.state = BottomSheetBehavior.STATE_EXPANDED
             }
         }
-        return dialog;
+        return dialog
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.kitapDetayAciklamaTextDialogId.text = kitapAciklama;
+        binding.kitapDetayAciklamaTextDialogId.text = args.kitapAciklama
         binding.closeKitapAciklamaDlgImageViewId.setOnClickListener {
-            dismiss();
+            dismiss()
         }
     }
 }

@@ -5,20 +5,27 @@
       <map>
         <entry key="../../../../../layout/custom_preview.xml" value="0.12239583333333333" />
         <entry key="app/src/main/res/drawable-v24/fill_heart.xml" value="0.10364583333333334" />
+        <entry key="app/src/main/res/drawable/bg_gradient_splash.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/capsule_shape.xml" value="0.1015625" />
         <entry key="app/src/main/res/drawable/capsule_shape_unselect.xml" value="0.1015625" />
         <entry key="app/src/main/res/drawable/detay_textview_background.xml" value="0.1265625" />
         <entry key="app/src/main/res/drawable/ic_baseline_archive_48.xml" value="0.1265625" />
         <entry key="app/src/main/res/drawable/ic_baseline_archive_white.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_baseline_chevron_left.xml" value="0.148" />
+        <entry key="app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_baseline_person_24.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_baseline_share_24.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_baseline_share_72.xml" value="0.12239583333333333" />
+        <entry key="app/src/main/res/drawable/ic_circle_delete.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_heart.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_popup_question.xml" value="0.131" />
         <entry key="app/src/main/res/drawable/kitap_detay_kitap_img_background.xml" value="0.1125" />
         <entry key="app/src/main/res/drawable/kitap_liste_tab_background.xml" value="0.1015625" />
         <entry key="app/src/main/res/drawable/like_heart.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/like_heart_checked_to_unchecked.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/like_heart_unchecked_to_checked.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/like_heart_vector.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/splash_background.xml" value="0.1" />
         <entry key="app/src/main/res/font/alegreya.xml" value="0.10208333333333333" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.17481884057971014" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.1" />
@@ -28,10 +35,12 @@
         <entry key="app/src/main/res/layout/fragment_kitap_detay_deep.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_splash.xml" value="0.11770833333333333" />
         <entry key="app/src/main/res/layout/fragment_tanitim.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/item_arsiv_kitap.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_dash_kategori.xml" value="0.11927083333333334" />
         <entry key="app/src/main/res/layout/item_kitap.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_kitap_search.xml" value="0.1308876811594203" />
         <entry key="app/src/main/res/layout/item_kitaptur.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/item_selection.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_yayinevi.xml" value="0.11927083333333334" />
         <entry key="app/src/main/res/layout/kitap_ekleme_fragment.xml" value="0.25" />
         <entry key="app/src/main/res/layout/kitap_item_swipe_layout.xml" value="0.22" />

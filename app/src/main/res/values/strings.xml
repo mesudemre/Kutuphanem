@@ -12,6 +12,7 @@
     <string name="shareLabel">Paylaş</string>
     <string name="archiveLabel">Arşivle</string>
     <string name="noNetworkConnection">İnternet bağlantınız bulunmamaktadır!</string>
+    <string name="vazgecLabel">Vazgeç</string>
 
     <!--Bottom Navigation Menu -->
     <string name="anasayfaItem">Anasayfa</string>
@@ -23,7 +24,7 @@
     <string name="girisLabel">Giriş</string>
     <string name="login_password_hint">Şifreniz</string>
     <string name="login_email_hint">Kullanıcı Adınız</string>
-    <string name="girisButtonLabel">Giriş</string>
+    <string name="girisButtonLabel">GİRİŞ</string>
     <string name="sifremiUnuttumLabel">Şifremi Unuttum</string>
     <string name="hesapYokKayitLabel">Hesabınız yok mu? Hemen kaydolun.</string>
 
@@ -35,16 +36,21 @@
     <!--ParametreFragment -->
     <string name="yayinEviLabel">Yayınevi</string>
     <string name="kitapTurLabel">Kitap Tür</string>
+    <string name="parametreScreenInfo">Bu ekranda aşağıdaki seçeneklerden birini seçerek Yayınevi, Kitap Türü ve bu parametrelerden birini ekleme işlemini gerçekleştirebilirsiniz.</string>
+    <string name="parameterAddLabel">Parametre Kaydı</string>
+    <string name="parametreEklemeInfo">Bu ekrandan kitap türü ya da yayınevi parametresi ekleyebilirsiniz.</string>
 
     <!--ParametreYayineviFragment -->
     <string name="yayinEviListeHataLabel">Yayınevi listesi yüklenemedi!</string>
     <string name="yayinEviSilmekIstiyormusunuz">adlı yayınevini silmek istiyor musunuz?</string>
     <string name="yayinEviSilmeHata">Yayınevi silinirken hata meydana geldi!</string>
+    <string name="yayilEviSilmeTitle">Yayınevi Silme</string>
 
     <!--ParametreKitapturFragment -->
     <string name="kitapTurListeHata">Kitap türü listesi yüklenemedi!</string>
     <string name="kitapTurSilmekIstiyormusunuz">adlı kitap türünü silmek istiyor musunuz?</string>
     <string name="kitapTurSilmeHata">Kitap türü silinirken hata meydana geldi!</string>
+    <string name="kitapTurSilmeTitle">Kitap Türü Silme</string>
 
     <!--ParametreEklemeFragment -->
     <string name="parametreAciklamaHint">Açıklama</string>
@@ -52,6 +58,9 @@
     <string name="parametreParamYayinevi">Yayınevi Parametresi Ekleme</string>
     <string name="parametreAciklamaHata">Açıklama boş geçilemez!</string>
     <string name="parametreEklemeHata">Parametre eklenirken hata meydana geldi!</string>
+    <string name="parametreEklemeKitapTurHata">Lütfen kitap türünü giriniz!</string>
+    <string name="parametreEklemeYayinEviHata">Lütfen yayın evinin adını giriniz!</string>
+    <string name="parametreEklemeLengthHata">En az 3 karakter girmelisiniz!</string>
 
     <!--KitapListeFragment -->
     <string name="kitapListeError">Kitap listesi getirilemedi!Tekrar deneyiniz...</string>
@@ -99,7 +108,6 @@
     <string name="profilGuncellemeTercihlerLabel">Uygulama Tercihlerim</string>
     <string name="cinsiyetLabel">Cinsiyetiniz</string>
 
-    <!--profil_image_degistir_menu.xml -->
     <string name="itemPhotoCamera">Kamera</string>
     <string name="itemPhotoLocalStorage">Galeri</string>
     <string name="itemRemoveImage">Resmi Kaldır</string>
@@ -138,6 +146,8 @@
     <string name="kitapResmiYuklemeHata">Kitap resmi yüklenirken hata meydana geldi!</string>
     <string name="kitapTurSecinizText">Kitap türü seçiniz...</string>
     <string name="yayinEviSecinizText">Yayınevi seçiniz...</string>
+    <string name="yayinEviNotFounCriteria">Aradığınız isimde bir yayınevi bulunmamaktadır...</string>
+    <string name="kitapTurNotFounCriteria">Aradığınız isimde bir kitap türü bulunmamaktadır...</string>
 
     <!--KitapDetayFragment -->
     <string name="kitapAdLabelText">Kitap Adı</string>
@@ -170,4 +180,18 @@
 
     <string name="pleaseSearch">Ara...</string>
     <string name="profilResimDegisiklik">Profil resminiz değiştirilecektir. Onaylıyor musunuz?</string>
+
+    <string name="fab_menu_manuel">Manuel Giriş</string>
+    <string name="fab_menu_isbn">ISBN</string>
+    <string name="fab_menu_isbn_cam">Kamera</string>
+
+    <string name="kutuphanem_notification_channel_id">kutuphanemapp2021</string>
+    <string name="kutuphanem_notification_channel_name">kutuphanemapp</string>
+    <string name="kutuphanem_notification_channel_advertise">kutuphanemuygulamasi</string>
+
+    <string name="clear_arsiv_image_result">Arşivinizde olmayan kitapların resimlerini sizin için sildik. İyi günler dileriz...</string>
+    <string name="title_activity_main">MainActivity</string>
+
+
+    <string name="splash_content_desc">Kütüphanem Splash Logo</string>
 </resources>

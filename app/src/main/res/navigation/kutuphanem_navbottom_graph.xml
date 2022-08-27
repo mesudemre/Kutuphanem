@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/kutuphanem_navbottom_graph"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/splashFragment">
+    app:startDestination="@id/anasayfaFragment">
 
     <fragment
         android:id="@+id/anasayfaFragment"
@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_anasayfaFragment_to_kitapDetayFragment"
             app:destination="@id/kitapDetayFragment" />
+        <action
+            android:id="@+id/action_anasayfaFragment_to_closeApplicationDialogFragment"
+            app:destination="@id/closeApplicationDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/kitapListeFragment"
@@ -37,19 +40,13 @@
         <action
             android:id="@+id/action_parametreFragment_to_profilIslemFragment"
             app:destination="@id/profilIslemFragment" />
-        <action
-            android:id="@+id/action_parametreFragment_to_parametreEklemeFragment"
-            app:destination="@id/parametreEklemeFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/profilIslemFragment"
         tools:layout="@layout/profil_islem_fragment"
         android:name="com.mesutemre.kutuphanem.auth.profil.ui.ProfilIslemFragment"
         android:label="ProfilIslemFragment" >
-        <action
-            android:id="@+id/action_profilIslemFragment_to_loginFragment"
-            app:destination="@id/loginFragment"
-            app:enterAnim="@anim/slide_down" />
         <action
             android:id="@+id/action_profilIslemFragment_to_profilIslemAdSoyadEpostaFragment"
             app:destination="@id/profilIslemAdSoyadEpostaFragment"
@@ -60,25 +57,16 @@
             app:enterAnim="@anim/slide_left"/>
         <action
             android:id="@+id/action_profilIslemFragment_to_profilIslemIlgiAlanlarimFragment"
-            app:destination="@id/profilIslemIlgiAlanlarimFragment"
-            app:enterAnim="@anim/slide_left"/>
+            app:destination="@id/profilIslemIlgiAlanlarimFragment"/>
         <action
             android:id="@+id/action_profilIslemFragment_to_profilIslemIletisiTercihlerimFragment"
             app:destination="@id/profilIslemIletisiTercihlerimFragment"
             app:enterAnim="@anim/slide_left"/>
-    </fragment>
-    <fragment
-        android:id="@+id/parametreEklemeFragment"
-        android:name="com.mesutemre.kutuphanem.parametre.ekleme.ui.ParametreEklemeFragment"
-        android:label="ParametreEklemeFragment" >
-        <argument
-            android:name="paramTur"
-            app:argType="string"
-            app:nullable="true" />
         <action
-            android:id="@+id/action_parametreEklemeFragment_to_parametreFragment"
-            app:destination="@id/parametreFragment" />
+            android:id="@+id/action_profilIslemFragment_to_exitFromApplicationDialogFragment"
+            app:destination="@id/exitFromApplicationDialogFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/kitapEklemeFragment"
         android:name="com.mesutemre.kutuphanem.kitap.ekleme.ui.KitapEklemeFragment"
@@ -94,6 +82,12 @@
         <argument
             android:name="fromArsiv"
             app:argType="boolean"/>
+        <action
+            android:id="@+id/action_kitapDetayFragment_to_kotlinKitapViewFooFragment"
+            app:destination="@id/kotlinKitapViewFooFragment" />
+        <action
+            android:id="@+id/action_kitapDetayFragment_to_kitapAciklamaBottomSheetDialogFragment"
+            app:destination="@id/kitapAciklamaBottomSheetDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/kitapDetayDeepFragment"
@@ -104,29 +98,10 @@
             app:destination="@id/anasayfaFragment" />
         <deepLink
             android:id="@+id/deepLinkKitapDetay"
-            app:uri="http://192.168.1.105:8080/KutuphaneSistemiWS/api/kitap/nesne?kitapId={kitapId}" />
+            app:uri="http://192.168.1.106:8080/KutuphaneSistemiWS/api/kitap/nesne?kitapId={kitapId}" />
         <argument android:name="kitapId" app:argType="string"/>
     </fragment>
-    <fragment
-        android:id="@+id/splashFragment"
-        android:name="com.mesutemre.kutuphanem.anasayfa.ui.SplashFragment"
-        android:label="SplashFragment" >
-        <action
-            android:id="@+id/action_splashFragment_to_anasayfaFragment"
-            app:destination="@id/anasayfaFragment" />
-        <action
-            android:id="@+id/action_splashFragment_to_loginFragment"
-            app:destination="@id/loginFragment"
-            app:enterAnim="@anim/slide_down" />
-    </fragment>
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.mesutemre.kutuphanem.auth.login.ui.LoginFragment"
-        android:label="LoginFragment" >
-        <action
-            android:id="@+id/action_loginFragment_to_anasayfaFragment"
-            app:destination="@id/anasayfaFragment" />
-    </fragment>
+
     <fragment
         android:id="@+id/profilIslemAdSoyadEpostaFragment"
         android:name="com.mesutemre.kutuphanem.auth.profil.ui.ProfilIslemAdSoyadEpostaFragment"
@@ -159,6 +134,29 @@
             android:name="kullaniciObj"
             app:argType="com.mesutemre.kutuphanem.auth.profil.model.Kullanici" />
     </fragment>
-
-
+    <fragment
+        android:id="@+id/kotlinKitapViewFooFragment"
+        android:name="com.mesutemre.kutuphanem.kitap.detay.ui.KotlinKitapViewFooFragment"
+        android:label="KotlinKitapViewFooFragment">
+        <argument android:name="fileInfo" app:argType="com.mesutemre.kutuphanem.kitap.detay.ui.FileDataModel"/>
+    </fragment>
+    <dialog
+        android:id="@+id/kitapAciklamaBottomSheetDialogFragment"
+        android:name="com.mesutemre.kutuphanem.kitap.detay.ui.dialog.KitapAciklamaBottomSheetDialogFragment"
+        android:label="KitapAciklamaBottomSheetDialogFragment">
+        <argument android:name="kitapAciklama" app:argType="string"/>
+    </dialog>
+    <dialog
+        android:id="@+id/closeApplicationDialogFragment"
+        android:name="com.mesutemre.kutuphanem.anasayfa.ui.dialog.CloseApplicationDialogFragment"
+        android:label="CloseApplicationDialogFragment" />
+    <dialog
+        android:id="@+id/exitFromApplicationDialogFragment"
+        android:name="com.mesutemre.kutuphanem.auth.profil.ui.dialog.ExitFromApplicationDialogFragment"
+        android:label="ExitFromApplicationDialogFragment">
+    </dialog>
+    <dialog
+        android:id="@+id/resimSecBottomSheetDialogFragment"
+        android:name="com.mesutemre.kutuphanem.auth.profil.ui.dialog.ResimSecBottomSheetDialogFragment"
+        android:label="ResimSecBottomSheetDialogFragment" />
 </navigation>

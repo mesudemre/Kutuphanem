@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:textAllCaps="true"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="@dimen/kutuphanem_general_left_right_margin"
         android:text="@string/kitapTurSecinizText"
         android:textColor="@color/black"
         android:textStyle="bold" />
@@ -24,21 +24,21 @@
     <SearchView
         android:id="@+id/selectionSearchView"
         android:layout_width="match_parent"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginTop="@dimen/kutuphanem_general_left_right_margin"
+        android:layout_marginBottom="@dimen/kutuphanem_general_left_right_margin"
+        android:layout_marginStart="@dimen/kutuphanem_general_cardview_radius"
+        android:layout_marginEnd="@dimen/kutuphanem_general_cardview_radius"
         android:background="@color/acikGri"
-        android:layout_marginEnd="8dp"
         android:layout_height="wrap_content"
         android:includeFontPadding="false"
-        android:padding="2dp"
-        android:textSize="16sp"
+        android:padding="@dimen/kutuphanem_small_margin_top_space"
+        android:textSize="@dimen/_16sdp"
         app:iconifiedByDefault="false"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/selectionRecyclerViewId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="@dimen/kutuphanem_general_left_right_margin"/>
 
 </LinearLayout>

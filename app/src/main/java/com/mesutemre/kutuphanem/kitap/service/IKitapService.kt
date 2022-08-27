@@ -55,4 +55,8 @@ interface IKitapService {
     @Streaming
     @GET
     suspend fun downloadKitapResim(@Url fileUrl:String):Response<ResponseBody>;
+
+    @Streaming
+    @GET
+    suspend fun downloadKitapFoo(@Url fileUrl:String):Response<ResponseBody>;
 }

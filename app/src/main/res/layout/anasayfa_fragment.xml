@@ -17,13 +17,13 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="48dp"
+                android:layout_marginLeft="@dimen/kutuphanem_small_margin_top_space"
+                android:layout_marginRight="@dimen/kutuphanem_small_margin_top_space"
                 android:focusableInTouchMode="true"
-                app:boxCornerRadiusBottomEnd="20dp"
-                app:boxCornerRadiusBottomStart="20dp"
-                app:boxCornerRadiusTopEnd="20dp"
-                app:boxCornerRadiusTopStart="20dp"
+                app:boxCornerRadiusBottomEnd="@dimen/kutuphanem_general_margin_top"
+                app:boxCornerRadiusBottomStart="@dimen/kutuphanem_general_margin_top"
+                app:boxCornerRadiusTopEnd="@dimen/kutuphanem_general_margin_top"
+                app:boxCornerRadiusTopStart="@dimen/kutuphanem_general_margin_top"
                 app:errorEnabled="true"
                 app:startIconDrawable="@drawable/ic_baseline_search_grey_24">
 
@@ -39,29 +39,31 @@
                 android:id="@+id/notificationImageId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:foreground="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
                 android:layout_alignRight="@id/searchInputLayout"
                 android:layout_alignParentEnd="true"
+                android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
-                android:src="@drawable/ic_baseline_notifications_48" />
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:src="@drawable/ic_baseline_notifications_48"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/cart_badge"
                 android:layout_width="20dp"
-                android:layout_alignRight="@id/notificationImageId"
                 android:layout_height="20dp"
+                android:layout_alignRight="@id/notificationImageId"
                 android:layout_gravity="right|end|top"
-                android:layout_marginEnd="8dp"
                 android:layout_marginTop="3dp"
+                android:layout_marginEnd="8dp"
                 android:background="@drawable/badge_background"
                 android:gravity="center"
                 android:padding="3dp"
-                android:textColor="@android:color/white"
                 android:text="5"
-                android:textSize="12sp"/>
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:visibility="gone"/>
         </RelativeLayout>
 
         <View
@@ -81,14 +83,14 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="@dimen/_40sdp"
                     android:background="@color/vbsari">
 
                     <ImageView
                         android:id="@+id/yeniIconLeftId"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginStart="10dp"
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginStart="@dimen/_5sdp"
                         android:src="@drawable/yeni_icon" />
 
                     <com.google.android.material.textview.MaterialTextView
@@ -96,31 +98,25 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:layout_marginLeft="2dp"
+                        android:layout_marginLeft="@dimen/kutuphanem_small_margin_top_space"
                         android:layout_toRightOf="@id/yeniIconLeftId"
-                        android:fontFamily="@font/alegreya"
                         android:text="@string/yeniArayuzText"
-                        android:textColor="@color/whiteTextColor"
-                        android:textSize="17sp"
-                        android:textStyle="bold" />
+                        style="@style/TextAppearance.White.Normal.Alegrya.Bold" />
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="@dimen/_8sdp"
+                    android:layout_marginRight="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/kutuphanem_login_margin_padding"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <com.google.android.material.textview.MaterialTextView
+                        style="@style/TextAppearance.Transparent.Large.Alegrya.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:fontFamily="@font/alegreya"
-                        android:text="@string/dashKategoriText"
-                        android:textColor="@color/transparent"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
+                        android:text="@string/dashKategoriText" />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -130,15 +126,12 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <com.google.android.material.textview.MaterialTextView
+                    <com.mesutemre.kutuphanem.util.customcomponents.CustomErrorComponent
                         android:id="@+id/dashKategoriHataTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:visibility="gone"
-                        android:text="@string/dashKategoriListeHata"
-                        android:textColor="@color/design_default_color_error"
-                        android:textSize="16sp" />
+                        app:custom_error_message="@string/dashKategoriListeHata"
+                        android:visibility="gone"/>
 
                     <ProgressBar
                         android:id="@+id/dashKategoriProgressBarId"
@@ -158,7 +151,7 @@
 
                 <LinearLayout
                     android:orientation="vertical"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="@dimen/kutuphanem_general_margin_top"
                     android:background="@color/lacivert"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -166,12 +159,12 @@
                     <androidx.viewpager2.widget.ViewPager2
                         android:id="@+id/tanitimViewPager"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp" />
+                        android:layout_height="@dimen/_50sdp" />
 
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/tanitimTabLayout"
                         android:layout_width="match_parent"
-                        android:layout_height="20dp"
+                        android:layout_height="@dimen/kutuphanem_general_margin_top"
                         android:layout_gravity="bottom"
                         android:background="@color/lacivert"
                         app:tabBackground="@drawable/tab_selector"

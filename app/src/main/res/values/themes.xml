@@ -1,4 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="SplashTheme" parent="Theme.SplashScreen">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="postSplashScreenTheme">@style/NoActionBar</item>
+    </style>
     <!-- Base application theme. -->
     <style name="Theme.Kutuphanem" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
@@ -10,68 +15,85 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
-    <style name="NoActionBar" parent="Theme.MaterialComponents.Light.DarkActionBar">
+
+    <style name="NoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-
-        <item name="colorPrimary">@color/primaryTextColor</item>
-        <item name="colorPrimaryVariant">#314AEC</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:opacity">opaque</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
+
     <style name="generalParent">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
+
     <style name="loginParent" parent="generalParent">
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">@color/loginBkColor</item>
         <item name="android:focusableInTouchMode">true</item>
     </style>
+
     <style name="headerText" parent="generalParent">
         <item name="android:textSize">22sp</item>
         <item name="android:textAlignment">center</item>
         <item name="android:textColor">@color/whiteTextColor</item>
         <item name="android:textStyle">bold</item>
     </style>
+
     <style name="modifiedEditText" parent="generalParent">
         <item name="android:textSize">12sp</item>
     </style>
+
     <style name="ErrorTextAppearance" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@android:color/holo_red_dark</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textStyle">bold</item>
     </style>
+
     <style name="ParametreTabLayoutTextStyle" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
         <item name="textAllCaps">false</item>
     </style>
+
     <style name="KitapListeTabLayoutTextStyle" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">@font/alegreya_bold</item>
         <item name="textAllCaps">false</item>
     </style>
+
     <style name="BottomNavigationItemActive">
         <item name="android:fontFamily">@font/alegreya</item>
         <item name="itemTextColor">@color/nav_icontint_colors</item>
         <item name="itemIconTint">@color/nav_icontint_colors</item>
     </style>
+
     <style name="BottomNavigationItemInActive">
         <item name="android:fontFamily">@font/alegreya</item>
         <item name="itemTextColor">@color/cardview_dark_background</item>
         <item name="itemIconTint">@color/cardview_dark_background</item>
     </style>
+
     <style name="DatePickerTheme" parent="Theme.MaterialComponents.Light.Dialog">
         <item name="colorAccent">@color/lacivert</item>
-        <item name="android:buttonBarNegativeButtonStyle">@style/DatePickerTheme.ButtonBarNegativeButtonStyle</item>
-        <item name="android:buttonBarPositiveButtonStyle">@style/DatePickerTheme.ButtonBarPositiveButtonStyle</item>
+        <item name="android:buttonBarNegativeButtonStyle">
+            @style/DatePickerTheme.ButtonBarNegativeButtonStyle
+        </item>
+        <item name="android:buttonBarPositiveButtonStyle">
+            @style/DatePickerTheme.ButtonBarPositiveButtonStyle
+        </item>
     </style>
+
     <style name="DatePickerTheme.ButtonBarNegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@color/lacivert</item>
     </style>
+
     <style name="DatePickerTheme.ButtonBarPositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@color/lacivert</item>
     </style>
+
     <style name="CustomCardViewStyle" parent="@style/Widget.MaterialComponents.CardView">
         <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay_card_custom_corners</item>
     </style>
@@ -99,29 +121,36 @@
     <style name="PrimaryButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:backgroundTint">@color/lacivert</item>
     </style>
+
     <style name="ProfilUpdateButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:background">@drawable/profil_guncelle_button_background</item>
         <item name="android:text">@string/profilGuncelleButtonLabel</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginRight">3dp</item>>
-        <item name="android:layout_marginLeft">3dp</item>>
-        <item name="android:layout_marginTop">20dp</item>
-        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_marginRight">@dimen/kutuphanem_small_margin_top_space</item>>
+        <item name="android:layout_marginLeft">@dimen/kutuphanem_small_margin_top_space</item>>
+        <item name="android:layout_marginTop">@dimen/kutuphanem_general_margin_top</item>
+        <item name="android:layout_marginBottom">@dimen/profil_islem_ilgi_alan_margin_bottom</item>
         <item name="android:textColor">@color/whiteTextColor</item>
     </style>
+
     <style name="LogoutButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:backgroundTint">@color/kirmizi</item>
     </style>
+
     <style name="KutuphanemCheckBoxStyle" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
         <item name="android:buttonTint">@color/lacivert</item>
     </style>
+
     <style name="KutuphanemRadioButtonStyle" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
         <item name="android:buttonTint">@color/lacivert</item>
     </style>
+
     <style name="TabRoundCardviewStyle" parent="@style/Widget.MaterialComponents.CardView">
-        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MaterialCardView.Cut</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MaterialCardView.Cut
+        </item>
     </style>
+
     <style name="ShapeAppearanceOverlay.MaterialCardView.Cut" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopRight">30dp</item>
@@ -129,9 +158,11 @@
         <item name="cornerSizeBottomRight">30dp</item>
         <item name="cornerSizeBottomLeft">30dp</item>
     </style>
+
     <style name="CustomHintApperance" parent="TextAppearance.Design.Hint">
         <item name="android:textColor">@color/transparent</item>
     </style>
+
     <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
         <item name="searchHintIcon">@null</item>
         <item name="queryHint">@string/searchHintText</item>
@@ -152,10 +183,38 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="trackTint">@color/switch_track_selector</item>
         <item name="thumbTint">@color/switch_thumb_selector</item>
-        <item name="android:textColor">@color/transparent</item>
+        <item name="android:textAppearance">@style/TextAppearance.Transparent.Small.Ubuntu</item>
     </style>
+
     <style name="ChipTextAppearance.Readable" parent="TextAppearance.MaterialComponents.Chip">
         <item name="fontFamily">@font/alegreya_bold</item>
         <item name="android:fontFamily">@font/alegreya_bold</item>
     </style>
+
+    <style name="TextAppearance"></style>
+
+    <style name="TextAppearance.Lacivert">
+        <item name="android:textColor">@color/lacivert</item>
+    </style>
+
+    <style name="TextAppearance.Transparent">
+        <item name="android:textColor">@color/transparent</item>
+    </style>
+
+    <style name="TextAppearance.Black">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextAppearance.White">
+        <item name="android:textColor">@color/whiteTextColor</item>
+    </style>
+
+    <style name="TextAppearance.Primary">
+        <item name="android:textColor">@color/primaryTextColor</item>
+    </style>
+
+    <style name="TextAppearance.Error">
+        <item name="android:textColor">@color/design_default_color_error</item>
+    </style>
+
 </resources>

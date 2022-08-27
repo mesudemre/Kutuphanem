@@ -10,10 +10,6 @@ import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.di.IoDispatcher
 import com.mesutemre.kutuphanem.kitap.service.IKitapService
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
-import com.mesutemre.kutuphanem.parametre.dao.ParametreRepository
-import com.mesutemre.kutuphanem.parametre.kitaptur.model.KitapturModel
-import com.mesutemre.kutuphanem.parametre.service.IParametreService
-import com.mesutemre.kutuphanem.parametre.yayinevi.model.YayineviModel
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.PARAM_KITAPTUR_DB_KEY
 import com.mesutemre.kutuphanem.util.PARAM_YAYINEVI_DB_KEY
@@ -36,15 +32,12 @@ import javax.inject.Inject
 class KitapEklemeViewModel @Inject
 constructor(@IoDispatcher private val ioDispatcher: CoroutineDispatcher,
             private val kitapService: IKitapService,
-            private val parametreService: IParametreService,
-            private val parametreRepository: ParametreRepository
 ): BaseViewModel() {
 
     @Inject
     lateinit var customSharedPreferences: CustomSharedPreferences;
 
-    val kitapTurListeResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<List<KitapturModel>>>();
-    val yayinEviListeResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<List<YayineviModel>>>();
+
     val kitapKaydetResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<Boolean>>();
     val kitapResimYukleResourceEvent = BaseSingleLiveEvent<BaseResourceEvent<ResponseStatusModel>>();
 
@@ -67,99 +60,21 @@ constructor(@IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     }
 
     private suspend fun initKitapTurFromService(){
-        kitapTurListeResourceEvent.value = BaseResourceEvent.Loading();
-        val kitapTurListeResponse = serviceCall(
-            call = {
-                parametreService.getKitapTurListe()
-            },ioDispatcher);
-        when(kitapTurListeResponse){
-            is BaseDataEvent.Success->{
-                kitapTurListeResourceEvent.value = BaseResourceEvent.Success(kitapTurListeResponse.data!!);
-                storeKitapTurInDatabse(kitapTurListeResponse.data!!);
-            }
-            is BaseDataEvent.Error->{
-                kitapTurListeResourceEvent.value = BaseResourceEvent.Error(kitapTurListeResponse.errMessage);
-            }
-        }
+
     }
 
     private suspend fun initKitapTurFromDatabase(){
-        kitapTurListeResourceEvent.value = BaseResourceEvent.Loading();
-        val kitapTurListeDBResponse = dbCall(
-            call = {
-                parametreRepository.getKitapTurListe()
-            },ioDispatcher);
 
-        when(kitapTurListeDBResponse){
-            is BaseDataEvent.Success->{
-                kitapTurListeResourceEvent.value = BaseResourceEvent.Success(kitapTurListeDBResponse.data!!);
-            }
-            is BaseDataEvent.Error->{
-                kitapTurListeResourceEvent.value = BaseResourceEvent.Error(kitapTurListeDBResponse.errMessage);
-            }
-        }
-    }
-
-    private suspend fun storeKitapTurInDatabse(kitapTurListe:List<KitapturModel>){
-        withContext(ioDispatcher) {
-            parametreRepository.deleteKitapTurListe();
-            parametreRepository.kitapTurParametreKaydet(*kitapTurListe.toTypedArray());
-            customSharedPreferences.putBooleanToSharedPreferences(PARAM_KITAPTUR_DB_KEY,true);
-        }
     }
 
     private suspend fun yayinEviListeGetir(){
         val fromDb = customSharedPreferences.getBooleanFromSharedPreferences(
             PARAM_YAYINEVI_DB_KEY
         );
-        if(fromDb){
-            this.initYayinEviFromDatabase();
-        }else{
-            this.initYayinEviFromService();
-        }
+
     }
 
-    private suspend fun initYayinEviFromService(){
-        yayinEviListeResourceEvent.value = BaseResourceEvent.Loading();
-        val yayinEviListeResponse = serviceCall(
-            call = {
-                parametreService.getYayinEviListe();
-            },ioDispatcher);
-        when(yayinEviListeResponse){
-            is BaseDataEvent.Success->{
-                yayinEviListeResourceEvent.value = BaseResourceEvent.Success(yayinEviListeResponse.data!!);
-                storeYayinEviInDatabse(yayinEviListeResponse.data!!);
-            }
-            is BaseDataEvent.Error->{
-                yayinEviListeResourceEvent.value = BaseResourceEvent.Error(yayinEviListeResponse.errMessage);
-            }
-        }
-    }
 
-    private suspend fun initYayinEviFromDatabase(){
-        yayinEviListeResourceEvent.value = BaseResourceEvent.Loading();
-        val yayinEviListeDBResponse = dbCall(
-            call = {
-                parametreRepository.getYayinEviListe()
-            },ioDispatcher);
-
-        when(yayinEviListeDBResponse){
-            is BaseDataEvent.Success->{
-                yayinEviListeResourceEvent.value = BaseResourceEvent.Success(yayinEviListeDBResponse.data!!);
-            }
-            is BaseDataEvent.Error->{
-                yayinEviListeResourceEvent.value = BaseResourceEvent.Error(yayinEviListeDBResponse.errMessage);
-            }
-        }
-    }
-
-    private suspend fun storeYayinEviInDatabse(yayinEviListe:List<YayineviModel>){
-        withContext(ioDispatcher) {
-            parametreRepository.deleteYayinEviListe();
-            parametreRepository.yayinEviParametreKaydet(*yayinEviListe.toTypedArray());
-            customSharedPreferences.putBooleanToSharedPreferences(PARAM_YAYINEVI_DB_KEY,true);
-        }
-    }
 
      fun kitapKaydet(jsonStr:String,kitapImageUri:Uri,context:Context){
         viewModelScope.launch {

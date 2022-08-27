@@ -94,7 +94,7 @@
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/lacivert"
+                android:textColor="@color/transparent"
                 android:fontFamily="@font/alegreya_bold"
                 android:textSize="18sp"
                 android:text="@string/itemRemoveImage" />
@@ -105,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="4dp"
-                app:tint="@color/lacivert"
+                app:tint="@color/transparent"
                 android:src="@drawable/ic_baseline_delete_24" />
         </LinearLayout>
 
@@ -123,7 +123,7 @@
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/lacivert"
+                android:textColor="@color/transparent"
                 android:textSize="18sp"
                 android:fontFamily="@font/alegreya_bold"
                 android:text="@string/itemPhotoCamera" />
@@ -133,7 +133,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                app:tint="@color/lacivert"
+                app:tint="@color/transparent"
                 android:layout_marginTop="4dp"
                 android:src="@drawable/ic_baseline_photo_camera_24" />
         </LinearLayout>
@@ -154,7 +154,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:fontFamily="@font/alegreya_bold"
-                android:textColor="@color/lacivert"
+                android:textColor="@color/transparent"
                 android:text="@string/itemPhotoLocalStorage"/>
 
             <ImageView
@@ -163,7 +163,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="4dp"
-                app:tint="@color/lacivert"
+                app:tint="@color/transparent"
                 android:src="@drawable/ic_baseline_image_24" />
         </LinearLayout>
 

@@ -51,16 +51,6 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/kitapTurText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:gravity="left"
-                    android:text="@{`Kitap Türü : ` + kitap.kitapTur.aciklama}"
-                    android:textColor="#4E4E4E"
-                    android:textSize="14sp" />
-
-                <TextView
                     android:id="@+id/kitapAciklamaTextId"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

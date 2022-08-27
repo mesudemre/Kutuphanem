@@ -34,4 +34,5 @@
     <color name="acikGri">#FAFAFA</color>
     <color name="ratingYellow">#FFC107</color>
     <color name="acik_lacivert">#1D5CFD</color>
+    <color name="google_dark_grey">#2d2e30</color>
 </resources>

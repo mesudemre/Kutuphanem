@@ -1,23 +1,39 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-//apply plugin: 'kotlin-android-extensions'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
-apply plugin: 'kotlin-android-extensions'
+//apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     defaultConfig {
         applicationId "com.mesutemre.kutuphanem"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 5
-        versionName "1.1"
+        versionCode 20
+        versionName "2.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+
+    def keystorePropertiesFile = rootProject.file("app/keystore.properties");
+    def keystoreProperties = new Properties()
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+    signingConfigs {
+        release {
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+        }
     }
 
     dataBinding{
@@ -31,6 +47,7 @@ android {
 
     buildTypes {
         release {
+            manifestPlaceholders = [appLabel: "Kütüphanem"]
             debuggable false
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -38,18 +55,25 @@ android {
         }
 
         debug {
+            manifestPlaceholders = [appLabel: "Kütüphanem-Debug"]
             buildConfigField 'String', 'API_URL', "\"${DEV_ALPHA_BETA_API_URL}\""
             debuggable true
+            versionNameSuffix "-debug"
         }
 
         alpha {
+            manifestPlaceholders = [appLabel: "Kütüphanem-Alpha"]
             buildConfigField 'String', 'API_URL', "\"${DEV_ALPHA_BETA_API_URL}\""
             debuggable true
+            versionNameSuffix "-alpha"
         }
 
         beta {
+            manifestPlaceholders = [appLabel: "Kütüphanem-Beta"]
             buildConfigField 'String', 'API_URL', "\"${DEV_ALPHA_BETA_API_URL}\""
-            debuggable true
+            debuggable false
+            versionNameSuffix "-beta"
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
@@ -63,7 +87,12 @@ android {
         disable 'RestrictedApi'
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.0.1'
+        kotlinCompilerExtensionVersion = '1.1.1'
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
     }
 }
 
@@ -75,9 +104,11 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.3.61"
 
     implementation "android.arch.lifecycle:extensions:$lifeCycleExtensionVersion"
     implementation "androidx.room:room-runtime:$roomVersion"
@@ -102,6 +133,7 @@ dependencies {
     implementation "androidx.paging:paging-rxjava2:$pagingVersion"
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    kapt("androidx.hilt:hilt-compiler:1.0.0")
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
     implementation group: 'commons-io', name: 'commons-io', version: '2.6'
     implementation("androidx.security:security-crypto:1.0.0")
@@ -111,14 +143,43 @@ dependencies {
     implementation 'id.zelory:compressor:3.0.1'
 
     //Jetpack compose libs
-    implementation "androidx.activity:activity-compose:$compose_version"
-    implementation "androidx.compose.material:material:$composeUI_version"
-    implementation "androidx.compose.animation:animation:$composeUI_version"
-    implementation "androidx.compose.ui:ui-tooling:$composeUI_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$composeVM_version"
-    implementation "com.google.android.material:compose-theme-adapter:$composeMaterial_version"
+    implementation "androidx.compose.ui:ui:$compose_ui_version"
+    implementation "androidx.compose.ui:ui-tooling:$compose_tooling_version"
+    implementation "androidx.compose.foundation:foundation:$compose_foundation_version"
+    implementation "androidx.compose.material:material:$compose_material_version"
+    implementation "androidx.compose.material:material-icons-core:$compose_material_icon_version_core"
+    implementation "androidx.compose.material:material-icons-extended:$compose_material_icon_extended"
+    implementation "androidx.activity:activity-compose:$compose_activity_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$compose_view_model_version"
+    implementation "androidx.compose.runtime:runtime-livedata:$compose_live_data_version"
+    implementation "androidx.compose.runtime:runtime-rxjava2:$compose_rxjava_version"
+    implementation "androidx.navigation:navigation-compose:$compose_nav_version"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_junit_version"
+    implementation "androidx.compose.compiler:compiler:1.2.0-alpha04"
+    implementation "androidx.hilt:hilt-navigation-compose:$compose_hilt_version"
+    implementation "androidx.constraintlayout:constraintlayout-compose:$compose_constraint_layout"
+
 
     implementation platform('com.google.firebase:firebase-bom:28.4.1')
 
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttpLogging_version"
+
+    implementation "androidx.work:work-runtime-ktx:$work_manager_version"
+    implementation "androidx.hilt:hilt-work:$work_manager_hilt_version"
+    implementation "com.intuit.sdp:sdp-android:$intuit_version"
+
+    implementation 'androidx.core:core-splashscreen:1.0.0-beta01'
+
+    //Compose accompanist
+    implementation "com.google.accompanist:accompanist-pager:$accompanist_pager"
+    implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_systemuicontroller"
+    implementation "com.google.accompanist:accompanist-insets:$accompanist_insets"
+    implementation "com.google.accompanist:accompanist-insets-ui:$accompanist_insetsui"
+    implementation "com.google.accompanist:accompanist-flowlayout:$accompanist_flowlayout"
+    implementation "com.google.accompanist:accompanist-pager-indicators:$accompanist_pagerindicators"
+    implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_swiperefresh"
+    implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_navigationAnimate"
+    implementation "com.airbnb.android:lottie-compose:$lottieVersion"
+
+    //implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 }
