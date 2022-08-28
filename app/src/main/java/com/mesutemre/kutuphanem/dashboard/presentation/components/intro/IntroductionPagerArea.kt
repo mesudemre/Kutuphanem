@@ -36,9 +36,9 @@ fun IntroductionPagerArea(pagerList: List<IntroductionPagerData>) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(80.sdp),
-            backgroundColor = MaterialTheme.colorPalette.acikSari,
+            backgroundColor = MaterialTheme.colorPalette.white,
             shape = MaterialTheme.shapes.medium,
-            elevation = 4.sdp
+            elevation = 8.sdp
         ) {
             AnimatedVisibility(
                 visible = page == pagerState.currentPage,
