@@ -98,7 +98,7 @@ class MainActivity : ComponentActivity() {
                         if (tokenState.value.isNotEmpty()) {
                             KutuphanemNavigation(
                                 navController = kutuphanemAppState.navController,
-                                startDestinition = KutuphanemNavigationItem.MainScreen,
+                                startDestinition = KutuphanemNavigationItem.DashboardScreen,
                                 showSnackbar = { message, duration, type ->
                                     kutuphanemAppState.showSnackbar(
                                         message = message,
@@ -136,7 +136,7 @@ private fun KutuphanemBottomNavigationBar(
     val currentRoute = navBackStackEntry?.destination?.route
 
     val bottomNavItems = listOf(
-        KutuphanemNavigationItem.MainScreen,
+        KutuphanemNavigationItem.DashboardScreen,
         KutuphanemNavigationItem.BookListScreen,
         KutuphanemNavigationItem.ParameterScreen,
         KutuphanemNavigationItem.ProfileScreen

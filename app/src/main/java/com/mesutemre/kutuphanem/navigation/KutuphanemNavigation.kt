@@ -12,8 +12,8 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
+import com.mesutemre.kutuphanem.dashboard.DashboardScreen
 import com.mesutemre.kutuphanem.login.presentation.LoginScreen
-import com.mesutemre.kutuphanem.mainscreen.MainScreen
 import com.mesutemre.kutuphanem.parameter.ParametreScreen
 import com.mesutemre.kutuphanem.parameter.ekleme.presentation.ParametreEklemeScreen
 import com.mesutemre.kutuphanem.parameter.kitaptur.presentation.ParametreKitapTurScreen
@@ -30,8 +30,8 @@ fun KutuphanemNavigation(
         navController = navController,
         startDestination = startDestinition.screenRoute
     ) {
-        composable(route = KutuphanemNavigationItem.MainScreen.screenRoute) {
-            MainScreen()
+        composable(route = KutuphanemNavigationItem.DashboardScreen.screenRoute) {
+            DashboardScreen()
         }
 
         composable(route = KutuphanemNavigationItem.LoginScreen.screenRoute) {

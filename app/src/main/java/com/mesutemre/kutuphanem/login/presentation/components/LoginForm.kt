@@ -77,7 +77,7 @@ fun LoginForm(
                 )
             }
             if (loginState.isSuccess) {
-                navController.navigate(KutuphanemNavigationItem.MainScreen.screenRoute) {
+                navController.navigate(KutuphanemNavigationItem.DashboardScreen.screenRoute) {
                     popUpToTop(navController)
                 }
             }

@@ -41,3 +41,4 @@ val buttonGradientBrush = Brush.horizontalGradient(
 val SecondaryGray = Color(0XFF8294A8)
 val OtherGrayLight = Color(0xFFB4BFCB)
 val iconGrayTint = Color(0xFF6A686E)
+val placeholderColor = Color(0XFFD3D5E2)

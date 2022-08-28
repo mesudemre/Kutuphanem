@@ -41,6 +41,7 @@ data class ColorPalette(
     val googleDarkGray:Color,
     val secondaryGray:Color,
     val otherGrayLight:Color,
-    val iconGrayTint:Color
+    val iconGrayTint:Color,
+    val placeHolderColor:Color
 ) {
 }

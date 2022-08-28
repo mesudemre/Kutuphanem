@@ -14,11 +14,11 @@ sealed class KutuphanemNavigationItem(
     @StringRes val pageTitle:Int? = null
 ) {
     object LoginScreen : KutuphanemNavigationItem(screenRoute = "kutuphanem_login_screen")
-    object MainScreen : KutuphanemNavigationItem(
-        screenRoute = "kutuphanem_main_screen",
+
+    object DashboardScreen : KutuphanemNavigationItem(
+        screenRoute = "kutuphanem_dashboard_screen",
         icon = R.drawable.ic_baseline_home_24,
         title = R.string.anasayfaItem,
-        showTopBar = true,
         showBottomBar = true,
         pageTitle = R.string.anasayfaItem
     )

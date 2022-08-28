@@ -180,6 +180,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_swiperefresh"
     implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_navigationAnimate"
     implementation "com.airbnb.android:lottie-compose:$lottieVersion"
+    implementation "com.google.accompanist:accompanist-placeholder-material:$accompanist_placeholder"
 
     //implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 }

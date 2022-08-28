@@ -194,4 +194,5 @@
 
 
     <string name="splash_content_desc">Kütüphanem Splash Logo</string>
+    <string name="dashboard_welcome_text">Hoşgeldiniz</string>
 </resources>

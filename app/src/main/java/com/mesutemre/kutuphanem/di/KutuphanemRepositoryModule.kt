@@ -11,6 +11,9 @@ import com.mesutemre.kutuphanem.parameter.yayinevi.data.dao.entity.IYayinEviDao
 import com.mesutemre.kutuphanem.parameter.yayinevi.data.remote.dto.IYayinEviApi
 import com.mesutemre.kutuphanem.parameter.yayinevi.data.repository.YayinEviRepositoryImpl
 import com.mesutemre.kutuphanem.parameter.yayinevi.domain.repository.YayinEviRepository
+import com.mesutemre.kutuphanem.profile.data.remote.IKullaniciApi
+import com.mesutemre.kutuphanem.profile.data.repository.KullaniciRepository
+import com.mesutemre.kutuphanem.profile.domain.repository.KullaniciRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,5 +44,11 @@ class KutuphanemRepositoryModule {
     @Provides
     fun provideParametreKitapTurRepository(api: IKitapTurApi, dao:IKitapTurDao): KitapTurRepository {
         return KitapTurRepositoryImpl(api,dao)
+    }
+
+    @Singleton
+    @Provides
+    fun provideKullaniciRepository(api: IKullaniciApi):KullaniciRepository {
+        return KullaniciRepositoryImpl(api)
     }
 }
