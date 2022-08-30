@@ -47,9 +47,9 @@ fun DashBoardKullaniciBilgiLoading() {
             Spacer(
                 modifier = Modifier
                     .width(180.sdp)
-                    .height(8.sdp)
+                    .height(12.sdp)
                     .clip(shape = MaterialTheme.shapes.medium)
-                    .padding(top = 2.sdp)
+                    .padding(top = 4.sdp)
                     .placeholder(
                         visible = true,
                         color = MaterialTheme.colorPalette.placeHolderColor,

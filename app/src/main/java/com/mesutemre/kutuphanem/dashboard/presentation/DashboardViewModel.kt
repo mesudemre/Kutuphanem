@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.dashboard.domain.use_case.GetDasboardKullaniciBilgi
 import com.mesutemre.kutuphanem.dashboard.domain.use_case.GetDashboardIntroductionList
+import com.mesutemre.kutuphanem.dashboard.domain.use_case.GetDashboardKategoriList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collectLatest
@@ -19,7 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
     private val getDashboardIntroductionList: GetDashboardIntroductionList,
-    private val getDashBoardKullaniciBilgi: GetDasboardKullaniciBilgi
+    private val getDashBoardKullaniciBilgi: GetDasboardKullaniciBilgi,
+    private val getDashboardKategoriList: GetDashboardKategoriList
 ) :BaseViewModel(){
     
     private val _dashboardState = mutableStateOf(DashboardState())
@@ -30,7 +32,10 @@ class DashboardViewModel @Inject constructor(
             introductionList = getDashboardIntroductionList()
         )
         viewModelScope.launch {
-            async { fillDashBoardUserInfo() }
+            async {
+                fillDashBoardUserInfo()
+                fillKategoriList()
+            }
         }
     }
 
@@ -38,6 +43,14 @@ class DashboardViewModel @Inject constructor(
         getDashBoardKullaniciBilgi().collectLatest {
             _dashboardState.value = _dashboardState.value.copy(
                 kullaniciBilgi = it
+            )
+        }
+    }
+
+    private suspend fun fillKategoriList() {
+        getDashboardKategoriList().collectLatest {
+            _dashboardState.value = _dashboardState.value.copy(
+                kategoriListeResource = it
             )
         }
     }

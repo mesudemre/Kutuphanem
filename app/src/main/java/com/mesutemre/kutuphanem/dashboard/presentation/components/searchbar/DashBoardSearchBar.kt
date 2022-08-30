@@ -30,7 +30,7 @@ fun DashBoardSearchBar( searchInput: String,
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 4.sdp, end = 4.sdp, top = 8.sdp, bottom = 4.sdp)
+            .padding(start = 8.sdp, end = 8.sdp, top = 8.sdp, bottom = 8.sdp)
     ) {
         var searchInputText by remember {
             mutableStateOf(searchInput)
@@ -40,11 +40,11 @@ fun DashBoardSearchBar( searchInput: String,
             onValueChange = { onSearch },
             placeholder = {
                    Text(text = stringResource(id = R.string.searchHintText),
-                   style = MaterialTheme.typography.mediumUbuntuTransparent)
+                   style = MaterialTheme.typography.normalUbuntuTransparent)
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(44.sdp)
+                .height(40.sdp)
                 .clip(shape = MaterialTheme.shapes.medium)
                 .background(color = MaterialTheme.colorPalette.white)
                 .border(
