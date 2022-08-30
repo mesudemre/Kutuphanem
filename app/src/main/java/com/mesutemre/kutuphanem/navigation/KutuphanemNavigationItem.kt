@@ -63,4 +63,8 @@ sealed class KutuphanemNavigationItem(
         showTopBar = true,
         pageTitle = R.string.parameterAddLabel
     )
+
+    object DashboardSearchScreen: KutuphanemNavigationItem(
+        screenRoute = "kutuphanem_dashboard_search_screen"
+    )
 }

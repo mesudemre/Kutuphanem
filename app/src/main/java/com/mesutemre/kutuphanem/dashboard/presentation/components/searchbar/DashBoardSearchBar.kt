@@ -10,11 +10,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardBackspace
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,83 +21,67 @@ import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.ui.theme.*
 
 @Composable
-fun DashBoardSearchBar( searchInput: String,
+fun DashBoardSearchBar(
                         notificationCount:Int,
-                        onBackPressed:()->Unit,
-                        onSearch: () -> Unit) {
+                        onClickSearch:()->Unit,
+                        onSearch: (String) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 8.sdp, end = 8.sdp, top = 8.sdp, bottom = 8.sdp)
+            .padding(8.sdp)
     ) {
-        var searchInputText by remember {
-            mutableStateOf(searchInput)
-        }
         OutlinedTextField(
-            value = searchInputText,
-            onValueChange = { onSearch },
+            value = "",
+            onValueChange = { onSearch.invoke(it) },
             placeholder = {
                    Text(text = stringResource(id = R.string.searchHintText),
                    style = MaterialTheme.typography.normalUbuntuTransparent)
             },
+            textStyle = MaterialTheme.typography.normalUbuntuBlack,
+            enabled = false,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(40.sdp)
+                .weight(0.9f)
                 .clip(shape = MaterialTheme.shapes.medium)
                 .background(color = MaterialTheme.colorPalette.white)
                 .border(
                     width = 1.sdp,
                     color = MaterialTheme.colorPalette.otherGrayLight,
                     shape = MaterialTheme.shapes.medium
-                ),
+                ).clickable {
+                    onClickSearch.invoke()
+                },
             leadingIcon = {
-                if (searchInput.length>0) {
-                    Icon(imageVector = Icons.Filled.KeyboardBackspace,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorPalette.transparent,
-                    modifier = Modifier.clickable {
-                        onBackPressed.invoke()
-                    })
-                }else {
                     Icon(imageVector = Icons.Outlined.Search,
                         contentDescription = stringResource(id = R.string.searchHintText),
                         tint = MaterialTheme.colorPalette.transparent)
-                }
-            },
-            trailingIcon = {
-                if (searchInput.length>0) {
-                    Icon(imageVector = Icons.Outlined.Close,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorPalette.transparent,
-                        modifier = Modifier.clickable {
-                            onBackPressed.invoke()
-                        })
-                }else if (searchInput.length == 0 && notificationCount>0) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Icon(imageVector = Icons.Filled.Notifications,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorPalette.lacivert,
-                            modifier = Modifier
-                                .size(32.sdp)
-                                .clickable {
-
-                                })
-                        Row(modifier = Modifier
-                            .size(16.sdp)
-                            .offset(y = (-8).sdp,x = 8.sdp)
-                            .clip(shape = CircleShape)
-                            .aspectRatio(1f)
-                            .background(color = MaterialTheme.colorPalette.turuncu),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically) {
-                            Text(text = notificationCount.toString(),
-                                style = MaterialTheme.typography.smallUbuntuWhite.copy(
-                                    fontSize = 10.ssp
-                                ))
-                        }
-                    }
-                }
             }
         )
+
+        Box(modifier = Modifier.padding(start = 4.sdp),
+            contentAlignment = Alignment.Center) {
+            Icon(imageVector = Icons.Filled.Notifications,
+                contentDescription = null,
+                tint = MaterialTheme.colorPalette.lacivert,
+                modifier = Modifier
+                    .size(40.sdp)
+                    .clickable {
+
+                    })
+            Row(modifier = Modifier
+                .size(16.sdp)
+                .offset(y = (-8).sdp,x = 8.sdp)
+                .clip(shape = CircleShape)
+                .aspectRatio(1f)
+                .background(color = MaterialTheme.colorPalette.turuncu),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically) {
+                Text(text = notificationCount.toString(),
+                    style = MaterialTheme.typography.smallUbuntuWhite.copy(
+                        fontSize = 10.ssp
+                    ))
+            }
+        }
     }
 }
