@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.ui.theme.*
@@ -34,8 +35,8 @@ fun DashBoardSearchBar(
             value = "",
             onValueChange = { onSearch.invoke(it) },
             placeholder = {
-                   Text(text = stringResource(id = R.string.searchHintText),
-                   style = MaterialTheme.typography.normalUbuntuTransparent)
+                Text(text = stringResource(id = R.string.searchHintText),
+                    style = MaterialTheme.typography.smallUbuntuTransparent)
             },
             textStyle = MaterialTheme.typography.normalUbuntuBlack,
             enabled = false,
@@ -49,7 +50,8 @@ fun DashBoardSearchBar(
                     width = 1.sdp,
                     color = MaterialTheme.colorPalette.otherGrayLight,
                     shape = MaterialTheme.shapes.medium
-                ).clickable {
+                )
+                .clickable {
                     onClickSearch.invoke()
                 },
             leadingIcon = {
@@ -71,7 +73,7 @@ fun DashBoardSearchBar(
                     })
             Row(modifier = Modifier
                 .size(16.sdp)
-                .offset(y = (-8).sdp,x = 8.sdp)
+                .offset(y = (-8).sdp, x = 8.sdp)
                 .clip(shape = CircleShape)
                 .aspectRatio(1f)
                 .background(color = MaterialTheme.colorPalette.turuncu),

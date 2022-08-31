@@ -24,10 +24,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem.ui.theme.colorPalette
-import com.mesutemre.kutuphanem.ui.theme.normalUbuntuBlack
-import com.mesutemre.kutuphanem.ui.theme.normalUbuntuTransparent
-import com.mesutemre.kutuphanem.ui.theme.sdp
+import com.mesutemre.kutuphanem.ui.theme.*
 
 @Composable
 fun KitapYazarSearchText(searchInput: String,
@@ -43,9 +40,9 @@ fun KitapYazarSearchText(searchInput: String,
             onValueChange = { onSearch.invoke(it) },
             placeholder = {
                 Text(text = stringResource(id = R.string.searchHintText),
-                    style = MaterialTheme.typography.normalUbuntuTransparent)
+                    style = MaterialTheme.typography.smallUbuntuTransparent)
             },
-            textStyle = MaterialTheme.typography.normalUbuntuBlack,
+            textStyle = MaterialTheme.typography.smallUbuntuBlack,
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
