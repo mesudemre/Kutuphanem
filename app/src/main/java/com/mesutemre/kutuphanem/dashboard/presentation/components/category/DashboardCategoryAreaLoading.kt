@@ -16,12 +16,13 @@ import com.mesutemre.kutuphanem.ui.theme.sdp
 fun DashboardCategoryAreaLoading() {
     Spacer(
         modifier = Modifier
-            .height(160.sdp)
+            .height(120.sdp)
             .fillMaxWidth()
             .placeholder(
                 visible = true,
-                color = MaterialTheme.colorPalette.placeHolderColor,
-                highlight = PlaceholderHighlight.shimmer(highlightColor = MaterialTheme.colorPalette.otherGrayLight)
+                color = MaterialTheme.colorPalette.shrim_gray,
+                highlight = PlaceholderHighlight
+                    .shimmer(highlightColor = MaterialTheme.colorPalette.otherGrayLight)
             )
     )
 }

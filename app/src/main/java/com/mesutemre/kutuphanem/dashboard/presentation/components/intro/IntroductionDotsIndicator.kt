@@ -17,10 +17,12 @@ import com.mesutemre.kutuphanem.ui.theme.sdp
 fun IntroductionDotsIndicator(
     totalDot: Int,
     selectedIndex: Int,
-    selectedColor: Color = MaterialTheme.colorPalette.googleDarkGray,
-    unSelectedColor: Color = MaterialTheme.colorPalette.otherGrayLight
+    selectedColor: Color = MaterialTheme.colorPalette.lacivert,
+    unSelectedColor: Color = MaterialTheme.colorPalette.lacivert.copy(
+        alpha = 0.4f
+    )
 ) {
-    Box(modifier = Modifier.fillMaxWidth(),contentAlignment = Alignment.Center) {
+    Box(modifier = Modifier.fillMaxWidth().padding(top = 2.sdp),contentAlignment = Alignment.Center) {
         LazyRow(
             modifier = Modifier
                 .wrapContentWidth()

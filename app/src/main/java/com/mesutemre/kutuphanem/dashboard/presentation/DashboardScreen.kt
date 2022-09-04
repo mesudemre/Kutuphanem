@@ -1,5 +1,6 @@
 package com.mesutemre.kutuphanem.dashboard
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,7 @@ import com.mesutemre.kutuphanem.dashboard.presentation.components.category.Dashb
 import com.mesutemre.kutuphanem.navigation.KutuphanemNavigationItem
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun DashboardScreen(
     navController: NavController,

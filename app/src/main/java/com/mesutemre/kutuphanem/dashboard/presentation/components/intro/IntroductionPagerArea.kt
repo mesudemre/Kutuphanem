@@ -1,9 +1,5 @@
 package com.mesutemre.kutuphanem.dashboard.presentation.components
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -21,33 +17,30 @@ import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.mediumAllegraBlackBold
 import com.mesutemre.kutuphanem.ui.theme.sdp
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun IntroductionPagerArea(pagerList: List<IntroductionPagerData>) {
     val pagerState = rememberPagerState()
 
-    HorizontalPager(
-        count = pagerList.size, state = pagerState, modifier = Modifier
+    Card(
+        modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.sdp)
             .offset(y = -24.sdp)
-    ) { page ->
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(80.sdp),
-            backgroundColor = MaterialTheme.colorPalette.white,
-            shape = MaterialTheme.shapes.medium,
-            elevation = 8.sdp
-        ) {
-            AnimatedVisibility(
-                visible = page == pagerState.currentPage,
-                enter = scaleIn() + expandVertically(expandFrom = Alignment.CenterVertically)
-            ) {
+            .height(80.sdp),
+        backgroundColor = MaterialTheme.colorPalette.white,
+        shape = MaterialTheme.shapes.medium,
+        elevation = 8.sdp
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            HorizontalPager(
+                count = pagerList.size, state = pagerState, modifier = Modifier
+                    .fillMaxWidth()
+            ) { page ->
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(80.sdp),
+                        .height(60.sdp),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -57,8 +50,11 @@ fun IntroductionPagerArea(pagerList: List<IntroductionPagerData>) {
                     )
                 }
             }
-
+            Spacer(modifier = Modifier.height(4.sdp))
+            IntroductionDotsIndicator(
+                totalDot = pagerList.size,
+                selectedIndex = pagerState.currentPage
+            )
         }
     }
-    IntroductionDotsIndicator(totalDot = pagerList.size, selectedIndex = pagerState.currentPage)
 }

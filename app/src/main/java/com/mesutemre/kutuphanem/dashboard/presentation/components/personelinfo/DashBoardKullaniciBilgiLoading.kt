@@ -52,7 +52,7 @@ fun DashBoardKullaniciBilgiLoading() {
                     .padding(top = 4.sdp)
                     .placeholder(
                         visible = true,
-                        color = MaterialTheme.colorPalette.placeHolderColor,
+                        color = MaterialTheme.colorPalette.shrim_gray,
                         highlight = PlaceholderHighlight.shimmer(highlightColor = MaterialTheme.colorPalette.otherGrayLight)
                     )
             )

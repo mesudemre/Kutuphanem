@@ -1,6 +1,6 @@
 package com.mesutemre.kutuphanem.dashboard.presentation.components.category
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,16 +14,14 @@ import com.mesutemre.kutuphanem.dashboard.domain.model.DashboardKategoriItem
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun DashboardCategoryArea(kategoriResource: BaseResourceEvent<List<DashboardKategoriItem>>) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(180.sdp)
-            .padding(horizontal = 16.sdp, vertical = 16.sdp),
-        border = BorderStroke(
-            width = (1/2).sdp,
-            color = MaterialTheme.colorPalette.transparent),
+            .height(140.sdp)
+            .padding(horizontal = 16.sdp),
         shape = MaterialTheme.shapes.medium,
         backgroundColor = MaterialTheme.colorPalette.white,
         elevation = 8.sdp

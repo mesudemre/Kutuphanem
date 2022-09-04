@@ -13,19 +13,22 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
+import com.airbnb.lottie.compose.*
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.ui.theme.*
 
 @Composable
 fun DashBoardSearchBar(
-                        notificationCount:Int,
-                        onClickSearch:()->Unit,
-                        onSearch: (String) -> Unit) {
+    notificationCount: Int,
+    onClickSearch: () -> Unit,
+    onSearch: (String) -> Unit
+) {
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -35,8 +38,10 @@ fun DashBoardSearchBar(
             value = "",
             onValueChange = { onSearch.invoke(it) },
             placeholder = {
-                Text(text = stringResource(id = R.string.searchHintText),
-                    style = MaterialTheme.typography.smallUbuntuTransparent)
+                Text(
+                    text = stringResource(id = R.string.searchHintText),
+                    style = MaterialTheme.typography.smallUbuntuTransparent
+                )
             },
             textStyle = MaterialTheme.typography.normalUbuntuBlack,
             enabled = false,
@@ -55,35 +60,62 @@ fun DashBoardSearchBar(
                     onClickSearch.invoke()
                 },
             leadingIcon = {
-                    Icon(imageVector = Icons.Outlined.Search,
-                        contentDescription = stringResource(id = R.string.searchHintText),
-                        tint = MaterialTheme.colorPalette.transparent)
+                Icon(
+                    imageVector = Icons.Outlined.Search,
+                    contentDescription = stringResource(id = R.string.searchHintText),
+                    tint = MaterialTheme.colorPalette.transparent
+                )
             }
         )
 
-        Box(modifier = Modifier.padding(start = 4.sdp),
-            contentAlignment = Alignment.Center) {
-            Icon(imageVector = Icons.Filled.Notifications,
-                contentDescription = null,
-                tint = MaterialTheme.colorPalette.lacivert,
-                modifier = Modifier
+        Box(
+            modifier = Modifier.padding(start = 4.sdp),
+            contentAlignment = Alignment.Center
+        ) {
+            if (notificationCount > 0) {
+                val compositionResult: LottieCompositionResult = rememberLottieComposition(
+                    spec = LottieCompositionSpec.RawRes(
+                        R.raw.bell_ring
+                    )
+                )
+                val progress by animateLottieCompositionAsState(
+                    composition = compositionResult.value,
+                    iterations = 1,
+                    speed = 1.0f
+                )
+                LottieAnimation(composition = compositionResult.value, progress, modifier = Modifier
                     .size(40.sdp)
                     .clickable {
 
                     })
-            Row(modifier = Modifier
-                .size(16.sdp)
-                .offset(y = (-8).sdp, x = 8.sdp)
-                .clip(shape = CircleShape)
-                .aspectRatio(1f)
-                .background(color = MaterialTheme.colorPalette.turuncu),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically) {
-                Text(text = notificationCount.toString(),
-                    style = MaterialTheme.typography.smallUbuntuWhite.copy(
-                        fontSize = 10.ssp
-                    ))
+                Row(
+                    modifier = Modifier
+                        .size(16.sdp)
+                        .offset(y = (-8).sdp, x = 8.sdp)
+                        .clip(shape = CircleShape)
+                        .aspectRatio(1f)
+                        .background(color = MaterialTheme.colorPalette.turuncu),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = notificationCount.toString(),
+                        style = MaterialTheme.typography.smallUbuntuWhite.copy(
+                            fontSize = 8.ssp
+                        )
+                    )
+                }
+            } else {
+                Icon(imageVector = Icons.Filled.Notifications,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorPalette.lacivert,
+                    modifier = Modifier
+                        .size(30.sdp)
+                        .clickable {
+
+                        })
             }
+
         }
     }
 }
