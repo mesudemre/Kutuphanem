@@ -4,8 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -24,7 +24,10 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem.ui.theme.*
+import com.mesutemre.kutuphanem.ui.theme.colorPalette
+import com.mesutemre.kutuphanem.ui.theme.sdp
+import com.mesutemre.kutuphanem.ui.theme.smallUbuntuBlack
+import com.mesutemre.kutuphanem.ui.theme.smallUbuntuTransparent
 
 @Composable
 fun KitapYazarSearchText(searchInput: String,
@@ -46,7 +49,7 @@ fun KitapYazarSearchText(searchInput: String,
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(40.sdp)
+                .defaultMinSize(minHeight = 40.sdp)
                 .clip(shape = MaterialTheme.shapes.medium)
                 .background(color = MaterialTheme.colorPalette.white)
                 .border(

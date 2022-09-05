@@ -66,6 +66,7 @@ android {
             buildConfigField 'String', 'API_URL', "\"${DEV_ALPHA_BETA_API_URL}\""
             debuggable true
             versionNameSuffix "-alpha"
+            signingConfig signingConfigs.release
         }
 
         beta {
