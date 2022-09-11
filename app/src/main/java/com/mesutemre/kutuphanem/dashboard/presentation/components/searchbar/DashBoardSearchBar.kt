@@ -28,7 +28,6 @@ fun DashBoardSearchBar(
     onClickSearch: () -> Unit,
     onSearch: (String) -> Unit
 ) {
-
     Row(
         modifier = Modifier
             .fillMaxWidth()

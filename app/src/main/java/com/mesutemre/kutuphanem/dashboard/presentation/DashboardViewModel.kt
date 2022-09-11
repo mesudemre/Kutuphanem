@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.base.BaseViewModel
+import com.mesutemre.kutuphanem.dashboard.domain.model.DashboardKategoriItem
 import com.mesutemre.kutuphanem.dashboard.domain.use_case.GetDasboardKullaniciBilgi
 import com.mesutemre.kutuphanem.dashboard.domain.use_case.GetDashboardIntroductionList
 import com.mesutemre.kutuphanem.dashboard.domain.use_case.GetDashboardKategoriList

@@ -31,7 +31,7 @@ buildscript {
 
     ext.google_service_version = '4.3.10'
     ext.PROD_API_URL = ''
-    ext.DEV_ALPHA_BETA_API_URL = 'http://192.168.1.104:8080/KutuphaneSistemiWS/'
+    ext.DEV_ALPHA_BETA_API_URL = 'http://192.168.1.105:8080/KutuphaneSistemiWS/'
     ext.okhttpLogging_version = '4.9.2'
     ext.work_manager_version = '2.7.0'
     ext.work_manager_hilt_version = '1.0.0'

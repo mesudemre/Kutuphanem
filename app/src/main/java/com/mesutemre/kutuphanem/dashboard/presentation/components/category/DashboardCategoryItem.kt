@@ -28,6 +28,7 @@ fun DashboardCategoryItem(item: DashboardKategoriItem) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         SubcomposeAsyncImage(model = item.resim,
             modifier = Modifier
                 .size(64.sdp)

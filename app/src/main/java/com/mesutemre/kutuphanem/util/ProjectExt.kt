@@ -29,6 +29,7 @@ import androidx.fragment.app.Fragment
 import androidx.work.*
 import com.google.android.material.snackbar.Snackbar
 import com.mesutemre.kutuphanem.R
+import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.kitap.liste.model.KitapModel
 import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.model.SUCCESS
@@ -39,16 +40,16 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-const val APP_TOKEN_KEY:String = "APP_TOKEN";
-const val KULLANICI_ADI_KEY:String = "KULLANICI_ADI";
+const val APP_TOKEN_KEY: String = "APP_TOKEN";
+const val KULLANICI_ADI_KEY: String = "KULLANICI_ADI";
 const val KUTUPHANEM_DB_NAME = "kutuphanem";
-const val PARAM_YAYINEVI_DB_KEY:String = "PARAM_YAYINEVI";
-const val PARAM_KITAPTUR_DB_KEY:String = "PARAM_KITAPTUR";
-const val KULLANICI_DB_MEVCUT:String = "KULLANICI_MEVCUT";
-const val CAMERA_REQUEST_CODE:Int = 1991;
-const val READ_EXTERNAL_STORAGE_REQUEST_CODE:Int=1992;
-const val WRITE_EXTERNAL_STORAGE_REQUEST_CODE:Int=2019;
-const val SHARED_PREF_FILE:String = "KUTUPHANEM_SP";
+const val PARAM_YAYINEVI_DB_KEY: String = "PARAM_YAYINEVI";
+const val PARAM_KITAPTUR_DB_KEY: String = "PARAM_KITAPTUR";
+const val KULLANICI_DB_MEVCUT: String = "KULLANICI_MEVCUT";
+const val CAMERA_REQUEST_CODE: Int = 1991;
+const val READ_EXTERNAL_STORAGE_REQUEST_CODE: Int = 1992;
+const val WRITE_EXTERNAL_STORAGE_REQUEST_CODE: Int = 2019;
+const val SHARED_PREF_FILE: String = "KUTUPHANEM_SP";
 
 val DEVICE_NAME: String by lazy {
     val manufacturer = Build.MANUFACTURER
@@ -72,23 +73,23 @@ private fun capitalize(s: String?): String {
     }
 }
 
-fun showSnackBar(view:View, message:String,@SnackType type: Int){
-    var builder:SpannableStringBuilder  = SpannableStringBuilder();
-    val sb: Snackbar = Snackbar.make(view,message, Snackbar.LENGTH_SHORT);
-    val tv =sb.view.findViewById(com.google.android.material.R.id.snackbar_text) as TextView;
+fun showSnackBar(view: View, message: String, @SnackType type: Int) {
+    var builder: SpannableStringBuilder = SpannableStringBuilder();
+    val sb: Snackbar = Snackbar.make(view, message, Snackbar.LENGTH_SHORT);
+    val tv = sb.view.findViewById(com.google.android.material.R.id.snackbar_text) as TextView;
     tv.textSize = 16f;
-    tv.typeface = ResourcesCompat.getFont(view.context,R.font.source_sans_pro_regular);
-    tv.setTextColor(view.resources.getColor(R.color.whiteTextColor,null))
+    tv.typeface = ResourcesCompat.getFont(view.context, R.font.source_sans_pro_regular);
+    tv.setTextColor(view.resources.getColor(R.color.whiteTextColor, null))
 
-    when(type){
-        SUCCESS->{
-            sb.setBackgroundTint(view.resources.getColor(R.color.fistikYesil,null));
+    when (type) {
+        SUCCESS -> {
+            sb.setBackgroundTint(view.resources.getColor(R.color.fistikYesil, null));
         }
-        WARNING->{
-            sb.setBackgroundTint(view.resources.getColor(R.color.acikTuruncu,null));
+        WARNING -> {
+            sb.setBackgroundTint(view.resources.getColor(R.color.acikTuruncu, null));
         }
-        ERROR->{
-            sb.setBackgroundTint(view.resources.getColor(R.color.kirmizi,null));
+        ERROR -> {
+            sb.setBackgroundTint(view.resources.getColor(R.color.kirmizi, null));
         }
 
     }
@@ -98,25 +99,31 @@ fun showSnackBar(view:View, message:String,@SnackType type: Int){
     sb.show();
 }
 
-fun formatDate(date:Date,pattern:String):String{
-    val sdf:SimpleDateFormat = SimpleDateFormat(pattern);
+fun formatDate(date: Date, pattern: String): String {
+    val sdf: SimpleDateFormat = SimpleDateFormat(pattern);
     return sdf.format(date);
 }
 
-fun getImageUriFromBitmap(c: Context, inImage:Bitmap):Uri{
-    var path:String = "";
+fun getImageUriFromBitmap(c: Context, inImage: Bitmap): Uri {
+    var path: String = "";
     try {
         val bytes: ByteArrayOutputStream = ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        path = MediaStore.Images.Media.insertImage(c.getContentResolver(), inImage, "KUTUPHANEM_IMG_"+System.currentTimeMillis(),null);
+        path = MediaStore.Images.Media.insertImage(
+            c.getContentResolver(),
+            inImage,
+            "KUTUPHANEM_IMG_" + System.currentTimeMillis(),
+            null
+        );
 
-    }catch (e:Exception){
-        Log.e("Exception",e.localizedMessage);
+    } catch (e: Exception) {
+        Log.e("Exception", e.localizedMessage);
         e.printStackTrace();
     }
     return Uri.parse(path);
 }
-fun getPath(context:Context,uri:Uri):String?{
+
+fun getPath(context: Context, uri: Uri): String? {
     val isKitKatorAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
     // DocumentProvider
     if (isKitKatorAbove && DocumentsContract.isDocumentUri(context, uri)) {
@@ -131,7 +138,10 @@ fun getPath(context:Context,uri:Uri):String?{
 
         } else if (isDownloadsDocument(uri)) {
             val id = DocumentsContract.getDocumentId(uri)
-            val contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(id))
+            val contentUri = ContentUris.withAppendedId(
+                Uri.parse("content://downloads/public_downloads"),
+                java.lang.Long.valueOf(id)
+            )
             return getStreamFile(context, contentUri)
         } else if (isMediaDocument(uri)) {
             val docId = DocumentsContract.getDocumentId(uri)
@@ -155,7 +165,7 @@ fun getPath(context:Context,uri:Uri):String?{
     return null;
 }
 
-fun getStreamFile(context: Context,uri:Uri):String?{
+fun getStreamFile(context: Context, uri: Uri): String? {
     val inputStream = context.contentResolver.openInputStream(uri);
     val createFile = createImageFile();
     copyInputStreamToFile(inputStream!!, createFile);
@@ -198,45 +208,54 @@ private fun createImageFile(): File {
     return File.createTempFile(imageFileName, ".jpg", storageDir)
 }
 
-private fun isExternalStorageDocument(uri:Uri):Boolean {
+private fun isExternalStorageDocument(uri: Uri): Boolean {
     return "com.android.externalstorage.documents".equals(uri.getAuthority());
 }
 
-private fun isDownloadsDocument(uri:Uri):Boolean {
+private fun isDownloadsDocument(uri: Uri): Boolean {
     return "com.android.providers.downloads.documents".equals(uri.getAuthority());
 }
 
-private fun isMediaDocument(uri:Uri):Boolean {
+private fun isMediaDocument(uri: Uri): Boolean {
     return "com.android.providers.media.documents".equals(uri.getAuthority());
 }
 
 @BindingAdapter(value = ["android:rippleEffect"])
-fun rippleEffect(view:View,value:Boolean){
+fun rippleEffect(view: View, value: Boolean) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         val outValue = TypedValue();
-        view.context.theme.resolveAttribute(android.R.attr.selectableItemBackground,outValue,true);
+        view.context.theme.resolveAttribute(
+            android.R.attr.selectableItemBackground,
+            outValue,
+            true
+        );
         view.foreground = view.context.getDrawable(outValue.resourceId);
     }
 }
 
-fun checkDeviceHasCamera(ctx:Context):Boolean{
-    if(ctx.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)){
+fun checkDeviceHasCamera(ctx: Context): Boolean {
+    if (ctx.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
         return true;
     }
     return false;
 }
 
-fun checkDeviceHasFronCamera(ctx:Context):Boolean{
-    if(ctx.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT)){
+fun checkDeviceHasFronCamera(ctx: Context): Boolean {
+    if (ctx.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT)) {
         return true;
     }
     return false;
 }
 
-fun saveFile(kitap: KitapModel, requireContext: Context, isArchive:Boolean,arr:ByteArray): File? {
-    val kitapResim =  BitmapFactory.decodeByteArray(arr,0,arr.size);
+fun saveFile(
+    kitap: KitapModel,
+    requireContext: Context,
+    isArchive: Boolean,
+    arr: ByteArray
+): File? {
+    val kitapResim = BitmapFactory.decodeByteArray(arr, 0, arr.size);
     val bytes: ByteArrayOutputStream = ByteArrayOutputStream();
-    var photoFile:File? = null;
+    var photoFile: File? = null;
     if (kitapResim != null) {
         kitapResim?.compress(Bitmap.CompressFormat.PNG, 100, bytes);
         var resimAd: String = kitap.kitapAd + "_" + kitap.kitapId
@@ -249,11 +268,11 @@ fun saveFile(kitap: KitapModel, requireContext: Context, isArchive:Boolean,arr:B
     return photoFile;
 }
 
-fun convertBitmapToFile(bitmap: Bitmap, fileNameToSave: String,requireContext: Context):File {
-    var photoFile:File? = null;
+fun convertBitmapToFile(bitmap: Bitmap, fileNameToSave: String, requireContext: Context): File {
+    var photoFile: File? = null;
     return try {
-        val imgPath:File = requireContext.createOutputDirectory("arsiv")
-        photoFile = File(imgPath.absolutePath,fileNameToSave)
+        val imgPath: File = requireContext.createOutputDirectory("arsiv")
+        photoFile = File(imgPath.absolutePath, fileNameToSave)
 
         val bos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos) // YOU can also save it in JPEG
@@ -270,74 +289,83 @@ fun convertBitmapToFile(bitmap: Bitmap, fileNameToSave: String,requireContext: C
     }
 }
 
-inline fun <reified T: Activity>
-        Context.startActivity(){
-            val intent = Intent(this,T::class.java);
-            startActivity(intent);
-        }
+inline fun <reified T : Activity>
+        Context.startActivity() {
+    val intent = Intent(this, T::class.java);
+    startActivity(intent);
+}
 
-fun Context.arsivResimSil(kitapId:String) {
-    val directory = File(this.filesDir,"arsiv");
-    val f = File(directory.absolutePath+"/${kitapId}.png");
-    if(f.exists()){
+fun Context.arsivResimSil(kitapId: String) {
+    val directory = File(this.filesDir, "arsiv");
+    val f = File(directory.absolutePath + "/${kitapId}.png");
+    if (f.exists()) {
         f.delete();
     }
 }
 
-inline fun <reified W:ListenableWorker>
-        Context.enqueeOneTimeWorkManager(constraints: Constraints = Constraints.Builder()
-                            .setRequiresBatteryNotLow(true)
-                            .build()) {
-            val otwr = OneTimeWorkRequestBuilder<W>()
-                .setConstraints(constraints)
-                .build()
-            WorkManager.getInstance(this).enqueue(otwr);
-        }
+inline fun <reified W : ListenableWorker>
+        Context.enqueeOneTimeWorkManager(
+    constraints: Constraints = Constraints.Builder()
+        .setRequiresBatteryNotLow(true)
+        .build()
+) {
+    val otwr = OneTimeWorkRequestBuilder<W>()
+        .setConstraints(constraints)
+        .build()
+    WorkManager.getInstance(this).enqueue(otwr);
+}
 
-inline fun <reified W:ListenableWorker>
-        Context.enqueePeriodicTimeWorkManager(workTag:String,
-                                              constraints: Constraints = Constraints.Builder()
-                        .setRequiresBatteryNotLow(true)
-                        .build()) {
-            val pwr = PeriodicWorkRequestBuilder<W>(1,TimeUnit.DAYS)
-                .setConstraints(constraints)
-                .build();
-            WorkManager.getInstance(this).enqueueUniquePeriodicWork(workTag,ExistingPeriodicWorkPolicy.KEEP,pwr);
+inline fun <reified W : ListenableWorker>
+        Context.enqueePeriodicTimeWorkManager(
+    workTag: String,
+    constraints: Constraints = Constraints.Builder()
+        .setRequiresBatteryNotLow(true)
+        .build()
+) {
+    val pwr = PeriodicWorkRequestBuilder<W>(1, TimeUnit.DAYS)
+        .setConstraints(constraints)
+        .build();
+    WorkManager.getInstance(this)
+        .enqueueUniquePeriodicWork(workTag, ExistingPeriodicWorkPolicy.KEEP, pwr);
 
-        }
+}
 
-fun Context.showKutuphanemBasicNotification(baslik:String,
-                                            aciklama:String) {
+fun Context.showKutuphanemBasicNotification(
+    baslik: String,
+    aciklama: String
+) {
     val builder: NotificationCompat.Builder;
-    val bildirimYoneticisi = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager;
-    val notificationLayout = RemoteViews(this.packageName, R.layout.kutuphanem_basic_notification_layout);
+    val bildirimYoneticisi =
+        this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager;
+    val notificationLayout =
+        RemoteViews(this.packageName, R.layout.kutuphanem_basic_notification_layout);
 
-    notificationLayout.setTextViewText(R.id.notificationTitleTextView,baslik);
-    notificationLayout.setTextViewText(R.id.notificationDetailTextView,aciklama);
+    notificationLayout.setTextViewText(R.id.notificationTitleTextView, baslik);
+    notificationLayout.setTextViewText(R.id.notificationDetailTextView, aciklama);
 
-    if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val kanalId = this.getString(R.string.kutuphanem_notification_channel_id)
         val kanalAd = this.getString(R.string.kutuphanem_notification_channel_name)
         val kanalTanitim = this.getString(R.string.kutuphanem_notification_channel_advertise)
 
         var kanal: NotificationChannel? = bildirimYoneticisi.getNotificationChannel(kanalId)
 
-        if(kanal == null){
-            kanal = NotificationChannel(kanalId,kanalAd, NotificationManager.IMPORTANCE_DEFAULT);
+        if (kanal == null) {
+            kanal = NotificationChannel(kanalId, kanalAd, NotificationManager.IMPORTANCE_DEFAULT);
             kanal.description = kanalTanitim;
             kanal.vibrationPattern = longArrayOf(0, 200, 60, 200)
 
             bildirimYoneticisi.createNotificationChannel(kanal);
         }
 
-        builder = NotificationCompat.Builder(this,kanalId);
+        builder = NotificationCompat.Builder(this, kanalId);
         builder
             .setSmallIcon(R.drawable.ic_stat_onesignal_default)
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
             .setCustomContentView(notificationLayout)
             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
             .setAutoCancel(true);
-    }else {
+    } else {
         builder = NotificationCompat.Builder(this);
         builder
             .setSmallIcon(R.drawable.ic_stat_onesignal_default)
@@ -346,15 +374,15 @@ fun Context.showKutuphanemBasicNotification(baslik:String,
             .setAutoCancel(true)
             .priority = Notification.PRIORITY_DEFAULT;
     }
-    bildirimYoneticisi.notify(2,builder.build());
+    bildirimYoneticisi.notify(2, builder.build());
 }
 
-fun downloadKitap( requireContext: Context,arr:ByteArray): File? {
-    var kitapFile:File? = null;
+fun downloadKitap(requireContext: Context, arr: ByteArray): File? {
+    var kitapFile: File? = null;
 
     return try {
-        val imgPath:File = requireContext.createOutputDirectory("kitapdownloads")
-        kitapFile = File(imgPath.absolutePath,"kotlin.pdf")
+        val imgPath: File = requireContext.createOutputDirectory("kitapdownloads")
+        kitapFile = File(imgPath.absolutePath, "kotlin.pdf")
 
         val fos = FileOutputStream(kitapFile)
         fos.write(arr)
@@ -371,12 +399,28 @@ fun Fragment.closeApplication() {
     this.activity?.finish()
 }
 
-fun Context.createOutputDirectory(folderPath:String):File {
+fun Context.createOutputDirectory(folderPath: String): File {
     val mediaDir = this.filesDir.let {
         File(it, folderPath).apply { mkdirs() }
     }
     return if (mediaDir != null && mediaDir.exists())
         mediaDir else this.filesDir
+}
+
+fun <R, C> BaseResourceEvent<R>.convertRersourceEventType(
+    onSuccess:(() -> Unit)? = null,
+    convert: () -> C,
+): BaseResourceEvent<C> {
+    return if (this is BaseResourceEvent.Success) {
+        onSuccess?.let {
+            it.invoke()
+        }
+        BaseResourceEvent.Success(data = convert.invoke())
+    }else if (this is BaseResourceEvent.Error) {
+        BaseResourceEvent.Error(message = this.message)
+    } else {
+        BaseResourceEvent.Loading()
+    }
 }
 
 
