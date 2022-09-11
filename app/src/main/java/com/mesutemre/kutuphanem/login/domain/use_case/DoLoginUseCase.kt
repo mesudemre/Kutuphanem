@@ -1,7 +1,8 @@
 package com.mesutemre.kutuphanem.login.domain.use_case.do_login
 
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
-import com.mesutemre.kutuphanem.base.BaseUseCase
+import com.mesutemre.kutuphanem.base.IServiceCall
+import com.mesutemre.kutuphanem.base.ServiceCallUseCase
 import com.mesutemre.kutuphanem.di.IoDispatcher
 import com.mesutemre.kutuphanem.login.data.remote.dto.AccountCredentialsDto
 import com.mesutemre.kutuphanem.login.domain.repository.ILoginRepository
@@ -17,7 +18,7 @@ import javax.inject.Inject
 class DoLoginUseCase @Inject constructor(
     private val kullaniciRepository:ILoginRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
-):BaseUseCase(){
+):IServiceCall by ServiceCallUseCase(){
 
     operator fun invoke(accountCredentialsDto: AccountCredentialsDto): Flow<BaseResourceEvent<String?>> {
         return serviceCall {

@@ -2,6 +2,8 @@ package com.mesutemre.kutuphanem.parameter.kitaptur.domain.use_case
 
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.base.BaseUseCase
+import com.mesutemre.kutuphanem.base.IServiceCall
+import com.mesutemre.kutuphanem.base.ServiceCallUseCase
 import com.mesutemre.kutuphanem.di.IoDispatcher
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.remote.dto.KitapTurDto
@@ -20,7 +22,7 @@ import javax.inject.Inject
 class DeleteKitapTurUseCase  @Inject constructor(
     private val kitapTurRepository: KitapTurRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
-): BaseUseCase() {
+): IServiceCall by ServiceCallUseCase() {
     operator fun invoke(kitapTurItem: KitapTurItem): Flow<BaseResourceEvent<ResponseStatusModel?>> {
         val kitapTurDto: KitapTurDto = KitapTurDto(
             id = kitapTurItem.id,
