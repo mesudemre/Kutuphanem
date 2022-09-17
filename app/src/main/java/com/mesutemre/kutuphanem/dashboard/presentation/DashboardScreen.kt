@@ -4,6 +4,8 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,6 +18,7 @@ import com.mesutemre.kutuphanem.dashboard.presentation.components.DashBoardSearc
 import com.mesutemre.kutuphanem.dashboard.presentation.components.IntroductionPagerArea
 import com.mesutemre.kutuphanem.dashboard.presentation.components.PersonelInfoArea
 import com.mesutemre.kutuphanem.dashboard.presentation.components.category.DashboardCategoryArea
+import com.mesutemre.kutuphanem.dashboard.presentation.components.statistics.StatisticsArea
 import com.mesutemre.kutuphanem.navigation.KutuphanemNavigationItem
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 
@@ -41,8 +44,11 @@ fun DashboardScreen(
             }) {
 
         }
-        PersonelInfoArea(dashBoardState.kullaniciBilgi)
-        IntroductionPagerArea(dashBoardState.introductionList)
-        DashboardCategoryArea(dashBoardState.kategoriListeResource)
+        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            PersonelInfoArea(dashBoardState.kullaniciBilgi)
+            IntroductionPagerArea(dashBoardState.introductionList)
+            DashboardCategoryArea(dashBoardState.kategoriListeResource)
+            StatisticsArea(dashBoardState.kitapTurIstatistikResource)
+        }
     }
 }

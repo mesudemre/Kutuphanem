@@ -1,4 +1,4 @@
-package com.mesutemre.kutuphanem.dashboard.presentation.components.category
+package com.mesutemre.kutuphanem.util.customcomponents.progressbar
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,10 +13,10 @@ import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
 
 @Composable
-fun DashboardCategoryAreaLoading() {
+fun KutuphanemShimmerArea(height: Int) {
     Spacer(
         modifier = Modifier
-            .height(120.sdp)
+            .height(height.sdp)
             .fillMaxWidth()
             .placeholder(
                 visible = true,

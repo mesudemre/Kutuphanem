@@ -3,6 +3,7 @@ package com.mesutemre.kutuphanem.di
 import android.content.Context
 import com.mesutemre.kutuphanem.BuildConfig
 import com.mesutemre.kutuphanem.auth.service.KullaniciService
+import com.mesutemre.kutuphanem.dashboard.data.remote.IDashBoardApi
 import com.mesutemre.kutuphanem.interceptors.HeaderInterceptor
 import com.mesutemre.kutuphanem.interceptors.NetworkConnectionInterceptor
 import com.mesutemre.kutuphanem.kitap.service.IKitapService
@@ -91,5 +92,9 @@ class KutuphanemNetworkModule {
     @Singleton
     @Provides
     fun providerKullaniciAPI(retrofit: Retrofit): IKullaniciApi = retrofit.create(IKullaniciApi::class.java)
+
+    @Singleton
+    @Provides
+    fun providerDashBoardAPI(retrofit: Retrofit): IDashBoardApi = retrofit.create(IDashBoardApi::class.java)
 
 }

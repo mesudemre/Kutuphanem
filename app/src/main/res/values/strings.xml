@@ -195,4 +195,5 @@
 
     <string name="splash_content_desc">Kütüphanem Splash Logo</string>
     <string name="dashboard_welcome_text">Hoşgeldiniz</string>
+    <string name="dasboard_statistics_title">İstatistikler</string>
 </resources>
