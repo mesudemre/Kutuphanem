@@ -22,7 +22,7 @@ fun StatisticsArea(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(280.sdp)
+            .height(200.sdp)
             .padding(horizontal = 16.sdp, vertical = 16.sdp),
         shape = MaterialTheme.shapes.medium,
         backgroundColor = MaterialTheme.colorPalette.white,
@@ -32,7 +32,7 @@ fun StatisticsArea(
             StatisticsAreaTitle()
             when(kitapTurIstatistikResource) {
                 is BaseResourceEvent.Loading -> {
-                    KutuphanemShimmerArea(height = 170)
+                    KutuphanemShimmerArea(height = 180)
                 }
                 is BaseResourceEvent.Success -> {
 
