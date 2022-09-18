@@ -12,6 +12,7 @@ import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.dashboard.domain.model.DashboardKitapTurIstatistikItem
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
+import com.mesutemre.kutuphanem.util.customcomponents.chart.KutuphanemPieChart
 import com.mesutemre.kutuphanem.util.customcomponents.progressbar.KutuphanemShimmerArea
 
 @Composable
@@ -22,7 +23,7 @@ fun StatisticsArea(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(200.sdp)
+            .height(320.sdp)
             .padding(horizontal = 16.sdp, vertical = 16.sdp),
         shape = MaterialTheme.shapes.medium,
         backgroundColor = MaterialTheme.colorPalette.white,
@@ -35,7 +36,16 @@ fun StatisticsArea(
                     KutuphanemShimmerArea(height = 180)
                 }
                 is BaseResourceEvent.Success -> {
-
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        KutuphanemPieChart(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 4.sdp),
+                            pointList = kitapTurIstatistikResource.data!!.map {
+                                it.adet
+                            })
+                        StatisticsDescriptionArea(list = kitapTurIstatistikResource.data!!)
+                    }
                 }
                 is BaseResourceEvent.Error -> {
 

@@ -22,6 +22,9 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
 import android.widget.TextView
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.core.app.NotificationCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
@@ -35,6 +38,7 @@ import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.model.SnackType
 import com.mesutemre.kutuphanem.model.WARNING
+import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -419,4 +423,43 @@ fun <R, C> BaseResourceEvent<R>.convertRersourceEventType(
     }
 }
 
+@Composable
+fun getColorListForPieChart(): List<Color> {
+    return listOf(
+        MaterialTheme.colorPalette.acik_kirmizi,
+        MaterialTheme.colorPalette.fistikYesil,
+        MaterialTheme.colorPalette.lacivert,
+        MaterialTheme.colorPalette.kahverengi,
+        MaterialTheme.colorPalette.acikMor,
+        MaterialTheme.colorPalette.aero,
+        MaterialTheme.colorPalette.etonBlue,
+        MaterialTheme.colorPalette.turuncu,
+        MaterialTheme.colorPalette.salmonPink,
+        MaterialTheme.colorPalette.sari,
+        MaterialTheme.colorPalette.spaceCadet,
+        MaterialTheme.colorPalette.morningBlue
+    )
+}
 
+@Composable
+fun RandomComposeColor(): Color {
+    return arrayOf(
+        MaterialTheme.colorPalette.acik_kirmizi,
+        MaterialTheme.colorPalette.acikTuruncu,
+        MaterialTheme.colorPalette.acikSari,
+        MaterialTheme.colorPalette.fistikYesil,
+        MaterialTheme.colorPalette.lacivert,
+        MaterialTheme.colorPalette.shrim_gray,
+        MaterialTheme.colorPalette.kahverengi,
+        MaterialTheme.colorPalette.googleDarkGray,
+        MaterialTheme.colorPalette.acikMor,
+        MaterialTheme.colorPalette.aero,
+        MaterialTheme.colorPalette.kirikBeyaz,
+        MaterialTheme.colorPalette.etonBlue,
+        MaterialTheme.colorPalette.turuncu,
+        MaterialTheme.colorPalette.salmonPink,
+        MaterialTheme.colorPalette.primaryTextColor,
+        MaterialTheme.colorPalette.spaceCadet,
+        MaterialTheme.colorPalette.morningBlue
+    ).random()
+}

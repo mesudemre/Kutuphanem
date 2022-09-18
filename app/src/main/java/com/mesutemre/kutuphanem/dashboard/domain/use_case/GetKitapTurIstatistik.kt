@@ -7,7 +7,6 @@ import com.mesutemre.kutuphanem.dashboard.data.remote.dto.convertToDashboardKita
 import com.mesutemre.kutuphanem.dashboard.data.repository.DashBoardRepository
 import com.mesutemre.kutuphanem.dashboard.domain.model.DashboardKitapTurIstatistikItem
 import com.mesutemre.kutuphanem.di.IoDispatcher
-import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.convertRersourceEventType
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -21,7 +20,6 @@ import javax.inject.Inject
  */
 class GetKitapTurIstatistik @Inject constructor(
     private val dashBoardRepository: DashBoardRepository,
-    private val customSharedPreferences: CustomSharedPreferences,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : IServiceCall by ServiceCallUseCase() {
 
