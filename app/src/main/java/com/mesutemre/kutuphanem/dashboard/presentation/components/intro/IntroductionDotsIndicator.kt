@@ -32,8 +32,8 @@ fun IntroductionDotsIndicator(
                 if (index == selectedIndex) {
                     Box(
                         modifier = Modifier
-                            .size(8.sdp)
-                            .clip(CircleShape)
+                            .size(height = 8.sdp, width = 12.sdp)
+                            .clip(MaterialTheme.shapes.medium)
                             .background(selectedColor)
                     )
                 } else {
