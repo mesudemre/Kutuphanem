@@ -1,10 +1,12 @@
 package com.mesutemre.kutuphanem.parameter.yayinevi.domain.use_case
 
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
+import com.mesutemre.kutuphanem.base.DbCallUseCase
+import com.mesutemre.kutuphanem.base.IDbCall
 import com.mesutemre.kutuphanem.parameter.yayinevi.data.dao.entity.YayinEviEntity
-import com.mesutemre.kutuphanem.parameter.yayinevi.data.remote.dto.YayinEviDto
+import com.mesutemre.kutuphanem.parameter.yayinevi.domain.model.YayinEviItem
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.PARAM_YAYINEVI_DB_KEY
+import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
 /**
@@ -15,20 +17,18 @@ class StoreYayinEviParametre @Inject constructor(
     private val deleteYayinEviFromDbUseCase: DeleteYayinEviFromDbUseCase,
     private val saveYayinEviIntoDbUseCase: SaveYayinEviIntoDbUseCase,
     private val customSharedPreferences: CustomSharedPreferences
-){
+) : IDbCall by DbCallUseCase() {
 
-    operator fun invoke(list: List<YayinEviDto>) {
-        val deleteEvent = deleteYayinEviFromDbUseCase()
-        if (deleteEvent is BaseResourceEvent.Success<*>) {
-            val yayinEviEntityList = list.map {
+    operator suspend fun invoke(list: List<YayinEviItem>) {
+        deleteYayinEviFromDbUseCase().collectLatest {
+            saveYayinEviIntoDbUseCase(*list.map {
                 YayinEviEntity(
                     yayinEviId = it.id,
                     aciklama = it.aciklama
                 )
+            }).collectLatest {
+                customSharedPreferences.putToSharedPref(PARAM_YAYINEVI_DB_KEY, true)
             }
-            val insertEvent = saveYayinEviIntoDbUseCase(yayinEviEntityList)
-            if (insertEvent is BaseResourceEvent.Success<*>)
-                customSharedPreferences.putToSharedPref(PARAM_YAYINEVI_DB_KEY,true)
         }
     }
 }

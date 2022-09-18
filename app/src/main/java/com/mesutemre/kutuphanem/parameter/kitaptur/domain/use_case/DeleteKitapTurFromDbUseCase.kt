@@ -19,7 +19,7 @@ class DeleteKitapTurFromDbUseCase @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ): IDbCall by DbCallUseCase() {
 
-    operator fun invoke() : Flow<BaseResourceEvent<Unit?>>{
+    operator fun invoke() : Flow<BaseResourceEvent<Unit>>{
         return dbCall {
             kitapTurRepository.deleteKitapTurList()
         }.flowOn(ioDispatcher)

@@ -20,7 +20,7 @@ class SaveYayinEviIntoDbUseCase @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ): IDbCall by DbCallUseCase() {
 
-    operator fun invoke(yayinEviEntityList: List<YayinEviEntity>): Flow<BaseResourceEvent<Unit?>> {
+    operator fun invoke(yayinEviEntityList: List<YayinEviEntity>): Flow<BaseResourceEvent<Unit>> {
         return dbCall {
             yayinEviRepository.saveYayinEviList(*yayinEviEntityList.toTypedArray())
         }.flowOn(ioDispatcher)

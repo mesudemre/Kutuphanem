@@ -6,5 +6,5 @@ interface IDbCall {
 
     fun <T : Any> dbCall(
         call: suspend () -> T
-    ): Flow<BaseResourceEvent<T?>>
+    ): Flow<BaseResourceEvent<T>>
 }

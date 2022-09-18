@@ -408,13 +408,9 @@ fun Context.createOutputDirectory(folderPath: String): File {
 }
 
 fun <R, C> BaseResourceEvent<R>.convertRersourceEventType(
-    onSuccess:(() -> Unit)? = null,
     convert: () -> C,
 ): BaseResourceEvent<C> {
     return if (this is BaseResourceEvent.Success) {
-        onSuccess?.let {
-            it.invoke()
-        }
         BaseResourceEvent.Success(data = convert.invoke())
     }else if (this is BaseResourceEvent.Error) {
         BaseResourceEvent.Error(message = this.message)

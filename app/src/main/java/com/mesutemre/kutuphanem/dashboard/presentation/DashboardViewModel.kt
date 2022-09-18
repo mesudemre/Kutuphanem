@@ -30,8 +30,6 @@ class DashboardViewModel @Inject constructor(
     val dashboardState: State<DashboardState> = _dashboardState
     
     init {
-        val n = 10
-
         _dashboardState.value = _dashboardState.value.copy(
             introductionList = getDashboardIntroductionList()
         )

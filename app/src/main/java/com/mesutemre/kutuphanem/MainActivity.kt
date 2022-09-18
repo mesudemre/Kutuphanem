@@ -144,8 +144,8 @@ private fun KutuphanemBottomNavigationBar(
     BottomAppBar(
         modifier = Modifier.graphicsLayer {
             shape = RoundedCornerShape(
-                topStart = 20.sdp,
-                topEnd = 20.sdp
+                topStart = 12.sdp,
+                topEnd = 12.sdp
             )
             clip = true
         },

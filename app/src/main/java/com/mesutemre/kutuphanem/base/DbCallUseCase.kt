@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.flow
  */
 class DbCallUseCase : IDbCall {
 
-    override fun <T : Any> dbCall(call: suspend () -> T): Flow<BaseResourceEvent<T?>> = flow {
+    override fun <T : Any> dbCall(call: suspend () -> T): Flow<BaseResourceEvent<T>> = flow {
         emit(BaseResourceEvent.Loading())
         var response: T? = null
         try {

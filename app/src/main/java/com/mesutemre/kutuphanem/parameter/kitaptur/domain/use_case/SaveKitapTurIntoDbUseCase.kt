@@ -20,7 +20,7 @@ class SaveKitapTurIntoDbUseCase @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ): IDbCall by DbCallUseCase(){
 
-    operator fun invoke(kitapTurEntityList: List<KitapTurEntity>): Flow<BaseResourceEvent<Unit?>> {
+    operator fun invoke(kitapTurEntityList: List<KitapTurEntity>): Flow<BaseResourceEvent<Unit>> {
         return dbCall {
             kitapTurRepository.saveKitapTurList(*kitapTurEntityList.toTypedArray())
         }.flowOn(ioDispatcher)

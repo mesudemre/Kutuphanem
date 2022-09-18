@@ -11,6 +11,7 @@ import com.mesutemre.kutuphanem.util.PARAM_YAYINEVI_DB_KEY
 import com.mesutemre.kutuphanem.util.convertRersourceEventType
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -26,24 +27,26 @@ class GetYayinEviListUseCase @Inject constructor(
     private val storeYayinEviParametre: StoreYayinEviParametre
 ): IServiceCall by ServiceCallUseCase(), IDbCall by DbCallUseCase(){
 
-    operator fun invoke(isSwipeRefresh: Boolean): Flow<BaseResourceEvent<List<YayinEviItem>>> {
+    operator suspend fun invoke(isSwipeRefresh: Boolean): Flow<BaseResourceEvent<List<YayinEviItem>>> {
         val isDbKayit = customSharedPreferences.getBooleanFromSharedPreferences(PARAM_YAYINEVI_DB_KEY)
-        return if (isSwipeRefresh || !isDbKayit) {
-            serviceCall {
+        if (isSwipeRefresh || !isDbKayit) {
+            val serviceListEvent = serviceCall {
                 yayinEviRepository.getYayinEviLisetByAPI()
             }.map {
-                it.convertRersourceEventType(
-                    onSuccess = {
-                        storeYayinEviParametre(it.data!!)
-                    }
-                ) {
+                it.convertRersourceEventType{
                     it.data!!.map {k->
                         k.toYayinEviItem()
                     }
                 }
             }.flowOn(ioDispatcher)
+            serviceListEvent.collectLatest {
+                if (it is BaseResourceEvent.Success) {
+                    storeYayinEviParametre(it.data!!)
+                }
+            }
+            return serviceListEvent
         }else {
-            dbCall {
+            return dbCall {
                 yayinEviRepository.getYayinEviListeByDAO()
             }.map {
                 it.convertRersourceEventType {
