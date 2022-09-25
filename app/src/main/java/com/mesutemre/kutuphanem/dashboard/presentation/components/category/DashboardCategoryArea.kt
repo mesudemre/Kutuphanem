@@ -15,6 +15,7 @@ import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.dashboard.domain.model.DashboardKategoriItem
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
+import com.mesutemre.kutuphanem.util.customcomponents.card.KutuphanemCardTitle
 import com.mesutemre.kutuphanem.util.customcomponents.progressbar.KutuphanemShimmerArea
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -30,7 +31,7 @@ fun DashboardCategoryArea(kategoriResource: BaseResourceEvent<List<DashboardKate
         elevation = 8.sdp
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
-            DashboardCategoryAreaTitle()
+            KutuphanemCardTitle(title = R.string.dashKategoriText)
             when(kategoriResource) {
                 is BaseResourceEvent.Loading -> {
                     KutuphanemShimmerArea(height = 120)

@@ -1,5 +1,6 @@
-package com.mesutemre.kutuphanem.dashboard.presentation.components.category
+package com.mesutemre.kutuphanem.util.customcomponents.card
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
@@ -17,12 +18,14 @@ import com.mesutemre.kutuphanem.ui.theme.normalUbuntuTransparentBold
 import com.mesutemre.kutuphanem.ui.theme.sdp
 
 @Composable
-fun DashboardCategoryAreaTitle() {
+fun KutuphanemCardTitle(
+    @StringRes title:Int
+) {
     ConstraintLayout(modifier = Modifier
         .fillMaxWidth()
         .padding(bottom = 8.sdp)) {
         val (labelText, iconItem) = createRefs()
-        Text(text = stringResource(id = R.string.dashKategoriText), modifier = Modifier
+        Text(text = stringResource(id = title), modifier = Modifier
             .constrainAs(labelText) {
                 top.linkTo(parent.top, 8.sdp)
                 bottom.linkTo(parent.bottom, 8.sdp)
@@ -37,7 +40,7 @@ fun DashboardCategoryAreaTitle() {
                 bottom.linkTo(parent.bottom, 8.sdp)
                 end.linkTo(parent.end, 8.sdp)
             },
-            contentDescription = stringResource(id = R.string.dashKategoriText),
+            contentDescription = stringResource(id = title),
             tint = MaterialTheme.colorPalette.transparent
         )
     }

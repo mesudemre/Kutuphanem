@@ -10,6 +10,8 @@ import com.mesutemre.kutuphanem.dashboard.domain.use_case.GetDashboardKategoriLi
 import com.mesutemre.kutuphanem.dashboard.domain.use_case.GetKitapTurIstatistik
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,7 +30,7 @@ class DashboardViewModel @Inject constructor(
     
     private val _dashboardState = mutableStateOf(DashboardState())
     val dashboardState: State<DashboardState> = _dashboardState
-    
+
     init {
         _dashboardState.value = _dashboardState.value.copy(
             introductionList = getDashboardIntroductionList()
