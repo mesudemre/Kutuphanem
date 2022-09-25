@@ -11,8 +11,17 @@ interface IDashBoardDao {
     suspend fun getKitapTurIstatistikListe(): List<KitapTurIstatistikEntity>
 
     @Insert
-    suspend fun kitapTurIstatistikKaydet(vararg yayinEvi: KitapTurIstatistikEntity)
+    suspend fun kitapTurIstatistikKaydet(vararg kitapTurIstatistik: KitapTurIstatistikEntity)
 
     @Query("DELETE FROM KitapTurIstatistikEntity")
     suspend fun deleteKitapTurIstatistikList()
+
+    @Query("SELECT adet,yil from KitapYilIstatistikEntity")
+    suspend fun getKitapYilIstatistikListe(): List<KitapYilIstatistikEntity>
+
+    @Insert
+    suspend fun kitapYilIstatistikKaydet(vararg kitapYilIstatistik: KitapYilIstatistikEntity)
+
+    @Query("DELETE FROM KitapYilIstatistikEntity")
+    suspend fun deleteKitapYilIstatistikList()
 }

@@ -9,7 +9,7 @@ import com.mesutemre.kutuphanem.dashboard.domain.model.DashboardKitapTurIstatist
 data class KitapTurIstatistikEntity(
 
     @PrimaryKey(autoGenerate = true)
-    val id: Int?,
+    val id: Int? = null,
 
     @ColumnInfo(name = "aciklama")
     val aciklama: String,

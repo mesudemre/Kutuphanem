@@ -8,6 +8,7 @@ import com.mesutemre.kutuphanem.auth.profil.model.Kullanici
 import com.mesutemre.kutuphanem.auth.profil.model.KullaniciKitapTurModel
 import com.mesutemre.kutuphanem.dashboard.data.dao.entity.IDashBoardDao
 import com.mesutemre.kutuphanem.dashboard.data.dao.entity.KitapTurIstatistikEntity
+import com.mesutemre.kutuphanem.dashboard.data.dao.entity.KitapYilIstatistikEntity
 import com.mesutemre.kutuphanem.exceptions.dao.KutuphanemGlobalExceptionHandlerDao
 import com.mesutemre.kutuphanem.exceptions.model.KutuphanemGlobalExceptionHandlerModel
 import com.mesutemre.kutuphanem.kitap.dao.KitapDao
@@ -26,7 +27,8 @@ import com.mesutemre.kutuphanem.util.converters.Converters
                 KutuphanemGlobalExceptionHandlerModel::class,
                 YayinEviEntity::class,
                 KitapTurEntity::class,
-                KitapTurIstatistikEntity::class
+                KitapTurIstatistikEntity::class,
+                KitapYilIstatistikEntity::class
             ),
             exportSchema = false)
 @TypeConverters(Converters::class)

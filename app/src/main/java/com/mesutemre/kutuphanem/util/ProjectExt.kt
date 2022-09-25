@@ -44,16 +44,18 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-const val APP_TOKEN_KEY: String = "APP_TOKEN";
-const val KULLANICI_ADI_KEY: String = "KULLANICI_ADI";
-const val KUTUPHANEM_DB_NAME = "kutuphanem";
-const val PARAM_YAYINEVI_DB_KEY: String = "PARAM_YAYINEVI";
-const val PARAM_KITAPTUR_DB_KEY: String = "PARAM_KITAPTUR";
-const val KULLANICI_DB_MEVCUT: String = "KULLANICI_MEVCUT";
-const val CAMERA_REQUEST_CODE: Int = 1991;
-const val READ_EXTERNAL_STORAGE_REQUEST_CODE: Int = 1992;
-const val WRITE_EXTERNAL_STORAGE_REQUEST_CODE: Int = 2019;
-const val SHARED_PREF_FILE: String = "KUTUPHANEM_SP";
+const val APP_TOKEN_KEY: String = "APP_TOKEN"
+const val KULLANICI_ADI_KEY: String = "KULLANICI_ADI"
+const val KUTUPHANEM_DB_NAME = "kutuphanem"
+const val PARAM_YAYINEVI_DB_KEY: String = "PARAM_YAYINEVI"
+const val PARAM_KITAPTUR_DB_KEY: String = "PARAM_KITAPTUR"
+const val KULLANICI_DB_MEVCUT: String = "KULLANICI_MEVCUT"
+const val DASHBOARD_KATEGORI_ISTATISTIK = "DASHBOARD_KATEGORI_ISTATISTIK"
+const val DASHBOARD_YIL_ISTATISTIK = "DASHBOARD_YIL_ISTATISTIK"
+const val CAMERA_REQUEST_CODE: Int = 1991
+const val READ_EXTERNAL_STORAGE_REQUEST_CODE: Int = 1992
+const val WRITE_EXTERNAL_STORAGE_REQUEST_CODE: Int = 2019
+const val SHARED_PREF_FILE: String = "KUTUPHANEM_SP"
 
 val DEVICE_NAME: String by lazy {
     val manufacturer = Build.MANUFACTURER
