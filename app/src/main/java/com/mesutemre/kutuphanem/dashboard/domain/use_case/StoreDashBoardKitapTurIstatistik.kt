@@ -1,6 +1,5 @@
 package com.mesutemre.kutuphanem.dashboard.domain.use_case
 
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.dashboard.data.dao.entity.KitapTurIstatistikEntity
 import com.mesutemre.kutuphanem.dashboard.data.remote.dto.KitapTurIstatistikDto
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
@@ -19,16 +18,14 @@ class StoreDashBoardKitapTurIstatistik @Inject constructor(
 ){
     operator suspend fun invoke(list: List<KitapTurIstatistikDto>) {
         deleteKitapTurIstatistikUseCase().collectLatest {
-            if (it is BaseResourceEvent.Success) {
-                val kitapTurIstatistikEntityList = list.map {
-                    KitapTurIstatistikEntity(
-                        aciklama = it.aciklama,
-                        adet = it.adet
-                    )
-                }
-                saveKitapTurIstatistikUseCase(kitapTurIstatistikEntityList).collectLatest {
-                    customSharedPreferences.putToSharedPref(DASHBOARD_KATEGORI_ISTATISTIK,true)
-                }
+            val kitapTurIstatistikEntityList = list.map {
+                KitapTurIstatistikEntity(
+                    aciklama = it.aciklama,
+                    adet = it.adet
+                )
+            }
+            saveKitapTurIstatistikUseCase(kitapTurIstatistikEntityList).collectLatest {
+                customSharedPreferences.putToSharedPref(DASHBOARD_KATEGORI_ISTATISTIK,true)
             }
         }
     }

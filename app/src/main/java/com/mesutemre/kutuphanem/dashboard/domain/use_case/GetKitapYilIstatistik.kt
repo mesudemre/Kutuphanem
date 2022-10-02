@@ -1,14 +1,14 @@
 package com.mesutemre.kutuphanem.dashboard.domain.use_case
 
 import com.mesutemre.kutuphanem.base.*
-import com.mesutemre.kutuphanem.dashboard.data.dao.entity.convertToDashBoardKitapTurIstatistikItem
-import com.mesutemre.kutuphanem.dashboard.data.remote.dto.KitapTurIstatistikDto
-import com.mesutemre.kutuphanem.dashboard.data.remote.dto.convertToDashboardKitapTurIstatistikItem
+import com.mesutemre.kutuphanem.dashboard.data.dao.entity.convertToDashBoardKitapYilIstatistikItem
+import com.mesutemre.kutuphanem.dashboard.data.remote.dto.KitapYilIstatistikDto
+import com.mesutemre.kutuphanem.dashboard.data.remote.dto.convertToDashBoardKitapYilIstatistikItem
 import com.mesutemre.kutuphanem.dashboard.data.repository.DashBoardRepository
-import com.mesutemre.kutuphanem.dashboard.domain.model.DashboardKitapTurIstatistikItem
+import com.mesutemre.kutuphanem.dashboard.domain.model.DashBoardKitapYilIstatistikItem
 import com.mesutemre.kutuphanem.di.IoDispatcher
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
-import com.mesutemre.kutuphanem.util.DASHBOARD_KATEGORI_ISTATISTIK
+import com.mesutemre.kutuphanem.util.DASHBOARD_YIL_ISTATISTIK
 import com.mesutemre.kutuphanem.util.convertRersourceEventType
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -19,45 +19,46 @@ import javax.inject.Inject
 
 /**
  * @Author: mesutemre.celenk
- * @Date: 17.09.2022
+ * @Date: 2.10.2022
  */
-class GetKitapTurIstatistik @Inject constructor(
+class GetKitapYilIstatistik @Inject constructor(
     private val dashBoardRepository: DashBoardRepository,
     private val customSharedPreferences: CustomSharedPreferences,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    private val storeKitapTurIstatistik: StoreDashBoardKitapTurIstatistik
-) : IServiceCall by ServiceCallUseCase(), IDbCall by DbCallUseCase() {
+    private val storeDashboardKitapYilIstatistik: StoreDashboardKitapYilIstatistik
+) : IServiceCall by ServiceCallUseCase(),IDbCall by DbCallUseCase() {
 
-    operator suspend fun invoke(): Flow<BaseResourceEvent<List<DashboardKitapTurIstatistikItem>>> {
+    operator suspend fun invoke(): Flow<BaseResourceEvent<List<DashBoardKitapYilIstatistikItem>>> {
         val isDbKayit = customSharedPreferences.getBooleanFromSharedPreferences(
-            DASHBOARD_KATEGORI_ISTATISTIK
+            DASHBOARD_YIL_ISTATISTIK
         )
-        var dashBoardKitapTurIstatistikDtoList: List<KitapTurIstatistikDto>? = null
         if (!isDbKayit) {
+            var kitapYilIstatistikList: List<KitapYilIstatistikDto>? = null
             val serviceEvent = serviceCall {
-                dashBoardRepository.getKitapTurIstatistikByAPI()
+                dashBoardRepository.getKitapYilIstatistikByAPI()
             }.map {
-                dashBoardKitapTurIstatistikDtoList = it.data
+                kitapYilIstatistikList = it.data
                 it.convertRersourceEventType {
                     it.data!!.map { k ->
-                        k.convertToDashboardKitapTurIstatistikItem()
+                        k.convertToDashBoardKitapYilIstatistikItem()
                     }
                 }
             }.flowOn(ioDispatcher)
-
             serviceEvent.collectLatest {
                 if (it is BaseResourceEvent.Success) {
-                    storeKitapTurIstatistik(dashBoardKitapTurIstatistikDtoList!!)
+                    kitapYilIstatistikList?.let {
+                        storeDashboardKitapYilIstatistik(it)
+                    }
                 }
             }
             return serviceEvent
         }else {
             return dbCall {
-                dashBoardRepository.getKitapTurIstatistikByDAO()
+                dashBoardRepository.getKitapYilIstatistikByDAO()
             }.map {
                 it.convertRersourceEventType {
                     it.data!!.map { ist->
-                        ist.convertToDashBoardKitapTurIstatistikItem()
+                        ist.convertToDashBoardKitapYilIstatistikItem()
                     }
                 }
             }

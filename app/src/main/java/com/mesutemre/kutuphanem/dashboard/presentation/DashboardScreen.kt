@@ -8,19 +8,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.accompanist.insets.systemBarsPadding
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.mesutemre.kutuphanem.dashboard.presentation.DashboardState
 import com.mesutemre.kutuphanem.dashboard.presentation.DashboardViewModel
 import com.mesutemre.kutuphanem.dashboard.presentation.components.DashBoardSearchBar
 import com.mesutemre.kutuphanem.dashboard.presentation.components.IntroductionPagerArea
 import com.mesutemre.kutuphanem.dashboard.presentation.components.PersonelInfoArea
 import com.mesutemre.kutuphanem.dashboard.presentation.components.category.DashboardCategoryArea
 import com.mesutemre.kutuphanem.dashboard.presentation.components.statistics.StatisticsArea
+import com.mesutemre.kutuphanem.dashboard.presentation.components.statistics.kitapyil.KitapYilStatisticsArea
 import com.mesutemre.kutuphanem.navigation.KutuphanemNavigationItem
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 
@@ -52,6 +51,7 @@ fun DashboardScreen(
             IntroductionPagerArea(dashBoardState.introductionList)
             DashboardCategoryArea(dashBoardState.kategoriListeResource)
             StatisticsArea(dashBoardState.kitapTurIstatistikResource)
+            KitapYilStatisticsArea(dashBoardState.kitapYilIstatistikResource)
         }
     }
 }
