@@ -320,7 +320,7 @@ fun KutuphanemBarChart(
                 val paint = Paint().apply {
                     this.color = labelColor.toArgb()
                     textAlign = Paint.Align.CENTER
-                    textSize = 40f
+                    textSize = 30f
                 }
 
                 var spaceStep = 0f

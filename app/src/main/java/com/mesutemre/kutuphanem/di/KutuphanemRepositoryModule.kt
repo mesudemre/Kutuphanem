@@ -4,6 +4,10 @@ import com.mesutemre.kutuphanem.dashboard.data.dao.entity.IDashBoardDao
 import com.mesutemre.kutuphanem.dashboard.data.remote.IDashBoardApi
 import com.mesutemre.kutuphanem.dashboard.data.repository.DashBoardRepository
 import com.mesutemre.kutuphanem.dashboard.domain.repository.DashBoardRepositoryImpl
+import com.mesutemre.kutuphanem.dashboard_search.data.dao.IDashBoardSearchHistoryDao
+import com.mesutemre.kutuphanem.dashboard_search.data.repository.SearchDashboardRepository
+import com.mesutemre.kutuphanem.dashboard_search.domain.repository.SearchDashBoardRepositoryImpl
+import com.mesutemre.kutuphanem.kitap.data.remote.IKitapApi
 import com.mesutemre.kutuphanem.login.data.remote.LoginService
 import com.mesutemre.kutuphanem.login.data.repository.LoginRepository
 import com.mesutemre.kutuphanem.login.domain.repository.ILoginRepository
@@ -60,5 +64,11 @@ class KutuphanemRepositoryModule {
     @Provides
     fun provideDashBoardRepository(api: IDashBoardApi,dao:IDashBoardDao): DashBoardRepository {
         return DashBoardRepositoryImpl(api,dao)
+    }
+
+    @Singleton
+    @Provides
+    fun provideSearchDashBoardRepository(api: IKitapApi,dao:IDashBoardSearchHistoryDao): SearchDashboardRepository {
+        return SearchDashBoardRepositoryImpl(api,dao)
     }
 }

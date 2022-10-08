@@ -6,6 +6,7 @@ import com.mesutemre.kutuphanem.auth.service.KullaniciService
 import com.mesutemre.kutuphanem.dashboard.data.remote.IDashBoardApi
 import com.mesutemre.kutuphanem.interceptors.HeaderInterceptor
 import com.mesutemre.kutuphanem.interceptors.NetworkConnectionInterceptor
+import com.mesutemre.kutuphanem.kitap.data.remote.IKitapApi
 import com.mesutemre.kutuphanem.kitap.service.IKitapService
 import com.mesutemre.kutuphanem.login.data.remote.LoginService
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.remote.dto.IKitapTurApi
@@ -96,5 +97,9 @@ class KutuphanemNetworkModule {
     @Singleton
     @Provides
     fun providerDashBoardAPI(retrofit: Retrofit): IDashBoardApi = retrofit.create(IDashBoardApi::class.java)
+
+    @Singleton
+    @Provides
+    fun providerKitapAPI(retrofit: Retrofit): IKitapApi = retrofit.create(IKitapApi::class.java)
 
 }

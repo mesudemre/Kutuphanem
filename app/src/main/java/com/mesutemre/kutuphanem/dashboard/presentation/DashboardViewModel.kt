@@ -28,6 +28,7 @@ class DashboardViewModel @Inject constructor(
     val dashboardState: State<DashboardState> = _dashboardState
 
     init {
+
         _dashboardState.value = _dashboardState.value.copy(
             introductionList = getDashboardIntroductionList()
         )
