@@ -7,7 +7,6 @@ import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.dashboard_search.domain.use_case.GetKitapSearchListUseCase
 import com.mesutemre.kutuphanem.dashboard_search.domain.use_case.GetSearchHistoryListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
