@@ -1,4 +1,4 @@
-package com.mesutemre.kutuphanem.auth.profil.model
+package com.mesutemre.kutuphanem.profile.data.remote.dto
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

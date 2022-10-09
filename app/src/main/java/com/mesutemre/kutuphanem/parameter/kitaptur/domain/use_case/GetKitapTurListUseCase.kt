@@ -1,17 +1,20 @@
 package com.mesutemre.kutuphanem.parameter.kitaptur.domain.use_case
 
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
-import com.mesutemre.kutuphanem.base.BaseUseCase
+import com.mesutemre.kutuphanem.base.*
 import com.mesutemre.kutuphanem.di.IoDispatcher
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.dao.entity.toKitapTurItem
+import com.mesutemre.kutuphanem.parameter.kitaptur.data.remote.dto.KitapTurDto
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.remote.dto.toKitapTurItem
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.repository.KitapTurRepository
 import com.mesutemre.kutuphanem.parameter.kitaptur.domain.model.KitapTurItem
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.PARAM_KITAPTUR_DB_KEY
+import com.mesutemre.kutuphanem.util.convertRersourceEventType
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 /**
@@ -23,40 +26,40 @@ class GetKitapTurListUseCase @Inject constructor(
     private val customSharedPreferences: CustomSharedPreferences,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val storeKitapTurParametre: StoreKitapTurParametre
-): BaseUseCase() {
+): IServiceCall by ServiceCallUseCase(), IDbCall by DbCallUseCase() {
 
-    operator fun invoke(isSwipeRefresh: Boolean) : Flow<BaseResourceEvent<List<KitapTurItem>>> = flow{
-        emit(BaseResourceEvent.Loading())
+    operator suspend fun invoke(isSwipeRefresh: Boolean) : Flow<BaseResourceEvent<List<KitapTurItem>>> {
         val isDbKayit = customSharedPreferences.getBooleanFromSharedPreferences(
             PARAM_KITAPTUR_DB_KEY
         )
+        var kitapTurDtoList: List<KitapTurDto>? = null
         if (isSwipeRefresh || !isDbKayit) {
-            val serviceList = nonFlowServiceCall(ioDispatcher) {
+            val serviceEvent = serviceCall {
                 kitapTurRepository.getKitapTurListeByAPI()
+            }.map {
+                kitapTurDtoList = it.data
+                it.convertRersourceEventType {
+                    it.data!!.map {k->
+                        k.toKitapTurItem()
+                    }
+                }
+            }.flowOn(ioDispatcher)
+            serviceEvent.collectLatest {
+                if (it is BaseResourceEvent.Success) {
+                    storeKitapTurParametre(kitapTurDtoList!!)
+                }
             }
-            if (serviceList is BaseResourceEvent.Success) {
-                emit(BaseResourceEvent.Success(
-                    data = serviceList.data?.map {
-                        it.toKitapTurItem()
-                    }!!
-                ))
-                storeKitapTurParametre(serviceList.data)
-            }else if (serviceList is BaseResourceEvent.Error) {
-                emit(BaseResourceEvent.Error(serviceList.message))
-            }
-        } else {
-            val dbList = nonFlowDbCall(ioDispatcher) {
+            return serviceEvent
+        }else {
+            return dbCall {
                 kitapTurRepository.getKitapTurListeByDAO()
-            }
-            if (dbList is BaseResourceEvent.Success) {
-                emit(BaseResourceEvent.Success(
-                    data = dbList.data?.map {
-                        it.toKitapTurItem()
-                    }!!
-                ))
-            }else if (dbList is BaseResourceEvent.Error) {
-                emit(BaseResourceEvent.Error(dbList.message))
-            }
+            }.map {
+                it.convertRersourceEventType {
+                    it.data!!.map {k->
+                        k.toKitapTurItem()
+                    }
+                }
+            }.flowOn(ioDispatcher)
         }
     }
 }

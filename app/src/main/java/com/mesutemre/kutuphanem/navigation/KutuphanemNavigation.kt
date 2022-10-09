@@ -12,8 +12,9 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
+import com.mesutemre.kutuphanem.dashboard.DashboardScreen
+import com.mesutemre.kutuphanem.dashboard_search.presentation.DashboardSearchScreen
 import com.mesutemre.kutuphanem.login.presentation.LoginScreen
-import com.mesutemre.kutuphanem.mainscreen.MainScreen
 import com.mesutemre.kutuphanem.parameter.ParametreScreen
 import com.mesutemre.kutuphanem.parameter.ekleme.presentation.ParametreEklemeScreen
 import com.mesutemre.kutuphanem.parameter.kitaptur.presentation.ParametreKitapTurScreen
@@ -30,8 +31,8 @@ fun KutuphanemNavigation(
         navController = navController,
         startDestination = startDestinition.screenRoute
     ) {
-        composable(route = KutuphanemNavigationItem.MainScreen.screenRoute) {
-            MainScreen()
+        composable(route = KutuphanemNavigationItem.DashboardScreen.screenRoute) {
+            DashboardScreen(navController)
         }
 
         composable(route = KutuphanemNavigationItem.LoginScreen.screenRoute) {
@@ -76,6 +77,16 @@ fun KutuphanemNavigation(
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
             }) {
             ParametreEklemeScreen(showSnackbar = showSnackbar)
+        }
+
+        composable(route = KutuphanemNavigationItem.DashboardSearchScreen.screenRoute,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
+            }) {
+            DashboardSearchScreen(navController)
         }
     }
 }

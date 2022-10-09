@@ -1,7 +1,8 @@
 package com.mesutemre.kutuphanem.parameter.yayinevi.domain.use_case
 
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
-import com.mesutemre.kutuphanem.base.BaseUseCase
+import com.mesutemre.kutuphanem.base.IServiceCall
+import com.mesutemre.kutuphanem.base.ServiceCallUseCase
 import com.mesutemre.kutuphanem.di.IoDispatcher
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.parameter.yayinevi.data.remote.dto.YayinEviDto
@@ -20,7 +21,7 @@ import javax.inject.Inject
 class DeleteYayinEviUseCase @Inject constructor(
     private val yayinEviRepository: YayinEviRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
-):BaseUseCase() {
+):IServiceCall by ServiceCallUseCase() {
     operator fun invoke(yayinEviItem: YayinEviItem): Flow<BaseResourceEvent<ResponseStatusModel?>> {
         val yayinEviDto: YayinEviDto = YayinEviDto(
             id = yayinEviItem.id,

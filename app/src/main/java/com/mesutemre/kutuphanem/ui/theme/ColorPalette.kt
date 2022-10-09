@@ -41,6 +41,13 @@ data class ColorPalette(
     val googleDarkGray:Color,
     val secondaryGray:Color,
     val otherGrayLight:Color,
-    val iconGrayTint:Color
-) {
-}
+    val iconGrayTint:Color,
+    val placeHolderColor:Color,
+    val acikMor:Color,
+    val aero:Color,
+    val kirikBeyaz:Color,
+    val etonBlue:Color,
+    val salmonPink:Color,
+    val spaceCadet: Color,
+    val morningBlue:Color
+)

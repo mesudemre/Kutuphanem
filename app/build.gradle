@@ -14,8 +14,8 @@ android {
         applicationId "com.mesutemre.kutuphanem"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 20
-        versionName "2.0.0"
+        versionCode 30
+        versionName "2.2.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -66,6 +66,7 @@ android {
             buildConfigField 'String', 'API_URL', "\"${DEV_ALPHA_BETA_API_URL}\""
             debuggable true
             versionNameSuffix "-alpha"
+            signingConfig signingConfigs.release
         }
 
         beta {
@@ -125,8 +126,6 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
-    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
-    implementation "io.reactivex.rxjava2:rxandroid:$rxandroidVersion"
     implementation "com.github.bumptech.glide:glide:$glideVersion"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swipeRefreshVersion"
     implementation "androidx.paging:paging-runtime:$pagingVersion"
@@ -180,6 +179,11 @@ dependencies {
     implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_swiperefresh"
     implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_navigationAnimate"
     implementation "com.airbnb.android:lottie-compose:$lottieVersion"
-
-    //implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+    implementation "com.google.accompanist:accompanist-placeholder-material:$accompanist_placeholder"
+    implementation"io.coil-kt:coil-compose:$coilVersion"
+    implementation('com.google.crypto.tink:tink-android') {
+        version {
+            strictly '1.4.0'
+        }
+    }
 }

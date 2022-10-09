@@ -1,9 +1,12 @@
 package com.mesutemre.kutuphanem.auth.profil.model
 
 import androidx.annotation.Keep
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.SerializedName
+import com.mesutemre.kutuphanem.profile.data.remote.dto.CinsiyetModel
 import java.io.Serializable
 import java.util.*
 

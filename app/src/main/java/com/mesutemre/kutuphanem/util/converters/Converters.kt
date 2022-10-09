@@ -1,7 +1,7 @@
 package com.mesutemre.kutuphanem.util.converters
 
 import androidx.room.TypeConverter
-import com.mesutemre.kutuphanem.auth.profil.model.CinsiyetModel
+import com.mesutemre.kutuphanem.profile.data.remote.dto.CinsiyetModel
 import java.text.SimpleDateFormat
 import java.util.*
 

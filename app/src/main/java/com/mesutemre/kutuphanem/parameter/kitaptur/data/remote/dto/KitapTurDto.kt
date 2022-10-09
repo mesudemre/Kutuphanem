@@ -2,6 +2,7 @@ package com.mesutemre.kutuphanem.parameter.kitaptur.data.remote.dto
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.mesutemre.kutuphanem.dashboard.domain.model.DashboardKategoriItem
 import com.mesutemre.kutuphanem.parameter.kitaptur.domain.model.KitapTurItem
 import java.io.Serializable
 
@@ -25,4 +26,8 @@ data class KitapTurDto(
 
 fun KitapTurDto.toKitapTurItem(): KitapTurItem {
     return KitapTurItem(id = this.id ?: 0, aciklama = this.aciklama ?: "")
+}
+
+fun KitapTurDto.toDashboardKategoriItem(): DashboardKategoriItem {
+    return DashboardKategoriItem(aciklama = this.aciklama ?: "", resim = this.resim ?: "")
 }

@@ -1,7 +1,8 @@
 package com.mesutemre.kutuphanem.parameter.ekleme.domain
 
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
-import com.mesutemre.kutuphanem.base.BaseUseCase
+import com.mesutemre.kutuphanem.base.IServiceCall
+import com.mesutemre.kutuphanem.base.ServiceCallUseCase
 import com.mesutemre.kutuphanem.di.IoDispatcher
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.parameter.ekleme.presentation.components.SelectedParameterType
@@ -22,7 +23,7 @@ class SaveParametreUseCase @Inject constructor(
     private val kitapTurRepository: KitapTurRepository,
     private val yayinEviRepository: YayinEviRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
-) : BaseUseCase() {
+) : IServiceCall by ServiceCallUseCase() {
 
     operator fun invoke(
         selectedParameterType: SelectedParameterType,

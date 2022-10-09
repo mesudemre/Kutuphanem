@@ -1,7 +1,6 @@
 package com.mesutemre.kutuphanem.parameter.yayinevi.domain.use_case
 
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
-import com.mesutemre.kutuphanem.base.BaseUseCase
+import com.mesutemre.kutuphanem.base.*
 import com.mesutemre.kutuphanem.di.IoDispatcher
 import com.mesutemre.kutuphanem.parameter.yayinevi.data.dao.entity.toYayinEviItem
 import com.mesutemre.kutuphanem.parameter.yayinevi.data.remote.dto.toYayinEviItem
@@ -9,9 +8,12 @@ import com.mesutemre.kutuphanem.parameter.yayinevi.domain.model.YayinEviItem
 import com.mesutemre.kutuphanem.parameter.yayinevi.domain.repository.YayinEviRepository
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.PARAM_YAYINEVI_DB_KEY
+import com.mesutemre.kutuphanem.util.convertRersourceEventType
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 /**
@@ -23,38 +25,36 @@ class GetYayinEviListUseCase @Inject constructor(
     private val customSharedPreferences: CustomSharedPreferences,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val storeYayinEviParametre: StoreYayinEviParametre
-): BaseUseCase(){
+): IServiceCall by ServiceCallUseCase(), IDbCall by DbCallUseCase(){
 
-    operator fun invoke(isSwipeRefresh: Boolean): Flow<BaseResourceEvent<List<YayinEviItem>>> = flow{
-        emit(BaseResourceEvent.Loading())
+    operator suspend fun invoke(isSwipeRefresh: Boolean): Flow<BaseResourceEvent<List<YayinEviItem>>> {
         val isDbKayit = customSharedPreferences.getBooleanFromSharedPreferences(PARAM_YAYINEVI_DB_KEY)
         if (isSwipeRefresh || !isDbKayit) {
-            val serviceList = nonFlowServiceCall(ioDispatcher) {
+            val serviceListEvent = serviceCall {
                 yayinEviRepository.getYayinEviLisetByAPI()
+            }.map {
+                it.convertRersourceEventType{
+                    it.data!!.map {k->
+                        k.toYayinEviItem()
+                    }
+                }
+            }.flowOn(ioDispatcher)
+            serviceListEvent.collectLatest {
+                if (it is BaseResourceEvent.Success) {
+                    storeYayinEviParametre(it.data!!)
+                }
             }
-            if (serviceList is BaseResourceEvent.Success) {
-                emit(BaseResourceEvent.Success(
-                    data = serviceList.data?.map {
-                        it.toYayinEviItem()
-                    }!!
-                ))
-                storeYayinEviParametre(serviceList.data)
-            }else if (serviceList is BaseResourceEvent.Error) {
-                emit(BaseResourceEvent.Error(serviceList.message))
-            }
+            return serviceListEvent
         }else {
-            val dbList = nonFlowDbCall(ioDispatcher) {
+            return dbCall {
                 yayinEviRepository.getYayinEviListeByDAO()
-            }
-            if (dbList is BaseResourceEvent.Success) {
-                emit(BaseResourceEvent.Success(
-                    data = dbList.data?.map {
-                        it.toYayinEviItem()
-                    }!!
-                ))
-            }else if (dbList is BaseResourceEvent.Error) {
-                emit(BaseResourceEvent.Error(dbList.message))
-            }
+            }.map {
+                it.convertRersourceEventType {
+                    it.data!!.map {k->
+                        k.toYayinEviItem()
+                    }
+                }
+            }.flowOn(ioDispatcher)
         }
     }
 }

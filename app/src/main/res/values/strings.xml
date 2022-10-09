@@ -194,4 +194,11 @@
 
 
     <string name="splash_content_desc">Kütüphanem Splash Logo</string>
+    <string name="dashboard_welcome_text">Hoşgeldiniz</string>
+    <string name="dasboard_category_statistics_title">Kategori İstatistiği</string>
+    <string name="dasboard_category_statistics_error">Kategori İstatistiği getirilemedi!</string>
+    <string name="dasboard_category_statistics_kitap_yil_title">Son 5 Yıl Alınan Kitaplar</string>
+    <string name="dasboard_category_statistics_kitap_yil_error">Yıllara göre kitap istatistiği yüklenemedi!</string>
+    <string name="search_dashboard_not_search_yet">Henüz bir arama geçmişiniz bulunmamaktadır.</string>
+    <string name="search_dashboard_not_found">Aradığınız kriterde kitap ya da yazar bulunmamaktadır.</string>
 </resources>

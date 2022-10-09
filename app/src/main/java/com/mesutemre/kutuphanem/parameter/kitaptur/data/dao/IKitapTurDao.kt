@@ -8,7 +8,7 @@ import com.mesutemre.kutuphanem.parameter.kitaptur.data.dao.entity.KitapTurEntit
 @Dao
 interface IKitapTurDao {
 
-    @Query("SELECT id,aciklama FROM KitapTurEntity ORDER BY aciklama")
+    @Query("SELECT id,aciklama,resim FROM KitapTurEntity ORDER BY aciklama")
     suspend fun getKitapTurListe(): List<KitapTurEntity>
 
     @Insert

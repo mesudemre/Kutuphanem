@@ -1,8 +1,11 @@
 package com.mesutemre.kutuphanem.base
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 
@@ -12,9 +15,18 @@ import retrofit2.Response
  */
 abstract class BaseViewModel: ViewModel() {
 
+    private val message = Channel<String>()
+    val messageFlow = message.receiveAsFlow()
+
+    fun triggerEvent() = viewModelScope.launch {
+        message.send("MESAJ.Merhaba.BaseViewModel")
+    }
+
     inline suspend fun <T:Any> serviceCall(crossinline call: suspend() -> Response<T>,
                                            dispatcher: CoroutineDispatcher
+
     ):BaseDataEvent<T>{
+
         return withContext(dispatcher){
             val response: Response<T>
             try {
@@ -52,16 +64,6 @@ abstract class BaseViewModel: ViewModel() {
                 BaseDataEvent.Error("Herhangi bir data bulunamadı!")
             }else {
                 BaseDataEvent.Success(response)
-            }
-        }
-    }
-
-    inline fun <T> MutableStateFlow<T>.updateState(function: (T) -> T) {
-        while (true) {
-            val prevValue = value
-            val nextValue = function(prevValue)
-            if (compareAndSet(prevValue, nextValue)) {
-                return
             }
         }
     }

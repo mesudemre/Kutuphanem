@@ -51,7 +51,15 @@ private val DarkColorPalette = ColorPalette(
     googleDarkGray = googleDarkGray,
     otherGrayLight = OtherGrayLight,
     secondaryGray = SecondaryGray,
-    iconGrayTint = iconGrayTint
+    iconGrayTint = iconGrayTint,
+    placeHolderColor = placeholderColor,
+    acikMor = acikMor,
+    aero = aero,
+    kirikBeyaz = kirikBeyaz,
+    etonBlue = etonBlue,
+    salmonPink = salmonPink,
+    spaceCadet = spaceCadet,
+    morningBlue = morningBlue
 )
 
 private val LightColorPalette = ColorPalette(
@@ -96,7 +104,15 @@ private val LightColorPalette = ColorPalette(
     googleDarkGray = googleDarkGray,
     otherGrayLight = OtherGrayLight,
     secondaryGray = SecondaryGray,
-    iconGrayTint = iconGrayTint
+    iconGrayTint = iconGrayTint,
+    placeHolderColor = placeholderColor,
+    acikMor = acikMor,
+    aero = aero,
+    kirikBeyaz = kirikBeyaz,
+    etonBlue = etonBlue,
+    salmonPink = salmonPink,
+    spaceCadet = spaceCadet,
+    morningBlue = morningBlue
 )
 
 private val LocalColors = staticCompositionLocalOf { LightColorPalette }
