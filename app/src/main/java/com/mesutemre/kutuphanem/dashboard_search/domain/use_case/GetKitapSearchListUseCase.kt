@@ -35,8 +35,12 @@ class GetKitapSearchListUseCase @Inject constructor(
             searchDashboardRepository.getKitapSearchList(kitapDto)
         }.map {
             it.convertRersourceEventType {
-                it.data!!.map { k ->
-                    k.convertKitapDtoToKitapSearchItem()
+                it.data?.let {list->
+                    list.map { k ->
+                        k.convertKitapDtoToKitapSearchItem()
+                    }
+                } ?: run {
+                    emptyList()
                 }
             }
         }.flowOn(ioDispatcher)

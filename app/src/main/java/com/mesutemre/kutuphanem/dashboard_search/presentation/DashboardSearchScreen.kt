@@ -16,6 +16,7 @@ import androidx.navigation.NavController
 import com.google.accompanist.insets.systemBarsPadding
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.mesutemre.kutuphanem.dashboard_search.presentation.components.DashboardSearchHistory
+import com.mesutemre.kutuphanem.dashboard_search.presentation.components.DashboardSearchResult
 import com.mesutemre.kutuphanem.dashboard_search.presentation.components.KitapYazarSearchText
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.mediumUbuntuTransparent
@@ -46,6 +47,10 @@ fun DashboardSearchScreen(
     ) {
         KitapYazarSearchText(
             searchInput = dashBoardSearchState.searchText,
+            onClearSearch = {
+                localFocusManager.clearFocus()
+                dashboardSearchViewModel.onClearSearch()
+            },
             onBackPressed = {
                 localFocusManager.clearFocus()
                 dashboardSearchViewModel.onSearchBack()
@@ -55,7 +60,7 @@ fun DashboardSearchScreen(
         }
 
         if (dashBoardSearchState.isSearching) {
-
+            DashboardSearchResult(resultListResource = dashBoardSearchState.searchResultResource)
         } else {
             DashboardSearchHistory(historyListResource = dashBoardSearchState.historyListResource)
         }

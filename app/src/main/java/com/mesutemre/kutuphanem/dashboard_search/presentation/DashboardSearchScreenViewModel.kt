@@ -62,4 +62,11 @@ class DashboardSearchScreenViewModel @Inject constructor(
             }
         }
     }
+
+    fun onClearSearch() {
+        _dashboardSearchState.value = _dashboardSearchState.value.copy(
+            searchText = "",
+            isSearching = false
+        )
+    }
 }

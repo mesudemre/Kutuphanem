@@ -17,7 +17,7 @@ import com.mesutemre.kutuphanem.ui.theme.mediumUbuntuTransparent
 import com.mesutemre.kutuphanem.ui.theme.sdp
 
 @Composable
-fun NoSearchDoneYet() {
+fun NoSearchDoneYet(aciklama:String) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -26,10 +26,10 @@ fun NoSearchDoneYet() {
     ) {
         Image(
             painter = painterResource(id = R.drawable.not_yet_search),
-            contentDescription = stringResource(id = R.string.search_dashboard_not_search_yet)
+            contentDescription = aciklama
         )
         Text(
-            text = stringResource(id = R.string.search_dashboard_not_search_yet),
+            text = aciklama,
             style = MaterialTheme.typography.mediumUbuntuTransparent,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = 24.sdp)

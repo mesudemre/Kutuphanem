@@ -32,6 +32,7 @@ import com.mesutemre.kutuphanem.ui.theme.smallUbuntuTransparent
 @Composable
 fun KitapYazarSearchText(searchInput: String,
                          onBackPressed:()->Unit,
+                         onClearSearch:()->Unit,
                          onSearch: (String) -> Unit) {
     val focusRequester = remember { FocusRequester() }
 
@@ -65,7 +66,6 @@ fun KitapYazarSearchText(searchInput: String,
                         tint = MaterialTheme.colorPalette.transparent,
                         modifier = Modifier.clickable {
                             onBackPressed.invoke()
-                            //focusManager.clearFocus()
                         })
                 }else {
                     Icon(imageVector = Icons.Outlined.Search,
@@ -79,8 +79,7 @@ fun KitapYazarSearchText(searchInput: String,
                         contentDescription = null,
                         tint = MaterialTheme.colorPalette.transparent,
                         modifier = Modifier.clickable {
-                            onBackPressed.invoke()
-                            //focusManager.clearFocus()
+                            onClearSearch()
                         })
                 }
             }
