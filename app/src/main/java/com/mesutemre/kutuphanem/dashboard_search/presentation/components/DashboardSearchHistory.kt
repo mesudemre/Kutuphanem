@@ -48,7 +48,7 @@ fun DashboardSearchHistory(
                             modifier = Modifier
                                 .weight(1f),
                             text = stringResource(id = R.string.search_dashboard_searchHistoryTitle),
-                            style = MaterialTheme.typography.smallUbuntuBlackBold
+                            style = MaterialTheme.typography.smallUbuntuTransparentBold
                         )
                         Text(
                             modifier = Modifier
@@ -68,7 +68,8 @@ fun DashboardSearchHistory(
                         items(historyListResource.data!!) { history ->
                             DashBoardSearchHistoryRowItem(
                                 kitapAd = history.kitapAd ?: "",
-                                yazarAd = history.yazarAd ?: ""
+                                yazarAd = history.yazarAd ?: "",
+                                isHistory = true
                             ) {
                             }
                             Divider(

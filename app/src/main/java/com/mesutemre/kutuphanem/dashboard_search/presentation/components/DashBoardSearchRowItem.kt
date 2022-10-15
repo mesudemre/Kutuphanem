@@ -10,13 +10,14 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.History
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.mesutemre.kutuphanem.ui.theme.*
 
 @Composable
-fun DashBoardSearchHistoryRowItem(kitapAd:String,yazarAd:String,onClick:()->Unit) {
+fun DashBoardSearchHistoryRowItem(kitapAd:String,yazarAd:String,isHistory:Boolean = false,onClick:()->Unit) {
     Row(modifier = Modifier
         .fillMaxWidth()
         .clickable {
@@ -37,7 +38,7 @@ fun DashBoardSearchHistoryRowItem(kitapAd:String,yazarAd:String,onClick:()->Unit
             )
         }
         Icon(
-            Icons.Filled.ChevronRight,
+            if (isHistory) Icons.Filled.History else Icons.Filled.ChevronRight,
             modifier = Modifier
                 .padding(horizontal = 2.sdp)
                 .align(alignment = Alignment.CenterVertically),
