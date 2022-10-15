@@ -60,9 +60,13 @@ fun DashboardSearchScreen(
         }
 
         if (dashBoardSearchState.isSearching) {
-            DashboardSearchResult(resultListResource = dashBoardSearchState.searchResultResource)
+            DashboardSearchResult(resultListResource = dashBoardSearchState.searchResultResource) {
+                dashboardSearchViewModel.saveSearchHistory(it)
+            }
         } else {
-            DashboardSearchHistory(historyListResource = dashBoardSearchState.historyListResource)
+            DashboardSearchHistory(historyListResource = dashBoardSearchState.historyListResource) {
+                dashboardSearchViewModel.clearSearchHistory()
+            }
         }
     }
 }

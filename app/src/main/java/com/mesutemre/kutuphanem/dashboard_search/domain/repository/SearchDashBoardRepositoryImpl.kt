@@ -6,6 +6,7 @@ import com.mesutemre.kutuphanem.dashboard_search.data.repository.SearchDashboard
 import com.mesutemre.kutuphanem.dashboard_search.domain.model.KitapSearchItem
 import com.mesutemre.kutuphanem.kitap.data.remote.IKitapApi
 import com.mesutemre.kutuphanem.kitap.data.remote.dto.KitapDto
+import com.mesutemre.kutuphanem.parameter.kitaptur.data.dao.entity.KitapTurEntity
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -24,5 +25,13 @@ class SearchDashBoardRepositoryImpl @Inject constructor(
 
     override suspend fun getKitapSearchList(kitap: KitapDto): Response<List<KitapDto>> {
         return kitapService.getKitapListe(kitap)
+    }
+
+    override suspend fun saveSearchHistoryToDb(vararg searchHistory: DashBoardSearchHistoryEntity) {
+        dao.searchHistoryKaydet(*searchHistory)
+    }
+
+    override suspend fun clearSearchHistory() {
+        dao.deleteSearchHistory()
     }
 }

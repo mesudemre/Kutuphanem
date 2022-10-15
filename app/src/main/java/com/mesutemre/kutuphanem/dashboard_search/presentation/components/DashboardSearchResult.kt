@@ -21,8 +21,11 @@ import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
 
 @Composable
-fun DashboardSearchResult(resultListResource: BaseResourceEvent<List<KitapSearchItem>>) {
-    when(resultListResource) {
+fun DashboardSearchResult(
+    resultListResource: BaseResourceEvent<List<KitapSearchItem>>,
+    onSelectResultItem: (KitapSearchItem) -> Unit
+) {
+    when (resultListResource) {
         is BaseResourceEvent.Loading -> {
             val compositionResult: LottieCompositionResult = rememberLottieComposition(
                 spec = LottieCompositionSpec.RawRes(
@@ -35,27 +38,34 @@ fun DashboardSearchResult(resultListResource: BaseResourceEvent<List<KitapSearch
                 iterations = LottieConstants.IterateForever,
                 speed = 1.0f
             )
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .height(80.sdp), contentAlignment = Alignment.Center) {
-                LottieAnimation(composition = compositionResult.value, progress, Modifier.fillMaxWidth())
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(80.sdp), contentAlignment = Alignment.Center
+            ) {
+                LottieAnimation(
+                    composition = compositionResult.value,
+                    progress,
+                    Modifier.fillMaxWidth()
+                )
             }
         }
         is BaseResourceEvent.Success -> {
             if (resultListResource.data.isNullOrEmpty()) {
                 NoSearchDoneYet(stringResource(id = R.string.search_dashboard_not_found))
-            }else {
-                LazyColumn(modifier = Modifier.padding(top = 8.sdp)){
-                    items(resultListResource.data!!) {item->
+            } else {
+                LazyColumn(modifier = Modifier.padding(top = 8.sdp)) {
+                    items(resultListResource.data!!) { item ->
                         DashBoardSearchHistoryRowItem(
                             kitapAd = item.kitapAd,
                             yazarAd = item.yazarAd
                         ) {
+                            onSelectResultItem(item)
                         }
                         Divider(
-                            modifier = Modifier.padding(vertical = 4.sdp,horizontal = 16.sdp),
+                            modifier = Modifier.padding(vertical = 4.sdp, horizontal = 16.sdp),
                             thickness = 1.sdp,
-                            color = MaterialTheme.colorPalette.lacivert
+                            color = MaterialTheme.colorPalette.otherGrayLight
                         )
                     }
                 }
