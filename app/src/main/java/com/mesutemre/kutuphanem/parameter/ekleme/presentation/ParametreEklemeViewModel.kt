@@ -1,7 +1,5 @@
 package com.mesutemre.kutuphanem.parameter.ekleme.presentation
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.base.BaseViewModel
@@ -9,7 +7,9 @@ import com.mesutemre.kutuphanem.parameter.ekleme.domain.ClearParametreCacheUseCa
 import com.mesutemre.kutuphanem.parameter.ekleme.domain.ParametreEklemeValidation
 import com.mesutemre.kutuphanem.parameter.ekleme.domain.SaveParametreUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,28 +24,34 @@ class ParametreEklemeViewModel @Inject constructor(
     private val clearParametreCacheUseCase: ClearParametreCacheUseCase
 ) : BaseViewModel() {
 
-    private val _parametreEklemeState = mutableStateOf(ParametreEklemeState())
-    val parametreEklemeState: State<ParametreEklemeState> = _parametreEklemeState
+    private val _parametreEklemeState = MutableStateFlow(ParametreEklemeState())
+    val parametreEklemeState: StateFlow<ParametreEklemeState> = _parametreEklemeState
 
     fun onChangeEvent(event: ParametreEklemeValidationEvent) {
         when (event) {
             is ParametreEklemeValidationEvent.ParametreTypeChanged -> {
-                _parametreEklemeState.value = _parametreEklemeState.value.copy(
-                    selectedParameterType = event.selectedParameterType,
-                    parametreText = "",
-                    parametreTextErrorMessage = null
-                )
+                _parametreEklemeState.update {
+                    it.copy(
+                        selectedParameterType = event.selectedParameterType,
+                        parametreText = "",
+                        parametreTextErrorMessage = null
+                    )
+                }
             }
             is ParametreEklemeValidationEvent.ParametreTextChanged -> {
-                _parametreEklemeState.value = _parametreEklemeState.value.copy(
-                    parametreText = event.text,
-                    parametreTextErrorMessage = null
-                )
+                _parametreEklemeState.update {
+                    it.copy(
+                        parametreText = event.text,
+                        parametreTextErrorMessage = null
+                    )
+                }
             }
             is ParametreEklemeValidationEvent.ParametreFocusChanged -> {
-                _parametreEklemeState.value = _parametreEklemeState.value.copy(
-                    parametreTextErrorMessage = null
-                )
+                _parametreEklemeState.update {
+                    it.copy(
+                        parametreTextErrorMessage = null
+                    )
+                }
             }
             is ParametreEklemeValidationEvent.Submit -> {
                 sumbitParametreKayitForm()
@@ -64,9 +70,11 @@ class ParametreEklemeViewModel @Inject constructor(
             !it.successfullValidate
         }
         if (hasError) {
-            _parametreEklemeState.value = _parametreEklemeState.value.copy(
-                parametreTextErrorMessage = validationResult.messageResId
-            )
+            _parametreEklemeState.update {
+                it.copy(
+                    parametreTextErrorMessage = validationResult.messageResId
+                )
+            }
             return
         }
 
@@ -78,16 +86,17 @@ class ParametreEklemeViewModel @Inject constructor(
             saveParametreUseCase(
                 _parametreEklemeState.value.selectedParameterType,
                 _parametreEklemeState.value.parametreText
-            ).collect {
-                if (it is BaseResourceEvent.Success)
+            ).collect { response ->
+                if (response is BaseResourceEvent.Success)
                     clearParametreCacheUseCase(_parametreEklemeState.value.selectedParameterType)
-                _parametreEklemeState.value = _parametreEklemeState.value.copy(
-                    parametreKayit = it,
-                    parametreText = "",
-                    parametreTextErrorMessage = null
-                )
+                _parametreEklemeState.update {
+                    it.copy(
+                        parametreKayit = response,
+                        parametreText = "",
+                        parametreTextErrorMessage = null
+                    )
+                }
             }
         }
     }
-
 }

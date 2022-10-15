@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -36,7 +37,7 @@ fun ParametreYayinEviScreen(
     viewModel: ParametreYayinEviViewModel = hiltViewModel(),
     showSnackbar: (String, SnackbarDuration, Int) -> Unit
 ) {
-    val state = viewModel.state.value
+    val state = viewModel.state.collectAsState().value
 
     when (state.yayinEviDelete) {
         is BaseResourceEvent.Success -> {

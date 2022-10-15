@@ -1,7 +1,5 @@
 package com.mesutemre.kutuphanem.parameter.yayinevi.presentation
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.lifecycle.viewModelScope
@@ -14,7 +12,9 @@ import com.mesutemre.kutuphanem.parameter.yayinevi.domain.use_case.DeleteYayinEv
 import com.mesutemre.kutuphanem.parameter.yayinevi.domain.use_case.GetYayinEviListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,8 +29,8 @@ class ParametreYayinEviViewModel @Inject constructor(
     private val deleteYayinEviUseCase: DeleteYayinEviUseCase
 ) : BaseViewModel() {
 
-    private val _state = mutableStateOf(ParametreYayinEviState())
-    val state: State<ParametreYayinEviState> = _state
+    private val _state = MutableStateFlow(ParametreYayinEviState())
+    val state: StateFlow<ParametreYayinEviState> = _state
 
     init {
         initYayinEviList(false)
@@ -38,11 +38,13 @@ class ParametreYayinEviViewModel @Inject constructor(
 
     fun initYayinEviList(isSwipe: Boolean) {
         viewModelScope.launch {
-            getYayinEviListUseCase(isSwipe).collect {
-                _state.value = _state.value.copy(
-                    yayinEviList = it,
-                    defaultYayineviList = it.data
-                )
+            getYayinEviListUseCase(isSwipe).collect { response ->
+                _state.update {
+                    it.copy(
+                        yayinEviList = response,
+                        defaultYayineviList = response.data
+                    )
+                }
             }
         }
     }
@@ -54,10 +56,12 @@ class ParametreYayinEviViewModel @Inject constructor(
         viewModelScope.launch(defaultDispatcher) {
             if (text.isEmpty()) {
                 filterResult = BaseResourceEvent.Success(data = listToSearch!!)
-                _state.value = _state.value.copy(
-                    yayinEviFilterText = text,
-                    yayinEviList = filterResult
-                )
+                _state.update {
+                    it.copy(
+                        yayinEviFilterText = text,
+                        yayinEviList = filterResult
+                    )
+                }
                 return@launch
             }
             val results = listToSearch?.filter {
@@ -72,38 +76,46 @@ class ParametreYayinEviViewModel @Inject constructor(
             } else {
                 filterResult = BaseResourceEvent.Success(data = results!!)
             }
-            _state.value = _state.value.copy(
-                yayinEviFilterText = text,
-                yayinEviList = filterResult,
-            )
+            _state.update {
+                it.copy(
+                    yayinEviFilterText = text,
+                    yayinEviList = filterResult,
+                )
+            }
         }
     }
 
     fun openDeleteConfirmDialog(selectedYayinEvi: YayinEviItem) {
-        _state.value = _state.value.copy(
-            isPopUpShow = true,
-            selectedYayinevi = selectedYayinEvi
-        )
+        _state.update {
+            it.copy(
+                isPopUpShow = true,
+                selectedYayinevi = selectedYayinEvi
+            )
+        }
     }
 
     fun onDismissParameterDeleteDialog() {
-        _state.value = _state.value.copy(
-            isPopUpShow = false,
-            selectedYayinevi = null
-        )
+        _state.update {
+            it.copy(
+                isPopUpShow = false,
+                selectedYayinevi = null
+            )
+        }
     }
 
     fun onClickDeleteYayinevi() {
         viewModelScope.launch {
-            deleteYayinEviUseCase(_state.value.selectedYayinevi!!).collect {
-                if (it is BaseResourceEvent.Success) {
+            deleteYayinEviUseCase(_state.value.selectedYayinevi!!).collect { response ->
+                if (response is BaseResourceEvent.Success) {
                     initYayinEviList(true)
                 }
-                _state.value = _state.value.copy(
-                    isPopUpShow = false,
-                    yayinEviDelete = it,
-                    selectedYayinevi = null
-                )
+                _state.update {
+                    it.copy(
+                        isPopUpShow = false,
+                        yayinEviDelete = response,
+                        selectedYayinevi = null
+                    )
+                }
             }
         }
     }
