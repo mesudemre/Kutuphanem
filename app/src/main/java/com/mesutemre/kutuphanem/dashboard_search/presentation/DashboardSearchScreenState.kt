@@ -9,5 +9,6 @@ data class DashboardSearchScreenState(
     val isSearching:Boolean = false,
     val historyListResource: BaseResourceEvent<List<DashBoardSearchHistoryEntity>> = BaseResourceEvent.Nothing(),
     val searchScreenVisibility: Boolean = true,
-    val searchResultResource: BaseResourceEvent<List<KitapSearchItem>> = BaseResourceEvent.Nothing()
+    val searchResultResource: BaseResourceEvent<List<KitapSearchItem>> = BaseResourceEvent.Nothing(),
+    val searchResultSaveResource: BaseResourceEvent<Unit> = BaseResourceEvent.Nothing()
 )

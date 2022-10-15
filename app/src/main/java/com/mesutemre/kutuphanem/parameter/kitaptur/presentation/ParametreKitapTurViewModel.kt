@@ -1,7 +1,5 @@
 package com.mesutemre.kutuphanem.parameter.kitaptur.presentation
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.lifecycle.viewModelScope
@@ -14,7 +12,9 @@ import com.mesutemre.kutuphanem.parameter.kitaptur.domain.use_case.DeleteKitapTu
 import com.mesutemre.kutuphanem.parameter.kitaptur.domain.use_case.GetKitapTurListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,10 +27,10 @@ class ParametreKitapTurViewModel @Inject constructor(
     private val getKitapTurListUseCase: GetKitapTurListUseCase,
     @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
     private val deleteKitapTurUseCase: DeleteKitapTurUseCase
-): BaseViewModel() {
+) : BaseViewModel() {
 
-    private val _state = mutableStateOf(ParametreKitapTurState())
-    val state: State<ParametreKitapTurState> = _state
+    private val _state = MutableStateFlow(ParametreKitapTurState())
+    val state: StateFlow<ParametreKitapTurState> = _state
 
     init {
         initKitapTurList(false)
@@ -38,11 +38,13 @@ class ParametreKitapTurViewModel @Inject constructor(
 
     fun initKitapTurList(isSwipe: Boolean) {
         viewModelScope.launch {
-            getKitapTurListUseCase(isSwipe).collect {
-                _state.value = _state.value.copy(
-                    kitapTurList = it,
-                    defaultKitapTurList = it.data
-                )
+            getKitapTurListUseCase(isSwipe).collect { response ->
+                _state.update {
+                    it.copy(
+                        kitapTurList = response,
+                        defaultKitapTurList = response.data
+                    )
+                }
             }
         }
     }
@@ -54,10 +56,12 @@ class ParametreKitapTurViewModel @Inject constructor(
         viewModelScope.launch(defaultDispatcher) {
             if (text.isEmpty()) {
                 filterResult = BaseResourceEvent.Success(data = listToSearch!!)
-                _state.value = _state.value.copy(
-                    kitapTurFilterText = text,
-                    kitapTurList = filterResult
-                )
+                _state.update {
+                    it.copy(
+                        kitapTurFilterText = text,
+                        kitapTurList = filterResult
+                    )
+                }
                 return@launch
             }
             val results = listToSearch?.filter {
@@ -72,38 +76,46 @@ class ParametreKitapTurViewModel @Inject constructor(
             } else {
                 filterResult = BaseResourceEvent.Success(data = results!!)
             }
-            _state.value = _state.value.copy(
-                kitapTurFilterText = text,
-                kitapTurList = filterResult,
-            )
+            _state.update {
+                it.copy(
+                    kitapTurFilterText = text,
+                    kitapTurList = filterResult,
+                )
+            }
         }
     }
 
     fun openDeleteConfirmDialog(selectedKitapTur: KitapTurItem) {
-        _state.value = _state.value.copy(
-            isPopUpShow = true,
-            selectedKitapTur = selectedKitapTur
-        )
+        _state.update {
+            it.copy(
+                isPopUpShow = true,
+                selectedKitapTur = selectedKitapTur
+            )
+        }
     }
 
     fun onDismissParameterDeleteDialog() {
-        _state.value = _state.value.copy(
-            isPopUpShow = false,
-            selectedKitapTur = null
-        )
+        _state.update {
+            it.copy(
+                isPopUpShow = false,
+                selectedKitapTur = null
+            )
+        }
     }
 
     fun onClickDeleteKitapTur() {
         viewModelScope.launch {
-            deleteKitapTurUseCase(_state.value.selectedKitapTur!!).collect {
-                if (it is BaseResourceEvent.Success) {
+            deleteKitapTurUseCase(_state.value.selectedKitapTur!!).collect {response->
+                if (response is BaseResourceEvent.Success) {
                     initKitapTurList(true)
                 }
-                _state.value = _state.value.copy(
-                    isPopUpShow = false,
-                    kitapTurDelete = it,
-                    selectedKitapTur = null
-                )
+                _state.update {
+                    it.copy(
+                        isPopUpShow = false,
+                        kitapTurDelete = response,
+                        selectedKitapTur = null
+                    )
+                }
             }
         }
     }

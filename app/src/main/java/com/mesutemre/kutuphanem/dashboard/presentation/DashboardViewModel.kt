@@ -1,13 +1,14 @@
 package com.mesutemre.kutuphanem.dashboard.presentation
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.dashboard.domain.use_case.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,16 +23,17 @@ class DashboardViewModel @Inject constructor(
     private val getDashboardKategoriList: GetDashboardKategoriList,
     private val getKitapTurIstatistik: GetKitapTurIstatistik,
     private val getKitapYilIstatistik: GetKitapYilIstatistik
-) :BaseViewModel(){
-    
-    private val _dashboardState = mutableStateOf(DashboardState())
-    val dashboardState: State<DashboardState> = _dashboardState
+) : BaseViewModel() {
+
+    private val _dashboardState = MutableStateFlow(DashboardState())
+    val dashboardState: StateFlow<DashboardState> = _dashboardState
 
     init {
-
-        _dashboardState.value = _dashboardState.value.copy(
-            introductionList = getDashboardIntroductionList()
-        )
+        _dashboardState.update {
+            it.copy(
+                introductionList = getDashboardIntroductionList()
+            )
+        }
         viewModelScope.launch {
             async {
                 fillDashBoardUserInfo()
@@ -43,34 +45,42 @@ class DashboardViewModel @Inject constructor(
     }
 
     private suspend fun fillDashBoardUserInfo() {
-        getDashBoardKullaniciBilgi().collectLatest {
-            _dashboardState.value = _dashboardState.value.copy(
-                kullaniciBilgi = it
-            )
+        getDashBoardKullaniciBilgi().collectLatest { response ->
+            _dashboardState.update {
+                it.copy(
+                    kullaniciBilgi = response
+                )
+            }
         }
     }
 
     private suspend fun fillKategoriList() {
-        getDashboardKategoriList().collectLatest {
-            _dashboardState.value = _dashboardState.value.copy(
-                kategoriListeResource = it
-            )
+        getDashboardKategoriList().collectLatest { response ->
+            _dashboardState.update {
+                it.copy(
+                    kategoriListeResource = response
+                )
+            }
         }
     }
 
     private suspend fun fillKitapTurIstatistik() {
-        getKitapTurIstatistik().collectLatest {
-            _dashboardState.value = _dashboardState.value.copy(
-                kitapTurIstatistikResource = it
-            )
+        getKitapTurIstatistik().collectLatest { response ->
+            _dashboardState.update {
+                it.copy(
+                    kitapTurIstatistikResource = response
+                )
+            }
         }
     }
 
     private suspend fun fillKitapYilIstatistik() {
-        getKitapYilIstatistik().collectLatest {
-            _dashboardState.value = _dashboardState.value.copy(
-                kitapYilIstatistikResource = it
-            )
+        getKitapYilIstatistik().collectLatest { response ->
+            _dashboardState.update {
+                it.copy(
+                    kitapYilIstatistikResource = response
+                )
+            }
         }
     }
 }

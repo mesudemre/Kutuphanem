@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -36,7 +37,7 @@ fun ParametreKitapTurScreen(
     viewModel: ParametreKitapTurViewModel = hiltViewModel(),
     showSnackbar: (String, SnackbarDuration, Int) -> Unit
 ) {
-    val state = viewModel.state.value
+    val state = viewModel.state.collectAsState().value
 
     when (state.kitapTurDelete) {
         is BaseResourceEvent.Success -> {
@@ -127,7 +128,7 @@ fun ParametreKitapTurScreen(
                             .fillMaxWidth()
                             .height(100.sdp),
                         errorText = if (state.kitapTurList.messageId != null)
-                            stringResource(id = state.kitapTurList.messageId)
+                            stringResource(id = state.kitapTurList.messageId!!)
                         else
                             state.kitapTurList.message ?: ""
                     )

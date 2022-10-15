@@ -1,7 +1,5 @@
 package com.mesutemre.kutuphanem.login.presentation
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
@@ -15,8 +13,10 @@ import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.model.SnackbarMessageEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,8 +33,8 @@ class LoginViewModel @Inject constructor(
     private val writeTokenToPrefUseCase: WriteTokenToPrefUseCase
 ) : BaseViewModel() {
 
-    private val _state = mutableStateOf(LoginFormState())
-    val state: State<LoginFormState> = _state
+    private val _state = MutableStateFlow(LoginFormState())
+    val state: StateFlow<LoginFormState> = _state
 
     private val loginErrorMessageChannel = Channel<SnackbarMessageEvent>()
     val loginErrorMessage = loginErrorMessageChannel.receiveAsFlow()
@@ -42,10 +42,14 @@ class LoginViewModel @Inject constructor(
     fun onLoginFormEvent(event: LoginValidationEvent) {
         when (event) {
             is LoginValidationEvent.UsernameChanged -> {
-                _state.value = _state.value.copy(username = event.username, usernameError = false)
+                _state.update {
+                    it.copy(username = event.username, usernameError = false)
+                }
             }
             is LoginValidationEvent.PasswordChanged -> {
-                _state.value = _state.value.copy(password = event.password, passwordError = false)
+                _state.update {
+                    it.copy(password = event.password, passwordError = false)
+                }
             }
             is LoginValidationEvent.Submit -> {
                 sumbitLoginForm()
@@ -64,23 +68,25 @@ class LoginViewModel @Inject constructor(
         }
 
         if (hasError) {
-            _state.value = _state.value.copy(
-                usernameError = !usernameValidationResult.successfullValidate,
-                usernameErrorMessage = usernameValidationResult.messageResId,
-                passwordError = !passwordValidationResult.successfullValidate,
-                passwordErrorMessage = passwordValidationResult.messageResId
-            )
+            _state.update {
+                it.copy(
+                    usernameError = !usernameValidationResult.successfullValidate,
+                    usernameErrorMessage = usernameValidationResult.messageResId,
+                    passwordError = !passwordValidationResult.successfullValidate,
+                    passwordErrorMessage = passwordValidationResult.messageResId
+                )
+            }
             return
         }
         doLogin()
     }
 
     fun onUsernameFocusedChange() {
-        _state.value = _state.value.copy(usernameError = false)
+        _state.update { it.copy(usernameError = false) }
     }
 
     fun onPasswordFocusedChange() {
-        _state.value = _state.value.copy(passwordError = false)
+        _state.update { it.copy(passwordError = false) }
     }
 
     private fun doLogin() {
@@ -117,7 +123,9 @@ class LoginViewModel @Inject constructor(
                         )
                     }
                 }
-                _state.value = _state.value.copy(isLoading = isLoading, isSuccess = isSuccess)
+                _state.update {
+                    it.copy(isLoading = isLoading, isSuccess = isSuccess)
+                }
             }
         }
     }

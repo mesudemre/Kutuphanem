@@ -8,6 +8,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextAlign
@@ -27,7 +28,7 @@ fun DashboardSearchScreen(
     navController: NavController,
     dashboardSearchViewModel: DashboardSearchScreenViewModel = hiltViewModel()
 ) {
-    val dashBoardSearchState = dashboardSearchViewModel.dashboardSearchState.value
+    val dashBoardSearchState = dashboardSearchViewModel.dashboardSearchState.collectAsState().value
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(
         color = MaterialTheme.colorPalette.lacivert
@@ -48,7 +49,6 @@ fun DashboardSearchScreen(
         KitapYazarSearchText(
             searchInput = dashBoardSearchState.searchText,
             onClearSearch = {
-                localFocusManager.clearFocus()
                 dashboardSearchViewModel.onClearSearch()
             },
             onBackPressed = {
@@ -60,9 +60,13 @@ fun DashboardSearchScreen(
         }
 
         if (dashBoardSearchState.isSearching) {
-            DashboardSearchResult(resultListResource = dashBoardSearchState.searchResultResource)
+            DashboardSearchResult(resultListResource = dashBoardSearchState.searchResultResource) {
+                dashboardSearchViewModel.saveSearchHistory(it)
+            }
         } else {
-            DashboardSearchHistory(historyListResource = dashBoardSearchState.historyListResource)
+            DashboardSearchHistory(historyListResource = dashBoardSearchState.historyListResource) {
+                dashboardSearchViewModel.clearSearchHistory()
+            }
         }
     }
 }

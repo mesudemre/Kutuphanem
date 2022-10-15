@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -41,7 +42,7 @@ fun LoginForm(
     loginViewModel: LoginViewModel = hiltViewModel(),
     navController: NavController
 ) {
-    val loginState = loginViewModel.state.value
+    val loginState = loginViewModel.state.collectAsState().value
     val context = LocalContext.current
 
     LaunchedEffect(key1 = Unit) {
