@@ -1,4 +1,4 @@
-package com.mesutemre.kutuphanem.ui.theme
+package com.mesutemre.kutuphanem_ui.theme
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalDensity
@@ -6,7 +6,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import com.mesutemre.kutuphanem.KutuphanemApplication
 import com.mesutemre.kutuphanem_base.KutuphanemBaseApplication
 import kotlin.math.abs
 

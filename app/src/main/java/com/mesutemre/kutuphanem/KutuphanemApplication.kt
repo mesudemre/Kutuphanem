@@ -1,6 +1,5 @@
 package com.mesutemre.kutuphanem
 
-import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.mesutemre.kutuphanem.job.ClearImageNotInArchiveWorker
@@ -8,6 +7,7 @@ import com.mesutemre.kutuphanem.job.GlobalExceptionCatchWorker
 import com.mesutemre.kutuphanem.job.SendExceptionToServerWorker
 import com.mesutemre.kutuphanem.util.enqueeOneTimeWorkManager
 import com.mesutemre.kutuphanem.util.enqueePeriodicTimeWorkManager
+import com.mesutemre.kutuphanem_base.KutuphanemBaseApplication
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
@@ -17,12 +17,7 @@ import javax.inject.Inject
  * <b>Android'in tüm hilt(Dependency Injection) sürecini başlatan kod blogudur</b>
  */
 @HiltAndroidApp
-class KutuphanemApplication:Application(),Configuration.Provider {
-
-    companion object {
-        lateinit var instance:KutuphanemApplication
-        private set
-    }
+class KutuphanemApplication:KutuphanemBaseApplication(),Configuration.Provider {
 
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
@@ -35,7 +30,6 @@ class KutuphanemApplication:Application(),Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
-        instance = this
         enqueeOneTimeWorkManager<GlobalExceptionCatchWorker>();
         enqueePeriodicTimeWorkManager<ClearImageNotInArchiveWorker>("imageClear")
         enqueePeriodicTimeWorkManager<SendExceptionToServerWorker>("exceptionSender")

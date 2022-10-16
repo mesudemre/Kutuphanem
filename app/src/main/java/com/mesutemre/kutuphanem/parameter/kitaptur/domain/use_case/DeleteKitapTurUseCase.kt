@@ -1,7 +1,6 @@
 package com.mesutemre.kutuphanem.parameter.kitaptur.domain.use_case
 
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
-import com.mesutemre.kutuphanem.base.BaseUseCase
 import com.mesutemre.kutuphanem.base.IServiceCall
 import com.mesutemre.kutuphanem.base.ServiceCallUseCase
 import com.mesutemre.kutuphanem.di.IoDispatcher
