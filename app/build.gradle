@@ -8,84 +8,16 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 32
-
     defaultConfig {
-        applicationId "com.mesutemre.kutuphanem"
-        minSdkVersion 23
-        targetSdkVersion 32
-        versionCode 35
-        versionName "2.2.1"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary true
-        }
+        applicationId "$appId"
     }
-
-    def keystorePropertiesFile = rootProject.file("app/keystore.properties");
-    def keystoreProperties = new Properties()
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-
-    signingConfigs {
-        release {
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-        }
+    apply from: '../scripts/base.gradle'
+    lintOptions {
+        disable 'RestrictedApi'
     }
-
-    dataBinding{
-        enabled = true
-    }
-
     buildFeatures {
         viewBinding true
         compose true
-    }
-
-    buildTypes {
-        release {
-            manifestPlaceholders = [appLabel: "Kütüphanem"]
-            debuggable false
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField 'String', 'API_URL', "\"${PROD_API_URL}\""
-        }
-
-        debug {
-            manifestPlaceholders = [appLabel: "Kütüphanem-Debug"]
-            buildConfigField 'String', 'API_URL', "\"${DEV_ALPHA_BETA_API_URL}\""
-            debuggable true
-            versionNameSuffix "-debug"
-        }
-
-        alpha {
-            manifestPlaceholders = [appLabel: "Kütüphanem-Alpha"]
-            buildConfigField 'String', 'API_URL', "\"${DEV_ALPHA_BETA_API_URL}\""
-            debuggable true
-            versionNameSuffix "-alpha"
-            signingConfig signingConfigs.release
-        }
-
-        beta {
-            manifestPlaceholders = [appLabel: "Kütüphanem-Beta"]
-            buildConfigField 'String', 'API_URL', "\"${DEV_ALPHA_BETA_API_URL}\""
-            debuggable false
-            versionNameSuffix "-beta"
-            signingConfig signingConfigs.release
-        }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = '11'
-    }
-    lintOptions {
-        disable 'RestrictedApi'
     }
     composeOptions {
         kotlinCompilerExtensionVersion = '1.1.1'
@@ -185,6 +117,7 @@ dependencies {
     implementation "com.airbnb.android:lottie-compose:$lottieVersion"
     implementation "com.google.accompanist:accompanist-placeholder-material:$accompanist_placeholder"
     implementation"io.coil-kt:coil-compose:$coilVersion"
+    implementation 'androidx.room:room-paging:2.4.3'
     implementation('com.google.crypto.tink:tink-android') {
         version {
             strictly '1.4.0'
