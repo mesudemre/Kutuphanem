@@ -1,8 +1,8 @@
 package com.mesutemre.kutuphanem.dashboard_search.presentation
 
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.dashboard_search.data.dao.entity.DashBoardSearchHistoryEntity
 import com.mesutemre.kutuphanem.dashboard_search.domain.model.KitapSearchItem
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 
 data class DashboardSearchScreenState(
     val searchText:String = "",

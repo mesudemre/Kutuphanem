@@ -1,12 +1,12 @@
 package com.mesutemre.kutuphanem.dashboard_search.domain.use_case
 
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
-import com.mesutemre.kutuphanem.base.DbCallUseCase
-import com.mesutemre.kutuphanem.base.IDbCall
 import com.mesutemre.kutuphanem.dashboard_search.data.dao.entity.DashBoardSearchHistoryEntity
 import com.mesutemre.kutuphanem.dashboard_search.data.repository.SearchDashboardRepository
 import com.mesutemre.kutuphanem.dashboard_search.domain.model.KitapSearchItem
 import com.mesutemre.kutuphanem.di.IoDispatcher
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
+import com.mesutemre.kutuphanem_base.use_case.DbCallUseCase
+import com.mesutemre.kutuphanem_base.use_case.IDbCall
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -31,7 +31,7 @@ class SaveSearchHistoryItemToDbUseCase @Inject constructor(
         historyList.collectLatest {
             if (it is BaseResourceEvent.Success && it.data != null) {
                 val kitapMevcut: () -> Boolean = { ->
-                    it.data.any {
+                    it.data!!.any {
                         it.kitapId == item.kitapId
                     }
                 }

@@ -1,10 +1,10 @@
 package com.mesutemre.kutuphanem.parameter.kitaptur.domain.use_case
 
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.dao.entity.KitapTurEntity
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.remote.dto.KitapTurDto
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.PARAM_KITAPTUR_DB_KEY
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 

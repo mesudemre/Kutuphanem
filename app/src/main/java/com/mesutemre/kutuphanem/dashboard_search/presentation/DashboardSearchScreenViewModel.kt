@@ -1,13 +1,13 @@
 package com.mesutemre.kutuphanem.dashboard_search.presentation
 
 import androidx.lifecycle.viewModelScope
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.dashboard_search.domain.model.KitapSearchItem
 import com.mesutemre.kutuphanem.dashboard_search.domain.use_case.ClearSearchHistoryUseCase
 import com.mesutemre.kutuphanem.dashboard_search.domain.use_case.GetKitapSearchListUseCase
 import com.mesutemre.kutuphanem.dashboard_search.domain.use_case.GetSearchHistoryListUseCase
 import com.mesutemre.kutuphanem.dashboard_search.domain.use_case.SaveSearchHistoryItemToDbUseCase
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

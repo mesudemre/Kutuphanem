@@ -1,14 +1,14 @@
 package com.mesutemre.kutuphanem.dashboard.domain.use_case
 
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
-import com.mesutemre.kutuphanem.base.IServiceCall
-import com.mesutemre.kutuphanem.base.ServiceCallUseCase
 import com.mesutemre.kutuphanem.dashboard.domain.model.DashboardKullaniciBilgiData
 import com.mesutemre.kutuphanem.di.IoDispatcher
 import com.mesutemre.kutuphanem.profile.data.remote.dto.toDashBoardKullaniciBilgi
 import com.mesutemre.kutuphanem.profile.data.repository.KullaniciRepository
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.convertRersourceEventType
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
+import com.mesutemre.kutuphanem_base.use_case.IServiceCall
+import com.mesutemre.kutuphanem_base.use_case.ServiceCallUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn

@@ -413,15 +413,15 @@ fun Context.createOutputDirectory(folderPath: String): File {
         mediaDir else this.filesDir
 }
 
-fun <R, C> BaseResourceEvent<R>.convertRersourceEventType(
+fun <R, C> com.mesutemre.kutuphanem_base.model.BaseResourceEvent<R>.convertRersourceEventType(
     convert: () -> C,
-): BaseResourceEvent<C> {
-    return if (this is BaseResourceEvent.Success) {
-        BaseResourceEvent.Success(data = convert.invoke())
-    }else if (this is BaseResourceEvent.Error) {
-        BaseResourceEvent.Error(message = this.message)
+): com.mesutemre.kutuphanem_base.model.BaseResourceEvent<C> {
+    return if (this is com.mesutemre.kutuphanem_base.model.BaseResourceEvent.Success) {
+        com.mesutemre.kutuphanem_base.model.BaseResourceEvent.Success(data = convert.invoke())
+    }else if (this is com.mesutemre.kutuphanem_base.model.BaseResourceEvent.Error) {
+        com.mesutemre.kutuphanem_base.model.BaseResourceEvent.Error(message = this.message)
     } else {
-        BaseResourceEvent.Loading()
+        com.mesutemre.kutuphanem_base.model.BaseResourceEvent.Loading()
     }
 }
 

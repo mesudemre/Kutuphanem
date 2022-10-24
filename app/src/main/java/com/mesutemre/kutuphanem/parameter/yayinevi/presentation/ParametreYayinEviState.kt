@@ -1,8 +1,8 @@
 package com.mesutemre.kutuphanem.parameter.yayinevi.presentation
 
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.parameter.yayinevi.domain.model.YayinEviItem
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 
 data class ParametreYayinEviState(
     val yayinEviFilterText: String = "",

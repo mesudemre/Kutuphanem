@@ -1,7 +1,7 @@
 package com.mesutemre.kutuphanem.dashboard.presentation
 
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.dashboard.domain.model.*
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 
 data class DashboardState(
     val introductionList:List<IntroductionPagerData> = emptyList(),

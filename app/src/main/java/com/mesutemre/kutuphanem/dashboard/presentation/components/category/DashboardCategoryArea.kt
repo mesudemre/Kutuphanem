@@ -1,6 +1,5 @@
 package com.mesutemre.kutuphanem.dashboard.presentation.components.category
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -11,14 +10,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.dashboard.domain.model.DashboardKategoriItem
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
 import com.mesutemre.kutuphanem.util.customcomponents.card.KutuphanemCardTitle
 import com.mesutemre.kutuphanem.util.customcomponents.progressbar.KutuphanemShimmerArea
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun DashboardCategoryArea(kategoriResource: BaseResourceEvent<List<DashboardKategoriItem>>) {
     Card(

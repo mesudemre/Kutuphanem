@@ -18,7 +18,6 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.model.QA_DLG
 import com.mesutemre.kutuphanem.model.SUCCESS
@@ -30,6 +29,7 @@ import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemLoader
 import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemSearchInput
 import com.mesutemre.kutuphanem.util.customcomponents.dialog.CustomKutuphanemDialog
 import com.mesutemre.kutuphanem.util.customcomponents.error.KutuphanemErrorView
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -128,7 +128,7 @@ fun ParametreYayinEviScreen(
                             .fillMaxWidth()
                             .height(100.sdp),
                         errorText = if (state.yayinEviList.messageId != null)
-                            stringResource(id = state.yayinEviList.messageId)
+                            stringResource(id = state.yayinEviList.messageId!!)
                         else
                             state.yayinEviList.message ?: ""
                     )

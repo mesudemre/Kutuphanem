@@ -4,12 +4,12 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.di.DefaultDispatcher
 import com.mesutemre.kutuphanem.parameter.yayinevi.domain.model.YayinEviItem
 import com.mesutemre.kutuphanem.parameter.yayinevi.domain.use_case.DeleteYayinEviUseCase
 import com.mesutemre.kutuphanem.parameter.yayinevi.domain.use_case.GetYayinEviListUseCase
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow

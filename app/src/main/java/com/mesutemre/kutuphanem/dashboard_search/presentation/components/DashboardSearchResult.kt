@@ -15,10 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.airbnb.lottie.compose.*
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.dashboard_search.domain.model.KitapSearchItem
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 
 @Composable
 fun DashboardSearchResult(
