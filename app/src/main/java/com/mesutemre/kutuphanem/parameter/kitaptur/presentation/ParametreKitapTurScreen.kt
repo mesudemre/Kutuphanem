@@ -25,7 +25,7 @@ import com.mesutemre.kutuphanem.parameter.components.ParametreDeleteSwipeBackgro
 import com.mesutemre.kutuphanem.parameter.components.ParametreRowItem
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
-import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemLoader
+import com.mesutemre.kutuphanem.util.customcomponents.progressbar.KutuphanemLoader
 import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemSearchInput
 import com.mesutemre.kutuphanem.util.customcomponents.dialog.CustomKutuphanemDialog
 import com.mesutemre.kutuphanem.util.customcomponents.error.KutuphanemErrorView

@@ -11,23 +11,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import com.mesutemre.kutuphanem.ui.theme.colorPalette
-import com.mesutemre.kutuphanem.ui.theme.mediumUbuntuErrorBold
-import com.mesutemre.kutuphanem.ui.theme.sdp
+import com.mesutemre.kutuphanem_ui.theme.colorPalette
+import com.mesutemre.kutuphanem_ui.theme.mediumUbuntuErrorBold
+import com.mesutemre.kutuphanem_ui.theme.sdp
 
 @Composable
-fun KutuphanemErrorView(modifier:Modifier,errorText: String) {
+fun KutuphanemErrorView(modifier: Modifier, errorText: String) {
     Card(
         modifier = modifier,
         backgroundColor = MaterialTheme.colorPalette.white,
         shape = MaterialTheme.shapes.small,
         elevation = 2.sdp
     ) {
-        Column{
+        Column {
             Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 Icon(
                     Icons.Filled.Error,
-                    modifier = Modifier.height(40.sdp).width(40.sdp),
+                    modifier = Modifier
+                        .height(40.sdp)
+                        .width(40.sdp),
                     contentDescription = errorText,
                     tint = MaterialTheme.colorPalette.acik_kirmizi
                 )

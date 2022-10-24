@@ -1,4 +1,4 @@
-package com.mesutemre.kutuphanem.util.customcomponents
+package com.mesutemre.kutuphanem.util.customcomponents.progressbar
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
