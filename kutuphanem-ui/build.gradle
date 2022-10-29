@@ -36,4 +36,6 @@ dependencies {
     implementation "androidx.compose.material:material-icons-extended:$compose_material_icon_extended"
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_systemuicontroller"
     implementation "androidx.constraintlayout:constraintlayout-compose:$compose_constraint_layout"
+    implementation"io.coil-kt:coil-compose:$coilVersion"
+    implementation "com.google.accompanist:accompanist-placeholder-material:$accompanist_placeholder"
 }

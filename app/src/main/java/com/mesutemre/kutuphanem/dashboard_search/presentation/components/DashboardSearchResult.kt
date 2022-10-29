@@ -19,6 +19,7 @@ import com.mesutemre.kutuphanem.dashboard_search.domain.model.KitapSearchItem
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
+import com.mesutemre.kutuphanem_ui.card.KitapCardItem
 
 @Composable
 fun DashboardSearchResult(
@@ -62,6 +63,13 @@ fun DashboardSearchResult(
                         ) {
                             onSelectResultItem(item)
                         }
+                        /*KitapCardItem(
+                            kitapId = item.kitapId,
+                            kitapAd = item.kitapAd,
+                            yazarAd = item.yazarAd,
+                            aciklama = "DashBoardSearchHistoryRowItem DashBoardSearchHistoryRowItem DashBoardSearchHistoryRowItem DashBoardSearchHistoryRowItem DashBoardSearchHistoryRowItem DashBoardSearchHistoryRowItem DashBoardSearchHistoryRowItem DashBoardSearchHistoryRowItem DashBoardSearchHistoryRowItem DashBoardSearchHistoryRowItem DashBoardSearchHistoryRowItem DashBoardSearchHistoryRowItem DashBoardSearchHistoryRowItem DashBoardSearchHistoryRowItem",
+                            kitapResim = "http://192.168.1.105:8080/KutuphaneSistemiWS/api/kullanici/userprofil/mesutemre"
+                        )*/
                         Divider(
                             modifier = Modifier.padding(vertical = 4.sdp, horizontal = 16.sdp),
                             thickness = 1.sdp,

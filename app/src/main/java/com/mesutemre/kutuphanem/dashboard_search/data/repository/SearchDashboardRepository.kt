@@ -1,7 +1,7 @@
 package com.mesutemre.kutuphanem.dashboard_search.data.repository
 
 import com.mesutemre.kutuphanem.dashboard_search.data.dao.entity.DashBoardSearchHistoryEntity
-import com.mesutemre.kutuphanem.kitap.data.remote.dto.KitapDto
+import com.mesutemre.kutuphanem.kitap_liste.data.remote.dto.KitapDto
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.dao.entity.KitapTurEntity
 import retrofit2.Response
 

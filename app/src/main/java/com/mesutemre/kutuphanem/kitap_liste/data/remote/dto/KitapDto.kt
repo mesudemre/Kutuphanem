@@ -1,8 +1,9 @@
-package com.mesutemre.kutuphanem.kitap.data.remote.dto
+package com.mesutemre.kutuphanem.kitap_liste.data.remote.dto
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.mesutemre.kutuphanem.dashboard_search.domain.model.KitapSearchItem
+import com.mesutemre.kutuphanem.kitap_liste.domain.model.KitapListeItem
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.remote.dto.KitapTurDto
 import com.mesutemre.kutuphanem.parameter.yayinevi.data.remote.dto.YayinEviDto
 import java.util.*
@@ -72,5 +73,21 @@ fun KitapDto.convertKitapDtoToKitapSearchItem(): KitapSearchItem {
         kitapId = this.id ?: 0,
         kitapAd = this.kitapAd ?: "",
         yazarAd = this.yazarAd ?: ""
+    )
+}
+
+fun KitapDto.convertKitapDtoToKitapListeItem(): KitapListeItem {
+    return KitapListeItem(
+        kitapId = this.id ?: 0,
+        kitapAd = this.kitapAd ?: "",
+        yazarAd = this.yazarAd ?: "",
+        kitapAciklama = this.kitapAciklama ?: "",
+        kitapResim = this.kitapResim ?: "",
+        isBegenilmis = this.begenilmis?.let {
+            it > 0
+        } ?: kotlin.run {
+            false
+        },
+        kitapPuan = this.kitapPuan ?: 0f
     )
 }

@@ -3,8 +3,8 @@ package com.mesutemre.kutuphanem.dashboard_search.domain.use_case
 import com.mesutemre.kutuphanem.dashboard_search.data.repository.SearchDashboardRepository
 import com.mesutemre.kutuphanem.dashboard_search.domain.model.KitapSearchItem
 import com.mesutemre.kutuphanem.di.IoDispatcher
-import com.mesutemre.kutuphanem.kitap.data.remote.dto.KitapDto
-import com.mesutemre.kutuphanem.kitap.data.remote.dto.convertKitapDtoToKitapSearchItem
+import com.mesutemre.kutuphanem.kitap_liste.data.remote.dto.KitapDto
+import com.mesutemre.kutuphanem.kitap_liste.data.remote.dto.convertKitapDtoToKitapSearchItem
 import com.mesutemre.kutuphanem.util.convertRersourceEventType
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import com.mesutemre.kutuphanem_base.use_case.IServiceCall
