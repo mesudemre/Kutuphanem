@@ -2,7 +2,6 @@ package com.mesutemre.kutuphanem.login.presentation
 
 import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.login.data.remote.dto.AccountCredentialsDto
 import com.mesutemre.kutuphanem.login.domain.use_case.PasswordValidation
@@ -11,6 +10,7 @@ import com.mesutemre.kutuphanem.login.domain.use_case.WriteTokenToPrefUseCase
 import com.mesutemre.kutuphanem.login.domain.use_case.do_login.DoLoginUseCase
 import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.model.SnackbarMessageEvent
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -110,7 +110,7 @@ class LoginViewModel @Inject constructor(
                                 )
                             )
                         } else {
-                            writeTokenToPrefUseCase(it.data)
+                            writeTokenToPrefUseCase(it.data!!)
                             isSuccess = true
                         }
                     }

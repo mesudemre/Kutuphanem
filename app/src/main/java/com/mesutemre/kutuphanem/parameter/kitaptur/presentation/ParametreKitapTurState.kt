@@ -1,8 +1,8 @@
 package com.mesutemre.kutuphanem.parameter.kitaptur.presentation
 
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.parameter.kitaptur.domain.model.KitapTurItem
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 
 data class ParametreKitapTurState(
     val kitapTurFilterText: String = "",

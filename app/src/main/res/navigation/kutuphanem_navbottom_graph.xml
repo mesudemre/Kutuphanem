@@ -3,23 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/kutuphanem_navbottom_graph"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/anasayfaFragment">
+    app:startDestination="@id/kitapListeFragment">
 
-    <fragment
-        android:id="@+id/anasayfaFragment"
-        tools:layout="@layout/anasayfa_fragment"
-        android:name="com.mesutemre.kutuphanem.anasayfa.ui.AnasayfaFragment"
-        android:label="AnasayfaFragment" >
-        <action
-            android:id="@+id/action_anasayfaFragment_to_kitapListeFragment"
-            app:destination="@id/kitapListeFragment" />
-        <action
-            android:id="@+id/action_anasayfaFragment_to_kitapDetayFragment"
-            app:destination="@id/kitapDetayFragment" />
-        <action
-            android:id="@+id/action_anasayfaFragment_to_closeApplicationDialogFragment"
-            app:destination="@id/closeApplicationDialogFragment" />
-    </fragment>
     <fragment
         android:id="@+id/kitapListeFragment"
         tools:layout="@layout/kitap_liste_fragment"
@@ -31,16 +16,6 @@
         <action
             android:id="@+id/action_kitapListeFragment_to_kitapDetayFragment"
             app:destination="@id/kitapDetayFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/parametreFragment"
-        tools:layout="@layout/parametre_fragment"
-        android:name="com.mesutemre.kutuphanem.parametre.ui.ParametreFragment"
-        android:label="ParametreFragment" >
-        <action
-            android:id="@+id/action_parametreFragment_to_profilIslemFragment"
-            app:destination="@id/profilIslemFragment" />
-
     </fragment>
     <fragment
         android:id="@+id/profilIslemFragment"

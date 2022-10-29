@@ -10,13 +10,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.dashboard_search.data.dao.entity.DashBoardSearchHistoryEntity
 import com.mesutemre.kutuphanem.ui.theme.*
-import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemLoader
+import com.mesutemre.kutuphanem.util.customcomponents.progressbar.KutuphanemLoader
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 
 @Composable
 fun DashboardSearchHistory(

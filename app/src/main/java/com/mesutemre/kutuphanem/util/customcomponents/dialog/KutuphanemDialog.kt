@@ -25,8 +25,8 @@ import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.mediumAllegraBlackBold
 import com.mesutemre.kutuphanem.ui.theme.normalUbuntuBlack
 import com.mesutemre.kutuphanem.ui.theme.sdp
-import com.mesutemre.kutuphanem.util.customcomponents.button.KutuphanemMainMaterialButton
-import com.mesutemre.kutuphanem.util.customcomponents.button.KutuphanemTerritaryButton
+import com.mesutemre.kutuphanem_ui.button.KutuphanemMainMaterialButton
+import com.mesutemre.kutuphanem_ui.button.KutuphanemTerritaryButton
 
 @Composable
 fun CustomKutuphanemDialog(

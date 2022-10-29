@@ -1,0 +1,41 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.mesutemre.kutuphanem_ui'
+    apply from: '../scripts/base.gradle'
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = '1.1.1'
+    }
+}
+
+dependencies {
+
+    implementation project(":kutuphanem-base")
+
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'com.google.android.material:material:1.6.1'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    implementation "com.intuit.sdp:sdp-android:$intuit_version"
+    implementation "androidx.compose.ui:ui:$compose_ui_version"
+    implementation "androidx.compose.ui:ui-tooling:$compose_tooling_version"
+    implementation "androidx.compose.foundation:foundation:$compose_foundation_version"
+    implementation "androidx.compose.material:material:$compose_material_version"
+    implementation "androidx.compose.material:material-icons-core:$compose_material_icon_version_core"
+    implementation "androidx.compose.material:material-icons-extended:$compose_material_icon_extended"
+    implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_systemuicontroller"
+    implementation "androidx.constraintlayout:constraintlayout-compose:$compose_constraint_layout"
+    implementation"io.coil-kt:coil-compose:$coilVersion"
+    implementation "com.google.accompanist:accompanist-placeholder-material:$accompanist_placeholder"
+}

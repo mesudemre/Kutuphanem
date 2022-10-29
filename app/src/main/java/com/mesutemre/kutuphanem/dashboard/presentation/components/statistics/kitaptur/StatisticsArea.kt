@@ -10,14 +10,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.dashboard.domain.model.DashboardKitapTurIstatistikItem
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
-import com.mesutemre.kutuphanem.util.customcomponents.card.KutuphanemCardTitle
 import com.mesutemre.kutuphanem.util.customcomponents.chart.KutuphanemPieChart
 import com.mesutemre.kutuphanem.util.customcomponents.error.KutuphanemErrorView
 import com.mesutemre.kutuphanem.util.customcomponents.progressbar.KutuphanemShimmerArea
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
+import com.mesutemre.kutuphanem_ui.card.KutuphanemCardTitle
 
 @Composable
 fun StatisticsArea(

@@ -1,7 +1,7 @@
 package com.mesutemre.kutuphanem.parameter.ekleme.presentation
 
 import androidx.lifecycle.viewModelScope
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.parameter.ekleme.domain.ClearParametreCacheUseCase
 import com.mesutemre.kutuphanem.parameter.ekleme.domain.ParametreEklemeValidation

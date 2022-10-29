@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,10 +16,13 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -39,6 +43,7 @@ import com.mesutemre.kutuphanem.ui.theme.*
 import com.mesutemre.kutuphanem.util.KutuphanemAppState
 import com.mesutemre.kutuphanem.util.customcomponents.snackbar.KutuphanemSnackBarHost
 import com.mesutemre.kutuphanem.util.rememberKutuphanemAppState
+import com.mesutemre.kutuphanem_ui.extensions.rippleClick
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -50,7 +55,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         lifecycleScope.launchWhenStarted {
             viewModel.messageFlow.collect {
-                Log.d("MESAJ","Mesaj geldi!!!")
+                Log.d("MESAJ", "Mesaj geldi!!!")
             }
         }
         installSplashScreen().apply {
@@ -226,7 +231,7 @@ fun KutuphanemTopBar(navController: NavController, pageTitle: String) {
                     bottom.linkTo(parent.bottom, 20.sdp)
                 }
                 .padding(horizontal = 8.sdp)
-                .clickable {
+                .rippleClick {
                     navController.popBackStack()
                 },
             contentDescription = pageTitle,

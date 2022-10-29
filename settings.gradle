@@ -1,2 +1,4 @@
 include ':app'
 rootProject.name = "Kutuphanem"
+include ':kutuphanem-base'
+include ':kutuphanem-ui'

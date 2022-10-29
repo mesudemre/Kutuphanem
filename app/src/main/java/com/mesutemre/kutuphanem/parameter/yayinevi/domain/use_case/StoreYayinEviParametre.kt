@@ -1,11 +1,11 @@
 package com.mesutemre.kutuphanem.parameter.yayinevi.domain.use_case
 
-import com.mesutemre.kutuphanem.base.DbCallUseCase
-import com.mesutemre.kutuphanem.base.IDbCall
 import com.mesutemre.kutuphanem.parameter.yayinevi.data.dao.entity.YayinEviEntity
 import com.mesutemre.kutuphanem.parameter.yayinevi.domain.model.YayinEviItem
 import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.PARAM_YAYINEVI_DB_KEY
+import com.mesutemre.kutuphanem_base.use_case.DbCallUseCase
+import com.mesutemre.kutuphanem_base.use_case.IDbCall
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 

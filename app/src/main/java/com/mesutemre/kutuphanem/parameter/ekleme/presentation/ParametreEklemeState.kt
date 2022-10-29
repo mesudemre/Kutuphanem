@@ -1,7 +1,7 @@
 package com.mesutemre.kutuphanem.parameter.ekleme.presentation
 
 import androidx.annotation.StringRes
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.parameter.ekleme.presentation.components.SelectedParameterType
 

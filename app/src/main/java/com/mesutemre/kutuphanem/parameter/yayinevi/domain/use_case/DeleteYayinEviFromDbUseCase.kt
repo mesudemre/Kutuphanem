@@ -1,10 +1,10 @@
 package com.mesutemre.kutuphanem.parameter.yayinevi.domain.use_case
 
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
-import com.mesutemre.kutuphanem.base.DbCallUseCase
-import com.mesutemre.kutuphanem.base.IDbCall
 import com.mesutemre.kutuphanem.di.IoDispatcher
 import com.mesutemre.kutuphanem.parameter.yayinevi.domain.repository.YayinEviRepository
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
+import com.mesutemre.kutuphanem_base.use_case.DbCallUseCase
+import com.mesutemre.kutuphanem_base.use_case.IDbCall
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn

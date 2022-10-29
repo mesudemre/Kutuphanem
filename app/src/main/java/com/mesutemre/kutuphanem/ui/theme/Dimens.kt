@@ -7,12 +7,13 @@ import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.mesutemre.kutuphanem.KutuphanemApplication
+import com.mesutemre.kutuphanem_base.KutuphanemBaseApplication
 import kotlin.math.abs
 
 val Float.sdp: Dp
     get() {
         val value = (this / 1.2f).toInt()
-        val context = KutuphanemApplication.instance
+        val context = KutuphanemBaseApplication.instance
         val name = when {
             value in 1..599 -> "_${value}sdp"
             value > -60 && value < 0 -> "_minus${abs(value)}sdp"
@@ -29,7 +30,7 @@ val Float.sdp: Dp
 val Int.sdp: Dp
     get() {
         val value = this.toInt()
-        val context = KutuphanemApplication.instance
+        val context = KutuphanemBaseApplication.instance
         val name = when {
             value in 1..599 -> "_${value}sdp"
             value > -60 && value < 0 -> "_minus${abs(value)}sdp"

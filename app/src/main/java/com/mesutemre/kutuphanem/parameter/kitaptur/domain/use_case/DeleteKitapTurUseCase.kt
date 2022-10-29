@@ -1,15 +1,14 @@
 package com.mesutemre.kutuphanem.parameter.kitaptur.domain.use_case
 
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
-import com.mesutemre.kutuphanem.base.BaseUseCase
-import com.mesutemre.kutuphanem.base.IServiceCall
-import com.mesutemre.kutuphanem.base.ServiceCallUseCase
 import com.mesutemre.kutuphanem.di.IoDispatcher
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.remote.dto.KitapTurDto
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.remote.dto.KitapTurDurum
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.repository.KitapTurRepository
 import com.mesutemre.kutuphanem.parameter.kitaptur.domain.model.KitapTurItem
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
+import com.mesutemre.kutuphanem_base.use_case.IServiceCall
+import com.mesutemre.kutuphanem_base.use_case.ServiceCallUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn

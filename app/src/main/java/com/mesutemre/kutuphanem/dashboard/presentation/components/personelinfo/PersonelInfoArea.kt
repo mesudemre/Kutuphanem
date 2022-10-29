@@ -15,13 +15,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.dashboard.domain.model.DashboardKullaniciBilgiData
 import com.mesutemre.kutuphanem.dashboard.presentation.components.personelinfo.DashBoardKullaniciBilgi
 import com.mesutemre.kutuphanem.dashboard.presentation.components.personelinfo.DashBoardKullaniciBilgiLoading
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.mediumUbuntuWhiteBold
 import com.mesutemre.kutuphanem.ui.theme.sdp
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 
 @Composable
 fun PersonelInfoArea(kullaniciBilgi: BaseResourceEvent<DashboardKullaniciBilgiData>) {

@@ -1,8 +1,8 @@
 package com.mesutemre.kutuphanem.parameter.ekleme.domain
 
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
-import com.mesutemre.kutuphanem.base.IServiceCall
-import com.mesutemre.kutuphanem.base.ServiceCallUseCase
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
+import com.mesutemre.kutuphanem_base.use_case.IServiceCall
+import com.mesutemre.kutuphanem_base.use_case.ServiceCallUseCase
 import com.mesutemre.kutuphanem.di.IoDispatcher
 import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.parameter.ekleme.presentation.components.SelectedParameterType

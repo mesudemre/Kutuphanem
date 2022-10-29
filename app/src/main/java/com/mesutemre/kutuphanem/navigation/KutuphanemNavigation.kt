@@ -14,6 +14,7 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.mesutemre.kutuphanem.dashboard.DashboardScreen
 import com.mesutemre.kutuphanem.dashboard_search.presentation.DashboardSearchScreen
+import com.mesutemre.kutuphanem.kitap_liste.presentation.KitapListeScreen
 import com.mesutemre.kutuphanem.login.presentation.LoginScreen
 import com.mesutemre.kutuphanem.parameter.ParametreScreen
 import com.mesutemre.kutuphanem.parameter.ekleme.presentation.ParametreEklemeScreen
@@ -87,6 +88,16 @@ fun KutuphanemNavigation(
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
             }) {
             DashboardSearchScreen(navController)
+        }
+
+        composable(route = KutuphanemNavigationItem.BookListScreen.screenRoute,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
+            }) {
+            KitapListeScreen(navController)
         }
     }
 }

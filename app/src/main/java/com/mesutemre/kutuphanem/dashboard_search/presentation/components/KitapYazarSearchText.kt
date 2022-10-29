@@ -3,6 +3,7 @@ package com.mesutemre.kutuphanem.dashboard_search.presentation.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardBackspace
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -28,6 +30,7 @@ import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
 import com.mesutemre.kutuphanem.ui.theme.smallUbuntuBlack
 import com.mesutemre.kutuphanem.ui.theme.smallUbuntuTransparent
+import com.mesutemre.kutuphanem_ui.extensions.rippleClick
 
 @Composable
 fun KitapYazarSearchText(searchInput: String,
@@ -64,8 +67,8 @@ fun KitapYazarSearchText(searchInput: String,
                     Icon(imageVector = Icons.Filled.KeyboardBackspace,
                         contentDescription = null,
                         tint = MaterialTheme.colorPalette.transparent,
-                        modifier = Modifier.clickable {
-                            onBackPressed.invoke()
+                        modifier = Modifier.rippleClick {
+                            onBackPressed()
                         })
                 }else {
                     Icon(imageVector = Icons.Outlined.Search,
@@ -78,7 +81,7 @@ fun KitapYazarSearchText(searchInput: String,
                     Icon(imageVector = Icons.Outlined.Close,
                         contentDescription = null,
                         tint = MaterialTheme.colorPalette.transparent,
-                        modifier = Modifier.clickable {
+                        modifier = Modifier.rippleClick {
                             onClearSearch()
                         })
                 }

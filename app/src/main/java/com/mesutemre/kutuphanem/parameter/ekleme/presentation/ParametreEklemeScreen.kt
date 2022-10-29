@@ -20,7 +20,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.parameter.ekleme.presentation.components.ParameterTypeSelection
@@ -29,8 +29,8 @@ import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
 import com.mesutemre.kutuphanem.ui.theme.smallUbuntuWhiteBold
 import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemFormInput
-import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemLoader
-import com.mesutemre.kutuphanem.util.customcomponents.button.KutuphanemMainMaterialButton
+import com.mesutemre.kutuphanem.util.customcomponents.progressbar.KutuphanemLoader
+import com.mesutemre.kutuphanem_ui.button.KutuphanemMainMaterialButton
 import com.mesutemre.kutuphanem.util.customcomponents.menuitem.KutuphanemMenuInfo
 
 @OptIn(ExperimentalComposeUiApi::class)
