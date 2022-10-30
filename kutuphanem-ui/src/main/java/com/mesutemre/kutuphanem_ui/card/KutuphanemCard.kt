@@ -1,19 +1,26 @@
 package com.mesutemre.kutuphanem_ui.card
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -64,61 +71,65 @@ fun KitapCardItem(
     kitapAd: String,
     yazarAd: String,
     aciklama: String,
-    kitapResim: String,
-    isLiked: Boolean = false,
+    kitapResim: String
     //onClickLike: (Int) -> Unit,
     //onClickShare: (String, String, String) -> Unit,
     //onClickArchive: (Int, String, String, String, String) -> Unit
 ) {
-    Card(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(200.sdp),
-        backgroundColor = MaterialTheme.colorPalette.white,
-        shape = MaterialTheme.shapes.medium,
-        elevation = 4.sdp
+            .height(180.sdp)
+            .background(color = MaterialTheme.colorPalette.loginBackColor)
     ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(170.sdp),
+            backgroundColor = MaterialTheme.colorPalette.white,
+            shape = MaterialTheme.shapes.medium,
+            elevation = 8.sdp
+        ) {
             KitapInfo(
                 kitapImage = kitapResim,
                 kitapAd = kitapAd,
                 yazarAd = yazarAd,
                 aciklama = aciklama
             )
-            Divider(
-                modifier = Modifier.padding(vertical = 4.sdp),
-                thickness = 1.sdp, color = MaterialTheme.colorPalette.otherGrayLight
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.sdp), horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .offset(x = (-10).sdp, y = 152.sdp), horizontalArrangement = Arrangement.End
+        ) {
+            KitapCardItemTransactionBox(
+                modifier = Modifier.size(32.sdp),
+                backgroundColor = MaterialTheme.colorPalette.turuncu,
+                title = "",
+                icon = Icons.Filled.Download,
+                iconSize = 16.sdp
             ) {
-                Icon(
-                    imageVector = Icons.Outlined.Share,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorPalette.iconGrayTint,
-                    modifier = Modifier
-                        .size(24.sdp)
-                        .rippleClick {
-                            //onClickShare(kitapAd, yazarAd, kitapResim)
-                        })
-                Icon(imageVector = Icons.Filled.Download, contentDescription = null,
-                    tint = MaterialTheme.colorPalette.iconGrayTint,
-                    modifier = Modifier
-                        .size(24.sdp)
-                        .padding(end = 8.sdp)
-                        .rippleClick {
-                            //onClickArchive(kitapId, kitapAd, yazarAd, aciklama, kitapResim)
-                        })
-                Icon(painter = painterResource(id = if (isLiked) R.drawable.red_heart else R.drawable.outline_heart),
-                    contentDescription = null, modifier = Modifier
-                        .size(24.sdp)
-                        .padding(end = 8.sdp)
-                        .rippleClick {
-                            //onClickLike(kitapId)
-                        })
+
+            }
+            Spacer(modifier = Modifier.width(8.sdp))
+            KitapCardItemTransactionBox(
+                modifier = Modifier.size(32.sdp),
+                backgroundColor = MaterialTheme.colorPalette.fistikYesil,
+                title = "",
+                icon = ImageVector.vectorResource(id = R.drawable.icon_like),
+                iconSize = 16.sdp
+            ) {
+
+            }
+            Spacer(modifier = Modifier.width(8.sdp))
+            KitapCardItemTransactionBox(
+                modifier = Modifier.size(32.sdp),
+                backgroundColor = MaterialTheme.colorPalette.primaryTextColor,
+                title = "",
+                icon = Icons.Filled.Share,
+                iconSize = 16.sdp
+            ) {
+
             }
         }
     }
@@ -132,7 +143,7 @@ private fun KitapInfo(kitapImage: String, kitapAd: String, yazarAd: String, acik
                 .width(100.sdp)
                 .height(150.sdp)
                 .border(
-                    2.sdp,
+                    1.sdp,
                     MaterialTheme.colorPalette.secondaryGray,
                     MaterialTheme.shapes.medium
                 ),
@@ -156,21 +167,27 @@ private fun KitapInfo(kitapImage: String, kitapAd: String, yazarAd: String, acik
                 modifier = Modifier.padding(top = 2.sdp),
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.smallUbuntuBlackBold
+                style = MaterialTheme.typography.smallUbuntuBlackBold.copy(
+                    lineHeight = 14.ssp
+                )
             )
             Text(
-                text = kitapAd,
-                modifier = Modifier.padding(top = 2.sdp),
+                text = yazarAd,
+                modifier = Modifier.padding(top = 4.sdp),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.smallUbuntuBlack
+                style = MaterialTheme.typography.smallAllegraBlack.copy(
+                    lineHeight = 14.ssp
+                )
             )
             Text(
                 text = aciklama,
-                modifier = Modifier.padding(top = 2.sdp),
-                maxLines = 3,
+                modifier = Modifier.padding(top = 6.sdp),
+                maxLines = 4,
                 overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.smallUbuntuTransparent
+                style = MaterialTheme.typography.smallUbuntuTransparent.copy(
+                    lineHeight = 14.ssp
+                )
             )
         }
     }
@@ -192,4 +209,30 @@ private fun KutuphanemImageIndeedLoading(
                 highlight = PlaceholderHighlight.shimmer(highlightColor = MaterialTheme.colorPalette.otherGrayLight)
             )
     )
+}
+
+@Composable
+private fun KitapCardItemTransactionBox(
+    modifier: Modifier,
+    backgroundColor: Color,
+    title: String,
+    icon: ImageVector,
+    iconSize: Dp,
+    iconTintColor: Color = MaterialTheme.colorPalette.white,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = modifier
+            .background(color = backgroundColor, shape = CircleShape)
+            .rippleClick {
+                onClick()
+            }, contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            modifier = Modifier.size(iconSize),
+            imageVector = icon,
+            contentDescription = title,
+            tint = iconTintColor
+        )
+    }
 }
