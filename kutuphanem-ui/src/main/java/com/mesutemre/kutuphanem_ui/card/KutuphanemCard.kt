@@ -11,6 +11,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
@@ -190,6 +191,14 @@ private fun KitapInfo(kitapImage: String, kitapAd: String, yazarAd: String, acik
                 )
             )
         }
+        Icon(
+            Icons.Filled.ChevronRight,
+            modifier = Modifier
+                .size(32.sdp)
+                .align(alignment = Alignment.CenterVertically),
+            contentDescription = null,
+            tint = MaterialTheme.colorPalette.secondaryGray
+        )
     }
 }
 
