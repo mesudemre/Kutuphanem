@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.mesutemre.kutuphanem.kitap_liste.presentation.customcomponents.KutuphanemListChipArea
 import com.mesutemre.kutuphanem.kitap_liste.presentation.customcomponents.TumKitapListe
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
@@ -36,6 +37,6 @@ fun KitapListeScreen(
             thickness = 1.sdp,
             color = MaterialTheme.colorPalette.otherGrayLight
         )
-        TumKitapListe(kitapServiceListeSource = state.kitapServiceListeSource)
+        TumKitapListe(kitapServiceListeSource = state.kitapListItemPageData.collectAsLazyPagingItems())
     }
 }
