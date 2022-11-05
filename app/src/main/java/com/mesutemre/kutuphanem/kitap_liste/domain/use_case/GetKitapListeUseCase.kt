@@ -12,6 +12,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
+/**
+ * @Author: mesutemre.celenk
+ * @Date: 29.10.2022
+ */
 class GetKitapListeUseCase @Inject constructor(
     private val kitapListeDataSource: KitapListDataSource
 ) : IServiceCall by ServiceCallUseCase() {
