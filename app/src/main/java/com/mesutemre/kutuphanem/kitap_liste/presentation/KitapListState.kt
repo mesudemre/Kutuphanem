@@ -1,10 +1,14 @@
 package com.mesutemre.kutuphanem.kitap_liste.presentation
 
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
+import androidx.paging.PagingData
 import com.mesutemre.kutuphanem.kitap_liste.domain.model.KitapListeItem
 import com.mesutemre.kutuphanem.kitap_liste.domain.model.SelectedListType
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 data class KitapListState(
     val selectedListType: SelectedListType = SelectedListType.TUM_LISTE,
-    val kitapServiceListeSource: BaseResourceEvent<List<KitapListeItem>> = BaseResourceEvent.Loading()
+    val kitapServiceListeSource: BaseResourceEvent<List<KitapListeItem>> = BaseResourceEvent.Loading(),
+    val kitapListItemPageData: Flow<PagingData<KitapListeItem>> = flow { }
 )

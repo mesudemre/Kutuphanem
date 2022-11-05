@@ -117,10 +117,11 @@ dependencies {
     implementation "com.airbnb.android:lottie-compose:$lottieVersion"
     implementation "com.google.accompanist:accompanist-placeholder-material:$accompanist_placeholder"
     implementation"io.coil-kt:coil-compose:$coilVersion"
-    implementation 'androidx.room:room-paging:2.4.3'
+    implementation "androidx.room:room-paging:$roomPaging"
     implementation('com.google.crypto.tink:tink-android') {
         version {
             strictly '1.4.0'
         }
     }
+    implementation "androidx.paging:paging-compose:$pagingCompose"
 }
