@@ -23,6 +23,13 @@ fun TumKitapListe(kitapServiceListeSource: LazyPagingItems<KitapListeItem>) {
             .fillMaxWidth()
             .padding(16.sdp)
     ) {
+        kitapServiceListeSource.apply {
+            when {
+                loadState.refresh is LoadState.Loading -> {
+                    KitapListeLoading()
+                }
+            }
+        }
         LazyColumn(modifier = Modifier.padding(bottom = 20.sdp)) {
             items(kitapServiceListeSource) { kitapModel ->
                 KitapCardItem(
@@ -36,16 +43,6 @@ fun TumKitapListe(kitapServiceListeSource: LazyPagingItems<KitapListeItem>) {
             }
             kitapServiceListeSource.apply {
                 when {
-                    loadState.refresh is LoadState.Loading -> {
-                        item {
-                            Box(
-                                modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                KutuphanemLoader(modifier = Modifier.size(400.sdp))
-                            }
-                        }
-                    }
                     loadState.append is LoadState.Loading -> {
                         item {
                             Box(
