@@ -14,8 +14,8 @@ import com.mesutemre.kutuphanem_ui.theme.sdp
 
 @Composable
 fun KitapListeLoading() {
-    LazyColumn(modifier = Modifier.padding(vertical = 16.sdp)) {
-        items(25) {
+    LazyColumn {
+        items(3) {
             Row(
                 modifier = Modifier
                     .padding(
@@ -32,7 +32,7 @@ fun KitapListeLoading() {
                         .width(100.sdp)
                         .height(150.sdp)
                         .border(
-                            0.sdp,
+                            1.sdp,
                             MaterialTheme.colorPalette.secondaryGray,
                             MaterialTheme.shapes.medium
                         )
@@ -46,28 +46,28 @@ fun KitapListeLoading() {
                     Spacer(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(8.sdp)
+                            .height(16.sdp)
                             .padding(top = 4.sdp, end = 8.sdp)
                             .shimmerEffect()
                     )
                     Spacer(
                         modifier = Modifier
                             .width(80.sdp)
-                            .height(8.sdp)
+                            .height(16.sdp)
                             .padding(top = 4.sdp, end = 8.sdp)
                             .shimmerEffect()
                     )
                     Spacer(
                         modifier = Modifier
                             .width(120.sdp)
-                            .height(8.sdp)
+                            .height(16.sdp)
                             .padding(top = 4.sdp)
                             .shimmerEffect()
                     )
                     Spacer(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(10.sdp)
+                            .height(20.sdp)
                             .padding(top = 12.sdp, end = 8.sdp)
                             .shimmerEffect()
                     )
@@ -75,7 +75,7 @@ fun KitapListeLoading() {
                     Spacer(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(10.sdp)
+                            .height(20.sdp)
                             .padding(top = 4.sdp, end = 8.sdp)
                             .shimmerEffect()
                     )
@@ -83,35 +83,7 @@ fun KitapListeLoading() {
                     Spacer(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(10.sdp)
-                            .padding(top = 4.sdp, end = 8.sdp)
-                            .shimmerEffect()
-                    )
-                    Spacer(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(10.sdp)
-                            .padding(top = 4.sdp, end = 8.sdp)
-                            .shimmerEffect()
-                    )
-                    Spacer(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(10.sdp)
-                            .padding(top = 4.sdp, end = 8.sdp)
-                            .shimmerEffect()
-                    )
-                    Spacer(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(10.sdp)
-                            .padding(top = 4.sdp, end = 8.sdp)
-                            .shimmerEffect()
-                    )
-                    Spacer(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(10.sdp)
+                            .height(20.sdp)
                             .padding(top = 4.sdp, end = 8.sdp)
                             .shimmerEffect()
                     )
