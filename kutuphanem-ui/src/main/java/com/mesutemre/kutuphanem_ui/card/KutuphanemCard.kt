@@ -137,6 +137,30 @@ fun KitapCardItem(
 }
 
 @Composable
+fun KitapArsivItemCard(
+    kitapAd: String,
+    yazarAd: String,
+    aciklama: String,
+    kitapResim: String
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(180.sdp),
+        backgroundColor = MaterialTheme.colorPalette.white,
+        shape = MaterialTheme.shapes.medium,
+        elevation = 8.sdp
+    ) {
+        KitapInfo(
+            kitapImage = kitapResim,
+            kitapAd = kitapAd,
+            yazarAd = yazarAd,
+            aciklama = aciklama
+        )
+    }
+}
+
+@Composable
 private fun KitapInfo(kitapImage: String, kitapAd: String, yazarAd: String, aciklama: String) {
     Row(modifier = Modifier.padding(top = 8.sdp, start = 8.sdp, end = 8.sdp)) {
         SubcomposeAsyncImage(model = kitapImage,

@@ -15,6 +15,8 @@ import com.mesutemre.kutuphanem.exceptions.dao.KutuphanemGlobalExceptionHandlerD
 import com.mesutemre.kutuphanem.exceptions.model.KutuphanemGlobalExceptionHandlerModel
 import com.mesutemre.kutuphanem.kitap.dao.KitapDao
 import com.mesutemre.kutuphanem.kitap.liste.model.KitapModel
+import com.mesutemre.kutuphanem.kitap_liste.data.dao.IKitapDao
+import com.mesutemre.kutuphanem.kitap_liste.data.dao.entity.KitapEntity
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.dao.IKitapTurDao
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.dao.entity.KitapTurEntity
 import com.mesutemre.kutuphanem.parameter.yayinevi.data.dao.entity.IYayinEviDao
@@ -31,7 +33,8 @@ import com.mesutemre.kutuphanem.util.converters.Converters
                 KitapTurEntity::class,
                 KitapTurIstatistikEntity::class,
                 KitapYilIstatistikEntity::class,
-                DashBoardSearchHistoryEntity::class
+                DashBoardSearchHistoryEntity::class,
+                KitapEntity::class
             ),
             exportSchema = false)
 @TypeConverters(Converters::class)
@@ -44,4 +47,5 @@ abstract class KutuphanemDatabase:RoomDatabase() {
     abstract fun getKitapTurDao(): IKitapTurDao
     abstract fun getDashBoardDao(): IDashBoardDao
     abstract fun getDashBoardSearchHistoryDao(): IDashBoardSearchHistoryDao
+    abstract fun getKitapListeDao(): IKitapDao
 }
