@@ -1,6 +1,7 @@
 package com.mesutemre.kutuphanem.kitap_liste.presentation.customcomponents
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -36,6 +37,7 @@ fun KitapArsivListe(kitapArsivListeSource: BaseResourceEvent<List<KitapArsivItem
                                     aciklama = kitap.kitapAciklama,
                                     kitapResim = kitap.kitapResim
                                 )
+                                Spacer(modifier = Modifier.padding(top = 12.sdp))
                             }
                         }
                     } else {

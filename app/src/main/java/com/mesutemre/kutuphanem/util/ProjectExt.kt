@@ -32,7 +32,6 @@ import androidx.fragment.app.Fragment
 import androidx.work.*
 import com.google.android.material.snackbar.Snackbar
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.kitap.liste.model.KitapModel
 import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.model.SUCCESS
@@ -274,6 +273,27 @@ fun saveFile(
     return photoFile;
 }
 
+fun Context.saveArsivFile(
+    kitapId: Int,
+    kitapAd: String,
+    isArchive: Boolean,
+    arr: ByteArray
+): File? {
+    val kitapResim = BitmapFactory.decodeByteArray(arr, 0, arr.size)
+    val bytes = ByteArrayOutputStream()
+    var photoFile: File? = null
+    if (kitapResim != null) {
+        kitapResim?.compress(Bitmap.CompressFormat.PNG, 100, bytes)
+        var resimAd: String = kitapAd + "_" + kitapId
+        if (isArchive) {
+            resimAd = kitapId.toString()
+        }
+
+        photoFile = convertBitmapToFile(kitapResim!!, resimAd + ".png", this)
+    }
+    return photoFile
+}
+
 fun convertBitmapToFile(bitmap: Bitmap, fileNameToSave: String, requireContext: Context): File {
     var photoFile: File? = null;
     return try {
@@ -418,7 +438,7 @@ fun <R, C> com.mesutemre.kutuphanem_base.model.BaseResourceEvent<R>.convertRerso
 ): com.mesutemre.kutuphanem_base.model.BaseResourceEvent<C> {
     return if (this is com.mesutemre.kutuphanem_base.model.BaseResourceEvent.Success) {
         com.mesutemre.kutuphanem_base.model.BaseResourceEvent.Success(data = convert.invoke())
-    }else if (this is com.mesutemre.kutuphanem_base.model.BaseResourceEvent.Error) {
+    } else if (this is com.mesutemre.kutuphanem_base.model.BaseResourceEvent.Error) {
         com.mesutemre.kutuphanem_base.model.BaseResourceEvent.Error(message = this.message)
     } else {
         com.mesutemre.kutuphanem_base.model.BaseResourceEvent.Loading()

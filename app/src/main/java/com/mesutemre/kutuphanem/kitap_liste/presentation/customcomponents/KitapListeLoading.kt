@@ -24,8 +24,8 @@ fun KitapListeLoading() {
                         end = 8.sdp,
                         bottom = 16.sdp
                     )
-                    .clip(shape = MaterialTheme.shapes.medium)
                     .background(color = MaterialTheme.colorPalette.white)
+                    .clip(shape = MaterialTheme.shapes.medium)
             ) {
                 Spacer(
                     modifier = Modifier

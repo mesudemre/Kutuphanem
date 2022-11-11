@@ -3,10 +3,10 @@ package com.mesutemre.kutuphanem.kitap_liste.presentation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.SnackbarDuration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -23,6 +23,7 @@ import com.mesutemre.kutuphanem.ui.theme.sdp
 @Composable
 fun KitapListeScreen(
     navController: NavHostController,
+    showSnackbar: (String, SnackbarDuration, Int) -> Unit,
     viewModel: KitapListViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
@@ -40,9 +41,13 @@ fun KitapListeScreen(
             thickness = 1.sdp,
             color = MaterialTheme.colorPalette.otherGrayLight
         )
-        when(state.selectedListType.ordinal) {
+        when (state.selectedListType.ordinal) {
             SelectedListType.TUM_LISTE.ordinal -> {
-                TumKitapListe(kitapServiceListeSource = state.kitapListItemPageData.collectAsLazyPagingItems())
+                TumKitapListe(
+                    kitapServiceListeSource = state.kitapListItemPageData.collectAsLazyPagingItems(),
+                    kitapArsivleSource = state.kitapArsivleSource,
+                    showSnackbar = showSnackbar
+                )
             }
             SelectedListType.ARSIV.ordinal -> {
                 KitapArsivListe(kitapArsivListeSource = state.kitapArsivListeSource)

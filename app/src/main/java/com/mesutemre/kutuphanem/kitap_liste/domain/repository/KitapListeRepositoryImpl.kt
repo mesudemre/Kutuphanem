@@ -7,6 +7,7 @@ import com.mesutemre.kutuphanem.kitap_liste.data.remote.IKitapApi
 import com.mesutemre.kutuphanem.kitap_liste.data.remote.dto.KitapDto
 import com.mesutemre.kutuphanem.kitap_liste.data.repository.KitapListeRepository
 import com.mesutemre.kutuphanem.kitap_liste.domain.model.KitapArsivItem
+import okhttp3.ResponseBody
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -32,5 +33,9 @@ class KitapListeRepositoryImpl @Inject constructor(
 
     override suspend fun deleteKitapById(kitapId: Int) {
         dao.kitapSil(kitapId)
+    }
+
+    override suspend fun downloadKitapResim(imageUrl: String): Response<ResponseBody> {
+        return api.downloadKitapResim(imageUrl)
     }
 }
