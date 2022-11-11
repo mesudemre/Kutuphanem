@@ -145,7 +145,7 @@ fun KitapArsivItemCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(180.sdp),
+            .height(170.sdp),
         backgroundColor = MaterialTheme.colorPalette.white,
         shape = MaterialTheme.shapes.medium,
         elevation = 8.sdp
