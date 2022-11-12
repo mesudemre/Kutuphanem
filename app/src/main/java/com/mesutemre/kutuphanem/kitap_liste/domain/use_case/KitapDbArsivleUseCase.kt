@@ -20,7 +20,7 @@ class KitapDbArsivleUseCase @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : IDbCall by DbCallUseCase() {
 
-    operator suspend fun invoke(kitapEntity: KitapEntity): Flow<BaseResourceEvent<Unit>> {
+    operator fun invoke(kitapEntity: KitapEntity): Flow<BaseResourceEvent<Unit>> {
         return dbCall {
             kitapListeRepository.kitapArsivKaydet(kitapEntity)
         }.flowOn(ioDispatcher)

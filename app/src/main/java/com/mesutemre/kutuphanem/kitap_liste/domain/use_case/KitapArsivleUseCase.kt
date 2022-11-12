@@ -21,7 +21,7 @@ class KitapArsivleUseCase @Inject constructor(
         yazarAd: String,
         kitapAciklama: String,
         kitapImageUrl: String
-    ) = channelFlow<BaseResourceEvent<ResponseStatusModel>> {
+    ) = channelFlow {
         send(BaseResourceEvent.Loading())
         kitapResimArsivleUseCase(
             imageUrl = kitapImageUrl,
