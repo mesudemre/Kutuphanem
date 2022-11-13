@@ -36,8 +36,10 @@ class DashboardViewModel @Inject constructor(
         }
         viewModelScope.launch {
             async { fillDashBoardUserInfo() }
-            async { fillKategoriList() }
-            async { fillKitapTurIstatistik() }
+            async {
+                fillKategoriList()
+                fillKitapTurIstatistik()
+            }
             async { fillKitapYilIstatistik() }
         }
     }

@@ -75,8 +75,12 @@ class KutuphanemRepositoryModule {
 
     @Singleton
     @Provides
-    fun provideDashBoardRepository(api: IDashBoardApi, dao: IDashBoardDao): DashBoardRepository {
-        return DashBoardRepositoryImpl(api, dao)
+    fun provideDashBoardRepository(
+        api: IDashBoardApi,
+        dao: IDashBoardDao,
+        dataStore: DataStore<Preferences>
+    ): DashBoardRepository {
+        return DashBoardRepositoryImpl(api, dao, dataStore)
     }
 
     @Singleton

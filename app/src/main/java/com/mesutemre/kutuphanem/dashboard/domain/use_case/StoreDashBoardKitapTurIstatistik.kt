@@ -2,7 +2,7 @@ package com.mesutemre.kutuphanem.dashboard.domain.use_case
 
 import com.mesutemre.kutuphanem.dashboard.data.dao.entity.KitapTurIstatistikEntity
 import com.mesutemre.kutuphanem.dashboard.data.remote.dto.KitapTurIstatistikDto
-import com.mesutemre.kutuphanem.util.CustomSharedPreferences
+import com.mesutemre.kutuphanem.dashboard.data.repository.DashBoardRepository
 import com.mesutemre.kutuphanem.util.DASHBOARD_KATEGORI_ISTATISTIK
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
@@ -14,8 +14,8 @@ import javax.inject.Inject
 class StoreDashBoardKitapTurIstatistik @Inject constructor(
     private val deleteKitapTurIstatistikUseCase: DeleteDashboardKitapTurIstatistikFromDbUseCase,
     private val saveKitapTurIstatistikUseCase: SaveDashboardKitapTurIstatistikIntoDbUseCase,
-    private val customSharedPreferences: CustomSharedPreferences
-){
+    private val dashBoardRepository: DashBoardRepository
+) {
     operator suspend fun invoke(list: List<KitapTurIstatistikDto>) {
         deleteKitapTurIstatistikUseCase().collectLatest {
             val kitapTurIstatistikEntityList = list.map {
@@ -25,7 +25,10 @@ class StoreDashBoardKitapTurIstatistik @Inject constructor(
                 )
             }
             saveKitapTurIstatistikUseCase(kitapTurIstatistikEntityList).collectLatest {
-                customSharedPreferences.putToSharedPref(DASHBOARD_KATEGORI_ISTATISTIK,true)
+                dashBoardRepository.saveKitapTurIstatistikDbKayitToDataStore(
+                    DASHBOARD_KATEGORI_ISTATISTIK,
+                    true
+                )
             }
         }
     }

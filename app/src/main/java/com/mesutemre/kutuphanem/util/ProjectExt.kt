@@ -449,18 +449,14 @@ fun <R, C> com.mesutemre.kutuphanem_base.model.BaseResourceEvent<R>.convertRerso
 @Composable
 fun getColorListForPieChart(): List<Color> {
     return listOf(
-        MaterialTheme.colorPalette.acik_kirmizi,
+        MaterialTheme.colorPalette.salmonPink,
         MaterialTheme.colorPalette.fistikYesil,
-        MaterialTheme.colorPalette.lacivert,
-        MaterialTheme.colorPalette.kahverengi,
+        MaterialTheme.colorPalette.morningBlue,
+        MaterialTheme.colorPalette.spaceCadet,
         MaterialTheme.colorPalette.acikMor,
         MaterialTheme.colorPalette.aero,
         MaterialTheme.colorPalette.etonBlue,
-        MaterialTheme.colorPalette.turuncu,
-        MaterialTheme.colorPalette.salmonPink,
-        MaterialTheme.colorPalette.sari,
-        MaterialTheme.colorPalette.spaceCadet,
-        MaterialTheme.colorPalette.morningBlue
+        MaterialTheme.colorPalette.turuncu
     )
 }
 
