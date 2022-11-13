@@ -15,5 +15,11 @@ interface YayinEviRepository {
 
     suspend fun deleteYayinEviList()
 
-    suspend fun yayinEviKaydet(yayinEviDto: YayinEviDto):Response<ResponseStatusModel>
+    suspend fun yayinEviKaydet(yayinEviDto: YayinEviDto): Response<ResponseStatusModel>
+
+    suspend fun checkYayinEviDbKayit(key: String): Boolean
+
+    suspend fun saveYayinEviDbKayitToDataStore(key: String, value: Boolean)
+
+    suspend fun clearYayinEviDbKayitCache(key: String)
 }

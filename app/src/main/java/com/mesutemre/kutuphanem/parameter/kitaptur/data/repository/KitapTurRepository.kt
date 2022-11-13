@@ -17,4 +17,10 @@ interface KitapTurRepository {
 
     suspend fun kitapTurKaydet(kitapTurDto: KitapTurDto): Response<ResponseStatusModel>
 
+    suspend fun checkKitapTurDbKayit(key: String): Boolean
+
+    suspend fun saveKitapTurDbKayitToDataStore(key: String, value: Boolean)
+
+    suspend fun clearKitapTurDbKayitCache(key: String)
+
 }

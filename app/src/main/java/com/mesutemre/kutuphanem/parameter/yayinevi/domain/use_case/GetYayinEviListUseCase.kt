@@ -5,7 +5,6 @@ import com.mesutemre.kutuphanem.parameter.yayinevi.data.dao.entity.toYayinEviIte
 import com.mesutemre.kutuphanem.parameter.yayinevi.data.remote.dto.toYayinEviItem
 import com.mesutemre.kutuphanem.parameter.yayinevi.domain.model.YayinEviItem
 import com.mesutemre.kutuphanem.parameter.yayinevi.domain.repository.YayinEviRepository
-import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.PARAM_YAYINEVI_DB_KEY
 import com.mesutemre.kutuphanem.util.convertRersourceEventType
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
@@ -26,19 +25,18 @@ import javax.inject.Inject
  */
 class GetYayinEviListUseCase @Inject constructor(
     private val yayinEviRepository: YayinEviRepository,
-    private val customSharedPreferences: CustomSharedPreferences,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val storeYayinEviParametre: StoreYayinEviParametre
-): IServiceCall by ServiceCallUseCase(), IDbCall by DbCallUseCase() {
+) : IServiceCall by ServiceCallUseCase(), IDbCall by DbCallUseCase() {
 
     operator suspend fun invoke(isSwipeRefresh: Boolean): Flow<BaseResourceEvent<List<YayinEviItem>>> {
-        val isDbKayit = customSharedPreferences.getBooleanFromSharedPreferences(PARAM_YAYINEVI_DB_KEY)
+        val isDbKayit = yayinEviRepository.checkYayinEviDbKayit(PARAM_YAYINEVI_DB_KEY)
         if (isSwipeRefresh || !isDbKayit) {
             val serviceListEvent = serviceCall {
                 yayinEviRepository.getYayinEviLisetByAPI()
             }.map {
-                it.convertRersourceEventType{
-                    it.data!!.map {k->
+                it.convertRersourceEventType {
+                    it.data!!.map { k ->
                         k.toYayinEviItem()
                     }
                 }
@@ -49,12 +47,12 @@ class GetYayinEviListUseCase @Inject constructor(
                 }
             }
             return serviceListEvent
-        }else {
+        } else {
             return dbCall {
                 yayinEviRepository.getYayinEviListeByDAO()
             }.map {
                 it.convertRersourceEventType {
-                    it.data!!.map {k->
+                    it.data!!.map { k ->
                         k.toYayinEviItem()
                     }
                 }

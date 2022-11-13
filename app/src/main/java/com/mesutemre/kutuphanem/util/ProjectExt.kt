@@ -55,6 +55,7 @@ const val CAMERA_REQUEST_CODE: Int = 1991
 const val READ_EXTERNAL_STORAGE_REQUEST_CODE: Int = 1992
 const val WRITE_EXTERNAL_STORAGE_REQUEST_CODE: Int = 2019
 const val SHARED_PREF_FILE: String = "KUTUPHANEM_SP"
+const val DATASTORE_FILE: String = "KUTUPHANEM_DS"
 
 val DEVICE_NAME: String by lazy {
     val manufacturer = Build.MANUFACTURER

@@ -2,7 +2,7 @@ package com.mesutemre.kutuphanem.parameter.yayinevi.domain.use_case
 
 import com.mesutemre.kutuphanem.parameter.yayinevi.data.dao.entity.YayinEviEntity
 import com.mesutemre.kutuphanem.parameter.yayinevi.domain.model.YayinEviItem
-import com.mesutemre.kutuphanem.util.CustomSharedPreferences
+import com.mesutemre.kutuphanem.parameter.yayinevi.domain.repository.YayinEviRepository
 import com.mesutemre.kutuphanem.util.PARAM_YAYINEVI_DB_KEY
 import com.mesutemre.kutuphanem_base.use_case.DbCallUseCase
 import com.mesutemre.kutuphanem_base.use_case.IDbCall
@@ -16,10 +16,10 @@ import javax.inject.Inject
 class StoreYayinEviParametre @Inject constructor(
     private val deleteYayinEviFromDbUseCase: DeleteYayinEviFromDbUseCase,
     private val saveYayinEviIntoDbUseCase: SaveYayinEviIntoDbUseCase,
-    private val customSharedPreferences: CustomSharedPreferences
+    private val yayinEviRepository: YayinEviRepository
 ) : IDbCall by DbCallUseCase() {
 
-    operator suspend fun invoke(list: List<YayinEviItem>) {
+    suspend operator fun invoke(list: List<YayinEviItem>) {
         deleteYayinEviFromDbUseCase().collectLatest {
             saveYayinEviIntoDbUseCase(*list.map {
                 YayinEviEntity(
@@ -27,7 +27,7 @@ class StoreYayinEviParametre @Inject constructor(
                     aciklama = it.aciklama
                 )
             }).collectLatest {
-                customSharedPreferences.putToSharedPref(PARAM_YAYINEVI_DB_KEY, true)
+                yayinEviRepository.saveYayinEviDbKayitToDataStore(PARAM_YAYINEVI_DB_KEY, true)
             }
         }
     }
