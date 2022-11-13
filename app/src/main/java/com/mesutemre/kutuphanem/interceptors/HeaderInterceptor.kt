@@ -17,7 +17,7 @@ import okhttp3.Response
  * @Author: mesutemre.celenk
  * @Date: 2.01.2022
  */
-class HeaderInterceptor(//val customSharedPreferences:CustomSharedPreferences,
+class HeaderInterceptor(
     private val dataStore: DataStore<Preferences>
 ) : Interceptor {
 
