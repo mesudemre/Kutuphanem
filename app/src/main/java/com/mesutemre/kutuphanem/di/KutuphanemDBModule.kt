@@ -59,4 +59,8 @@ class KutuphanemDBModule {
     @Singleton
     @Provides
     fun providerKutuphanemSearchHistory(database: KutuphanemDatabase) = database.getDashBoardSearchHistoryDao()
+
+    @Singleton
+    @Provides
+    fun provideKitapListeDao(database: KutuphanemDatabase) = database.getKitapListeDao()
 }

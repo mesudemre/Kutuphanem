@@ -72,10 +72,10 @@ fun KitapCardItem(
     kitapAd: String,
     yazarAd: String,
     aciklama: String,
-    kitapResim: String
+    kitapResim: String,
     //onClickLike: (Int) -> Unit,
     //onClickShare: (String, String, String) -> Unit,
-    //onClickArchive: (Int, String, String, String, String) -> Unit
+    onClickArchive: (Int, String, String, String) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -110,7 +110,7 @@ fun KitapCardItem(
                 icon = Icons.Filled.Download,
                 iconSize = 16.sdp
             ) {
-
+                onClickArchive(kitapId, kitapAd, yazarAd, aciklama)
             }
             Spacer(modifier = Modifier.width(8.sdp))
             KitapCardItemTransactionBox(
@@ -130,9 +130,32 @@ fun KitapCardItem(
                 icon = Icons.Filled.Share,
                 iconSize = 16.sdp
             ) {
-
             }
         }
+    }
+}
+
+@Composable
+fun KitapArsivItemCard(
+    kitapAd: String,
+    yazarAd: String,
+    aciklama: String,
+    kitapResim: String
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(170.sdp),
+        backgroundColor = MaterialTheme.colorPalette.white,
+        shape = MaterialTheme.shapes.medium,
+        elevation = 8.sdp
+    ) {
+        KitapInfo(
+            kitapImage = kitapResim,
+            kitapAd = kitapAd,
+            yazarAd = yazarAd,
+            aciklama = aciklama
+        )
     }
 }
 

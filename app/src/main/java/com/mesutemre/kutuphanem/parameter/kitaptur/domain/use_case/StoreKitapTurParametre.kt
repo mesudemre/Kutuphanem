@@ -2,7 +2,7 @@ package com.mesutemre.kutuphanem.parameter.kitaptur.domain.use_case
 
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.dao.entity.KitapTurEntity
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.remote.dto.KitapTurDto
-import com.mesutemre.kutuphanem.util.CustomSharedPreferences
+import com.mesutemre.kutuphanem.parameter.kitaptur.data.repository.KitapTurRepository
 import com.mesutemre.kutuphanem.util.PARAM_KITAPTUR_DB_KEY
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import kotlinx.coroutines.flow.collectLatest
@@ -13,7 +13,7 @@ import javax.inject.Inject
  * @Date: 3.07.2022
  */
 class StoreKitapTurParametre @Inject constructor(
-    private val customSharedPreferences: CustomSharedPreferences,
+    private val kitapTurRepository: KitapTurRepository,
     private val saveKitapTurIntoDbUseCase: SaveKitapTurIntoDbUseCase,
     private val deleteKitapTurFromDbUseCase: DeleteKitapTurFromDbUseCase
 ) {
@@ -28,7 +28,7 @@ class StoreKitapTurParametre @Inject constructor(
                     )
                 }
                 saveKitapTurIntoDbUseCase(kitapTurEntityList).collectLatest {
-                    customSharedPreferences.putToSharedPref(PARAM_KITAPTUR_DB_KEY, true)
+                    kitapTurRepository.saveKitapTurDbKayitToDataStore(PARAM_KITAPTUR_DB_KEY, true)
                 }
             }
         }

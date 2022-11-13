@@ -1,7 +1,8 @@
 package com.mesutemre.kutuphanem.parameter.ekleme.domain
 
 import com.mesutemre.kutuphanem.parameter.ekleme.presentation.components.SelectedParameterType
-import com.mesutemre.kutuphanem.util.CustomSharedPreferences
+import com.mesutemre.kutuphanem.parameter.kitaptur.data.repository.KitapTurRepository
+import com.mesutemre.kutuphanem.parameter.yayinevi.domain.repository.YayinEviRepository
 import com.mesutemre.kutuphanem.util.PARAM_KITAPTUR_DB_KEY
 import com.mesutemre.kutuphanem.util.PARAM_YAYINEVI_DB_KEY
 import javax.inject.Inject
@@ -11,12 +12,13 @@ import javax.inject.Inject
  * @Date: 12.07.2022
  */
 class ClearParametreCacheUseCase @Inject constructor(
-    private val customSharedPreferences: CustomSharedPreferences
+    private val yayinEviRepository: YayinEviRepository,
+    private val kitapTurRepository: KitapTurRepository
 ) {
-    operator fun invoke(type: SelectedParameterType) {
+    suspend operator fun invoke(type: SelectedParameterType) {
         if (type == SelectedParameterType.YAYINEVI)
-            customSharedPreferences.removeFromSharedPreferences(PARAM_YAYINEVI_DB_KEY)
+            yayinEviRepository.clearYayinEviDbKayitCache(PARAM_YAYINEVI_DB_KEY)
         else
-            customSharedPreferences.removeFromSharedPreferences(PARAM_KITAPTUR_DB_KEY)
+            kitapTurRepository.clearKitapTurDbKayitCache(PARAM_KITAPTUR_DB_KEY)
     }
 }

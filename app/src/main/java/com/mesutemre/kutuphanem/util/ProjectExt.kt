@@ -32,7 +32,6 @@ import androidx.fragment.app.Fragment
 import androidx.work.*
 import com.google.android.material.snackbar.Snackbar
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.kitap.liste.model.KitapModel
 import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.model.SUCCESS
@@ -56,6 +55,7 @@ const val CAMERA_REQUEST_CODE: Int = 1991
 const val READ_EXTERNAL_STORAGE_REQUEST_CODE: Int = 1992
 const val WRITE_EXTERNAL_STORAGE_REQUEST_CODE: Int = 2019
 const val SHARED_PREF_FILE: String = "KUTUPHANEM_SP"
+const val DATASTORE_FILE: String = "KUTUPHANEM_DS"
 
 val DEVICE_NAME: String by lazy {
     val manufacturer = Build.MANUFACTURER
@@ -274,6 +274,27 @@ fun saveFile(
     return photoFile;
 }
 
+fun Context.saveArsivFile(
+    kitapId: Int,
+    kitapAd: String,
+    isArchive: Boolean,
+    arr: ByteArray
+): File? {
+    val kitapResim = BitmapFactory.decodeByteArray(arr, 0, arr.size)
+    val bytes = ByteArrayOutputStream()
+    var photoFile: File? = null
+    if (kitapResim != null) {
+        kitapResim?.compress(Bitmap.CompressFormat.PNG, 100, bytes)
+        var resimAd: String = kitapAd + "_" + kitapId
+        if (isArchive) {
+            resimAd = kitapId.toString()
+        }
+
+        photoFile = convertBitmapToFile(kitapResim!!, resimAd + ".png", this)
+    }
+    return photoFile
+}
+
 fun convertBitmapToFile(bitmap: Bitmap, fileNameToSave: String, requireContext: Context): File {
     var photoFile: File? = null;
     return try {
@@ -418,7 +439,7 @@ fun <R, C> com.mesutemre.kutuphanem_base.model.BaseResourceEvent<R>.convertRerso
 ): com.mesutemre.kutuphanem_base.model.BaseResourceEvent<C> {
     return if (this is com.mesutemre.kutuphanem_base.model.BaseResourceEvent.Success) {
         com.mesutemre.kutuphanem_base.model.BaseResourceEvent.Success(data = convert.invoke())
-    }else if (this is com.mesutemre.kutuphanem_base.model.BaseResourceEvent.Error) {
+    } else if (this is com.mesutemre.kutuphanem_base.model.BaseResourceEvent.Error) {
         com.mesutemre.kutuphanem_base.model.BaseResourceEvent.Error(message = this.message)
     } else {
         com.mesutemre.kutuphanem_base.model.BaseResourceEvent.Loading()
@@ -428,18 +449,14 @@ fun <R, C> com.mesutemre.kutuphanem_base.model.BaseResourceEvent<R>.convertRerso
 @Composable
 fun getColorListForPieChart(): List<Color> {
     return listOf(
-        MaterialTheme.colorPalette.acik_kirmizi,
+        MaterialTheme.colorPalette.salmonPink,
         MaterialTheme.colorPalette.fistikYesil,
-        MaterialTheme.colorPalette.lacivert,
-        MaterialTheme.colorPalette.kahverengi,
+        MaterialTheme.colorPalette.morningBlue,
+        MaterialTheme.colorPalette.spaceCadet,
         MaterialTheme.colorPalette.acikMor,
         MaterialTheme.colorPalette.aero,
         MaterialTheme.colorPalette.etonBlue,
-        MaterialTheme.colorPalette.turuncu,
-        MaterialTheme.colorPalette.salmonPink,
-        MaterialTheme.colorPalette.sari,
-        MaterialTheme.colorPalette.spaceCadet,
-        MaterialTheme.colorPalette.morningBlue
+        MaterialTheme.colorPalette.turuncu
     )
 }
 

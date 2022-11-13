@@ -7,7 +7,6 @@ import com.mesutemre.kutuphanem.parameter.kitaptur.data.remote.dto.KitapTurDto
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.remote.dto.toDashboardKategoriItem
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.repository.KitapTurRepository
 import com.mesutemre.kutuphanem.parameter.kitaptur.domain.use_case.StoreKitapTurParametre
-import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.PARAM_KITAPTUR_DB_KEY
 import com.mesutemre.kutuphanem.util.convertRersourceEventType
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
@@ -28,15 +27,12 @@ import javax.inject.Inject
  */
 class GetDashboardKategoriList @Inject constructor(
     private val kitapTurRepository: KitapTurRepository,
-    private val customSharedPreferences: CustomSharedPreferences,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val storeKitapTurParametre: StoreKitapTurParametre
 ) : IServiceCall by ServiceCallUseCase(), IDbCall by DbCallUseCase() {
 
     operator suspend fun invoke(): Flow<BaseResourceEvent<List<DashboardKategoriItem>>> {
-        val isDbKayit = customSharedPreferences.getBooleanFromSharedPreferences(
-            PARAM_KITAPTUR_DB_KEY
-        )
+        val isDbKayit = kitapTurRepository.checkKitapTurDbKayit(PARAM_KITAPTUR_DB_KEY)
         var kitapTurDtoList: List<KitapTurDto>? = null
         if (!isDbKayit) {
             val serviceEvent = serviceCall {

@@ -42,62 +42,98 @@ fun KutuphanemNavigation(
 
         composable(route = KutuphanemNavigationItem.ParameterScreen.screenRoute,
             enterTransition = {
-                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(200)
+                )
             },
-        exitTransition = {
-            slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
-        }) {
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(200)
+                )
+            }) {
             ParametreScreen(navController)
         }
 
         composable(route = KutuphanemNavigationItem.ParameterYayinEviScreen.screenRoute,
             enterTransition = {
-                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(200)
+                )
             },
             exitTransition = {
-                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(200)
+                )
             }) {
             ParametreYayinEviScreen(showSnackbar = showSnackbar)
         }
 
         composable(route = KutuphanemNavigationItem.ParameterKitapTurScreen.screenRoute,
             enterTransition = {
-                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(200)
+                )
             },
             exitTransition = {
-                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(200)
+                )
             }) {
             ParametreKitapTurScreen(showSnackbar = showSnackbar)
         }
 
         composable(route = KutuphanemNavigationItem.ParameterEklemeScreen.screenRoute,
             enterTransition = {
-                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(200)
+                )
             },
             exitTransition = {
-                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(200)
+                )
             }) {
             ParametreEklemeScreen(showSnackbar = showSnackbar)
         }
 
         composable(route = KutuphanemNavigationItem.DashboardSearchScreen.screenRoute,
             enterTransition = {
-                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(200)
+                )
             },
             exitTransition = {
-                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(200)
+                )
             }) {
             DashboardSearchScreen(navController)
         }
 
         composable(route = KutuphanemNavigationItem.BookListScreen.screenRoute,
             enterTransition = {
-                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(200)
+                )
             },
             exitTransition = {
-                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(200))
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(200)
+                )
             }) {
-            KitapListeScreen(navController)
+            KitapListeScreen(navController, showSnackbar = showSnackbar)
         }
     }
 }
@@ -113,8 +149,8 @@ fun NavHostController.isBottomNavigationTopBarVisible(isBottomNavigation: Boolea
         it.screenRoute == route
     }
     if (isBottomNavigation)
-        return route != null && pageItem.size>0 && pageItem[0].showBottomBar
-    return route != null && pageItem.size>0 && pageItem[0].showTopBar
+        return route != null && pageItem.size > 0 && pageItem[0].showBottomBar
+    return route != null && pageItem.size > 0 && pageItem[0].showTopBar
 }
 
 @Composable
@@ -127,13 +163,13 @@ fun NavHostController.getCurrentNavigationItem(): KutuphanemNavigationItem? {
     val pageItem = list.filter {
         it.screenRoute == route
     }
-    if (pageItem != null && pageItem.size>0)
+    if (pageItem != null && pageItem.size > 0)
         return pageItem[0]
     return null
 }
 
 fun NavOptionsBuilder.popUpToTop(navController: NavController) {
     popUpTo(navController.currentBackStackEntry?.destination?.route ?: return) {
-        inclusive =  true
+        inclusive = true
     }
 }

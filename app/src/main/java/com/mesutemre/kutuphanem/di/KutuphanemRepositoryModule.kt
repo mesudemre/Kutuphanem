@@ -1,5 +1,7 @@
 package com.mesutemre.kutuphanem.di
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import com.mesutemre.kutuphanem.dashboard.data.dao.entity.IDashBoardDao
 import com.mesutemre.kutuphanem.dashboard.data.remote.IDashBoardApi
 import com.mesutemre.kutuphanem.dashboard.data.repository.DashBoardRepository
@@ -7,6 +9,7 @@ import com.mesutemre.kutuphanem.dashboard.domain.repository.DashBoardRepositoryI
 import com.mesutemre.kutuphanem.dashboard_search.data.dao.IDashBoardSearchHistoryDao
 import com.mesutemre.kutuphanem.dashboard_search.data.repository.SearchDashboardRepository
 import com.mesutemre.kutuphanem.dashboard_search.domain.repository.SearchDashBoardRepositoryImpl
+import com.mesutemre.kutuphanem.kitap_liste.data.dao.IKitapDao
 import com.mesutemre.kutuphanem.kitap_liste.data.remote.IKitapApi
 import com.mesutemre.kutuphanem.kitap_liste.data.repository.KitapListeRepository
 import com.mesutemre.kutuphanem.kitap_liste.domain.repository.KitapListeRepositoryImpl
@@ -46,37 +49,52 @@ class KutuphanemRepositoryModule {
 
     @Singleton
     @Provides
-    fun provideParametreYayinEviRepository(api: IYayinEviApi,dao: IYayinEviDao): YayinEviRepository {
-        return YayinEviRepositoryImpl(api,dao)
+    fun provideParametreYayinEviRepository(
+        api: IYayinEviApi,
+        dao: IYayinEviDao,
+        dataStore: DataStore<Preferences>
+    ): YayinEviRepository {
+        return YayinEviRepositoryImpl(api, dao, dataStore)
     }
 
     @Singleton
     @Provides
-    fun provideParametreKitapTurRepository(api: IKitapTurApi, dao:IKitapTurDao): KitapTurRepository {
-        return KitapTurRepositoryImpl(api,dao)
+    fun provideParametreKitapTurRepository(
+        api: IKitapTurApi,
+        dao: IKitapTurDao,
+        dataStore: DataStore<Preferences>
+    ): KitapTurRepository {
+        return KitapTurRepositoryImpl(api, dao, dataStore)
     }
 
     @Singleton
     @Provides
-    fun provideKullaniciRepository(api: IKullaniciApi):KullaniciRepository {
+    fun provideKullaniciRepository(api: IKullaniciApi): KullaniciRepository {
         return KullaniciRepositoryImpl(api)
     }
 
     @Singleton
     @Provides
-    fun provideDashBoardRepository(api: IDashBoardApi,dao:IDashBoardDao): DashBoardRepository {
-        return DashBoardRepositoryImpl(api,dao)
+    fun provideDashBoardRepository(
+        api: IDashBoardApi,
+        dao: IDashBoardDao,
+        dataStore: DataStore<Preferences>
+    ): DashBoardRepository {
+        return DashBoardRepositoryImpl(api, dao, dataStore)
     }
 
     @Singleton
     @Provides
-    fun provideSearchDashBoardRepository(api: IKitapApi, dao:IDashBoardSearchHistoryDao): SearchDashboardRepository {
-        return SearchDashBoardRepositoryImpl(api,dao)
+    fun provideSearchDashBoardRepository(
+        api: IKitapApi,
+        dao: IDashBoardSearchHistoryDao
+    ): SearchDashboardRepository {
+        return SearchDashBoardRepositoryImpl(api, dao)
     }
 
     @Singleton
     @Provides
-    fun provideKitapListeRepository(api: IKitapApi): KitapListeRepository {
-        return KitapListeRepositoryImpl(api)
+    fun provideKitapListeRepository(api: IKitapApi, dao: IKitapDao): KitapListeRepository {
+        return KitapListeRepositoryImpl(api, dao)
     }
 }

@@ -6,7 +6,6 @@ import com.mesutemre.kutuphanem.dashboard.data.remote.dto.convertToDashboardKita
 import com.mesutemre.kutuphanem.dashboard.data.repository.DashBoardRepository
 import com.mesutemre.kutuphanem.dashboard.domain.model.DashboardKitapTurIstatistikItem
 import com.mesutemre.kutuphanem.di.IoDispatcher
-import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.DASHBOARD_KATEGORI_ISTATISTIK
 import com.mesutemre.kutuphanem.util.convertRersourceEventType
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
@@ -27,15 +26,13 @@ import javax.inject.Inject
  */
 class GetKitapTurIstatistik @Inject constructor(
     private val dashBoardRepository: DashBoardRepository,
-    private val customSharedPreferences: CustomSharedPreferences,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val storeKitapTurIstatistik: StoreDashBoardKitapTurIstatistik
 ) : IServiceCall by ServiceCallUseCase(), IDbCall by DbCallUseCase() {
 
-    operator suspend fun invoke(): Flow<BaseResourceEvent<List<DashboardKitapTurIstatistikItem>>> {
-        val isDbKayit = customSharedPreferences.getBooleanFromSharedPreferences(
-            DASHBOARD_KATEGORI_ISTATISTIK
-        )
+    suspend operator fun invoke(): Flow<BaseResourceEvent<List<DashboardKitapTurIstatistikItem>>> {
+        val isDbKayit =
+            dashBoardRepository.checkKitapTurIstatistikKayit(DASHBOARD_KATEGORI_ISTATISTIK)
         var dashBoardKitapTurIstatistikDtoList: List<KitapTurIstatistikDto>? = null
         if (!isDbKayit) {
             val serviceEvent = serviceCall {
@@ -55,12 +52,12 @@ class GetKitapTurIstatistik @Inject constructor(
                 }
             }
             return serviceEvent
-        }else {
+        } else {
             return dbCall {
                 dashBoardRepository.getKitapTurIstatistikByDAO()
             }.map {
                 it.convertRersourceEventType {
-                    it.data!!.map { ist->
+                    it.data!!.map { ist ->
                         ist.convertToDashBoardKitapTurIstatistikItem()
                     }
                 }

@@ -6,8 +6,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,13 +14,10 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -43,6 +38,7 @@ import com.mesutemre.kutuphanem.ui.theme.*
 import com.mesutemre.kutuphanem.util.KutuphanemAppState
 import com.mesutemre.kutuphanem.util.customcomponents.snackbar.KutuphanemSnackBarHost
 import com.mesutemre.kutuphanem.util.rememberKutuphanemAppState
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import com.mesutemre.kutuphanem_ui.extensions.rippleClick
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -58,20 +54,20 @@ class MainActivity : ComponentActivity() {
                 Log.d("MESAJ", "Mesaj geldi!!!")
             }
         }
-        installSplashScreen().apply {
-            this.setKeepOnScreenCondition(object : SplashScreen.KeepOnScreenCondition {
-                override fun shouldKeepOnScreen(): Boolean {
-                    return viewModel.splashLoadingState.value
-                }
-            })
-        }
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
             KutuphanemTheme {
                 ProvideWindowInsets {
                     val kutuphanemAppState: KutuphanemAppState = rememberKutuphanemAppState()
-                    val tokenState = viewModel.tokenState.collectAsState()
+                    val mainActivityState = viewModel.mainActivityState.collectAsState()
+                    installSplashScreen().apply {
+                        this.setKeepOnScreenCondition(object : SplashScreen.KeepOnScreenCondition {
+                            override fun shouldKeepOnScreen(): Boolean {
+                                return mainActivityState.value.tokenResourceEvent is BaseResourceEvent.Loading
+                            }
+                        })
+                    }
                     Scaffold(
                         modifier = Modifier.navigationBarsPadding(),
                         scaffoldState = kutuphanemAppState.scaffoldState,
@@ -108,30 +104,36 @@ class MainActivity : ComponentActivity() {
                         snackbarHost = {
                             KutuphanemSnackBarHost(state = kutuphanemAppState.kutuphanemSnackbarState)
                         }) {
-                        if (tokenState.value.isNotEmpty()) {
-                            KutuphanemNavigation(
-                                navController = kutuphanemAppState.navController,
-                                startDestinition = KutuphanemNavigationItem.DashboardScreen,
-                                showSnackbar = { message, duration, type ->
-                                    kutuphanemAppState.showSnackbar(
-                                        message = message,
-                                        duration = duration,
-                                        type = type
-                                    )
+                        when (mainActivityState.value.tokenResourceEvent) {
+                            is BaseResourceEvent.Success -> {
+                                mainActivityState.value.tokenResourceEvent.data?.let {
+                                    if (it.isNotEmpty()) {
+                                        KutuphanemNavigation(
+                                            navController = kutuphanemAppState.navController,
+                                            startDestinition = KutuphanemNavigationItem.DashboardScreen,
+                                            showSnackbar = { message, duration, type ->
+                                                kutuphanemAppState.showSnackbar(
+                                                    message = message,
+                                                    duration = duration,
+                                                    type = type
+                                                )
+                                            }
+                                        )
+                                    } else {
+                                        KutuphanemNavigation(
+                                            navController = kutuphanemAppState.navController,
+                                            startDestinition = KutuphanemNavigationItem.LoginScreen,
+                                            showSnackbar = { message, duration, type ->
+                                                kutuphanemAppState.showSnackbar(
+                                                    message = message,
+                                                    duration = duration,
+                                                    type = type
+                                                )
+                                            }
+                                        )
+                                    }
                                 }
-                            )
-                        } else {
-                            KutuphanemNavigation(
-                                navController = kutuphanemAppState.navController,
-                                startDestinition = KutuphanemNavigationItem.LoginScreen,
-                                showSnackbar = { message, duration, type ->
-                                    kutuphanemAppState.showSnackbar(
-                                        message = message,
-                                        duration = duration,
-                                        type = type
-                                    )
-                                }
-                            )
+                            }
                         }
                     }
                 }

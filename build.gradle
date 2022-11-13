@@ -51,6 +51,7 @@ buildscript {
     ext.gsonVersion = '2.8.5'
     ext.pagingCompose = '1.0.0-alpha14'
     ext.roomPaging = '2.4.3'
+    ext.dataStoreVersion = '1.0.0'
 
     repositories {
         google()

@@ -6,7 +6,6 @@ import com.mesutemre.kutuphanem.parameter.kitaptur.data.remote.dto.KitapTurDto
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.remote.dto.toKitapTurItem
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.repository.KitapTurRepository
 import com.mesutemre.kutuphanem.parameter.kitaptur.domain.model.KitapTurItem
-import com.mesutemre.kutuphanem.util.CustomSharedPreferences
 import com.mesutemre.kutuphanem.util.PARAM_KITAPTUR_DB_KEY
 import com.mesutemre.kutuphanem.util.convertRersourceEventType
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
@@ -27,15 +26,12 @@ import javax.inject.Inject
  */
 class GetKitapTurListUseCase @Inject constructor(
     private val kitapTurRepository: KitapTurRepository,
-    private val customSharedPreferences: CustomSharedPreferences,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val storeKitapTurParametre: StoreKitapTurParametre
-): IServiceCall by ServiceCallUseCase(), IDbCall by DbCallUseCase() {
+) : IServiceCall by ServiceCallUseCase(), IDbCall by DbCallUseCase() {
 
-    operator suspend fun invoke(isSwipeRefresh: Boolean) : Flow<BaseResourceEvent<List<KitapTurItem>>> {
-        val isDbKayit = customSharedPreferences.getBooleanFromSharedPreferences(
-            PARAM_KITAPTUR_DB_KEY
-        )
+    operator suspend fun invoke(isSwipeRefresh: Boolean): Flow<BaseResourceEvent<List<KitapTurItem>>> {
+        val isDbKayit = kitapTurRepository.checkKitapTurDbKayit(PARAM_KITAPTUR_DB_KEY)
         var kitapTurDtoList: List<KitapTurDto>? = null
         if (isSwipeRefresh || !isDbKayit) {
             val serviceEvent = serviceCall {
@@ -43,7 +39,7 @@ class GetKitapTurListUseCase @Inject constructor(
             }.map {
                 kitapTurDtoList = it.data
                 it.convertRersourceEventType {
-                    it.data!!.map {k->
+                    it.data!!.map { k ->
                         k.toKitapTurItem()
                     }
                 }
@@ -54,12 +50,12 @@ class GetKitapTurListUseCase @Inject constructor(
                 }
             }
             return serviceEvent
-        }else {
+        } else {
             return dbCall {
                 kitapTurRepository.getKitapTurListeByDAO()
             }.map {
                 it.convertRersourceEventType {
-                    it.data!!.map {k->
+                    it.data!!.map { k ->
                         k.toKitapTurItem()
                     }
                 }

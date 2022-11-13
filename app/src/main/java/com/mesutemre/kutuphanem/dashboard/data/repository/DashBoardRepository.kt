@@ -10,7 +10,7 @@ interface DashBoardRepository {
 
     suspend fun getKitapTurIstatistikByAPI(): Response<List<KitapTurIstatistikDto>>
 
-    suspend fun getKitapTurIstatistikByDAO() :List<KitapTurIstatistikEntity>
+    suspend fun getKitapTurIstatistikByDAO(): List<KitapTurIstatistikEntity>
 
     suspend fun saveKitapTurIstatistikList(vararg kitapTur: KitapTurIstatistikEntity)
 
@@ -23,4 +23,8 @@ interface DashBoardRepository {
     suspend fun saveKitapYilIstatistikList(vararg kitapYil: KitapYilIstatistikEntity)
 
     suspend fun deleteKitapYilIstatistikList()
+
+    suspend fun checkKitapTurIstatistikKayit(key: String): Boolean
+
+    suspend fun saveKitapTurIstatistikDbKayitToDataStore(key: String, value: Boolean)
 }
