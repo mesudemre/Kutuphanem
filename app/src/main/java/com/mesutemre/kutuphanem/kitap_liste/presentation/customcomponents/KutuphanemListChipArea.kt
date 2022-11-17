@@ -8,9 +8,12 @@ import androidx.compose.material.icons.filled.Archive
 import androidx.compose.material.icons.filled.ViewList
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import com.mesutemre.kutuphanem.kitap_liste.domain.model.SelectedListType
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
+import com.mesutemre.kutuphanem_ui.R
 import com.mesutemre.kutuphanem_ui.chip.KutuphanemBaseChip
 
 @Composable
@@ -60,7 +63,8 @@ fun KutuphanemListChipArea(
             selectedBackgroundColor = MaterialTheme.colorPalette.lacivert,
             selectedTextColor = MaterialTheme.colorPalette.white,
             selectedIconTint = MaterialTheme.colorPalette.white,
-            leadingIcon = Icons.Filled.Add
+            leadingIcon = ImageVector.vectorResource(id = R.drawable.icon_like),
+            leadingIconModifier = Modifier.height(16.sdp).width(16.sdp)
         ) {
             onSelect(SelectedListType.BEGENDIKLERIM)
         }
