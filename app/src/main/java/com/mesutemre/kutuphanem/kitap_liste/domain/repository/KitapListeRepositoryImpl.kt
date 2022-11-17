@@ -7,6 +7,7 @@ import com.mesutemre.kutuphanem.kitap_liste.data.remote.IKitapApi
 import com.mesutemre.kutuphanem.kitap_liste.data.remote.dto.KitapDto
 import com.mesutemre.kutuphanem.kitap_liste.data.repository.KitapListeRepository
 import com.mesutemre.kutuphanem.kitap_liste.domain.model.KitapArsivItem
+import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import okhttp3.ResponseBody
 import retrofit2.Response
 import javax.inject.Inject
@@ -37,5 +38,9 @@ class KitapListeRepositoryImpl @Inject constructor(
 
     override suspend fun downloadKitapResim(imageUrl: String): Response<ResponseBody> {
         return api.downloadKitapResim(imageUrl)
+    }
+
+    override suspend fun kitapBegen(kitapDto: KitapDto): Response<ResponseStatusModel> {
+        return api.kitapBegen(kitapDto)
     }
 }

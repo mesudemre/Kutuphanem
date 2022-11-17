@@ -33,10 +33,7 @@ import androidx.work.*
 import com.google.android.material.snackbar.Snackbar
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.kitap.liste.model.KitapModel
-import com.mesutemre.kutuphanem.model.ERROR
-import com.mesutemre.kutuphanem.model.SUCCESS
-import com.mesutemre.kutuphanem.model.SnackType
-import com.mesutemre.kutuphanem.model.WARNING
+import com.mesutemre.kutuphanem.model.*
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import java.io.*
 import java.text.SimpleDateFormat
@@ -269,7 +266,7 @@ fun saveFile(
             resimAd = kitap.kitapId.toString();
         }
 
-        photoFile = convertBitmapToFile(kitapResim!!, resimAd + ".png", requireContext);
+        photoFile = convertBitmapToFile("", kitapResim!!, resimAd + ".png", requireContext);
     }
     return photoFile;
 }
@@ -290,15 +287,39 @@ fun Context.saveArsivFile(
             resimAd = kitapId.toString()
         }
 
-        photoFile = convertBitmapToFile(kitapResim!!, resimAd + ".png", this)
+        photoFile = convertBitmapToFile(KITAP_ARSIV, kitapResim!!, resimAd + ".png", this)
     }
     return photoFile
 }
 
-fun convertBitmapToFile(bitmap: Bitmap, fileNameToSave: String, requireContext: Context): File {
+fun Context.saveShareKitapFile(
+    kitapId: Int,
+    arr: ByteArray
+): File? {
+    val kitapResim = BitmapFactory.decodeByteArray(arr, 0, arr.size)
+    val bytes = ByteArrayOutputStream()
+    var photoFile: File? = null
+    if (kitapResim != null) {
+        kitapResim?.compress(Bitmap.CompressFormat.PNG, 100, bytes)
+        photoFile = convertBitmapToFile(
+            KITAP_DOWNLOADS,
+            kitapResim!!,
+            kitapId.toString() + "_share.png",
+            this
+        )
+    }
+    return photoFile
+}
+
+fun convertBitmapToFile(
+    folderName: String,
+    bitmap: Bitmap,
+    fileNameToSave: String,
+    requireContext: Context
+): File {
     var photoFile: File? = null;
     return try {
-        val imgPath: File = requireContext.createOutputDirectory("arsiv")
+        val imgPath: File = requireContext.createOutputDirectory(folderName)
         photoFile = File(imgPath.absolutePath, fileNameToSave)
 
         val bos = ByteArrayOutputStream()

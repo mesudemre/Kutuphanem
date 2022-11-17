@@ -125,4 +125,5 @@ dependencies {
     }
     implementation "androidx.paging:paging-compose:$pagingCompose"
     implementation "androidx.datastore:datastore-preferences:$dataStoreVersion"
+
 }
