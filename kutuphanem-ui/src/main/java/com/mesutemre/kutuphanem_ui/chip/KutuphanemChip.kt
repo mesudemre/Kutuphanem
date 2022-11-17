@@ -29,6 +29,7 @@ fun KutuphanemBaseChip(
     modifier: Modifier,
     title: String,
     leadingIcon: ImageVector? = null,
+    leadingIconModifier:Modifier = Modifier,
     disableIconTint:Color = MaterialTheme.colorPalette.secondaryGray,
     selectedIconTint: Color = MaterialTheme.colorPalette.black,
     unSelectedIconTint: Color = MaterialTheme.colorPalette.transparent,
@@ -72,6 +73,7 @@ fun KutuphanemBaseChip(
         Row(modifier = Modifier.padding(start = 2.sdp, end = 2.sdp),verticalAlignment = Alignment.CenterVertically) {
             leadingIcon?.let {
                 Icon(imageVector = it,
+                    modifier = leadingIconModifier,
                     tint = if (isDisable) disableIconTint else {
                         if (isSelected) selectedIconTint else unSelectedIconTint
                     },
