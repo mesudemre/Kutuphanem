@@ -1,9 +1,11 @@
 package com.mesutemre.kutuphanem.kitap_liste.presentation
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.SnackbarDuration
@@ -19,6 +21,7 @@ import com.mesutemre.kutuphanem.kitap_liste.presentation.customcomponents.Kutuph
 import com.mesutemre.kutuphanem.kitap_liste.presentation.customcomponents.TumKitapListe
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
+import com.mesutemre.kutuphanem_ui.extensions.isScrollingUp
 
 @Composable
 fun KitapListeScreen(
@@ -33,9 +36,19 @@ fun KitapListeScreen(
             .padding(top = 16.sdp)
             .background(color = MaterialTheme.colorPalette.loginBackColor)
     ) {
-        KutuphanemListChipArea(selectedListType = state.selectedListType, onSelect = {
-            viewModel.setSelectedListType(it)
-        })
+        val tumKitapListeLazyState = rememberLazyListState()
+        val arsivKitapListeLazyState = rememberLazyListState()
+
+        AnimatedVisibility(
+            (state.selectedListType == SelectedListType.TUM_LISTE && tumKitapListeLazyState.isScrollingUp())
+                    ||
+                    (state.selectedListType == SelectedListType.ARSIV && arsivKitapListeLazyState.isScrollingUp())
+        ) {
+            KutuphanemListChipArea(selectedListType = state.selectedListType, onSelect = {
+                viewModel.setSelectedListType(it)
+            })
+        }
+
         Divider(
             modifier = Modifier.padding(bottom = 4.sdp),
             thickness = 1.sdp,
@@ -44,6 +57,7 @@ fun KitapListeScreen(
         when (state.selectedListType.ordinal) {
             SelectedListType.TUM_LISTE.ordinal -> {
                 TumKitapListe(
+                    listState = tumKitapListeLazyState,
                     kitapServiceListeSource = state.kitapListItemPageData.collectAsLazyPagingItems(),
                     kitapIslemSource = state.kitapIslemSource,
                     kitapShareSource = state.kitapShareSource,
@@ -57,7 +71,10 @@ fun KitapListeScreen(
                 )
             }
             SelectedListType.ARSIV.ordinal -> {
-                KitapArsivListe(kitapArsivListeSource = state.kitapArsivListeSource)
+                KitapArsivListe(
+                    arsivListState = arsivKitapListeLazyState,
+                    kitapArsivListeSource = state.kitapArsivListeSource
+                )
             }
             SelectedListType.BEGENDIKLERIM.ordinal -> {
                 //TODO : Beğeni listesinin servisi format esnasında yedeklenmediği için şimdilik bırakıldı...

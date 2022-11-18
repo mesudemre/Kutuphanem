@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,7 +17,10 @@ import com.mesutemre.kutuphanem_ui.card.KitapArsivItemCard
 import com.mesutemre.kutuphanem_ui.theme.sdp
 
 @Composable
-fun KitapArsivListe(kitapArsivListeSource: BaseResourceEvent<List<KitapArsivItem>>) {
+fun KitapArsivListe(
+    arsivListState: LazyListState,
+    kitapArsivListeSource: BaseResourceEvent<List<KitapArsivItem>>) {
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -29,7 +33,7 @@ fun KitapArsivListe(kitapArsivListeSource: BaseResourceEvent<List<KitapArsivItem
             is BaseResourceEvent.Success -> {
                 kitapArsivListeSource.data?.let {
                     if (it.isNotEmpty()) {
-                        LazyColumn(modifier = Modifier.padding(bottom = 20.sdp)) {
+                        LazyColumn(modifier = Modifier.padding(bottom = 20.sdp), state = arsivListState) {
                             items(it) { kitap ->
                                 KitapArsivItemCard(
                                     kitapAd = kitap.kitapAd,

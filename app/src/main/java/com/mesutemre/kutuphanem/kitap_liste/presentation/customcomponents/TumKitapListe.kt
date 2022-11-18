@@ -3,6 +3,7 @@ package com.mesutemre.kutuphanem.kitap_liste.presentation.customcomponents
 import android.content.Intent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,6 +30,7 @@ import com.mesutemre.kutuphanem_ui.theme.sdp
 
 @Composable
 fun TumKitapListe(
+    listState: LazyListState,
     kitapServiceListeSource: LazyPagingItems<KitapListeItem>,
     kitapIslemSource: BaseResourceEvent<ResponseStatusModel?>,
     kitapShareSource: BaseResourceEvent<KitapShareModel>,
@@ -103,7 +105,7 @@ fun TumKitapListe(
         }
 
 
-        LazyColumn(modifier = Modifier.padding(bottom = 20.sdp)) {
+        LazyColumn(modifier = Modifier.padding(bottom = 20.sdp), state = listState) {
             items(kitapServiceListeSource) { kitapModel ->
                 val kitapArsiv: (Int, String, String, String) -> Unit =
                     { kitapId, kitapAd, yazarAd, aciklama ->
