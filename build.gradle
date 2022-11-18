@@ -8,8 +8,6 @@ buildscript {
     ext.roomVersion = "2.4.0"
     ext.navVersion = "2.4.1"
     ext.preferencesVersion = "1.1.1"
-    ext.swipeRefreshVersion = "1.1.0"
-    ext.pagingVersion = "3.0.1"
     ext.hilt_version = '2.37'
     ext.camerax_version = '1.0.0-beta12'
 

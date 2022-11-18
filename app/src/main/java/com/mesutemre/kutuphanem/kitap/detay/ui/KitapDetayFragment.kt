@@ -22,7 +22,6 @@ import com.mesutemre.kutuphanem.base.BaseFragment
 import com.mesutemre.kutuphanem.base.BaseResourceEvent
 import com.mesutemre.kutuphanem.databinding.FragmentKitapDetayBinding
 import com.mesutemre.kutuphanem.kitap.liste.model.KitapModel
-import com.mesutemre.kutuphanem.kitap.yorum.ui.KitapYorumBottomSheetDialogFragment
 import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.util.*
@@ -178,8 +177,6 @@ class KitapDetayFragment:BaseFragment<FragmentKitapDetayBinding>() {
         }
 
         binding.kitapYorumPanel?.setOnClickListener {
-            KitapYorumBottomSheetDialogFragment(kullanici,selectedKitap,viewModel)
-                .show(requireFragmentManager(),null)
         }
 
         binding.pdfGosterFoo.setOnClickListener {

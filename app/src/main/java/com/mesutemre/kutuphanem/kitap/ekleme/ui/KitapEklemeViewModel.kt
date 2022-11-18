@@ -15,9 +15,6 @@ import com.mesutemre.kutuphanem.util.PARAM_KITAPTUR_DB_KEY
 import com.mesutemre.kutuphanem.util.PARAM_YAYINEVI_DB_KEY
 import com.mesutemre.kutuphanem.util.getPath
 import dagger.hilt.android.lifecycle.HiltViewModel
-import id.zelory.compressor.Compressor
-import id.zelory.compressor.constraint.default
-import id.zelory.compressor.constraint.destination
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -97,7 +94,7 @@ constructor(@IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     }
 
     private suspend fun kitapResimYukle(kitapImageUri: Uri,kitapId:String,context:Context){
-        kitapResimYukleResourceEvent.value = BaseResourceEvent.Loading();
+        /*kitapResimYukleResourceEvent.value = BaseResourceEvent.Loading();
         val kitapIdParam: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),kitapId);
         val originalFile: File =  org.apache.commons.io.FileUtils.getFile(getPath(context,kitapImageUri));
         val photoFile2 = Compressor.compress(context,originalFile){
@@ -118,6 +115,6 @@ constructor(@IoDispatcher private val ioDispatcher: CoroutineDispatcher,
             is BaseDataEvent.Error->{
                 kitapResimYukleResourceEvent.value = BaseResourceEvent.Error(kitapResimYukleResponse.errMessage);
             }
-        }
+        }*/
     }
 }
