@@ -47,9 +47,10 @@ fun LoginForm(
     LaunchedEffect(key1 = Unit) {
         loginViewModel.loginErrorMessage.collect {
             showSnackbar(
-                if (it.message != null) it.message else context.getString(
-                    it.messageId ?: R.string.app_name
-                ),
+                it.message
+                    ?: context.getString(
+                        it.messageId ?: R.string.app_name
+                    ),
                 it.duration,
                 it.type
             )

@@ -73,8 +73,8 @@ fun KitapCardItem(
     yazarAd: String,
     aciklama: String,
     kitapResim: String,
-    //onClickLike: (Int) -> Unit,
-    //onClickShare: (String, String, String) -> Unit,
+    onClickLike: (Int) -> Unit,
+    onClickShare: (Int, String, String, String) -> Unit,
     onClickArchive: (Int, String, String, String) -> Unit
 ) {
     Box(
@@ -120,7 +120,7 @@ fun KitapCardItem(
                 icon = ImageVector.vectorResource(id = R.drawable.icon_like),
                 iconSize = 16.sdp
             ) {
-
+                onClickLike(kitapId)
             }
             Spacer(modifier = Modifier.width(8.sdp))
             KitapCardItemTransactionBox(
@@ -130,6 +130,7 @@ fun KitapCardItem(
                 icon = Icons.Filled.Share,
                 iconSize = 16.sdp
             ) {
+                onClickShare(kitapId, kitapAd, yazarAd, kitapResim)
             }
         }
     }

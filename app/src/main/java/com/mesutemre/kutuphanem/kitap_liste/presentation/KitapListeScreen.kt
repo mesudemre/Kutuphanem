@@ -45,12 +45,22 @@ fun KitapListeScreen(
             SelectedListType.TUM_LISTE.ordinal -> {
                 TumKitapListe(
                     kitapServiceListeSource = state.kitapListItemPageData.collectAsLazyPagingItems(),
-                    kitapArsivleSource = state.kitapArsivleSource,
-                    showSnackbar = showSnackbar
+                    kitapIslemSource = state.kitapIslemSource,
+                    kitapShareSource = state.kitapShareSource,
+                    showSnackbar = showSnackbar,
+                    onClickKitapLike = {
+                        viewModel.kitapBegen(it)
+                    },
+                    onClickKitapShare = { kitapId, kitapAd, yazarAd, kitapResim ->
+                        viewModel.kitapPaylas(kitapId, kitapAd, yazarAd, kitapResim)
+                    }
                 )
             }
             SelectedListType.ARSIV.ordinal -> {
                 KitapArsivListe(kitapArsivListeSource = state.kitapArsivListeSource)
+            }
+            SelectedListType.BEGENDIKLERIM.ordinal -> {
+                //TODO : Beğeni listesinin servisi format esnasında yedeklenmediği için şimdilik bırakıldı...
             }
         }
     }

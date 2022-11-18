@@ -203,4 +203,5 @@
     <string name="search_dashboard_not_found">Aradığınız kriterde kitap ya da yazar bulunmamaktadır.</string>
     <string name="search_dashboard_searchHistoryTitle">Arama Geçmişi</string>
     <string name="search_dashboard_searchHistoryClear">Temizle</string>
+    <string name="kitap_liste_share_content">Merhaba! %1$s yazarına ait %2$s adlı kitabı paylaşıyorum...</string>
 </resources>

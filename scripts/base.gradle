@@ -4,9 +4,8 @@ android {
     defaultConfig {
         minSdkVersion 23
         targetSdkVersion 32
-        versionCode 40
-        versionName "2.3.0"
-
+        versionCode 45
+        versionName "2.3.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true
@@ -26,7 +25,7 @@ android {
         }
     }
 
-    dataBinding{
+    dataBinding {
         enabled = true
     }
 
@@ -49,7 +48,7 @@ android {
         alpha {
             manifestPlaceholders = [appLabel: "Kütüphanem-Alpha"]
             buildConfigField 'String', 'API_URL', "\"${DEV_ALPHA_BETA_API_URL}\""
-            debuggable true
+            debuggable false
             versionNameSuffix "-alpha"
             signingConfig signingConfigs.release
         }

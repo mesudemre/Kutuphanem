@@ -4,14 +4,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.mesutemre.kutuphanem.kitap_liste.domain.model.KitapArsivItem
 import com.mesutemre.kutuphanem.kitap_liste.domain.model.SelectedListType
-import com.mesutemre.kutuphanem.kitap_liste.domain.use_case.GetKitapArsivListeUseCase
-import com.mesutemre.kutuphanem.kitap_liste.domain.use_case.GetKitapListeUseCase
-import com.mesutemre.kutuphanem.kitap_liste.domain.use_case.KitapArsivleUseCase
-import com.mesutemre.kutuphanem.model.SnackbarMessageEvent
+import com.mesutemre.kutuphanem.kitap_liste.domain.use_case.*
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import com.mesutemre.kutuphanem_base.viewmodel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -23,7 +19,9 @@ import javax.inject.Inject
 class KitapListViewModel @Inject constructor(
     private val getKitapListeUseCase: GetKitapListeUseCase,
     private val getKitapArsivListeUseCase: GetKitapArsivListeUseCase,
-    private val kitapArsivleUseCase: KitapArsivleUseCase
+    private val kitapArsivleUseCase: KitapArsivleUseCase,
+    private val kitapBegenUseCase: KitapBegenUseCase,
+    private val kitapShareUseCase: KitapShareUseCase
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow(KitapListState())
@@ -73,16 +71,46 @@ class KitapListViewModel @Inject constructor(
             ).collectLatest { response ->
                 _state.update {
                     it.copy(
-                        kitapArsivleSource = response
+                        kitapIslemSource = response
                     )
                 }
             }
         }
     }
 
-    fun setDefaultStateForKitapArsiv() {
+    fun setDefaultStateForKitapIslem() {
         _state.update {
-            it.copy(kitapArsivleSource = BaseResourceEvent.Nothing())
+            it.copy(kitapIslemSource = BaseResourceEvent.Nothing())
+        }
+    }
+
+    fun setDefaultStateForKitapShare() {
+        _state.update {
+            it.copy(kitapShareSource = BaseResourceEvent.Nothing())
+        }
+    }
+
+    fun kitapBegen(kitapId: Int) {
+        viewModelScope.launch {
+            kitapBegenUseCase(kitapId).collectLatest { response ->
+                _state.update {
+                    it.copy(
+                        kitapIslemSource = response
+                    )
+                }
+            }
+        }
+    }
+
+    fun kitapPaylas(kitapId: Int, kitapAd: String, yazarAd: String, kitapResim: String) {
+        viewModelScope.launch {
+            kitapShareUseCase(kitapId, yazarAd, kitapAd, kitapResim).collectLatest { response ->
+                _state.update {
+                    it.copy(
+                        kitapShareSource = response
+                    )
+                }
+            }
         }
     }
 }
