@@ -3,6 +3,7 @@ package com.mesutemre.kutuphanem_ui.card
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
@@ -75,7 +76,8 @@ fun KitapCardItem(
     kitapResim: String,
     onClickLike: (Int) -> Unit,
     onClickShare: (Int, String, String, String) -> Unit,
-    onClickArchive: (Int, String, String, String) -> Unit
+    onClickArchive: (Int, String, String, String) -> Unit,
+    onClickCardItem: (Int) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -86,7 +88,10 @@ fun KitapCardItem(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(170.sdp),
+                .height(170.sdp)
+                .clickable {
+                    onClickCardItem(kitapId)
+                },
             backgroundColor = MaterialTheme.colorPalette.white,
             shape = MaterialTheme.shapes.medium,
             elevation = 8.sdp

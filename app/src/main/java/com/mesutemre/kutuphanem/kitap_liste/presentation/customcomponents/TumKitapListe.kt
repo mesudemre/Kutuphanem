@@ -37,7 +37,8 @@ fun TumKitapListe(
     showSnackbar: (String, SnackbarDuration, Int) -> Unit,
     viewModel: KitapListViewModel = hiltViewModel(),
     onClickKitapLike: (Int) -> Unit,
-    onClickKitapShare: (Int, String, String, String) -> Unit
+    onClickKitapShare: (Int, String, String, String) -> Unit,
+    onClickCardItem: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -134,7 +135,9 @@ fun TumKitapListe(
                     },
                     onClickArchive = kitapArsiv,
                     onClickShare = kitapShare
-                )
+                ) {
+                    onClickCardItem(it)
+                }
                 Spacer(modifier = Modifier.padding(top = 12.sdp))
             }
             kitapServiceListeSource.apply {

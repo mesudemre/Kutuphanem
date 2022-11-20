@@ -19,6 +19,7 @@ import com.mesutemre.kutuphanem.kitap_liste.domain.model.SelectedListType
 import com.mesutemre.kutuphanem.kitap_liste.presentation.customcomponents.KitapArsivListe
 import com.mesutemre.kutuphanem.kitap_liste.presentation.customcomponents.KutuphanemListChipArea
 import com.mesutemre.kutuphanem.kitap_liste.presentation.customcomponents.TumKitapListe
+import com.mesutemre.kutuphanem.navigation.KutuphanemNavigationItem
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
 import com.mesutemre.kutuphanem_ui.extensions.isScrollingUp
@@ -68,7 +69,15 @@ fun KitapListeScreen(
                     onClickKitapShare = { kitapId, kitapAd, yazarAd, kitapResim ->
                         viewModel.kitapPaylas(kitapId, kitapAd, yazarAd, kitapResim)
                     }
-                )
+                ) { kitapId ->
+                    navController.navigate(
+                        KutuphanemNavigationItem.KitapDetayScreen.screenRoute.replace(
+                            "{kitapId}",
+                            kitapId.toString()
+                        )
+                            .replace("{isFromArsiv}", false.toString())
+                    )
+                }
             }
             SelectedListType.ARSIV.ordinal -> {
                 KitapArsivListe(

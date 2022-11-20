@@ -10,8 +10,8 @@ sealed class KutuphanemNavigationItem(
     val data: Any? = null,
     @DrawableRes val icon: Int? = null,
     @StringRes val title: Int? = null,
-    val showTopBar:Boolean = false,
-    @StringRes val pageTitle:Int? = null
+    val showTopBar: Boolean = false,
+    @StringRes val pageTitle: Int? = null
 ) {
     object LoginScreen : KutuphanemNavigationItem(screenRoute = "kutuphanem_login_screen")
 
@@ -52,19 +52,23 @@ sealed class KutuphanemNavigationItem(
         pageTitle = R.string.yayinEviLabel
     )
 
-    object ParameterKitapTurScreen: KutuphanemNavigationItem(
+    object ParameterKitapTurScreen : KutuphanemNavigationItem(
         screenRoute = "kutuphanem_parameter_kitaptur_screen",
         showTopBar = true,
         pageTitle = R.string.kitapTurLabel
     )
 
-    object ParameterEklemeScreen: KutuphanemNavigationItem(
+    object ParameterEklemeScreen : KutuphanemNavigationItem(
         screenRoute = "kutuphanem_parameter_ekleme",
         showTopBar = true,
         pageTitle = R.string.parameterAddLabel
     )
 
-    object DashboardSearchScreen: KutuphanemNavigationItem(
+    object DashboardSearchScreen : KutuphanemNavigationItem(
         screenRoute = "kutuphanem_dashboard_search_screen"
+    )
+
+    object KitapDetayScreen : KutuphanemNavigationItem(
+        screenRoute = "kutuphanem_kitap_detay?kitapId={kitapId}&isArsiv={isFromArsiv}"
     )
 }
