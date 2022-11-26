@@ -3,7 +3,7 @@ package com.mesutemre.kutuphanem.di
 import android.content.Context
 import androidx.room.Room
 import com.mesutemre.kutuphanem.database.KutuphanemDatabase
-import com.mesutemre.kutuphanem.database.MIGRATION_2TO2_1
+import com.mesutemre.kutuphanem.database.MIGRATION_2_3TO2_4
 import com.mesutemre.kutuphanem.util.KUTUPHANEM_DB_NAME
 import dagger.Module
 import dagger.Provides
@@ -22,13 +22,12 @@ class KutuphanemDBModule {
 
     @Singleton
     @Provides
-    fun provideKutuphanemDatabase
-                (@ApplicationContext context: Context) = Room.databaseBuilder(
+    fun provideKutuphanemDatabase(@ApplicationContext context: Context) = Room.databaseBuilder(
         context,
         KutuphanemDatabase::class.java,
         KUTUPHANEM_DB_NAME
     )
-        .addMigrations(MIGRATION_2TO2_1)
+        .addMigrations(MIGRATION_2_3TO2_4)
         .build();
 
 
@@ -42,7 +41,8 @@ class KutuphanemDBModule {
 
     @Singleton
     @Provides
-    fun provideKutuphanemGlobalExceptionHandlerDao(database: KutuphanemDatabase) = database.getGlobalExceptionDao();
+    fun provideKutuphanemGlobalExceptionHandlerDao(database: KutuphanemDatabase) =
+        database.getGlobalExceptionDao();
 
     @Singleton
     @Provides
@@ -58,9 +58,14 @@ class KutuphanemDBModule {
 
     @Singleton
     @Provides
-    fun providerKutuphanemSearchHistory(database: KutuphanemDatabase) = database.getDashBoardSearchHistoryDao()
+    fun providerKutuphanemSearchHistory(database: KutuphanemDatabase) =
+        database.getDashBoardSearchHistoryDao()
 
     @Singleton
     @Provides
     fun provideKitapListeDao(database: KutuphanemDatabase) = database.getKitapListeDao()
+
+    @Singleton
+    @Provides
+    fun provideKitapDetayDao(database: KutuphanemDatabase) = database.getKitapDetayDao()
 }

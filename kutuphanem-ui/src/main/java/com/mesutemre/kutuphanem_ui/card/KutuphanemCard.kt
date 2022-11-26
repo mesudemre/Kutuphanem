@@ -274,3 +274,25 @@ private fun KitapCardItemTransactionBox(
         )
     }
 }
+
+@Composable
+fun KitapDetayInfoCard(
+    label: String,
+    value: String
+) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = label,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.smallUbuntuBlackBold
+        )
+        Text(
+            text = value,
+            modifier = Modifier.padding(top = 4.sdp),
+            maxLines = 3,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.smallUbuntuTransparent.copy(lineHeight = 12.ssp)
+        )
+    }
+}

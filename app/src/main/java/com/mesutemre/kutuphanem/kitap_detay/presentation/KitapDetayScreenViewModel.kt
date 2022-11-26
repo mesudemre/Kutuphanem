@@ -1,17 +1,21 @@
 package com.mesutemre.kutuphanem.kitap_detay.presentation
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
+import com.mesutemre.kutuphanem.kitap_detay.domain.use_case.GetKitapDetayByIdUseCase
 import com.mesutemre.kutuphanem_base.viewmodel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class KitapDetayScreenViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val getKitapDetayByIdUseCase: GetKitapDetayByIdUseCase
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow(KitapDetayScreenState())
@@ -27,7 +31,21 @@ class KitapDetayScreenViewModel @Inject constructor(
                 isFromArsiv = this.isFromArsiv ?: false
             )
         }
-        Log.d("Kitap Id : ", "" + _state.value.kitapId)
-        Log.d("isFromArsiv : ", "" + _state.value.isFromArsiv)
+        getKitapDetayInfo()
+    }
+
+    private fun getKitapDetayInfo() {
+        viewModelScope.launch {
+            getKitapDetayByIdUseCase(
+                _state.value.kitapId,
+                _state.value.isFromArsiv
+            ).collectLatest { response ->
+                _state.update {
+                    it.copy(
+                        kitapDetayItemResource = response
+                    )
+                }
+            }
+        }
     }
 }

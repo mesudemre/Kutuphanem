@@ -13,7 +13,7 @@ import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.mesutemre.kutuphanem.ui.theme.sdp
 import com.mesutemre.kutuphanem_ui.theme.colorPalette
-import com.mesutemre.kutuphanem_ui.theme.smallUbuntuWhiteBold
+import com.mesutemre.kutuphanem_ui.theme.mediumUbuntuWhiteBold
 import com.mesutemre.kutuphanem_ui.theme.ssp
 
 @Composable
@@ -46,11 +46,11 @@ fun KitapDetayHeaderContent(
             })
         Text(
             text = kitapAd,
-            modifier = Modifier.padding(start = 16.sdp),
-            maxLines = 2,
+            modifier = Modifier.padding(start = 8.sdp),
+            maxLines = 3,
             overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.smallUbuntuWhiteBold.copy(
-                lineHeight = 14.ssp
+            style = MaterialTheme.typography.mediumUbuntuWhiteBold.copy(
+                lineHeight = 18.ssp
             )
         )
     }

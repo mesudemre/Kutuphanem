@@ -5,6 +5,7 @@ import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -35,7 +36,11 @@ class KitapArsivleUseCase @Inject constructor(
                         kitapAd = kitapAd,
                         yazarAd = yazarAd,
                         kitapAciklama = kitapAciklama,
-                        kitapResimPath = it.data?.path
+                        kitapResimPath = it.data?.path,
+                        kitapPuan = 0f,
+                        yayinEviId = 66,
+                        kitapTurId = 2,
+                        alinmaTar = Date()
                     )
                 ).collectLatest {
                     send(

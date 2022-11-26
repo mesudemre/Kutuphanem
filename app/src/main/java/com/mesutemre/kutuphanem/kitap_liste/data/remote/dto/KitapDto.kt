@@ -3,6 +3,7 @@ package com.mesutemre.kutuphanem.kitap_liste.data.remote.dto
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.mesutemre.kutuphanem.dashboard_search.domain.model.KitapSearchItem
+import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapDetayItem
 import com.mesutemre.kutuphanem.kitap_liste.domain.model.KitapListeItem
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.remote.dto.KitapTurDto
 import com.mesutemre.kutuphanem.parameter.yayinevi.data.remote.dto.YayinEviDto
@@ -89,5 +90,19 @@ fun KitapDto.convertKitapDtoToKitapListeItem(): KitapListeItem {
             false
         },
         kitapPuan = this.kitapPuan ?: 0f
+    )
+}
+
+fun KitapDto.convertKitapDtoToKitapDetayItem(): KitapDetayItem {
+    return KitapDetayItem(
+        kitapId = this.id ?: 0,
+        kitapAd = this.kitapAd ?: "",
+        yazarAd = this.yazarAd ?: "",
+        kitapAciklama = this.kitapAciklama ?: "",
+        kitapResim = this.kitapResim ?: "",
+        kitapPuan = this.kitapPuan ?: 0f,
+        yayinEviAd = this.yayinEvi?.aciklama,
+        kitapTurAd = this.kitapTur?.aciklama,
+        alinmaTar = this.alinmaTar
     )
 }

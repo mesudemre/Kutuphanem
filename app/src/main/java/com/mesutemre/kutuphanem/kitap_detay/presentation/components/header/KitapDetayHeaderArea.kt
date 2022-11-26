@@ -8,13 +8,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapDetayItem
 import com.mesutemre.kutuphanem.ui.theme.sdp
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import com.mesutemre.kutuphanem_ui.theme.colorPalette
 
 @Composable
 fun KitapDetayHeaderArea(
-    kitapResim: String,
-    kitapAd: String
+    kitapDetayItemResource: BaseResourceEvent<KitapDetayItem>
 ) {
     Box(
         modifier = Modifier
@@ -33,14 +34,27 @@ fun KitapDetayHeaderArea(
                 )
             )
     ) {
-        KitapDetayHeaderBackground(kitapResim = kitapResim, kitapAd = kitapAd)
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 32.sdp, start = 16.sdp, end = 16.sdp)
-        ) {
-            KitapDetayHeaderBar()
-            KitapDetayHeaderContent(kitapResim = kitapResim, kitapAd = kitapAd)
+        when (kitapDetayItemResource) {
+            is BaseResourceEvent.Loading -> {
+                KitapDetayHeaderLoading()
+            }
+            is BaseResourceEvent.Success -> {
+                KitapDetayHeaderBackground(
+                    kitapResim = kitapDetayItemResource.data!!.kitapResim,
+                    kitapAd = kitapDetayItemResource.data!!.kitapAd
+                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 32.sdp, start = 16.sdp, end = 16.sdp)
+                ) {
+                    KitapDetayHeaderBar()
+                    KitapDetayHeaderContent(
+                        kitapResim = kitapDetayItemResource.data!!.kitapResim,
+                        kitapAd = kitapDetayItemResource.data!!.kitapAd
+                    )
+                }
+            }
         }
     }
 }
