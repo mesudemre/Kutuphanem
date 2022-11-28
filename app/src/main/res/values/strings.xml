@@ -206,4 +206,6 @@
     <string name="kitap_liste_share_content">Merhaba! %1$s yazarına ait %2$s adlı kitabı paylaşıyorum...</string>
 
     <string name="floating_action_menu_barcode">Barkod ile Tara</string>
+    <string name="kitap_detay_kitap_bilgi_label">KİTAP BİLGİSİ</string>
+    <string name="kitap_detay_puan_label">Kitaba Verilen Puan</string>
 </resources>

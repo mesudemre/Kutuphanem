@@ -503,3 +503,7 @@ fun RandomComposeColor(): Color {
         MaterialTheme.colorPalette.morningBlue
     ).random()
 }
+
+fun Date.convertDate2String(pattern: String = "dd.MM.yyyy"): String {
+    return SimpleDateFormat(pattern).format(this);
+}

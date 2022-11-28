@@ -158,7 +158,7 @@ fun KutuphanemNavigation(
                     animationSpec = tween(200)
                 )
             }) {
-            KitapDetayScreen(showSnackbar = showSnackbar)
+            KitapDetayScreen(showSnackbar = showSnackbar, navController = navController)
         }
     }
 }

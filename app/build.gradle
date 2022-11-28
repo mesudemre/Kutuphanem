@@ -121,5 +121,6 @@ dependencies {
     }
     implementation "androidx.paging:paging-compose:$pagingCompose"
     implementation "androidx.datastore:datastore-preferences:$dataStoreVersion"
+    implementation "com.github.a914-gowtham:compose-ratingbar:$composeRatingBar"
 
 }

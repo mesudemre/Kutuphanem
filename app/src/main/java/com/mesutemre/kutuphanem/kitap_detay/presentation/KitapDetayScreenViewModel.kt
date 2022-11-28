@@ -2,6 +2,7 @@ package com.mesutemre.kutuphanem.kitap_detay.presentation
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapDetayBottomSheetState
 import com.mesutemre.kutuphanem.kitap_detay.domain.use_case.GetKitapDetayByIdUseCase
 import com.mesutemre.kutuphanem_base.viewmodel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -46,6 +47,23 @@ class KitapDetayScreenViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    fun onExpandKitapDetayBottomSheet(kitapDetayAciklama:String) {
+        _state.update {
+            it.copy(
+                kitapDetayAciklama = kitapDetayAciklama,
+                kitapDetayBottomSheetState = KitapDetayBottomSheetState.KITAP_DETAY_ACIKLAMA
+            )
+        }
+    }
+
+    fun onBottomSheetCollapsed() {
+        _state.update {
+            it.copy(
+                kitapDetayBottomSheetState = null
+            )
         }
     }
 }
