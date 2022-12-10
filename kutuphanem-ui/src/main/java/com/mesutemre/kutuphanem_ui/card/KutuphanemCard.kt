@@ -1,6 +1,7 @@
 package com.mesutemre.kutuphanem_ui.card
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -280,19 +281,26 @@ fun KitapDetayInfoCard(
     label: String,
     value: String
 ) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Text(
-            text = label,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.smallUbuntuBlackBold
-        )
-        Text(
-            text = value,
-            modifier = Modifier.padding(top = 4.sdp),
-            maxLines = 3,
-            overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.smallUbuntuTransparent.copy(lineHeight = 12.ssp)
-        )
+    Card(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 4.sdp),
+        shape = MaterialTheme.shapes.small,
+        backgroundColor = MaterialTheme.colorPalette.white,
+        elevation = 4.sdp
+    ) {
+        Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.sdp, vertical = 8.sdp)) {
+            Text(
+                text = label,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.smallUbuntuBlackBold
+            )
+            Text(
+                text = value,
+                modifier = Modifier.padding(top = 4.sdp),
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.smallUbuntuTransparent.copy(lineHeight = 12.ssp)
+            )
+        }
     }
 }

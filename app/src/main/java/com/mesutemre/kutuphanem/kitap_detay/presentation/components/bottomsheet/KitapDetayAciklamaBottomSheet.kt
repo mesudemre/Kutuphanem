@@ -9,6 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
 import com.mesutemre.kutuphanem_ui.theme.normalUbuntuTransparent
@@ -26,6 +27,7 @@ fun KitapDetayAciklamaBottomSheet(kitapAciklama: String) {
             modifier = Modifier
                 .padding(vertical = 4.sdp)
                 .width(24.sdp)
+                .clip(shape = MaterialTheme.shapes.small)
                 .align(Alignment.CenterHorizontally),
             thickness = 3.sdp,
             color = MaterialTheme.colorPalette.otherGrayLight

@@ -3,6 +3,8 @@ package com.mesutemre.kutuphanem.kitap_liste.data.remote.dto
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.mesutemre.kutuphanem.dashboard_search.domain.model.KitapSearchItem
+import com.mesutemre.kutuphanem.kitap_detay.data.remote.dto.KitapYorumDto
+import com.mesutemre.kutuphanem.kitap_detay.data.remote.dto.convertKitapYorumToKitapDetayIlkYorum
 import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapDetayItem
 import com.mesutemre.kutuphanem.kitap_liste.domain.model.KitapListeItem
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.remote.dto.KitapTurDto
@@ -65,8 +67,15 @@ data class KitapDto(
 
     @SerializedName("begenilmis")
     @Expose
-    val begenilmis: Int? = null
+    val begenilmis: Int? = null,
 
+    @SerializedName("yorumSayisi")
+    @Expose
+    val yorumSayisi: Int? = null,
+
+    @SerializedName("ilkYorum")
+    @Expose
+    val ilkYorum: KitapYorumDto? = null
 )
 
 fun KitapDto.convertKitapDtoToKitapSearchItem(): KitapSearchItem {
@@ -89,7 +98,10 @@ fun KitapDto.convertKitapDtoToKitapListeItem(): KitapListeItem {
         } ?: kotlin.run {
             false
         },
-        kitapPuan = this.kitapPuan ?: 0f
+        kitapPuan = this.kitapPuan ?: 0f,
+        yayinEviAd = this.yayinEvi?.aciklama ?: "",
+        kitapTurAd = this.kitapTur?.aciklama ?: "",
+        alinmaTar = this.alinmaTar ?: Date()
     )
 }
 
@@ -103,6 +115,8 @@ fun KitapDto.convertKitapDtoToKitapDetayItem(): KitapDetayItem {
         kitapPuan = this.kitapPuan ?: 0f,
         yayinEviAd = this.yayinEvi?.aciklama,
         kitapTurAd = this.kitapTur?.aciklama,
-        alinmaTar = this.alinmaTar
+        alinmaTar = this.alinmaTar,
+        yorumSayisi = this.yorumSayisi,
+        kitapIlkYorum = this.ilkYorum?.convertKitapYorumToKitapDetayIlkYorum()
     )
 }

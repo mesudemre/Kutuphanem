@@ -27,6 +27,7 @@ import com.mesutemre.kutuphanem.util.customcomponents.progressbar.KutuphanemLoad
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import com.mesutemre.kutuphanem_ui.card.KitapCardItem
 import com.mesutemre.kutuphanem_ui.theme.sdp
+import java.util.*
 
 @Composable
 fun TumKitapListe(
@@ -116,7 +117,11 @@ fun TumKitapListe(
                                 kitapAd = kitapModel?.kitapAd ?: "",
                                 yazarAd = kitapModel?.yazarAd ?: "",
                                 kitapAciklama = kitapModel?.kitapAciklama ?: "",
-                                kitapResim = kitapModel?.kitapResim ?: ""
+                                kitapResim = kitapModel?.kitapResim ?: "",
+                                kitapTurAd = kitapModel?.kitapTurAd ?: "",
+                                yayinEviAd = kitapModel?.yayinEviAd ?: "",
+                                kitapPuan = kitapModel?.kitapPuan ?: 0f,
+                                alinmaTar = kitapModel?.alinmaTar ?: Date()
                             )
                         )
                     }

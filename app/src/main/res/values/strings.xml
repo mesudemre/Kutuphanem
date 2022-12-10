@@ -208,4 +208,6 @@
     <string name="floating_action_menu_barcode">Barkod ile Tara</string>
     <string name="kitap_detay_kitap_bilgi_label">KİTAP BİLGİSİ</string>
     <string name="kitap_detay_puan_label">Kitaba Verilen Puan</string>
+    <string name="kitap_detay_kitap_puanYorum_bilgi_label">PUAN VE YORUMLAR</string>
+    <string name="kitap_detay_ilkYorumTitle">Yorumlar</string>
 </resources>

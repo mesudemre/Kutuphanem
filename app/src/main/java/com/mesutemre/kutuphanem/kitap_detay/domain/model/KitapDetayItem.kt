@@ -11,5 +11,7 @@ data class KitapDetayItem(
     val kitapPuan: Float,
     val kitapTurAd: String? = null,
     val yayinEviAd: String? = null,
-    val alinmaTar: Date? = null
+    val alinmaTar: Date? = null,
+    val yorumSayisi: Int? = null,
+    val kitapIlkYorum: KitapDetayIlkYorumModel? = null
 )

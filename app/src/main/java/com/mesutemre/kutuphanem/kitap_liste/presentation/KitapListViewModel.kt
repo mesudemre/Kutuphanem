@@ -67,7 +67,11 @@ class KitapListViewModel @Inject constructor(
                 kitapAd = kitapArsivItem.kitapAd,
                 yazarAd = kitapArsivItem.yazarAd,
                 kitapAciklama = kitapArsivItem.kitapAciklama,
-                kitapImageUrl = kitapArsivItem.kitapResim
+                kitapImageUrl = kitapArsivItem.kitapResim,
+                kitapTur = kitapArsivItem.kitapTurAd,
+                yayinEvi = kitapArsivItem.yayinEviAd,
+                alinmaTar = kitapArsivItem.alinmaTar,
+                kitapPuan = kitapArsivItem.kitapPuan
             ).collectLatest { response ->
                 _state.update {
                     it.copy(

@@ -21,7 +21,11 @@ class KitapArsivleUseCase @Inject constructor(
         kitapAd: String,
         yazarAd: String,
         kitapAciklama: String,
-        kitapImageUrl: String
+        kitapImageUrl: String,
+        kitapTur:String,
+        yayinEvi:String,
+        alinmaTar:Date,
+        kitapPuan:Float
     ) = channelFlow<BaseResourceEvent<ResponseStatusModel?>> {
         send(BaseResourceEvent.Loading())
         kitapResimArsivleUseCase(
@@ -37,10 +41,10 @@ class KitapArsivleUseCase @Inject constructor(
                         yazarAd = yazarAd,
                         kitapAciklama = kitapAciklama,
                         kitapResimPath = it.data?.path,
-                        kitapPuan = 0f,
-                        yayinEviId = 66,
-                        kitapTurId = 2,
-                        alinmaTar = Date()
+                        kitapPuan = kitapPuan,
+                        alinmaTar = alinmaTar,
+                        kitapTurAd = kitapTur,
+                        yayinEviAd = yayinEvi
                     )
                 ).collectLatest {
                     send(

@@ -60,11 +60,12 @@ fun KitapDetayScreen(
         sheetContentColor = MaterialTheme.colorPalette.loginBackColor,
         sheetPeekHeight = (-50).sdp
     ) {
+        val scrollState = rememberScrollState()
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = MaterialTheme.colorPalette.loginBackColor)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
         ) {
             KitapDetayHeaderArea(
                 kitapDetayItemResource = state.value.kitapDetayItemResource
