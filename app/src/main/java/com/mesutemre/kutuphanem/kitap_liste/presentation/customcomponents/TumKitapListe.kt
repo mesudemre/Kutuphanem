@@ -3,6 +3,7 @@ package com.mesutemre.kutuphanem.kitap_liste.presentation.customcomponents
 import android.content.Intent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,16 +27,19 @@ import com.mesutemre.kutuphanem.util.customcomponents.progressbar.KutuphanemLoad
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import com.mesutemre.kutuphanem_ui.card.KitapCardItem
 import com.mesutemre.kutuphanem_ui.theme.sdp
+import java.util.*
 
 @Composable
 fun TumKitapListe(
+    listState: LazyListState,
     kitapServiceListeSource: LazyPagingItems<KitapListeItem>,
     kitapIslemSource: BaseResourceEvent<ResponseStatusModel?>,
     kitapShareSource: BaseResourceEvent<KitapShareModel>,
     showSnackbar: (String, SnackbarDuration, Int) -> Unit,
     viewModel: KitapListViewModel = hiltViewModel(),
     onClickKitapLike: (Int) -> Unit,
-    onClickKitapShare: (Int, String, String, String) -> Unit
+    onClickKitapShare: (Int, String, String, String) -> Unit,
+    onClickCardItem: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -103,7 +107,7 @@ fun TumKitapListe(
         }
 
 
-        LazyColumn(modifier = Modifier.padding(bottom = 20.sdp)) {
+        LazyColumn(modifier = Modifier.padding(bottom = 20.sdp), state = listState) {
             items(kitapServiceListeSource) { kitapModel ->
                 val kitapArsiv: (Int, String, String, String) -> Unit =
                     { kitapId, kitapAd, yazarAd, aciklama ->
@@ -113,7 +117,11 @@ fun TumKitapListe(
                                 kitapAd = kitapModel?.kitapAd ?: "",
                                 yazarAd = kitapModel?.yazarAd ?: "",
                                 kitapAciklama = kitapModel?.kitapAciklama ?: "",
-                                kitapResim = kitapModel?.kitapResim ?: ""
+                                kitapResim = kitapModel?.kitapResim ?: "",
+                                kitapTurAd = kitapModel?.kitapTurAd ?: "",
+                                yayinEviAd = kitapModel?.yayinEviAd ?: "",
+                                kitapPuan = kitapModel?.kitapPuan ?: 0f,
+                                alinmaTar = kitapModel?.alinmaTar ?: Date()
                             )
                         )
                     }
@@ -132,7 +140,9 @@ fun TumKitapListe(
                     },
                     onClickArchive = kitapArsiv,
                     onClickShare = kitapShare
-                )
+                ) {
+                    onClickCardItem(it)
+                }
                 Spacer(modifier = Modifier.padding(top = 12.sdp))
             }
             kitapServiceListeSource.apply {

@@ -9,6 +9,9 @@ import com.mesutemre.kutuphanem.dashboard.domain.repository.DashBoardRepositoryI
 import com.mesutemre.kutuphanem.dashboard_search.data.dao.IDashBoardSearchHistoryDao
 import com.mesutemre.kutuphanem.dashboard_search.data.repository.SearchDashboardRepository
 import com.mesutemre.kutuphanem.dashboard_search.domain.repository.SearchDashBoardRepositoryImpl
+import com.mesutemre.kutuphanem.kitap_detay.data.dao.IKitapDetayDao
+import com.mesutemre.kutuphanem.kitap_detay.data.repository.KitapDetayRepository
+import com.mesutemre.kutuphanem.kitap_detay.domain.repository.KitapDetayRepositoryImpl
 import com.mesutemre.kutuphanem.kitap_liste.data.dao.IKitapDao
 import com.mesutemre.kutuphanem.kitap_liste.data.remote.IKitapApi
 import com.mesutemre.kutuphanem.kitap_liste.data.repository.KitapListeRepository
@@ -96,5 +99,14 @@ class KutuphanemRepositoryModule {
     @Provides
     fun provideKitapListeRepository(api: IKitapApi, dao: IKitapDao): KitapListeRepository {
         return KitapListeRepositoryImpl(api, dao)
+    }
+
+    @Singleton
+    @Provides
+    fun provideKitapDetayRepository(
+        api: IKitapApi,
+        dao: IKitapDetayDao
+    ): KitapDetayRepository {
+        return KitapDetayRepositoryImpl(api, dao)
     }
 }

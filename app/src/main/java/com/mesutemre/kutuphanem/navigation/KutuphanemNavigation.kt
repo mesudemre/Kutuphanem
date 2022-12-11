@@ -6,14 +6,13 @@ import androidx.compose.animation.core.tween
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.NavOptionsBuilder
+import androidx.navigation.*
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.mesutemre.kutuphanem.dashboard.DashboardScreen
 import com.mesutemre.kutuphanem.dashboard_search.presentation.DashboardSearchScreen
+import com.mesutemre.kutuphanem.kitap_detay.presentation.KitapDetayScreen
 import com.mesutemre.kutuphanem.kitap_liste.presentation.KitapListeScreen
 import com.mesutemre.kutuphanem.login.presentation.LoginScreen
 import com.mesutemre.kutuphanem.parameter.ParametreScreen
@@ -49,7 +48,7 @@ fun KutuphanemNavigation(
             },
             exitTransition = {
                 slideOutOfContainer(
-                    AnimatedContentScope.SlideDirection.Left,
+                    AnimatedContentScope.SlideDirection.Right,
                     animationSpec = tween(200)
                 )
             }) {
@@ -65,7 +64,7 @@ fun KutuphanemNavigation(
             },
             exitTransition = {
                 slideOutOfContainer(
-                    AnimatedContentScope.SlideDirection.Left,
+                    AnimatedContentScope.SlideDirection.Right,
                     animationSpec = tween(200)
                 )
             }) {
@@ -81,7 +80,7 @@ fun KutuphanemNavigation(
             },
             exitTransition = {
                 slideOutOfContainer(
-                    AnimatedContentScope.SlideDirection.Left,
+                    AnimatedContentScope.SlideDirection.Right,
                     animationSpec = tween(200)
                 )
             }) {
@@ -97,7 +96,7 @@ fun KutuphanemNavigation(
             },
             exitTransition = {
                 slideOutOfContainer(
-                    AnimatedContentScope.SlideDirection.Left,
+                    AnimatedContentScope.SlideDirection.Right,
                     animationSpec = tween(200)
                 )
             }) {
@@ -129,11 +128,37 @@ fun KutuphanemNavigation(
             },
             exitTransition = {
                 slideOutOfContainer(
-                    AnimatedContentScope.SlideDirection.Left,
+                    AnimatedContentScope.SlideDirection.Right,
                     animationSpec = tween(200)
                 )
             }) {
-            KitapListeScreen(navController, showSnackbar = showSnackbar)
+            KitapListeScreen(navController = navController, showSnackbar = showSnackbar)
+        }
+
+        composable(route = KutuphanemNavigationItem.KitapDetayScreen.screenRoute,
+            arguments = listOf(
+                navArgument("kitapId") {
+                    defaultValue = 0
+                    type = NavType.IntType
+                },
+                navArgument("isArsiv") {
+                    defaultValue = false
+                    type = NavType.BoolType
+                }
+            ),
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(200)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Right,
+                    animationSpec = tween(200)
+                )
+            }) {
+            KitapDetayScreen(showSnackbar = showSnackbar, navController = navController)
         }
     }
 }

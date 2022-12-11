@@ -1,8 +1,10 @@
 package com.mesutemre.kutuphanem_ui.card
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
@@ -75,7 +77,8 @@ fun KitapCardItem(
     kitapResim: String,
     onClickLike: (Int) -> Unit,
     onClickShare: (Int, String, String, String) -> Unit,
-    onClickArchive: (Int, String, String, String) -> Unit
+    onClickArchive: (Int, String, String, String) -> Unit,
+    onClickCardItem: (Int) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -86,7 +89,10 @@ fun KitapCardItem(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(170.sdp),
+                .height(170.sdp)
+                .clickable {
+                    onClickCardItem(kitapId)
+                },
             backgroundColor = MaterialTheme.colorPalette.white,
             shape = MaterialTheme.shapes.medium,
             elevation = 8.sdp
@@ -267,5 +273,34 @@ private fun KitapCardItemTransactionBox(
             contentDescription = title,
             tint = iconTintColor
         )
+    }
+}
+
+@Composable
+fun KitapDetayInfoCard(
+    label: String,
+    value: String
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 4.sdp),
+        shape = MaterialTheme.shapes.small,
+        backgroundColor = MaterialTheme.colorPalette.white,
+        elevation = 4.sdp
+    ) {
+        Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.sdp, vertical = 8.sdp)) {
+            Text(
+                text = label,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.smallUbuntuBlackBold
+            )
+            Text(
+                text = value,
+                modifier = Modifier.padding(top = 4.sdp),
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.smallUbuntuTransparent.copy(lineHeight = 12.ssp)
+            )
+        }
     }
 }

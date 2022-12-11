@@ -12,6 +12,10 @@ import okhttp3.ResponseBody
 import retrofit2.Response
 import javax.inject.Inject
 
+/**
+ * @Author: mesutemre.celenk
+ * @Date: 26.11.2022
+ */
 class KitapListeRepositoryImpl @Inject constructor(
     private val api: IKitapApi,
     private val dao: IKitapDao

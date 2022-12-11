@@ -15,5 +15,5 @@ interface IKitapDao {
     suspend fun getKitapArsivListe(): List<KitapEntity>
 
     @Query("DELETE FROM KitapEntity WHERE id=:kitapId")
-    suspend fun kitapSil(kitapId:Int)
+    suspend fun kitapSil(kitapId: Int)
 }
