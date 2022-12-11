@@ -28,12 +28,12 @@ import com.mesutemre.kutuphanem_ui.theme.*
 @Composable
 fun KitapDetayInfoBodyArea(
     kitapDetayItemResource: BaseResourceEvent<KitapDetayItem>,
-    changeBottomSheetState: (String) -> Unit
+    changeBottomSheetState: (String) -> Unit,
+    onClickYorumArea:()->Unit
 ) {
 
     when (kitapDetayItemResource) {
         is BaseResourceEvent.Loading -> {
-
         }
         is BaseResourceEvent.Success -> {
             val kitapDetayData = kitapDetayItemResource.data
@@ -68,7 +68,7 @@ fun KitapDetayInfoBodyArea(
                     label = stringResource(id = R.string.aciklamaHintText),
                     aciklama = kitapDetayData?.kitapAciklama ?: ""
                 ) {
-                    changeBottomSheetState.invoke(kitapDetayData?.kitapAciklama ?: "")
+                    changeBottomSheetState(kitapDetayData?.kitapAciklama ?: "")
                 }
                 Text(
                     text = stringResource(id = R.string.kitap_detay_kitap_puanYorum_bilgi_label),
@@ -79,7 +79,8 @@ fun KitapDetayInfoBodyArea(
                 KitapDetayRatingArea(kitapPuan = kitapDetayData?.kitapPuan ?: 0f)
                 KitapYorumBodyArea(
                     yorumSayisi = kitapDetayData?.yorumSayisi ?: 0,
-                    kitapDetayIlkYorumModel = kitapDetayData?.kitapIlkYorum
+                    kitapDetayIlkYorumModel = kitapDetayData?.kitapIlkYorum,
+                    onClickYorumArea = onClickYorumArea
                 )
             }
         }

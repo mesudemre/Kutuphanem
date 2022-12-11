@@ -210,4 +210,5 @@
     <string name="kitap_detay_puan_label">Kitaba Verilen Puan</string>
     <string name="kitap_detay_kitap_puanYorum_bilgi_label">PUAN VE YORUMLAR</string>
     <string name="kitap_detay_ilkYorumTitle">Yorumlar</string>
+    <string name="kitap_detay_noComment">Kitap hakkında hiçbir yorum yapılmamış. Dilerseniz ilk yorum yapan siz olun.</string>
 </resources>

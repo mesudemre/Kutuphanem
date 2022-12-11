@@ -330,7 +330,7 @@ class MainActivity : ComponentActivity() {
         isVisible: Boolean,
         onClick: () -> Unit
     ) {
-        val duration: Int = 1000
+        val duration: Int = 500
         val floatTweenSpec: TweenSpec<Float> = tween(durationMillis = duration)
         val colorTweenSpec: TweenSpec<Color> = tween(durationMillis = duration)
         val animatedIconFGColor by

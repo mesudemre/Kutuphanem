@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextOverflow
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
@@ -47,6 +48,8 @@ fun KitapIlkYorumItem(
                 Text(
                     modifier = Modifier.padding(top = 4.sdp),
                     text = kitapDetayIlkYorumModel.yorumAciklama,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.smallUbuntuBlack.copy(
                         lineHeight = 14.ssp
                     )

@@ -45,6 +45,31 @@ fun KitapDetayScreen(
         }
     }
 
+    val onClickKitapAciklama = remember<(String)->Unit> {
+        { aciklama->
+            coroutineScope.launch {
+                viewModel.onExpandKitapDetayBottomSheet(aciklama)
+                bottomSheetScaffoldState.bottomSheetState.animateTo(
+                    BottomSheetValue.Expanded,
+                    tween(500)
+                )
+            }
+        }
+    }
+    val onClickYorumArea = remember<()->Unit> {
+        {
+            coroutineScope.launch {
+                viewModel.onExpandYorumBottomSheet()
+                bottomSheetScaffoldState.bottomSheetState.animateTo(
+                    BottomSheetValue.Expanded,
+                    tween(500)
+                )
+            }.invokeOnCompletion {
+
+            }
+        }
+    }
+
     BottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
         sheetContent = {
@@ -72,17 +97,18 @@ fun KitapDetayScreen(
             )
             Spacer(modifier = Modifier.height(12.sdp))
             KitapDetayInfoBodyArea(
-                kitapDetayItemResource = state.value.kitapDetayItemResource
-            ) { aciklama ->
-                coroutineScope.launch {
-                    viewModel.onExpandKitapDetayBottomSheet(aciklama)
-                    bottomSheetScaffoldState.bottomSheetState.animateTo(
-                        BottomSheetValue.Expanded,
-                        tween(500)
-                    )
-                }
-            }
-
+                kitapDetayItemResource = state.value.kitapDetayItemResource,
+                changeBottomSheetState = {
+                    coroutineScope.launch {
+                        viewModel.onExpandKitapDetayBottomSheet(it)
+                        bottomSheetScaffoldState.bottomSheetState.animateTo(
+                            BottomSheetValue.Expanded,
+                            tween(500)
+                        )
+                    }
+                },
+                onClickYorumArea = onClickYorumArea
+            )
         }
     }
 }

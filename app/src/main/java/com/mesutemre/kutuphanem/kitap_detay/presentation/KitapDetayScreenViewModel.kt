@@ -59,10 +59,10 @@ class KitapDetayScreenViewModel @Inject constructor(
         }
     }
 
-    fun onBottomSheetCollapsed() {
+    fun onExpandYorumBottomSheet() {
         _state.update {
             it.copy(
-                kitapDetayBottomSheetState = null
+                kitapDetayBottomSheetState = KitapDetayBottomSheetState.YORUM
             )
         }
     }

@@ -1,5 +1,6 @@
 package com.mesutemre.kutuphanem.kitap_detay.presentation.components.body
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,7 +23,8 @@ import com.mesutemre.kutuphanem_ui.theme.smallUbuntuTransparent
 @Composable
 fun KitapYorumBodyArea(
     yorumSayisi: Int,
-    kitapDetayIlkYorumModel: KitapDetayIlkYorumModel? = null
+    kitapDetayIlkYorumModel: KitapDetayIlkYorumModel? = null,
+    onClickYorumArea: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -32,32 +34,35 @@ fun KitapYorumBodyArea(
         backgroundColor = MaterialTheme.colorPalette.white,
         elevation = 4.sdp
     ) {
-        kitapDetayIlkYorumModel?.let {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.sdp, vertical = 8.sdp)
-            ) {
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = stringResource(id = R.string.kitap_detay_ilkYorumTitle),
-                        style = MaterialTheme.typography.smallUbuntuBlackBold
-                    )
-                    Text(
-                        modifier = Modifier.padding(start = 8.sdp),
-                        text = "$yorumSayisi",
-                        style = MaterialTheme.typography.smallUbuntuTransparent
-                    )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.sdp, vertical = 8.sdp)
+                .clickable {
+                    onClickYorumArea()
                 }
-                KitapIlkYorumItem(kitapDetayIlkYorumModel = kitapDetayIlkYorumModel)
+        ) {
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    text = stringResource(id = R.string.kitap_detay_ilkYorumTitle),
+                    style = MaterialTheme.typography.smallUbuntuBlackBold
+                )
+                Text(
+                    modifier = Modifier.padding(start = 8.sdp),
+                    text = "$yorumSayisi",
+                    style = MaterialTheme.typography.smallUbuntuTransparent
+                )
             }
-        } ?: run {
-            Text(
-                modifier = Modifier.padding(horizontal = 8.sdp, vertical = 8.sdp),
-                text = stringResource(id = R.string.noComentKitapYet),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.smallUbuntuErrorBold
-            )
+            if (kitapDetayIlkYorumModel != null) {
+                KitapIlkYorumItem(kitapDetayIlkYorumModel = kitapDetayIlkYorumModel)
+            } else {
+                Text(
+                    modifier = Modifier.padding(horizontal = 8.sdp, vertical = 8.sdp),
+                    text = stringResource(id = R.string.kitap_detay_noComment),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.smallUbuntuErrorBold
+                )
+            }
         }
 
     }

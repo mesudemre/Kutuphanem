@@ -20,7 +20,7 @@ fun KitapDetayAciklamaBottomSheet(kitapAciklama: String) {
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.92f)
-            .padding(horizontal = 8.sdp)
+            .padding(horizontal = 16.sdp)
             .verticalScroll(rememberScrollState())
     ) {
         Divider(
