@@ -17,7 +17,10 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -58,8 +61,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainActivityViewModel by viewModels()
+    private lateinit var mainActivityState: State<MainActivityState>
 
-    @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycleScope.launchWhenStarted {
@@ -72,11 +75,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             KutuphanemTheme {
                 ProvideWindowInsets {
-                    var isVisible: Boolean by remember {
-                        mutableStateOf(false)
-                    }
                     val kutuphanemAppState: KutuphanemAppState = rememberKutuphanemAppState()
-                    val mainActivityState = viewModel.mainActivityState.collectAsState()
+                    mainActivityState = viewModel.mainActivityState.collectAsState()
                     installSplashScreen().apply {
                         this.setKeepOnScreenCondition(object : SplashScreen.KeepOnScreenCondition {
                             override fun shouldKeepOnScreen(): Boolean {
@@ -91,9 +91,8 @@ class MainActivity : ComponentActivity() {
                                     isBottomNavigation = true
                                 )
                             ) {
-                                KutuphanemNavigationBottomFloatingActionButton(isVisible) {
-                                    isVisible = !isVisible
-                                    viewModel.activateMenuAnimation(isVisible = isVisible)
+                                KutuphanemNavigationBottomFloatingActionButton(mainActivityState.value.animateMenuVisibility) {
+                                    viewModel.activateMenuAnimation()
                                 }
                             }
                         },
@@ -136,7 +135,6 @@ class MainActivity : ComponentActivity() {
                                                         type = type
                                                     )
                                                 })
-
                                             Box(
                                                 modifier = Modifier
                                                     .fillMaxWidth()
@@ -154,7 +152,7 @@ class MainActivity : ComponentActivity() {
                                                     ),
                                                 contentAlignment = Alignment.Center
                                             ) {
-                                                FloatingActionMenu(mainActivityState.value.menuItemAnim)
+                                                FloatingActionMenu(mainActivityState.value.animateMenuVisibility)
                                             }
 
                                         }
@@ -239,11 +237,12 @@ class MainActivity : ComponentActivity() {
     private fun FloatingActionMenuItem(
         modifier: Modifier, @DrawableRes iconId: Int, aciklama: String, onClick: () -> Unit
     ) {
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onClick()
-            }, verticalAlignment = Alignment.CenterVertically
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    onClick()
+                }, verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 painter = painterResource(
@@ -305,6 +304,7 @@ class MainActivity : ComponentActivity() {
                     unselectedContentColor = MaterialTheme.colorPalette.transparent,
                     alwaysShowLabel = true,
                     onClick = {
+                        viewModel.closeFastTransactionMenu()
                         navController.navigate(it.screenRoute) {
                             navController.graph.startDestinationRoute?.let { screen_route ->
                                 popUpTo(screen_route) {
@@ -323,7 +323,7 @@ class MainActivity : ComponentActivity() {
     private fun KutuphanemNavigationBottomFloatingActionButton(
         isVisible: Boolean, onClick: () -> Unit
     ) {
-        val duration: Int = 500
+        val duration: Int = 300
         val floatTweenSpec: TweenSpec<Float> = tween(durationMillis = duration)
         val colorTweenSpec: TweenSpec<Color> = tween(durationMillis = duration)
         val animatedIconFGColor by animateColorAsState(
@@ -376,6 +376,14 @@ class MainActivity : ComponentActivity() {
                     }
                     .padding(horizontal = 8.sdp),
                 style = MaterialTheme.typography.mediumUbuntuWhite)
+        }
+    }
+
+    override fun onBackPressed() {
+        if (mainActivityState.value.animateMenuVisibility) {
+            viewModel.closeFastTransactionMenu()
+        } else {
+            super.onBackPressed()
         }
     }
 }

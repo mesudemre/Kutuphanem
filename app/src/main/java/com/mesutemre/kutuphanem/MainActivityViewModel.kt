@@ -38,9 +38,15 @@ class MainActivityViewModel @Inject constructor(
         }
     }
 
-    fun activateMenuAnimation(isVisible: Boolean) {
+    fun activateMenuAnimation() {
         _mainActivityState.update {
-            it.copy(animateMenuVisibility = isVisible, menuItemAnim = isVisible)
+            it.copy(animateMenuVisibility = !it.animateMenuVisibility)
+        }
+    }
+
+    fun closeFastTransactionMenu() {
+        _mainActivityState.update {
+            it.copy(animateMenuVisibility = false)
         }
     }
 }

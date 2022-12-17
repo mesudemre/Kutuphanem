@@ -3,7 +3,6 @@ package com.mesutemre.kutuphanem.dashboard.domain.repository
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.mesutemre.kutuphanem.dashboard.data.dao.entity.IDashBoardDao
-import com.mesutemre.kutuphanem.dashboard.data.dao.entity.KitapTurIstatistikEntity
 import com.mesutemre.kutuphanem.dashboard.data.dao.entity.KitapYilIstatistikEntity
 import com.mesutemre.kutuphanem.dashboard.data.remote.IDashBoardApi
 import com.mesutemre.kutuphanem.dashboard.data.remote.dto.KitapTurIstatistikDto
@@ -27,18 +26,6 @@ class DashBoardRepositoryImpl @Inject constructor(
 
     override suspend fun getKitapTurIstatistikByAPI(): Response<List<KitapTurIstatistikDto>> {
         return service.getKitapTurIstatistikListe()
-    }
-
-    override suspend fun getKitapTurIstatistikByDAO(): List<KitapTurIstatistikEntity> {
-        return dao.getKitapTurIstatistikListe()
-    }
-
-    override suspend fun saveKitapTurIstatistikList(vararg kitapTur: KitapTurIstatistikEntity) {
-        dao.kitapTurIstatistikKaydet(*kitapTur)
-    }
-
-    override suspend fun deleteKitapTurIstatistikList() {
-        dao.deleteKitapTurIstatistikList()
     }
 
     override suspend fun getKitapYilIstatistikByAPI(): Response<List<KitapYilIstatistikDto>> {

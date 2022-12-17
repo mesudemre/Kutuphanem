@@ -7,15 +7,6 @@ import androidx.room.Query
 @Dao
 interface IDashBoardDao {
 
-    @Query("SELECT aciklama,adet FROM KitapTurIstatistikEntity")
-    suspend fun getKitapTurIstatistikListe(): List<KitapTurIstatistikEntity>
-
-    @Insert
-    suspend fun kitapTurIstatistikKaydet(vararg kitapTurIstatistik: KitapTurIstatistikEntity)
-
-    @Query("DELETE FROM KitapTurIstatistikEntity")
-    suspend fun deleteKitapTurIstatistikList()
-
     @Query("SELECT adet,yil from KitapYilIstatistikEntity")
     suspend fun getKitapYilIstatistikListe(): List<KitapYilIstatistikEntity>
 
