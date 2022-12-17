@@ -7,9 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.*
-import androidx.compose.animation.core.TweenSpec
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -26,10 +24,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.IntOffset
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -43,7 +39,10 @@ import com.mesutemre.kutuphanem.navigation.KutuphanemNavigation
 import com.mesutemre.kutuphanem.navigation.KutuphanemNavigationItem
 import com.mesutemre.kutuphanem.navigation.getCurrentNavigationItem
 import com.mesutemre.kutuphanem.navigation.isBottomNavigationTopBarVisible
-import com.mesutemre.kutuphanem.ui.theme.*
+import com.mesutemre.kutuphanem.ui.theme.KutuphanemTheme
+import com.mesutemre.kutuphanem.ui.theme.mediumUbuntuWhite
+import com.mesutemre.kutuphanem.ui.theme.smallAllegraLacivertBold
+import com.mesutemre.kutuphanem.ui.theme.smallAllegraTransparent
 import com.mesutemre.kutuphanem.util.KutuphanemAppState
 import com.mesutemre.kutuphanem.util.customcomponents.snackbar.KutuphanemSnackBarHost
 import com.mesutemre.kutuphanem.util.rememberKutuphanemAppState
@@ -60,6 +59,7 @@ class MainActivity : ComponentActivity() {
 
     private val viewModel: MainActivityViewModel by viewModels()
 
+    @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycleScope.launchWhenStarted {
@@ -84,8 +84,7 @@ class MainActivity : ComponentActivity() {
                             }
                         })
                     }
-                    Scaffold(
-                        modifier = Modifier.navigationBarsPadding(),
+                    Scaffold(modifier = Modifier.navigationBarsPadding(),
                         scaffoldState = kutuphanemAppState.scaffoldState,
                         floatingActionButton = {
                             if (kutuphanemAppState.navController.isBottomNavigationTopBarVisible(
@@ -94,6 +93,7 @@ class MainActivity : ComponentActivity() {
                             ) {
                                 KutuphanemNavigationBottomFloatingActionButton(isVisible) {
                                     isVisible = !isVisible
+                                    viewModel.activateMenuAnimation(isVisible = isVisible)
                                 }
                             }
                         },
@@ -127,8 +127,7 @@ class MainActivity : ComponentActivity() {
                                 mainActivityState.value.tokenResourceEvent.data?.let {
                                     if (it.isNotEmpty()) {
                                         Box(modifier = Modifier.fillMaxSize()) {
-                                            KutuphanemNavigation(
-                                                navController = kutuphanemAppState.navController,
+                                            KutuphanemNavigation(navController = kutuphanemAppState.navController,
                                                 startDestinition = KutuphanemNavigationItem.DashboardScreen,
                                                 showSnackbar = { message, duration, type ->
                                                     kutuphanemAppState.showSnackbar(
@@ -136,21 +135,31 @@ class MainActivity : ComponentActivity() {
                                                         duration = duration,
                                                         type = type
                                                     )
-                                                }
-                                            )
-                                            if (isVisible) {
-                                                Box(
-                                                    modifier = Modifier
-                                                        .align(Alignment.BottomCenter)
-                                                        .padding(64.sdp)
-                                                ) {
-                                                    FloatingActionMenu(isVisible)
-                                                }
+                                                })
+
+                                            Box(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .align(Alignment.BottomCenter)
+                                                    .padding(64.sdp)
+                                                    .height(if (mainActivityState.value.animateMenuVisibility) 80.sdp else 0.sdp)
+                                                    .border(
+                                                        1.sdp,
+                                                        color = MaterialTheme.colorPalette.secondaryGray,
+                                                        shape = MaterialTheme.shapes.medium
+                                                    )
+                                                    .clip(shape = MaterialTheme.shapes.medium)
+                                                    .background(
+                                                        MaterialTheme.colorPalette.white
+                                                    ),
+                                                contentAlignment = Alignment.Center
+                                            ) {
+                                                FloatingActionMenu(mainActivityState.value.menuItemAnim)
                                             }
+
                                         }
                                     } else {
-                                        KutuphanemNavigation(
-                                            navController = kutuphanemAppState.navController,
+                                        KutuphanemNavigation(navController = kutuphanemAppState.navController,
                                             startDestinition = KutuphanemNavigationItem.LoginScreen,
                                             showSnackbar = { message, duration, type ->
                                                 kutuphanemAppState.showSnackbar(
@@ -158,8 +167,7 @@ class MainActivity : ComponentActivity() {
                                                     duration = duration,
                                                     type = type
                                                 )
-                                            }
-                                        )
+                                            })
                                     }
                                 }
                             }
@@ -171,82 +179,71 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @OptIn(ExperimentalAnimationApi::class)
     @Composable
-    fun FloatingActionMenu(isVisible: Boolean) {
-        val density = LocalDensity.current
-        val intOffsetTweenSpec: TweenSpec<IntOffset> = tween(durationMillis = 1000)
-        AnimatedVisibility(
-            visible = isVisible,
-            enter = slideInVertically(
-                initialOffsetY = { with(density) { 80.sdp.roundToPx() } },
-                animationSpec = intOffsetTweenSpec,
-            ), exit = slideOutVertically(
-                targetOffsetY = { with(density) { 80.sdp.roundToPx() } },
-                animationSpec = intOffsetTweenSpec,
-            ),
+    fun FloatingActionMenu(menuItemAnim: Boolean) {
+        Column(
             modifier = Modifier
-                .height(80.sdp)
+                .fillMaxWidth()
+                .padding(start = 8.sdp),
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(80.sdp)
-                    .border(
-                        1.sdp,
-                        color = MaterialTheme.colorPalette.secondaryGray,
-                        shape = MaterialTheme.shapes.medium
-                    )
-                    .clip(shape = MaterialTheme.shapes.medium)
-                    .background(
-                        MaterialTheme.colorPalette.white
-                    )
+            AnimatedVisibility(
+                visible = menuItemAnim,
+                enter = slideInHorizontally(animationSpec = tween(durationMillis = 300)) { fullWidth ->
+                    -fullWidth / 3
+                } + fadeIn(
+                    animationSpec = tween(durationMillis = 300)
+                ),
+                exit = slideOutHorizontally(animationSpec = spring(stiffness = Spring.StiffnessHigh)) {
+                    300
+                } + fadeOut()
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 8.sdp)
-                        .align(Alignment.Center)
-                ) {
-                    FloatingActionMenuItem(
-                        modifier = Modifier
-                            .padding(start = 4.sdp, bottom = 6.sdp),
-                        iconId = R.drawable.ic_baseline_add_24,
-                        aciklama = stringResource(
-                            id = R.string.kitapEklemeTitle
-                        )
-                    ) {}
-                    Divider(
-                        modifier = Modifier.padding(start = 4.sdp, end = 4.sdp, bottom = 6.sdp),
-                        thickness = 1.sdp,
-                        color = MaterialTheme.colorPalette.otherGrayLight
+                FloatingActionMenuItem(
+                    modifier = Modifier.padding(start = 4.sdp),
+                    iconId = R.drawable.ic_baseline_add_24,
+                    aciklama = stringResource(
+                        id = R.string.kitapEklemeTitle
                     )
-                    FloatingActionMenuItem(
-                        modifier = Modifier
-                            .padding(start = 4.sdp),
-                        iconId = R.drawable.ic_barcode,
-                        aciklama = stringResource(
-                            id = R.string.floating_action_menu_barcode
-                        )
-                    ) {}
-                }
+                ) {}
+            }
+            Divider(
+                modifier = Modifier.padding(
+                    horizontal = 4.sdp,
+                    vertical = 8.sdp,
+                ),
+                thickness = 1.sdp,
+                color = MaterialTheme.colorPalette.otherGrayLight
+            )
+            AnimatedVisibility(
+                visible = menuItemAnim,
+                enter = slideInHorizontally(animationSpec = tween(durationMillis = 350)) { fullWidth ->
+                    -fullWidth / 3
+                } + fadeIn(
+                    animationSpec = tween(durationMillis = 350)
+                ),
+                exit = slideOutHorizontally(animationSpec = spring(stiffness = Spring.StiffnessHigh)) {
+                    350
+                } + fadeOut()
+            ) {
+                FloatingActionMenuItem(
+                    modifier = Modifier.padding(start = 4.sdp),
+                    iconId = R.drawable.ic_barcode,
+                    aciklama = stringResource(
+                        id = R.string.floating_action_menu_barcode
+                    )
+                ) {}
             }
         }
     }
 
     @Composable
     private fun FloatingActionMenuItem(
-        modifier: Modifier,
-        @DrawableRes iconId: Int,
-        aciklama: String,
-        onClick: () -> Unit
+        modifier: Modifier, @DrawableRes iconId: Int, aciklama: String, onClick: () -> Unit
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
-                    onClick()
-                }
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                onClick()
+            }, verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 painter = painterResource(
@@ -281,8 +278,7 @@ class MainActivity : ComponentActivity() {
         BottomAppBar(
             modifier = Modifier.graphicsLayer {
                 shape = RoundedCornerShape(
-                    topStart = 12.sdp,
-                    topEnd = 12.sdp
+                    topStart = 12.sdp, topEnd = 12.sdp
                 )
                 clip = true
             },
@@ -291,14 +287,12 @@ class MainActivity : ComponentActivity() {
             cutoutShape = RoundedCornerShape(30.sdp)
         ) {
             bottomNavItems.forEach {
-                BottomNavigationItem(
-                    selected = currentRoute == it.screenRoute,
+                BottomNavigationItem(selected = currentRoute == it.screenRoute,
                     icon = {
                         Icon(
                             painter = painterResource(
                                 id = it.icon ?: R.drawable.ic_baseline_home_24
-                            ),
-                            contentDescription = stringResource(id = R.string.anasayfaItem)
+                            ), contentDescription = stringResource(id = R.string.anasayfaItem)
                         )
                     },
                     label = {
@@ -327,28 +321,22 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun KutuphanemNavigationBottomFloatingActionButton(
-        isVisible: Boolean,
-        onClick: () -> Unit
+        isVisible: Boolean, onClick: () -> Unit
     ) {
         val duration: Int = 500
         val floatTweenSpec: TweenSpec<Float> = tween(durationMillis = duration)
         val colorTweenSpec: TweenSpec<Color> = tween(durationMillis = duration)
-        val animatedIconFGColor by
-        animateColorAsState(
+        val animatedIconFGColor by animateColorAsState(
             targetValue = if (isVisible) MaterialTheme.colorPalette.kirmizi else MaterialTheme.colorPalette.lacivert,
             animationSpec = colorTweenSpec
         )
-        val animatedRotateAngle by
-        animateFloatAsState(
-            targetValue = if (isVisible) 135.0f else 0.0f,
-            animationSpec = floatTweenSpec
+        val animatedRotateAngle by animateFloatAsState(
+            targetValue = if (isVisible) 135.0f else 0.0f, animationSpec = floatTweenSpec
         )
         FloatingActionButton(
-            shape = RoundedCornerShape(50.sdp),
-            onClick = {
+            shape = RoundedCornerShape(50.sdp), onClick = {
                 onClick()
-            },
-            backgroundColor = animatedIconFGColor
+            }, backgroundColor = animatedIconFGColor
         ) {
             Icon(
                 Icons.Filled.Add,
@@ -368,19 +356,15 @@ class MainActivity : ComponentActivity() {
                 .background(color = MaterialTheme.colorPalette.lacivert)
         ) {
             val (titleText, backIcon) = createRefs()
-            Icon(
-                Icons.Filled.ArrowBack,
-                modifier = Modifier
-                    .constrainAs(backIcon) {
-                        top.linkTo(parent.top, 40.sdp)
-                        bottom.linkTo(parent.bottom, 20.sdp)
-                    }
-                    .padding(horizontal = 8.sdp)
-                    .rippleClick {
-                        navController.popBackStack()
-                    },
-                contentDescription = pageTitle,
-                tint = MaterialTheme.colorPalette.white
+            Icon(Icons.Filled.ArrowBack, modifier = Modifier
+                .constrainAs(backIcon) {
+                    top.linkTo(parent.top, 40.sdp)
+                    bottom.linkTo(parent.bottom, 20.sdp)
+                }
+                .padding(horizontal = 8.sdp)
+                .rippleClick {
+                    navController.popBackStack()
+                }, contentDescription = pageTitle, tint = MaterialTheme.colorPalette.white
             )
             Text(text = pageTitle,
                 modifier = Modifier

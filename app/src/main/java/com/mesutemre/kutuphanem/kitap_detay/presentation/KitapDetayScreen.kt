@@ -45,8 +45,8 @@ fun KitapDetayScreen(
         }
     }
 
-    val onClickKitapAciklama = remember<(String)->Unit> {
-        { aciklama->
+    val onClickKitapAciklama = remember<(String) -> Unit> {
+        { aciklama ->
             coroutineScope.launch {
                 viewModel.onExpandKitapDetayBottomSheet(aciklama)
                 bottomSheetScaffoldState.bottomSheetState.animateTo(
@@ -56,7 +56,7 @@ fun KitapDetayScreen(
             }
         }
     }
-    val onClickYorumArea = remember<()->Unit> {
+    val onClickYorumArea = remember<() -> Unit> {
         {
             coroutineScope.launch {
                 viewModel.onExpandYorumBottomSheet()
