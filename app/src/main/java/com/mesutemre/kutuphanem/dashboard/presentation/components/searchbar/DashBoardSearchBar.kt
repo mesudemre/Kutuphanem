@@ -13,14 +13,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import com.airbnb.lottie.compose.*
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.ui.theme.*
+import com.mesutemre.kutuphanem_ui.extensions.rippleClick
 
 @Composable
 fun DashBoardSearchBar(
@@ -72,21 +71,14 @@ fun DashBoardSearchBar(
             contentAlignment = Alignment.Center
         ) {
             if (notificationCount > 0) {
-                val compositionResult: LottieCompositionResult = rememberLottieComposition(
-                    spec = LottieCompositionSpec.RawRes(
-                        R.raw.bell_ring
-                    )
-                )
-                val progress by animateLottieCompositionAsState(
-                    composition = compositionResult.value,
-                    iterations = 1,
-                    speed = 1.0f
-                )
-                LottieAnimation(composition = compositionResult.value, progress, modifier = Modifier
-                    .size(40.sdp)
-                    .clickable {
+                Icon(imageVector = Icons.Filled.Notifications,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorPalette.lacivert,
+                    modifier = Modifier
+                        .size(30.sdp)
+                        .rippleClick {
 
-                    })
+                        })
                 Row(
                     modifier = Modifier
                         .size(16.sdp)
@@ -110,7 +102,7 @@ fun DashBoardSearchBar(
                     tint = MaterialTheme.colorPalette.lacivert,
                     modifier = Modifier
                         .size(30.sdp)
-                        .clickable {
+                        .rippleClick {
 
                         })
             }

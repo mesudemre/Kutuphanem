@@ -17,16 +17,12 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -275,12 +271,6 @@ class MainActivity : ComponentActivity() {
             KutuphanemNavigationItem.ProfileScreen
         )
         BottomAppBar(
-            modifier = Modifier.graphicsLayer {
-                shape = RoundedCornerShape(
-                    topStart = 12.sdp, topEnd = 12.sdp
-                )
-                clip = true
-            },
             backgroundColor = MaterialTheme.colorPalette.white,
             contentColor = MaterialTheme.colorPalette.lacivert,
             cutoutShape = RoundedCornerShape(30.sdp)
@@ -323,9 +313,8 @@ class MainActivity : ComponentActivity() {
     private fun KutuphanemNavigationBottomFloatingActionButton(
         isVisible: Boolean, onClick: () -> Unit
     ) {
-        val duration: Int = 300
-        val floatTweenSpec: TweenSpec<Float> = tween(durationMillis = duration)
-        val colorTweenSpec: TweenSpec<Color> = tween(durationMillis = duration)
+        val floatTweenSpec: TweenSpec<Float> = tween(durationMillis = 300)
+        val colorTweenSpec: TweenSpec<Color> = tween(durationMillis = 300)
         val animatedIconFGColor by animateColorAsState(
             targetValue = if (isVisible) MaterialTheme.colorPalette.kirmizi else MaterialTheme.colorPalette.lacivert,
             animationSpec = colorTweenSpec
@@ -333,10 +322,9 @@ class MainActivity : ComponentActivity() {
         val animatedRotateAngle by animateFloatAsState(
             targetValue = if (isVisible) 135.0f else 0.0f, animationSpec = floatTweenSpec
         )
+
         FloatingActionButton(
-            shape = RoundedCornerShape(50.sdp), onClick = {
-                onClick()
-            }, backgroundColor = animatedIconFGColor
+            shape = RoundedCornerShape(50.sdp), onClick = onClick, backgroundColor = animatedIconFGColor
         ) {
             Icon(
                 Icons.Filled.Add,

@@ -30,12 +30,7 @@ fun KitapDetayHeaderContent(
         SubcomposeAsyncImage(model = kitapResim,
             modifier = Modifier
                 .width(100.sdp)
-                .height(150.sdp)
-                .border(
-                    1.sdp,
-                    MaterialTheme.colorPalette.fistikYesil,
-                    MaterialTheme.shapes.medium
-                ),
+                .height(150.sdp),
             contentDescription = kitapAd,
             loading = {
                 if (painter.state is AsyncImagePainter.State.Loading || painter.state is AsyncImagePainter.State.Error) {

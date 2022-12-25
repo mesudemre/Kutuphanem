@@ -173,8 +173,9 @@ private fun KitapInfo(kitapImage: String, kitapAd: String, yazarAd: String, acik
             modifier = Modifier
                 .width(100.sdp)
                 .height(150.sdp)
+                .clip(shape = MaterialTheme.shapes.medium)
                 .border(
-                    1.sdp,
+                    (1/2).sdp,
                     MaterialTheme.colorPalette.secondaryGray,
                     MaterialTheme.shapes.medium
                 ),
