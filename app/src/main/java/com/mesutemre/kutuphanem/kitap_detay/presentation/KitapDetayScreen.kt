@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapDetayBottomSheetState
 import com.mesutemre.kutuphanem.kitap_detay.presentation.components.body.KitapDetayInfoBodyArea
 import com.mesutemre.kutuphanem.kitap_detay.presentation.components.bottomsheet.KitapDetayAciklamaBottomSheet
+import com.mesutemre.kutuphanem.kitap_detay.presentation.components.bottomsheet.KitapYorumListeBottomSheet
 import com.mesutemre.kutuphanem.kitap_detay.presentation.components.header.KitapDetayHeaderArea
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
@@ -45,31 +46,13 @@ fun KitapDetayScreen(
         }
     }
 
-    val onClickKitapAciklama = remember<(String) -> Unit> {
-        { aciklama ->
-            coroutineScope.launch {
-                viewModel.onExpandKitapDetayBottomSheet(aciklama)
-                bottomSheetScaffoldState.bottomSheetState.animateTo(
-                    BottomSheetValue.Expanded,
-                    tween(500)
-                )
-            }
+    val defaultYorumModelList by remember {
+        derivedStateOf {
+            mutableStateOf(
+                viewModel.getDefaultBottomsheetYorumListe()
+            )
         }
     }
-    val onClickYorumArea = remember<() -> Unit> {
-        {
-            coroutineScope.launch {
-                viewModel.onExpandYorumBottomSheet()
-                bottomSheetScaffoldState.bottomSheetState.animateTo(
-                    BottomSheetValue.Expanded,
-                    tween(500)
-                )
-            }.invokeOnCompletion {
-
-            }
-        }
-    }
-
     BottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
         sheetContent = {
@@ -78,7 +61,22 @@ fun KitapDetayScreen(
                     state.value.kitapDetayAciklama ?: ""
                 )
             } else if (state.value.kitapDetayBottomSheetState == KitapDetayBottomSheetState.YORUM) {
-
+                KitapYorumListeBottomSheet(
+                    yorum = state.value.yorumText,
+                    kitapYorumListeResouce = state.value.kitapYorumListeResouce,
+                    yorumListeModel = state.value.yorumListeModel ?: defaultYorumModelList.value,
+                    onYorumChange = {
+                        viewModel.onChangeYorumText(it)
+                    },
+                    onCloseBottomSheet = {
+                        coroutineScope.launch {
+                            bottomSheetScaffoldState.bottomSheetState.animateTo(
+                                BottomSheetValue.Collapsed,
+                                tween(500)
+                            )
+                        }
+                    }
+                )
             }
         },
         sheetBackgroundColor = MaterialTheme.colorPalette.white,
@@ -107,7 +105,17 @@ fun KitapDetayScreen(
                         )
                     }
                 },
-                onClickYorumArea = onClickYorumArea
+                onClickYorumArea = {
+                    coroutineScope.launch {
+                        viewModel.onExpandYorumBottomSheet()
+                        bottomSheetScaffoldState.bottomSheetState.animateTo(
+                            BottomSheetValue.Expanded,
+                            tween(500)
+                        )
+                    }.invokeOnCompletion {
+                        viewModel.getKitapYorumListe()
+                    }
+                }
             )
         }
     }
