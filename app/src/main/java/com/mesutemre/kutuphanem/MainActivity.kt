@@ -1,14 +1,11 @@
 package com.mesutemre.kutuphanem
 
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.DrawableRes
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -35,7 +32,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.splashscreen.SplashScreenViewProvider
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -87,18 +83,6 @@ class MainActivity : ComponentActivity() {
                                 return mainActivityState.value.tokenResourceEvent is BaseResourceEvent.Loading
                             }
                         })
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                            this.setOnExitAnimationListener(object : SplashScreen.OnExitAnimationListener {
-                                override fun onSplashScreenExit(splashScreenViewProvider: SplashScreenViewProvider) {
-                                    splashScreenViewProvider.view.setBackgroundColor(R.color.lacivert)
-                                    splashScreenViewProvider.iconView.background = AppCompatResources.getDrawable(
-                                        baseContext,
-                                        R.drawable.anim_book_splash
-                                    )
-                                }
-
-                            })
-                        }
                     }
                     Scaffold(modifier = Modifier.navigationBarsPadding(),
                         scaffoldState = kutuphanemAppState.scaffoldState,
