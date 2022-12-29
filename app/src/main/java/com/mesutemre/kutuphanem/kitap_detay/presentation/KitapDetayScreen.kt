@@ -63,8 +63,12 @@ fun KitapDetayScreen(
             } else if (state.value.kitapDetayBottomSheetState == KitapDetayBottomSheetState.YORUM) {
                 KitapYorumListeBottomSheet(
                     yorum = state.value.yorumText,
+                    kullaniciResim = state.value.userInfo?.resim ?: "",
                     kitapYorumListeResouce = state.value.kitapYorumListeResouce,
                     yorumListeModel = state.value.yorumListeModel ?: defaultYorumModelList.value,
+                    getKitapYorumListe = {
+                        viewModel.getKitapYorumListe(true)
+                    },
                     onYorumChange = {
                         viewModel.onChangeYorumText(it)
                     },
@@ -86,7 +90,7 @@ fun KitapDetayScreen(
         val scrollState = rememberScrollState()
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .background(color = MaterialTheme.colorPalette.loginBackColor)
                 .verticalScroll(scrollState)
         ) {
@@ -113,10 +117,11 @@ fun KitapDetayScreen(
                             tween(500)
                         )
                     }.invokeOnCompletion {
-                        viewModel.getKitapYorumListe()
+                        viewModel.getKitapYorumListe(false)
                     }
                 }
             )
         }
+
     }
 }

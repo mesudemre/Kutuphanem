@@ -4,7 +4,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.runtime.*
@@ -14,7 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.style.TextOverflow
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapDetayBottomSheetState
 import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapDetayItem
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.normalUbuntuTransparentBold
@@ -23,13 +25,15 @@ import com.mesutemre.kutuphanem.util.convertDate2String
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import com.mesutemre.kutuphanem_ui.card.KitapDetayInfoCard
 import com.mesutemre.kutuphanem_ui.extensions.rippleClick
-import com.mesutemre.kutuphanem_ui.theme.*
+import com.mesutemre.kutuphanem_ui.theme.smallUbuntuBlackBold
+import com.mesutemre.kutuphanem_ui.theme.smallUbuntuTransparent
+import com.mesutemre.kutuphanem_ui.theme.ssp
 
 @Composable
 fun KitapDetayInfoBodyArea(
     kitapDetayItemResource: BaseResourceEvent<KitapDetayItem>,
     changeBottomSheetState: (String) -> Unit,
-    onClickYorumArea:()->Unit
+    onClickYorumArea: () -> Unit
 ) {
 
     when (kitapDetayItemResource) {
@@ -104,9 +108,11 @@ private fun KitapAciklamaText(
         backgroundColor = MaterialTheme.colorPalette.white,
         elevation = 4.sdp
     ) {
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.sdp, vertical = 8.sdp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.sdp, vertical = 8.sdp)
+        ) {
             var lineCount by remember {
                 mutableStateOf(1)
             }

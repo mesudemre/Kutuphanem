@@ -1,5 +1,6 @@
 package com.mesutemre.kutuphanem.kitap_detay.data.repository
 
+import com.mesutemre.kutuphanem.dashboard.domain.model.DashboardKullaniciBilgiData
 import com.mesutemre.kutuphanem.kitap_detay.data.dao.entity.KitapEntityWithYayinEviKitapTur
 import com.mesutemre.kutuphanem.kitap_detay.data.remote.dto.YorumListeDto
 import com.mesutemre.kutuphanem.kitap_liste.data.remote.dto.KitapDto
@@ -12,4 +13,6 @@ interface KitapDetayRepository {
     suspend fun getKitapFromDbById(kitapId: Int): KitapEntityWithYayinEviKitapTur
 
     suspend fun getKitapYorumListeByKitapId(kitapId: Int): Response<YorumListeDto>
+
+    suspend fun getDashboardUserInfo(): DashboardKullaniciBilgiData
 }

@@ -1,5 +1,6 @@
 package com.mesutemre.kutuphanem.kitap_detay.presentation
 
+import com.mesutemre.kutuphanem.dashboard.domain.model.DashboardKullaniciBilgiData
 import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapDetayBottomSheetState
 import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapDetayBottomSheetYorumModel
 import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapDetayBottomsheetYorumListModel
@@ -14,5 +15,6 @@ data class KitapDetayScreenState(
     val kitapDetayAciklama: String? = null,
     val kitapYorumListeResouce: BaseResourceEvent<List<KitapDetayBottomSheetYorumModel>> = BaseResourceEvent.Loading(),
     val yorumListeModel: List<KitapDetayBottomsheetYorumListModel>? = null,
-    val yorumText: String = ""
+    val yorumText: String = "",
+    val userInfo: DashboardKullaniciBilgiData? = null
 )

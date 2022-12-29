@@ -7,6 +7,7 @@ import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapDetayBottomsheetYo
 import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapDetayBottomsheetYorumListType
 import com.mesutemre.kutuphanem.kitap_detay.domain.use_case.GetKitapDetayByIdUseCase
 import com.mesutemre.kutuphanem.kitap_detay.domain.use_case.GetKitapYorumListeByKitapIdUseCase
+import com.mesutemre.kutuphanem.kitap_detay.domain.use_case.GetUserInfoFromDataStore
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import com.mesutemre.kutuphanem_base.viewmodel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +22,8 @@ import javax.inject.Inject
 class KitapDetayScreenViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val getKitapDetayByIdUseCase: GetKitapDetayByIdUseCase,
-    private val getKitapYorumListeByKitapIdUseCase: GetKitapYorumListeByKitapIdUseCase
+    private val getKitapYorumListeByKitapIdUseCase: GetKitapYorumListeByKitapIdUseCase,
+    private val getUserInfoFromDataStore: GetUserInfoFromDataStore
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow(KitapDetayScreenState())
@@ -37,6 +39,7 @@ class KitapDetayScreenViewModel @Inject constructor(
                 isFromArsiv = this.isFromArsiv ?: false
             )
         }
+        setUserInfo()
         getKitapDetayInfo()
     }
 
@@ -72,7 +75,13 @@ class KitapDetayScreenViewModel @Inject constructor(
         }
     }
 
-    fun getKitapYorumListe() {
+    fun getKitapYorumListe(isSwipe: Boolean) {
+        if (isSwipe || state.value.yorumListeModel.isNullOrEmpty()) {
+            getYorumListe()
+        }
+    }
+
+    private fun getYorumListe() {
         viewModelScope.launch {
             var kitapDetayBottomsheetYorumList: MutableList<KitapDetayBottomsheetYorumListModel> =
                 mutableListOf(
@@ -120,6 +129,16 @@ class KitapDetayScreenViewModel @Inject constructor(
             it.copy(
                 yorumText = text
             )
+        }
+    }
+
+    fun setUserInfo() {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    userInfo = getUserInfoFromDataStore()
+                )
+            }
         }
     }
 }

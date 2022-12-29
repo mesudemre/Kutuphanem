@@ -107,8 +107,9 @@ class KutuphanemRepositoryModule {
     fun provideKitapDetayRepository(
         api: IKitapApi,
         dao: IKitapDetayDao,
-        yorumApi: IKitapYorumApi
+        yorumApi: IKitapYorumApi,
+        dataStore: DataStore<Preferences>
     ): KitapDetayRepository {
-        return KitapDetayRepositoryImpl(api, dao, yorumApi)
+        return KitapDetayRepositoryImpl(api, dao, yorumApi, dataStore)
     }
 }

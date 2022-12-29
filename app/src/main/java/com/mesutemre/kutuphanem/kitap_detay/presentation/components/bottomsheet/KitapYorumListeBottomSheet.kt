@@ -3,9 +3,15 @@ package com.mesutemre.kutuphanem.kitap_detay.presentation.components.bottomsheet
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapDetayBottomSheetYorumModel
 import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapDetayBottomsheetYorumListModel
 import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapDetayBottomsheetYorumListType
@@ -17,12 +23,15 @@ import com.mesutemre.kutuphanem.ui.theme.sdp
 import com.mesutemre.kutuphanem.util.customcomponents.progressbar.KutuphanemLoader
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import com.mesutemre.kutuphanem_ui.bottomsheet.KutuphanemBottomSheetGesturer
+import com.mesutemre.kutuphanem_ui.theme.colorPalette
 
 @Composable
 fun KitapYorumListeBottomSheet(
     yorum: String,
+    kullaniciResim: String,
     kitapYorumListeResouce: BaseResourceEvent<List<KitapDetayBottomSheetYorumModel>>,
     yorumListeModel: List<KitapDetayBottomsheetYorumListModel>,
+    getKitapYorumListe: () -> Unit,
     onYorumChange: (String) -> Unit,
     onCloseBottomSheet: () -> Unit
 ) {
@@ -56,28 +65,51 @@ fun KitapYorumListeBottomSheet(
                     )
                 }
                 is BaseResourceEvent.Success -> {
-                    LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                        itemsIndexed(yorumListeModel) { index, yorumRow ->
-                            if (yorumRow.type == KitapDetayBottomsheetYorumListType.YAZMA_ITEM) {
-                                KitapYorumYazmaItem(
-                                    kullaniciResim = "",
-                                    yorumText = yorum,
-                                    onChangeYorum = onYorumChange
-                                ) {
-                                    //TODO : Burada send function call edilecek...
+                    SwipeRefresh(state = rememberSwipeRefreshState(isRefreshing = kitapYorumListeResouce is BaseResourceEvent.Loading),
+                        onRefresh = {
+                            getKitapYorumListe()
+                        },
+                        indicator = { state, trigger ->
+                            SwipeRefreshIndicator(
+                                state = state,
+                                refreshTriggerDistance = trigger,
+                                scale = true,
+                                backgroundColor = MaterialTheme.colorPalette.white,
+                                contentColor = MaterialTheme.colorPalette.lacivert,
+                                shape = RoundedCornerShape(50.sdp),
+                            )
+                        }
+                    ) {
+                        LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                            itemsIndexed(yorumListeModel) { index, yorumRow ->
+                                if (yorumRow.type == KitapDetayBottomsheetYorumListType.YAZMA_ITEM) {
+                                    KitapYorumYazmaItem(
+                                        kullaniciResim = kullaniciResim,
+                                        yorumText = yorum,
+                                        onChangeYorum = onYorumChange
+                                    ) {
+                                        //TODO : Burada send function call edilecek...
+                                    }
                                 }
-                            }
-                            if (yorumRow.type == KitapDetayBottomsheetYorumListType.YASAL_UYARI_ITEM) {
-                                Spacer(modifier = Modifier.height(8.sdp))
-                                KitapYorumYasalUyariItem()
-                            }
-                            if (yorumRow.type == KitapDetayBottomsheetYorumListType.YORUM_ITEM) {
-                                val yorum = yorumRow.data as KitapDetayBottomSheetYorumModel?
-                                yorum?.let {
+                                if (yorumRow.type == KitapDetayBottomsheetYorumListType.YASAL_UYARI_ITEM) {
                                     Spacer(modifier = Modifier.height(8.sdp))
-                                    KitapYorumItem(yorumItem = yorum)
-                                } ?: run {
-                                    //TODO : Empty state setlenecek...
+                                    KitapYorumYasalUyariItem()
+                                }
+                                if (yorumRow.type == KitapDetayBottomsheetYorumListType.YORUM_ITEM) {
+                                    val yorum = yorumRow.data as KitapDetayBottomSheetYorumModel?
+                                    yorum?.let {
+                                        Spacer(modifier = Modifier.height(8.sdp))
+                                        KitapYorumItem(yorumItem = yorum)
+                                        Divider(
+                                            modifier = Modifier.padding(
+                                                vertical = 4.sdp,
+                                            ),
+                                            thickness = 1.sdp,
+                                            color = MaterialTheme.colorPalette.otherGrayLight
+                                        )
+                                    } ?: run {
+                                        //TODO : Empty state setlenecek...
+                                    }
                                 }
                             }
                         }

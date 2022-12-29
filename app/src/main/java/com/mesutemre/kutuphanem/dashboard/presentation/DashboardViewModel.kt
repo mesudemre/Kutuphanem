@@ -3,6 +3,7 @@ package com.mesutemre.kutuphanem.dashboard.presentation
 import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.dashboard.domain.use_case.*
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +23,8 @@ class DashboardViewModel @Inject constructor(
     private val getDashBoardKullaniciBilgi: GetDasboardKullaniciBilgi,
     private val getDashboardKategoriList: GetDashboardKategoriList,
     private val getKitapTurIstatistik: GetKitapTurIstatistik,
-    private val getKitapYilIstatistik: GetKitapYilIstatistik
+    private val getKitapYilIstatistik: GetKitapYilIstatistik,
+    private val saveDashboardUserInfoDataStore: SaveDashboardUserInfoDataStore
 ) : BaseViewModel() {
 
     private val _dashboardState = MutableStateFlow(DashboardState())
@@ -44,6 +46,11 @@ class DashboardViewModel @Inject constructor(
 
     private suspend fun fillDashBoardUserInfo() {
         getDashBoardKullaniciBilgi().collectLatest { response ->
+            if (response is BaseResourceEvent.Success) {
+                response.data?.let {
+                    saveDashboardUserInfoDataStore(it)
+                }
+            }
             _dashboardState.update {
                 it.copy(
                     kullaniciBilgi = response
