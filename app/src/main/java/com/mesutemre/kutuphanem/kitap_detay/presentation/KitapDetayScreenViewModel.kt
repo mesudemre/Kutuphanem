@@ -3,7 +3,14 @@ package com.mesutemre.kutuphanem.kitap_detay.presentation
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapDetayBottomSheetState
+import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapDetayBottomsheetYorumListModel
+import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapDetayBottomsheetYorumListType
+import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapYorumKaydetModel
 import com.mesutemre.kutuphanem.kitap_detay.domain.use_case.GetKitapDetayByIdUseCase
+import com.mesutemre.kutuphanem.kitap_detay.domain.use_case.GetKitapYorumListeByKitapIdUseCase
+import com.mesutemre.kutuphanem.kitap_detay.domain.use_case.GetUserInfoFromDataStore
+import com.mesutemre.kutuphanem.kitap_detay.domain.use_case.KitapYorumKaydetUseCase
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import com.mesutemre.kutuphanem_base.viewmodel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +23,10 @@ import javax.inject.Inject
 @HiltViewModel
 class KitapDetayScreenViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val getKitapDetayByIdUseCase: GetKitapDetayByIdUseCase
+    private val getKitapDetayByIdUseCase: GetKitapDetayByIdUseCase,
+    private val getKitapYorumListeByKitapIdUseCase: GetKitapYorumListeByKitapIdUseCase,
+    private val getUserInfoFromDataStore: GetUserInfoFromDataStore,
+    private val kitapYorumKaydetUseCase: KitapYorumKaydetUseCase
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow(KitapDetayScreenState())
@@ -32,6 +42,7 @@ class KitapDetayScreenViewModel @Inject constructor(
                 isFromArsiv = this.isFromArsiv ?: false
             )
         }
+        setUserInfo()
         getKitapDetayInfo()
     }
 
@@ -50,7 +61,7 @@ class KitapDetayScreenViewModel @Inject constructor(
         }
     }
 
-    fun onExpandKitapDetayBottomSheet(kitapDetayAciklama:String) {
+    fun onExpandKitapDetayBottomSheet(kitapDetayAciklama: String) {
         _state.update {
             it.copy(
                 kitapDetayAciklama = kitapDetayAciklama,
@@ -64,6 +75,98 @@ class KitapDetayScreenViewModel @Inject constructor(
             it.copy(
                 kitapDetayBottomSheetState = KitapDetayBottomSheetState.YORUM
             )
+        }
+    }
+
+    fun getKitapYorumListe(isSwipe: Boolean) {
+        if (isSwipe || state.value.yorumListeModel.isNullOrEmpty()) {
+            getYorumListe()
+        }
+    }
+
+    private fun getYorumListe() {
+        viewModelScope.launch {
+            var kitapDetayBottomsheetYorumList: MutableList<KitapDetayBottomsheetYorumListModel> =
+                mutableListOf(
+                    KitapDetayBottomsheetYorumListModel(
+                        type = KitapDetayBottomsheetYorumListType.YAZMA_ITEM
+                    ),
+                    KitapDetayBottomsheetYorumListModel(
+                        type = KitapDetayBottomsheetYorumListType.YASAL_UYARI_ITEM
+                    )
+                )
+            kitapId?.let { kitapId ->
+                getKitapYorumListeByKitapIdUseCase(kitapId).collectLatest { response ->
+                    if (response is BaseResourceEvent.Success) {
+                        response.data?.forEach { yorum ->
+                            kitapDetayBottomsheetYorumList.add(
+                                KitapDetayBottomsheetYorumListModel(
+                                    type = KitapDetayBottomsheetYorumListType.YORUM_ITEM,
+                                    data = yorum
+                                )
+                            )
+                        }
+                    }
+                    _state.update {
+                        it.copy(
+                            yorumListeModel = kitapDetayBottomsheetYorumList,
+                            kitapYorumListeResouce = response
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    fun getDefaultBottomsheetYorumListe() = listOf<KitapDetayBottomsheetYorumListModel>(
+        KitapDetayBottomsheetYorumListModel(
+            type = KitapDetayBottomsheetYorumListType.YAZMA_ITEM
+        ),
+        KitapDetayBottomsheetYorumListModel(
+            type = KitapDetayBottomsheetYorumListType.YASAL_UYARI_ITEM
+        )
+    )
+
+    fun onChangeYorumText(text: String) {
+        _state.update {
+            it.copy(
+                yorumText = text
+            )
+        }
+    }
+
+    fun setUserInfo() {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    userInfo = getUserInfoFromDataStore()
+                )
+            }
+        }
+    }
+
+    fun kitapYorumKaydet(
+        yorumText: String
+    ) {
+        kitapId?.let { id ->
+            viewModelScope.launch {
+                kitapYorumKaydetUseCase(
+                    KitapYorumKaydetModel(
+                        yorumText = yorumText,
+                        kitapId = id
+                    )
+                ).collectLatest { response ->
+                    if (response is BaseResourceEvent.Success) {
+                        getKitapYorumListe(true)
+                    }
+                    _state.update {
+                        it.copy(
+                            kitapYorumKaydetResource = response,
+                            yorumText = ""
+                        )
+                    }
+                }
+            }
         }
     }
 }

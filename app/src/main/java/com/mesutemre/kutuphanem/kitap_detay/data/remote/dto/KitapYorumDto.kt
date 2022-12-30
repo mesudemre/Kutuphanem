@@ -2,9 +2,11 @@ package com.mesutemre.kutuphanem.kitap_detay.data.remote.dto
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapDetayBottomSheetYorumModel
 import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapDetayIlkYorumModel
 import com.mesutemre.kutuphanem.kitap_liste.data.remote.dto.KitapDto
 import com.mesutemre.kutuphanem.profile.data.remote.dto.KullaniciDto
+import com.mesutemre.kutuphanem.util.convertDate2String
 import java.util.*
 
 data class KitapYorumDto(
@@ -47,5 +49,14 @@ fun KitapYorumDto.convertKitapYorumToKitapDetayIlkYorum(): KitapDetayIlkYorumMod
         yorumAciklama = this.yorum ?: "",
         yorumYazanAdSoyad = this.yorumYazan?.ad + " " + this.yorumYazan?.soyad,
         yorumYazanResim = this.kullaniciResim
+    )
+}
+
+fun KitapYorumDto.convertKitapYorumToKitapDetayBottomSheetYorum(): KitapDetayBottomSheetYorumModel {
+    return KitapDetayBottomSheetYorumModel(
+        yorumAciklama = this.yorum ?: "",
+        yorumYazanAdSoyad = this.yorumYazan?.ad + " " + this.yorumYazan?.soyad,
+        yorumYazanResim = this.kullaniciResim,
+        yorumYazmaTarih = this.yorumYazmaTar?.convertDate2String() ?: ""
     )
 }

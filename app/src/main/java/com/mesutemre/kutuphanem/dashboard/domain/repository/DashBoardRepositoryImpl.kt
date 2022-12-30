@@ -2,13 +2,14 @@ package com.mesutemre.kutuphanem.dashboard.domain.repository
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import com.google.gson.Gson
 import com.mesutemre.kutuphanem.dashboard.data.dao.entity.IDashBoardDao
-import com.mesutemre.kutuphanem.dashboard.data.dao.entity.KitapTurIstatistikEntity
 import com.mesutemre.kutuphanem.dashboard.data.dao.entity.KitapYilIstatistikEntity
 import com.mesutemre.kutuphanem.dashboard.data.remote.IDashBoardApi
 import com.mesutemre.kutuphanem.dashboard.data.remote.dto.KitapTurIstatistikDto
 import com.mesutemre.kutuphanem.dashboard.data.remote.dto.KitapYilIstatistikDto
 import com.mesutemre.kutuphanem.dashboard.data.repository.DashBoardRepository
+import com.mesutemre.kutuphanem.dashboard.domain.model.DashboardKullaniciBilgiData
 import com.mesutemre.kutuphanem.util.readBoolean
 import com.mesutemre.kutuphanem.util.saveData
 import kotlinx.coroutines.flow.first
@@ -27,18 +28,6 @@ class DashBoardRepositoryImpl @Inject constructor(
 
     override suspend fun getKitapTurIstatistikByAPI(): Response<List<KitapTurIstatistikDto>> {
         return service.getKitapTurIstatistikListe()
-    }
-
-    override suspend fun getKitapTurIstatistikByDAO(): List<KitapTurIstatistikEntity> {
-        return dao.getKitapTurIstatistikListe()
-    }
-
-    override suspend fun saveKitapTurIstatistikList(vararg kitapTur: KitapTurIstatistikEntity) {
-        dao.kitapTurIstatistikKaydet(*kitapTur)
-    }
-
-    override suspend fun deleteKitapTurIstatistikList() {
-        dao.deleteKitapTurIstatistikList()
     }
 
     override suspend fun getKitapYilIstatistikByAPI(): Response<List<KitapYilIstatistikDto>> {
@@ -66,5 +55,9 @@ class DashBoardRepositoryImpl @Inject constructor(
         value: Boolean
     ) {
         dataStore.saveData(key, value)
+    }
+
+    override suspend fun saveDashboardUserInfoToDataStore(userInfo: DashboardKullaniciBilgiData) {
+        dataStore.saveData("TEMP_USER_INFO", Gson().toJson(userInfo))
     }
 }

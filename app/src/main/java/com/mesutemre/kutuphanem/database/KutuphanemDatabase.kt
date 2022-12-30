@@ -7,7 +7,6 @@ import com.mesutemre.kutuphanem.auth.dao.KullaniciDao
 import com.mesutemre.kutuphanem.auth.profil.model.Kullanici
 import com.mesutemre.kutuphanem.auth.profil.model.KullaniciKitapTurModel
 import com.mesutemre.kutuphanem.dashboard.data.dao.entity.IDashBoardDao
-import com.mesutemre.kutuphanem.dashboard.data.dao.entity.KitapTurIstatistikEntity
 import com.mesutemre.kutuphanem.dashboard.data.dao.entity.KitapYilIstatistikEntity
 import com.mesutemre.kutuphanem.dashboard_search.data.dao.IDashBoardSearchHistoryDao
 import com.mesutemre.kutuphanem.dashboard_search.data.dao.entity.DashBoardSearchHistoryEntity
@@ -33,7 +32,6 @@ import com.mesutemre.kutuphanem.util.converters.Converters
         KutuphanemGlobalExceptionHandlerModel::class,
         YayinEviEntity::class,
         KitapTurEntity::class,
-        KitapTurIstatistikEntity::class,
         KitapYilIstatistikEntity::class,
         DashBoardSearchHistoryEntity::class,
         KitapEntity::class

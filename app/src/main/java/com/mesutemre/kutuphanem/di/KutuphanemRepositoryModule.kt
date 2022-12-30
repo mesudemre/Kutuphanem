@@ -10,6 +10,7 @@ import com.mesutemre.kutuphanem.dashboard_search.data.dao.IDashBoardSearchHistor
 import com.mesutemre.kutuphanem.dashboard_search.data.repository.SearchDashboardRepository
 import com.mesutemre.kutuphanem.dashboard_search.domain.repository.SearchDashBoardRepositoryImpl
 import com.mesutemre.kutuphanem.kitap_detay.data.dao.IKitapDetayDao
+import com.mesutemre.kutuphanem.kitap_detay.data.remote.IKitapYorumApi
 import com.mesutemre.kutuphanem.kitap_detay.data.repository.KitapDetayRepository
 import com.mesutemre.kutuphanem.kitap_detay.domain.repository.KitapDetayRepositoryImpl
 import com.mesutemre.kutuphanem.kitap_liste.data.dao.IKitapDao
@@ -105,8 +106,10 @@ class KutuphanemRepositoryModule {
     @Provides
     fun provideKitapDetayRepository(
         api: IKitapApi,
-        dao: IKitapDetayDao
+        dao: IKitapDetayDao,
+        yorumApi: IKitapYorumApi,
+        dataStore: DataStore<Preferences>
     ): KitapDetayRepository {
-        return KitapDetayRepositoryImpl(api, dao)
+        return KitapDetayRepositoryImpl(api, dao, yorumApi, dataStore)
     }
 }

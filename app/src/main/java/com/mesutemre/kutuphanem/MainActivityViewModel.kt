@@ -37,4 +37,16 @@ class MainActivityViewModel @Inject constructor(
             }
         }
     }
+
+    fun activateMenuAnimation() {
+        _mainActivityState.update {
+            it.copy(animateMenuVisibility = !it.animateMenuVisibility)
+        }
+    }
+
+    fun closeFastTransactionMenu() {
+        _mainActivityState.update {
+            it.copy(animateMenuVisibility = false)
+        }
+    }
 }

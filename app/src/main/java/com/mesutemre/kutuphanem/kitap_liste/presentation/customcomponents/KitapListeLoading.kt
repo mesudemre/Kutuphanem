@@ -24,13 +24,14 @@ fun KitapListeLoading() {
                         end = 8.sdp,
                         bottom = 16.sdp
                     )
-                    .background(color = MaterialTheme.colorPalette.white)
                     .clip(shape = MaterialTheme.shapes.medium)
+                    .background(color = MaterialTheme.colorPalette.white)
             ) {
                 Spacer(
                     modifier = Modifier
                         .width(100.sdp)
                         .height(150.sdp)
+                        .clip(shape = MaterialTheme.shapes.medium)
                         .border(
                             1.sdp,
                             MaterialTheme.colorPalette.secondaryGray,

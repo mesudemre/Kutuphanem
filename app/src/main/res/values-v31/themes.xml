@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="SplashTheme" parent="Theme.SplashScreen">
+        <item name="android:windowBackground">@color/lacivert</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/anim_book_splash</item>
+        <item name="windowSplashScreenAnimationDuration">700</item>
+        <item name="postSplashScreenTheme">@style/NoActionBar</item>
+    </style>
+
+</resources>
