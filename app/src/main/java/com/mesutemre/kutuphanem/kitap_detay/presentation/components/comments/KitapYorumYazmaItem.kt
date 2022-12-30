@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Send
@@ -11,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
@@ -20,13 +22,14 @@ import com.mesutemre.kutuphanem.ui.theme.sdp
 import com.mesutemre.kutuphanem_ui.extensions.rippleClick
 import com.mesutemre.kutuphanem_ui.theme.smallUbuntuBlack
 import com.mesutemre.kutuphanem_ui.theme.smallUbuntuTransparent
+import com.mesutemre.kutuphanem_ui.theme.ssp
 
 @Composable
 fun KitapYorumYazmaItem(
     kullaniciResim: String,
     yorumText: String,
     onChangeYorum: (String) -> Unit,
-    sendYorum: () -> Unit
+    sendYorum: (String) -> Unit
 ) {
     TextField(
         value = yorumText,
@@ -56,7 +59,12 @@ fun KitapYorumYazmaItem(
                 style = MaterialTheme.typography.smallUbuntuTransparent
             )
         },
-        textStyle = MaterialTheme.typography.smallUbuntuBlack,
+        textStyle = MaterialTheme.typography.smallUbuntuBlack.copy(
+            lineHeight = 14.ssp
+        ),
+        keyboardOptions = KeyboardOptions(
+            capitalization = KeyboardCapitalization.Sentences
+        ),
         trailingIcon = {
             if (yorumText.isNotEmpty()) {
                 Icon(
@@ -66,7 +74,7 @@ fun KitapYorumYazmaItem(
                     tint = MaterialTheme.colorPalette.lacivert,
                     modifier = Modifier
                         .rippleClick {
-                            sendYorum()
+                            sendYorum(yorumText)
                         }
                 )
             }

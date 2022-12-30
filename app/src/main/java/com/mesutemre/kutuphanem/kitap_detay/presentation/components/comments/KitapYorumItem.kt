@@ -81,27 +81,26 @@ fun KitapYorumItem(
                                 .align(Alignment.Bottom)
                                 .padding(start = 2.sdp)
                                 .rippleClick {
-
+                                    readContinue = true
                                 }
                         )
                     }
                 }
-            } else {
-                AnimatedVisibility(
-                    visible = readContinue,
-                    enter = expandVertically(expandFrom = Alignment.Top) { 20 },
-                    exit = shrinkVertically(animationSpec = tween()) { fullHeight ->
-                        fullHeight / 2
-                    },
-                ) {
-                    Text(
-                        modifier = Modifier.padding(top = 4.sdp),
-                        text = yorumItem.yorumAciklama,
-                        style = MaterialTheme.typography.smallUbuntuBlack.copy(
-                            lineHeight = 14.ssp
-                        )
+            }
+            AnimatedVisibility(
+                visible = readContinue,
+                enter = expandVertically(expandFrom = Alignment.Top) { 20 },
+                exit = shrinkVertically(animationSpec = tween()) { fullHeight ->
+                    fullHeight / 2
+                },
+            ) {
+                Text(
+                    modifier = Modifier.padding(top = 4.sdp),
+                    text = yorumItem.yorumAciklama,
+                    style = MaterialTheme.typography.smallUbuntuBlack.copy(
+                        lineHeight = 14.ssp
                     )
-                }
+                )
             }
         }
     }

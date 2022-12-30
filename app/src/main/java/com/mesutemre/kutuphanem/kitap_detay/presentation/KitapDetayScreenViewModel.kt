@@ -5,9 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapDetayBottomSheetState
 import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapDetayBottomsheetYorumListModel
 import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapDetayBottomsheetYorumListType
+import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapYorumKaydetModel
 import com.mesutemre.kutuphanem.kitap_detay.domain.use_case.GetKitapDetayByIdUseCase
 import com.mesutemre.kutuphanem.kitap_detay.domain.use_case.GetKitapYorumListeByKitapIdUseCase
 import com.mesutemre.kutuphanem.kitap_detay.domain.use_case.GetUserInfoFromDataStore
+import com.mesutemre.kutuphanem.kitap_detay.domain.use_case.KitapYorumKaydetUseCase
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import com.mesutemre.kutuphanem_base.viewmodel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +25,8 @@ class KitapDetayScreenViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val getKitapDetayByIdUseCase: GetKitapDetayByIdUseCase,
     private val getKitapYorumListeByKitapIdUseCase: GetKitapYorumListeByKitapIdUseCase,
-    private val getUserInfoFromDataStore: GetUserInfoFromDataStore
+    private val getUserInfoFromDataStore: GetUserInfoFromDataStore,
+    private val kitapYorumKaydetUseCase: KitapYorumKaydetUseCase
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow(KitapDetayScreenState())
@@ -138,6 +141,31 @@ class KitapDetayScreenViewModel @Inject constructor(
                 it.copy(
                     userInfo = getUserInfoFromDataStore()
                 )
+            }
+        }
+    }
+
+    fun kitapYorumKaydet(
+        yorumText: String
+    ) {
+        kitapId?.let { id ->
+            viewModelScope.launch {
+                kitapYorumKaydetUseCase(
+                    KitapYorumKaydetModel(
+                        yorumText = yorumText,
+                        kitapId = id
+                    )
+                ).collectLatest { response ->
+                    if (response is BaseResourceEvent.Success) {
+                        getKitapYorumListe(true)
+                    }
+                    _state.update {
+                        it.copy(
+                            kitapYorumKaydetResource = response,
+                            yorumText = ""
+                        )
+                    }
+                }
             }
         }
     }

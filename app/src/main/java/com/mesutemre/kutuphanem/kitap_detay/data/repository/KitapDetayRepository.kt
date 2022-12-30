@@ -3,7 +3,9 @@ package com.mesutemre.kutuphanem.kitap_detay.data.repository
 import com.mesutemre.kutuphanem.dashboard.domain.model.DashboardKullaniciBilgiData
 import com.mesutemre.kutuphanem.kitap_detay.data.dao.entity.KitapEntityWithYayinEviKitapTur
 import com.mesutemre.kutuphanem.kitap_detay.data.remote.dto.YorumListeDto
+import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapYorumKaydetModel
 import com.mesutemre.kutuphanem.kitap_liste.data.remote.dto.KitapDto
+import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import retrofit2.Response
 
 interface KitapDetayRepository {
@@ -15,4 +17,6 @@ interface KitapDetayRepository {
     suspend fun getKitapYorumListeByKitapId(kitapId: Int): Response<YorumListeDto>
 
     suspend fun getDashboardUserInfo(): DashboardKullaniciBilgiData
+
+    suspend fun kitapYorumKaydet(kitapYorumKaydetModel: KitapYorumKaydetModel): Response<ResponseStatusModel>
 }

@@ -19,6 +19,7 @@ import com.mesutemre.kutuphanem.kitap_detay.presentation.components.comments.Kit
 import com.mesutemre.kutuphanem.kitap_detay.presentation.components.comments.KitapYorumItem
 import com.mesutemre.kutuphanem.kitap_detay.presentation.components.comments.KitapYorumYasalUyariItem
 import com.mesutemre.kutuphanem.kitap_detay.presentation.components.comments.KitapYorumYazmaItem
+import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.ui.theme.sdp
 import com.mesutemre.kutuphanem.util.customcomponents.progressbar.KutuphanemLoader
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
@@ -29,10 +30,12 @@ import com.mesutemre.kutuphanem_ui.theme.colorPalette
 fun KitapYorumListeBottomSheet(
     yorum: String,
     kullaniciResim: String,
-    kitapYorumListeResouce: BaseResourceEvent<List<KitapDetayBottomSheetYorumModel>>,
+    kitapYorumListeResource: BaseResourceEvent<List<KitapDetayBottomSheetYorumModel>>,
+    kitapYorumKaydetResource: BaseResourceEvent<ResponseStatusModel?>,
     yorumListeModel: List<KitapDetayBottomsheetYorumListModel>,
     getKitapYorumListe: () -> Unit,
     onYorumChange: (String) -> Unit,
+    kitapYorumKaydet: (String) -> Unit,
     onCloseBottomSheet: () -> Unit
 ) {
     Column(
@@ -56,16 +59,23 @@ fun KitapYorumListeBottomSheet(
                 .fillMaxWidth()
                 .padding(horizontal = 16.sdp, vertical = 8.sdp)
         ) {
-            when (kitapYorumListeResouce) {
+            if (kitapYorumKaydetResource is BaseResourceEvent.Loading) {
+                KutuphanemLoader(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .size(128.sdp)
+                )
+            }
+            when (kitapYorumListeResource) {
                 is BaseResourceEvent.Loading -> {
                     KutuphanemLoader(
                         modifier = Modifier
                             .align(Alignment.Center)
-                            .size(64.sdp)
+                            .size(128.sdp)
                     )
                 }
                 is BaseResourceEvent.Success -> {
-                    SwipeRefresh(state = rememberSwipeRefreshState(isRefreshing = kitapYorumListeResouce is BaseResourceEvent.Loading),
+                    SwipeRefresh(state = rememberSwipeRefreshState(isRefreshing = kitapYorumListeResource is BaseResourceEvent.Loading),
                         onRefresh = {
                             getKitapYorumListe()
                         },
@@ -88,7 +98,7 @@ fun KitapYorumListeBottomSheet(
                                         yorumText = yorum,
                                         onChangeYorum = onYorumChange
                                     ) {
-                                        //TODO : Burada send function call edilecek...
+                                        kitapYorumKaydet(it)
                                     }
                                 }
                                 if (yorumRow.type == KitapDetayBottomsheetYorumListType.YASAL_UYARI_ITEM) {

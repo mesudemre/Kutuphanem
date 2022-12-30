@@ -7,10 +7,13 @@ import com.mesutemre.kutuphanem.dashboard.domain.model.DashboardKullaniciBilgiDa
 import com.mesutemre.kutuphanem.kitap_detay.data.dao.IKitapDetayDao
 import com.mesutemre.kutuphanem.kitap_detay.data.dao.entity.KitapEntityWithYayinEviKitapTur
 import com.mesutemre.kutuphanem.kitap_detay.data.remote.IKitapYorumApi
+import com.mesutemre.kutuphanem.kitap_detay.data.remote.dto.KitapYorumDto
 import com.mesutemre.kutuphanem.kitap_detay.data.remote.dto.YorumListeDto
 import com.mesutemre.kutuphanem.kitap_detay.data.repository.KitapDetayRepository
+import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapYorumKaydetModel
 import com.mesutemre.kutuphanem.kitap_liste.data.remote.IKitapApi
 import com.mesutemre.kutuphanem.kitap_liste.data.remote.dto.KitapDto
+import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem.util.readString
 import kotlinx.coroutines.flow.first
 import retrofit2.Response
@@ -42,5 +45,16 @@ class KitapDetayRepositoryImpl @Inject constructor(
     override suspend fun getDashboardUserInfo(): DashboardKullaniciBilgiData {
         val data = dataStore.readString("TEMP_USER_INFO", "")
         return Gson().fromJson(data.first(), DashboardKullaniciBilgiData::class.java)
+    }
+
+    override suspend fun kitapYorumKaydet(kitapYorumKaydetModel: KitapYorumKaydetModel): Response<ResponseStatusModel> {
+        return yorumApi.kitapYorumKaydet(
+            yorum = KitapYorumDto(
+                kitap = KitapDto(
+                    id = kitapYorumKaydetModel.kitapId
+                ),
+                yorum = kitapYorumKaydetModel.yorumText
+            )
+        )
     }
 }

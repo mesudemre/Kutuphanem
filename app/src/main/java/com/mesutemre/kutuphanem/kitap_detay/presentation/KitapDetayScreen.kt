@@ -9,6 +9,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.mesutemre.kutuphanem.kitap_detay.domain.model.KitapDetayBottomSheetState
@@ -16,8 +17,11 @@ import com.mesutemre.kutuphanem.kitap_detay.presentation.components.body.KitapDe
 import com.mesutemre.kutuphanem.kitap_detay.presentation.components.bottomsheet.KitapDetayAciklamaBottomSheet
 import com.mesutemre.kutuphanem.kitap_detay.presentation.components.bottomsheet.KitapYorumListeBottomSheet
 import com.mesutemre.kutuphanem.kitap_detay.presentation.components.header.KitapDetayHeaderArea
+import com.mesutemre.kutuphanem.model.ERROR
+import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -33,6 +37,7 @@ fun KitapDetayScreen(
         BottomSheetState(BottomSheetValue.Collapsed)
     )
     val coroutineScope = rememberCoroutineScope()
+    val localFocusManager = LocalFocusManager.current
     BackHandler {
         if (bottomSheetScaffoldState.bottomSheetState.isExpanded) {
             coroutineScope.launch {
@@ -64,10 +69,15 @@ fun KitapDetayScreen(
                 KitapYorumListeBottomSheet(
                     yorum = state.value.yorumText,
                     kullaniciResim = state.value.userInfo?.resim ?: "",
-                    kitapYorumListeResouce = state.value.kitapYorumListeResouce,
+                    kitapYorumKaydetResource = state.value.kitapYorumKaydetResource,
+                    kitapYorumListeResource = state.value.kitapYorumListeResouce,
                     yorumListeModel = state.value.yorumListeModel ?: defaultYorumModelList.value,
                     getKitapYorumListe = {
                         viewModel.getKitapYorumListe(true)
+                    },
+                    kitapYorumKaydet = {
+                        localFocusManager.clearFocus()
+                        viewModel.kitapYorumKaydet(it)
                     },
                     onYorumChange = {
                         viewModel.onChangeYorumText(it)
@@ -94,6 +104,26 @@ fun KitapDetayScreen(
                 .background(color = MaterialTheme.colorPalette.loginBackColor)
                 .verticalScroll(scrollState)
         ) {
+            when (state.value.kitapYorumKaydetResource) {
+                is BaseResourceEvent.Success -> {
+                    LaunchedEffect(key1 = Unit) {
+                        showSnackbar(
+                            state.value.kitapYorumKaydetResource.data?.statusMessage!!,
+                            SnackbarDuration.Short,
+                            SUCCESS
+                        )
+                    }
+                }
+                is BaseResourceEvent.Error -> {
+                    LaunchedEffect(key1 = Unit) {
+                        showSnackbar(
+                            state.value.kitapYorumKaydetResource.data?.statusMessage!!,
+                            SnackbarDuration.Short,
+                            ERROR
+                        )
+                    }
+                }
+            }
             KitapDetayHeaderArea(
                 kitapDetayItemResource = state.value.kitapDetayItemResource
             )
