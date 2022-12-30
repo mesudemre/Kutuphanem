@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -43,6 +44,7 @@ fun LoginForm(
 ) {
     val loginState = loginViewModel.state.collectAsState().value
     val context = LocalContext.current
+    val localFocusManager = LocalFocusManager.current
 
     LaunchedEffect(key1 = Unit) {
         loginViewModel.loginErrorMessage.collect {
@@ -106,8 +108,9 @@ fun LoginForm(
                     text = stringResource(id = R.string.girisButtonLabel),
                     iconId = R.drawable.ic_baseline_login_24,
                     textStyle = MaterialTheme.typography.smallUbuntuWhiteBold,
-                    isEnabled = if (loginState.isLoading) false else true
+                    isEnabled = !loginState.isLoading
                 ) {
+                    localFocusManager.clearFocus()
                     loginViewModel.onLoginFormEvent(LoginValidationEvent.Submit)
                 }
                 Text(
