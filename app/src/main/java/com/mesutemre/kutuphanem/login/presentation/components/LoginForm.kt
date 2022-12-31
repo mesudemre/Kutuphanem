@@ -32,7 +32,7 @@ import com.mesutemre.kutuphanem.login.presentation.LoginViewModel
 import com.mesutemre.kutuphanem.navigation.KutuphanemNavigationItem
 import com.mesutemre.kutuphanem.navigation.popUpToTop
 import com.mesutemre.kutuphanem.ui.theme.*
-import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemBaseInput
+import com.mesutemre.kutuphanem.util.customcomponents.input.KutuphanemBaseInput
 import com.mesutemre.kutuphanem.util.customcomponents.progressbar.KutuphanemLoader
 import com.mesutemre.kutuphanem_ui.button.KutuphanemMainMaterialButton
 

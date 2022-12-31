@@ -28,7 +28,7 @@ import com.mesutemre.kutuphanem.parameter.ekleme.presentation.components.Selecte
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
 import com.mesutemre.kutuphanem.ui.theme.smallUbuntuWhiteBold
-import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemFormInput
+import com.mesutemre.kutuphanem.util.customcomponents.input.KutuphanemFormInput
 import com.mesutemre.kutuphanem.util.customcomponents.progressbar.KutuphanemLoader
 import com.mesutemre.kutuphanem_ui.button.KutuphanemMainMaterialButton
 import com.mesutemre.kutuphanem.util.customcomponents.menuitem.KutuphanemMenuInfo

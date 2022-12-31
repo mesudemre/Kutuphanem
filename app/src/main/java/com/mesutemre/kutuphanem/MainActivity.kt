@@ -17,7 +17,10 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -148,7 +151,10 @@ class MainActivity : ComponentActivity() {
                                                     ),
                                                 contentAlignment = Alignment.Center
                                             ) {
-                                                FloatingActionMenu(mainActivityState.value.animateMenuVisibility)
+                                                FloatingActionMenu(
+                                                    menuItemAnim = mainActivityState.value.animateMenuVisibility,
+                                                    navController = kutuphanemAppState.navController
+                                                )
                                             }
 
                                         }
@@ -174,7 +180,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun FloatingActionMenu(menuItemAnim: Boolean) {
+    fun FloatingActionMenu(menuItemAnim: Boolean, navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -197,7 +203,10 @@ class MainActivity : ComponentActivity() {
                     aciklama = stringResource(
                         id = R.string.kitapEklemeTitle
                     )
-                ) {}
+                ) {
+                    viewModel.closeFastTransactionMenu()
+                    navController.navigate(KutuphanemNavigationItem.KitapEklemeScreen.screenRoute)
+                }
             }
             Divider(
                 modifier = Modifier.padding(
@@ -324,7 +333,9 @@ class MainActivity : ComponentActivity() {
         )
 
         FloatingActionButton(
-            shape = RoundedCornerShape(50.sdp), onClick = onClick, backgroundColor = animatedIconFGColor
+            shape = RoundedCornerShape(50.sdp),
+            onClick = onClick,
+            backgroundColor = animatedIconFGColor
         ) {
             Icon(
                 Icons.Filled.Add,

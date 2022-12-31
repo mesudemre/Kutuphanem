@@ -148,6 +148,7 @@
     <string name="yayinEviSecinizText">Yayınevi seçiniz...</string>
     <string name="yayinEviNotFounCriteria">Aradığınız isimde bir yayınevi bulunmamaktadır...</string>
     <string name="kitapTurNotFounCriteria">Aradığınız isimde bir kitap türü bulunmamaktadır...</string>
+    <string name="kitapEklemeResimArea">Kitap resim ekleme</string>
 
     <!--KitapDetayFragment -->
     <string name="kitapAdLabelText">Kitap Adı</string>
@@ -213,4 +214,8 @@
     <string name="kitap_detay_kitap_puanYorum_bilgi_label">PUAN VE YORUMLAR</string>
     <string name="kitap_detay_ilkYorumTitle">Yorumlar</string>
     <string name="kitap_detay_noComment">Kitap hakkında hiçbir yorum yapılmamış. Dilerseniz ilk yorum yapan siz olun.</string>
+
+    <string name="kitap_ekleme_kitapAdPlaceholder">Lütfen bir kitap adı giriniz...</string>
+    <string name="kitap_ekleme_yazarAdPlaceholder">Lütfen bir yazar adı giriniz...</string>
+    <string name="kitap_ekleme_alinmaTarPlaceholder">GG.AA.YYYY</string>
 </resources>
