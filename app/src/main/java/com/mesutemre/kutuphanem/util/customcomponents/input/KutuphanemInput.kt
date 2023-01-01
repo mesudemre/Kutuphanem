@@ -382,13 +382,16 @@ fun KutuphanemOutlinedFormTextField(
     val isError by remember {
         mutableStateOf(errorMessage.isNullOrEmpty().not())
     }
+    val textLenght by remember {
+        mutableStateOf(textState.length)
+    }
     Column {
         OutlinedTextField(
             modifier = modifier,
             value = textState,
             onValueChange = { str ->
                 maxCharacter?.let {
-                    if (textState.length <= it) {
+                    if (str.length <= it) {
                         textState = str
                         onChange(str)
                     }
@@ -420,7 +423,7 @@ fun KutuphanemOutlinedFormTextField(
                         }
                     }
                 }
-            } ,
+            },
             leadingIcon = leadingIcon,
             placeholder = {
                 Text(text = placeHolder, style = placeHolderStyle)
