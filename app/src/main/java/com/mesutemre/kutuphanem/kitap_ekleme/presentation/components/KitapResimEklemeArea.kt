@@ -21,14 +21,15 @@ import com.mesutemre.kutuphanem_ui.theme.smallUbuntuError
 
 @Composable
 fun KitapResimEklemeArea(
-    errorValidationMessage: String? = null
+    errorValidationMessage: String? = null,
+    onClickResimEkleme: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Card(
             modifier = Modifier
                 .size(128.sdp)
                 .clickable {
-
+                    onClickResimEkleme()
                 },
             shape = MaterialTheme.shapes.medium,
             elevation = 8.sdp,

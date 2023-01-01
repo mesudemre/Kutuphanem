@@ -1,9 +1,9 @@
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
         minSdkVersion 23
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 65
         versionName "2.4.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

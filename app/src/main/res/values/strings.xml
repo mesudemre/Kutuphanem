@@ -218,4 +218,6 @@
     <string name="kitap_ekleme_kitapAdPlaceholder">Lütfen bir kitap adı giriniz...</string>
     <string name="kitap_ekleme_yazarAdPlaceholder">Lütfen bir yazar adı giriniz...</string>
     <string name="kitap_ekleme_alinmaTarPlaceholder">GG.AA.YYYY</string>
+    <string name="kitap_ekleme_kameraIzinDialogTitle">Kamera İzni</string>
+    <string name="kitap_ekleme_kameraIzinDialogDescription">Kitap resmi eklemek için kamera izninizin olması gerekmektedir. Uygulama ayarlarına gitmek için devam etmek istiyor musunuz?</string>
 </resources>

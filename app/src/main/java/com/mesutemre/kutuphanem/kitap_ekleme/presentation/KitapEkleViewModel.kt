@@ -42,4 +42,28 @@ class KitapEkleViewModel @Inject constructor() : BaseViewModel() {
             }
         }
     }
+
+    fun clickCameraPermission() {
+        _state.update {
+            it.copy(
+                isCameraPermissionClicked = true
+            )
+        }
+    }
+
+    fun showSettingsDialog() {
+        _state.update {
+            it.copy(
+                showSettingsDialog = true
+            )
+        }
+    }
+
+    fun dismissSettingsDialog() {
+        _state.update {
+            it.copy(
+                showSettingsDialog = false
+            )
+        }
+    }
 }

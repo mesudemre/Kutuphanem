@@ -9,5 +9,7 @@ data class KitapEklemeState(
     val yazarAd: String = "",
     val yazarAdError: Int? = null,
     val alinmaTar: String = "",
-    val alinmaTarError: Int? = null
+    val alinmaTarError: Int? = null,
+    val isCameraPermissionClicked: Boolean = false,
+    val showSettingsDialog: Boolean = false
 )
