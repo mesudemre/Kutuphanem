@@ -21,16 +21,18 @@ import com.mesutemre.kutuphanem.model.ERROR
 import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
+import com.mesutemre.kutuphanem.util.customcomponents.snackbar.KutuphanemSnackBarHost
+import com.mesutemre.kutuphanem.util.rememberKutuphanemAppState
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun KitapDetayScreen(
-    showSnackbar: (String, SnackbarDuration, Int) -> Unit,
     navController: NavController,
     viewModel: KitapDetayScreenViewModel = hiltViewModel()
 ) {
+    val kutuphanemAppState = rememberKutuphanemAppState()
     val state = viewModel.state.collectAsState()
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState =
@@ -60,6 +62,9 @@ fun KitapDetayScreen(
     }
     BottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
+        snackbarHost = {
+            KutuphanemSnackBarHost(state = kutuphanemAppState.kutuphanemSnackbarState)
+        },
         sheetContent = {
             if (state.value.kitapDetayBottomSheetState == KitapDetayBottomSheetState.KITAP_DETAY_ACIKLAMA) {
                 KitapDetayAciklamaBottomSheet(
@@ -107,7 +112,7 @@ fun KitapDetayScreen(
             when (state.value.kitapYorumKaydetResource) {
                 is BaseResourceEvent.Success -> {
                     LaunchedEffect(key1 = Unit) {
-                        showSnackbar(
+                        kutuphanemAppState.showSnackbar(
                             state.value.kitapYorumKaydetResource.data?.statusMessage!!,
                             SnackbarDuration.Short,
                             SUCCESS
@@ -116,7 +121,7 @@ fun KitapDetayScreen(
                 }
                 is BaseResourceEvent.Error -> {
                     LaunchedEffect(key1 = Unit) {
-                        showSnackbar(
+                        kutuphanemAppState.showSnackbar(
                             state.value.kitapYorumKaydetResource.data?.statusMessage!!,
                             SnackbarDuration.Short,
                             ERROR

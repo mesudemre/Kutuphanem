@@ -37,7 +37,7 @@ fun KutuphanemNavigation(
         }
 
         composable(route = KutuphanemNavigationItem.LoginScreen.screenRoute) {
-            LoginScreen(showSnackbar = showSnackbar, navController = navController)
+            LoginScreen(navController = navController)
         }
 
         composable(route = KutuphanemNavigationItem.ParameterScreen.screenRoute,
@@ -159,7 +159,7 @@ fun KutuphanemNavigation(
                     animationSpec = tween(200)
                 )
             }) {
-            KitapDetayScreen(showSnackbar = showSnackbar, navController = navController)
+            KitapDetayScreen(navController = navController)
         }
 
         composable(route = KutuphanemNavigationItem.KitapEklemeScreen.screenRoute,
