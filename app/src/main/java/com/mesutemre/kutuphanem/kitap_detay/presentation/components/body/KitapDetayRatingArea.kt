@@ -33,7 +33,7 @@ fun KitapDetayRatingArea(kitapPuan: Float) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.sdp),
+            .padding(vertical = 4.sdp, horizontal = 16.sdp),
         shape = MaterialTheme.shapes.small,
         backgroundColor = MaterialTheme.colorPalette.white,
         elevation = 4.sdp
@@ -86,7 +86,7 @@ fun KitapDetayRatingArea(kitapPuan: Float) {
             } else {
                 Text(
                     text = stringResource(id = R.string.noComentKitapYet),
-                    modifier = Modifier.padding(start = 4.sdp,top = 8.sdp),
+                    modifier = Modifier.padding(start = 4.sdp, top = 8.sdp),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.smallUbuntuErrorBold.copy(lineHeight = 14.ssp)
                 )

@@ -13,6 +13,7 @@
     <string name="archiveLabel">Arşivle</string>
     <string name="noNetworkConnection">İnternet bağlantınız bulunmamaktadır!</string>
     <string name="vazgecLabel">Vazgeç</string>
+    <string name="begenLabel">Beğen</string>
 
     <!--Bottom Navigation Menu -->
     <string name="anasayfaItem">Anasayfa</string>

@@ -1,7 +1,6 @@
 package com.mesutemre.kutuphanem_ui.card
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,11 +11,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -175,7 +172,7 @@ private fun KitapInfo(kitapImage: String, kitapAd: String, yazarAd: String, acik
                 .height(150.sdp)
                 .clip(shape = MaterialTheme.shapes.medium)
                 .border(
-                    (1/2).sdp,
+                    (1 / 2).sdp,
                     MaterialTheme.colorPalette.secondaryGray,
                     MaterialTheme.shapes.medium
                 ),
@@ -283,12 +280,16 @@ fun KitapDetayInfoCard(
     value: String
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 4.sdp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.sdp, horizontal = 16.sdp),
         shape = MaterialTheme.shapes.small,
         backgroundColor = MaterialTheme.colorPalette.white,
         elevation = 4.sdp
     ) {
-        Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.sdp, vertical = 8.sdp)) {
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.sdp, vertical = 8.sdp)) {
             Text(
                 text = label,
                 maxLines = 1,
@@ -302,6 +303,61 @@ fun KitapDetayInfoCard(
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.smallUbuntuTransparent.copy(lineHeight = 12.ssp)
             )
+        }
+    }
+}
+
+@Composable
+fun KitapAciklamaText(
+    label: String,
+    aciklama: String,
+    onClickTextDetailIcon: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.sdp, horizontal = 16.sdp),
+        shape = MaterialTheme.shapes.small,
+        backgroundColor = MaterialTheme.colorPalette.white,
+        elevation = 4.sdp
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.sdp, vertical = 8.sdp)
+        ) {
+            var lineCount by remember {
+                mutableStateOf(1)
+            }
+            Text(
+                text = label,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.smallUbuntuBlackBold
+            )
+            Text(
+                text = aciklama,
+                modifier = Modifier
+                    .padding(top = 4.sdp),
+                maxLines = 4,
+                onTextLayout = { textLayoutResult: TextLayoutResult ->
+                    lineCount = textLayoutResult.lineCount
+                },
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.smallUbuntuTransparent.copy(lineHeight = 14.ssp)
+            )
+            if (lineCount > 3) {
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowDown, contentDescription = label,
+                    tint = MaterialTheme.colorPalette.transparent,
+                    modifier = Modifier
+                        .size(32.sdp)
+                        .align(Alignment.CenterHorizontally)
+                        .rippleClick {
+                            onClickTextDetailIcon()
+                        }
+                )
+            }
         }
     }
 }

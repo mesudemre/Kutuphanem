@@ -10,19 +10,20 @@ import kotlinx.coroutines.flow.flow
  */
 class DbCallUseCase : IDbCall {
 
-    override fun <T : Any> dbCall(call: suspend () -> T): Flow<BaseResourceEvent<T>> = flow {
-        emit(BaseResourceEvent.Loading())
-        var response: T? = null
-        try {
-            response = call.invoke()
-        } catch (t: Throwable) {
-            emit(BaseResourceEvent.Error(t.message!!))
+    override inline fun <T : Any> dbCall(crossinline call: suspend () -> T): Flow<BaseResourceEvent<T>> =
+        flow {
+            emit(BaseResourceEvent.Loading())
+            var response: T? = null
+            try {
+                response = call.invoke()
+            } catch (t: Throwable) {
+                emit(BaseResourceEvent.Error(t.message!!))
+            }
+            if (response == null) {
+                emit(BaseResourceEvent.Error("Herhangi bir data bulunamadı!"))
+            } else {
+                emit(BaseResourceEvent.Success(response))
+            }
         }
-        if (response == null) {
-            emit(BaseResourceEvent.Error("Herhangi bir data bulunamadı!"))
-        } else {
-            emit(BaseResourceEvent.Success(response))
-        }
-    }
 
 }
