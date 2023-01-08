@@ -34,6 +34,7 @@ import com.mesutemre.kutuphanem.util.customcomponents.dialog.CustomKutuphanemDia
 import com.mesutemre.kutuphanem.util.customcomponents.input.KutuphanemOutlinedFormTextField
 import com.mesutemre.kutuphanem_base.util.MaskVisualTransformation
 import com.mesutemre.kutuphanem_ui.button.KutuphanemMainMaterialButton
+import com.mesutemre.kutuphanem_ui.card.KutuphanemSelectableCard
 import com.mesutemre.kutuphanem_ui.dialog.WARNING_DLG
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalPermissionsApi::class)
@@ -181,6 +182,33 @@ fun KitapEklemeScreen(
                     } ?: null,
                     label = stringResource(id = R.string.alinmaTarLabelText),
                     placeHolder = stringResource(id = R.string.kitap_ekleme_alinmaTarPlaceholder)
+                )
+                KutuphanemSelectableCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.sdp),
+                    title = state.value.selectedKitapTur?.let {
+                        it.kitapTurAciklama
+                    } ?: run {
+                        stringResource(id = R.string.kitapTurLabel)
+                    },
+                    errorStr = state.value.kitapTurError?.let {
+                        stringResource(id = it)
+                    }
+                )
+
+                KutuphanemSelectableCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.sdp),
+                    title = state.value.selectedYayinEvi?.let {
+                        it.yayinEviAciklama
+                    } ?: run {
+                        stringResource(id = R.string.yayinEviLabel)
+                    },
+                    errorStr = state.value.yayinEviError?.let {
+                        stringResource(id = it)
+                    }
                 )
             }
             KutuphanemMainMaterialButton(

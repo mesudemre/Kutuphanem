@@ -1,15 +1,13 @@
 package com.mesutemre.kutuphanem_ui.card
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
@@ -287,9 +285,11 @@ fun KitapDetayInfoCard(
         backgroundColor = MaterialTheme.colorPalette.white,
         elevation = 4.sdp
     ) {
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.sdp, vertical = 8.sdp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.sdp, vertical = 8.sdp)
+        ) {
             Text(
                 text = label,
                 maxLines = 1,
@@ -357,6 +357,80 @@ fun KitapAciklamaText(
                             onClickTextDetailIcon()
                         }
                 )
+            }
+        }
+    }
+}
+
+@Composable
+fun KutuphanemSelectableCard(
+    modifier: Modifier,
+    title: String,
+    errorStr: String? = null
+) {
+    Card(
+        modifier = modifier,
+        elevation = 4.sdp,
+        backgroundColor = MaterialTheme.colorPalette.white,
+        shape = MaterialTheme.shapes.medium,
+        border = BorderStroke(
+            width = (1 / 2).sdp,
+            color = errorStr?.let {
+                MaterialTheme.colorPalette.kirmizi
+            } ?: run {
+                MaterialTheme.colorPalette.transparent
+            }
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.sdp),
+            verticalArrangement = Arrangement.Center
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.sdp, vertical = 8.sdp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.smallUbuntuTransparent,
+                    modifier = Modifier.weight(1f)
+                )
+                Icon(
+                    Icons.Filled.ChevronRight,
+                    contentDescription = title,
+                    tint = MaterialTheme.colorPalette.lacivert
+                )
+            }
+            errorStr?.let {
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 2.sdp),
+                    thickness = 1.sdp,
+                    color = MaterialTheme.colorPalette.transparent
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(color = MaterialTheme.colorPalette.kirmizi)
+                        .padding(top = 4.sdp, start = 8.sdp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        Icons.Filled.Error,
+                        contentDescription = title,
+                        tint = MaterialTheme.colorPalette.white
+                    )
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.smallUbuntuWhite,
+                        modifier = Modifier.padding(start = 8.sdp)
+                    )
+                }
             }
         }
     }
