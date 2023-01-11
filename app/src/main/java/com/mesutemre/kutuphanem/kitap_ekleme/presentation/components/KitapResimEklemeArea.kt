@@ -14,10 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem_ui.theme.colorPalette
-import com.mesutemre.kutuphanem_ui.theme.sdp
-import com.mesutemre.kutuphanem_ui.theme.smallUbuntuError
+import com.mesutemre.kutuphanem_ui.theme.*
 
 @Composable
 fun KitapResimEklemeArea(
@@ -52,10 +51,17 @@ fun KitapResimEklemeArea(
                 Icon(
                     Icons.Filled.PhotoCamera,
                     modifier = Modifier
-                        .alpha(0.8f)
+                        .alpha(0.3f)
                         .size(100.sdp),
                     contentDescription = stringResource(id = R.string.kitapEklemeResimArea),
                     tint = MaterialTheme.colorPalette.secondaryGray
+                )
+                Text(
+                    text = stringResource(id = R.string.kitap_ekleme_kitapResimLabel),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.smallUbuntuTransparentBold.copy(
+                        lineHeight = 14.ssp
+                    )
                 )
             }
         }

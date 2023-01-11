@@ -221,4 +221,7 @@
     <string name="kitap_ekleme_alinmaTarPlaceholder">GG.AA.YYYY</string>
     <string name="kitap_ekleme_kameraIzinDialogTitle">Kamera İzni</string>
     <string name="kitap_ekleme_kameraIzinDialogDescription">Kitap resmi eklemek için kamera izninizin olması gerekmektedir. Uygulama ayarlarına gitmek için devam etmek istiyor musunuz?</string>
+    <string name="kitap_ekleme_kitapAciklamaPlaceHolder">Lütfen kitap hakkında kısa da olsa bir açıklama giriniz...</string>
+    <string name="kitap_ekleme_kitapAciklamaLabel">Kitap Hakkında</string>
+    <string name="kitap_ekleme_kitapResimLabel">Kitap resmi eklemek için tıklayınız...</string>
 </resources>

@@ -15,7 +15,7 @@ class KitapEkleViewModel @Inject constructor() : BaseViewModel() {
     val state: StateFlow<KitapEklemeState> = _state
 
     fun onKitapEklemeEvent(event: KitapEklemeEvent) {
-        when(event) {
+        when (event) {
             is KitapEklemeEvent.KitapAdTextChange -> {
                 _state.update {
                     it.copy(
@@ -37,6 +37,21 @@ class KitapEkleViewModel @Inject constructor() : BaseViewModel() {
                     it.copy(
                         alinmaTar = event.alinmaTar,
                         alinmaTarError = null
+                    )
+                }
+            }
+            is KitapEklemeEvent.KitapAciklamaTextChange -> {
+                _state.update {
+                    it.copy(
+                        kitapAciklama = event.kitapAciklama,
+                        kitapAciklamaError = null
+                    )
+                }
+            }
+            is KitapEklemeEvent.KitapResimEklemeOpenClose -> {
+                _state.update {
+                    it.copy(
+                        openCamera = event.isOpen
                     )
                 }
             }

@@ -8,15 +8,18 @@ import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.KitapEklemeYayinEviMod
 @Stable
 data class KitapEklemeState(
     val kitapAd: String = "",
-    val kitapAdError: Int? = null,
+    @StringRes val kitapAdError: Int? = null,
     val yazarAd: String = "",
-    val yazarAdError: Int? = null,
+    @StringRes val yazarAdError: Int? = null,
     val alinmaTar: String = "",
-    val alinmaTarError: Int? = null,
+    @StringRes val alinmaTarError: Int? = null,
     val isCameraPermissionClicked: Boolean = false,
     val showSettingsDialog: Boolean = false,
     val selectedKitapTur: KitapEklemeKitapTurModel? = null,
     @StringRes val kitapTurError: Int? = null,
     val selectedYayinEvi: KitapEklemeYayinEviModel? = null,
-    @StringRes val yayinEviError: Int? = null
+    @StringRes val yayinEviError: Int? = null,
+    val kitapAciklama: String = "",
+    @StringRes val kitapAciklamaError: Int? = null,
+    val openCamera: Boolean = false
 )

@@ -9,7 +9,9 @@ buildscript {
     ext.navVersion = "2.4.1"
     ext.preferencesVersion = "1.1.1"
     ext.hilt_version = '2.37'
-    ext.camerax_version = '1.0.0-beta12'
+    ext.camerax_version = '1.2.0'
+    ext.camera_lifecycle_version = '1.2.0'
+    ext.camerax_camera_view_version = '1.2.0'
 
     ext.compose_ui_version = '1.1.1'
     ext.compose_tooling_version = '1.1.1'

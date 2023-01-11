@@ -382,9 +382,6 @@ fun KutuphanemOutlinedFormTextField(
     val isError by remember {
         mutableStateOf(errorMessage.isNullOrEmpty().not())
     }
-    val textLenght by remember {
-        mutableStateOf(textState.length)
-    }
     Column {
         OutlinedTextField(
             modifier = modifier,
