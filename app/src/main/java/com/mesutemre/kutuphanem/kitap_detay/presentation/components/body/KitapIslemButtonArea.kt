@@ -35,6 +35,7 @@ fun KitapIslemButtonArea() {
                 listOf(
                     MaterialTheme.colorPalette.acikTuruncu,
                     MaterialTheme.colorPalette.fistikYesil,
+                    MaterialTheme.colorPalette.acikLacivert,
                     MaterialTheme.colorPalette.lacivert
                 ),
                 tileMode = TileMode.Repeated

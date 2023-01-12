@@ -73,8 +73,6 @@ sealed class KutuphanemNavigationItem(
     )
 
     object KitapEklemeScreen : KutuphanemNavigationItem(
-        screenRoute = "kutuphanem_kitap_ekleme",
-        showTopBar = true,
-        pageTitle = R.string.kitapEklemeTitle
+        screenRoute = "kutuphanem_kitap_ekleme"
     )
 }

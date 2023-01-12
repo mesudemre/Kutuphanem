@@ -1,7 +1,5 @@
 package com.mesutemre.kutuphanem.kitap_ekleme.presentation.components
 
-import android.graphics.Color
-import android.graphics.Paint
 import android.util.Log
 import android.view.ViewGroup
 import androidx.camera.core.CameraSelector
@@ -24,10 +22,6 @@ fun KitapResimCameraArea(
     cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
-    val paint = Paint().apply {
-        this.color = Color.GREEN
-        this.strokeWidth = 5f
-    }
     Box(modifier = Modifier.fillMaxSize()) {
         AndroidView(
             modifier = Modifier

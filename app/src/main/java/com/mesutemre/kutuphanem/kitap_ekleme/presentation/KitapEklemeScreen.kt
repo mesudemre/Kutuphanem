@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -28,6 +29,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.mesutemre.kutuphanem.BuildConfig
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.kitap_detay.presentation.KitapEklemeEvent
+import com.mesutemre.kutuphanem.kitap_ekleme.presentation.components.KitapEklemeScreenTopBar
 import com.mesutemre.kutuphanem.kitap_ekleme.presentation.components.KitapResimCameraArea
 import com.mesutemre.kutuphanem.kitap_ekleme.presentation.components.KitapResimEklemeArea
 import com.mesutemre.kutuphanem.ui.theme.sdp
@@ -59,10 +61,38 @@ fun KitapEklemeScreen(
     val cameraPermissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
     val context = LocalContext.current
 
+    val openCloseCamera = remember<(Boolean) -> Unit> {
+        {
+            viewModel.onKitapEklemeEvent(KitapEklemeEvent.KitapResimEklemeOpenClose(it))
+        }
+    }
+
+    val popBack = remember<() -> Unit> {
+        {
+            navController.popBackStack()
+        }
+    }
+
+    BackHandler {
+        if (state.value.openCamera) {
+            openCloseCamera(false)
+        } else {
+            popBack()
+        }
+    }
+
     BottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
+        topBar = if (state.value.openCamera.not()) {
+            {
+                KitapEklemeScreenTopBar(
+                    pageTitle = stringResource(id = R.string.kitapEklemeTitle),
+                    onBackPress = popBack
+                )
+            }
+        } else null,
         sheetContent = {
-
+            //TODO : Kitap tür ve yayınevi seçilecek shhetler açılacak...
         },
         sheetBackgroundColor = MaterialTheme.colorPalette.white,
         sheetContentColor = MaterialTheme.colorPalette.loginBackColor,
@@ -86,12 +116,6 @@ fun KitapEklemeScreen(
         val onChangeKitapAciklama = remember<(String) -> Unit> {
             {
                 viewModel.onKitapEklemeEvent(KitapEklemeEvent.KitapAciklamaTextChange(it))
-            }
-        }
-
-        val openCloseCamera = remember<(Boolean) -> Unit> {
-            {
-                viewModel.onKitapEklemeEvent(KitapEklemeEvent.KitapResimEklemeOpenClose(it))
             }
         }
 

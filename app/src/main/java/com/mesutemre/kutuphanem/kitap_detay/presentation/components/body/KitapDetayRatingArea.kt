@@ -33,7 +33,7 @@ fun KitapDetayRatingArea(kitapPuan: Float) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.sdp, horizontal = 16.sdp),
+            .padding(vertical = 4.sdp),
         shape = MaterialTheme.shapes.small,
         backgroundColor = MaterialTheme.colorPalette.white,
         elevation = 4.sdp
