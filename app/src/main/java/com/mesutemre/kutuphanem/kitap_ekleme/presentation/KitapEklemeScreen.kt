@@ -26,6 +26,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.mesutemre.kutuphanem.BuildConfig
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.kitap_detay.presentation.KitapEklemeEvent
@@ -60,6 +61,9 @@ fun KitapEklemeScreen(
     val state = viewModel.state.collectAsState()
     val cameraPermissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
     val context = LocalContext.current
+    val systemUiController = rememberSystemUiController()
+
+    systemUiController.isStatusBarVisible = !state.value.openCamera
 
     val openCloseCamera = remember<(Boolean) -> Unit> {
         {

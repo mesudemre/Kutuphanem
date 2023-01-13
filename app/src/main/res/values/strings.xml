@@ -224,4 +224,6 @@
     <string name="kitap_ekleme_kitapAciklamaPlaceHolder">Lütfen kitap hakkında kısa da olsa bir açıklama giriniz...</string>
     <string name="kitap_ekleme_kitapAciklamaLabel">Kitap Hakkında</string>
     <string name="kitap_ekleme_kitapResimLabel">Kitap resmi eklemek için tıklayınız...</string>
+    <string name="kitap_ekleme_onKameraLabel">Ön/Arka kamera</string>
+    <string name="kitap_ekleme_cameraTitle">Kitabın resmini çekebilirsiniz</string>
 </resources>
