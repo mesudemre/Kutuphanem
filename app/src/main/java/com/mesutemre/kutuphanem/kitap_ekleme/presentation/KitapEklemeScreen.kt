@@ -135,6 +135,7 @@ fun KitapEklemeScreen(
                     PermissionStatus.Denied(true) -> { //Ekrandan denied yaptık.
                         Log.d("KUTUPHANEM_PERMISSION", "Store true Kamera izni yok..")
                     }
+                    else -> {}
                 }
             }
         }

@@ -67,6 +67,7 @@ class KitapShareUseCase @Inject constructor(
                 is BaseResourceEvent.Error -> {
                     send(BaseResourceEvent.Error(message = response.message))
                 }
+                else -> {}
             }
         }
     }

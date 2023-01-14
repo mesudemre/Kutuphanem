@@ -67,9 +67,6 @@ class MainActivityLegacy : AppCompatActivity() {
             navHostFragment.navController.navigate(R.id.anasayfaFragment)
         }
 
-        binding.floatingActionButton3.setOnClickListener {
-            navHostFragment.navController.navigate(R.id.kitapEklemeFragment)
-        }
     }
 
     private fun initNavBottomMenu(){
@@ -85,9 +82,6 @@ class MainActivityLegacy : AppCompatActivity() {
         navHostFragment = supportFragmentManager.findFragmentById(R.id.bottomFragmentId) as NavHostFragment
         navHostFragment.navController.addOnDestinationChangedListener { controller, destination, arguments ->
             if(destination.id in arrayOf(
-                    R.id.kitapEklemeFragment,
-                    R.id.kitapDetayFragment,
-                    R.id.kitapDetayDeepFragment,
                     R.id.profilIslemAdSoyadEpostaFragment,
                     R.id.profilIslemDogumTarCinsiyetFragment,
                     R.id.profilIslemIlgiAlanlarimFragment,

@@ -171,10 +171,10 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
                             }
+                            else -> {}
                         }
                     }
                 }
-
             }
         }
     }

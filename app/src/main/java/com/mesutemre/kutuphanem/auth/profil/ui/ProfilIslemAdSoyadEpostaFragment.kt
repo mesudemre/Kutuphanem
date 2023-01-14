@@ -101,6 +101,7 @@ class ProfilIslemAdSoyadEpostaFragment:BaseFragment<ProfilIslemAdSoyadEpostaBind
                     binding.profilIslemAdSoyadEpostaMainLayoutId.showComponent();
                     showSnackBar(getFragmentView(),it.data!!.statusMessage, SUCCESS);
                 }
+                else -> {}
             }
         });
     }

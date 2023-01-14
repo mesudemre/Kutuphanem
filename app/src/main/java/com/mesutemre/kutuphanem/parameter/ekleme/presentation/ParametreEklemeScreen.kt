@@ -72,6 +72,7 @@ fun ParametreEklemeScreen(
                 )
             }
         }
+        else -> {}
     }
 
     ConstraintLayout(

@@ -74,6 +74,7 @@ fun KitapYilStatisticsArea(
                         )
                     )
                 }
+                else -> {}
             }
         }
     }

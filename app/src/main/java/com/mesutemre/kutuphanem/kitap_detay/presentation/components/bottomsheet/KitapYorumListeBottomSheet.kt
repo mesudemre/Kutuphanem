@@ -128,6 +128,7 @@ fun KitapYorumListeBottomSheet(
                 is BaseResourceEvent.Error -> {
 
                 }
+                else -> {}
             }
         }
     }

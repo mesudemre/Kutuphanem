@@ -91,6 +91,7 @@ fun KitapDetayInfoBodyArea(
         is BaseResourceEvent.Error -> {
 
         }
+        else -> {}
     }
 }
 

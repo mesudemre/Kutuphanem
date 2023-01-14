@@ -75,5 +75,6 @@ fun DashboardSearchResult(
         is BaseResourceEvent.Error -> {
             NoSearchDoneYet(resultListResource.message ?: "")
         }
+        else -> {}
     }
 }

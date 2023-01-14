@@ -58,6 +58,7 @@ fun ParametreKitapTurScreen(
                 )
             }
         }
+        else -> {}
     }
 
     if (state.isPopUpShow) {
@@ -174,6 +175,7 @@ fun ParametreKitapTurScreen(
                         }
                     }
                 }
+                else -> {}
             }
         }
     }

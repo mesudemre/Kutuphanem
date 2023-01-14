@@ -75,6 +75,7 @@ fun TumKitapListe(
                 )
                 viewModel.setDefaultStateForKitapIslem()
             }
+            else -> {}
         }
 
         when (kitapShareSource) {
@@ -104,6 +105,7 @@ fun TumKitapListe(
                 )
                 viewModel.setDefaultStateForKitapShare()
             }
+            else -> {}
         }
 
 

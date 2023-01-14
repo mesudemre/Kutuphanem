@@ -84,5 +84,6 @@ fun DashboardSearchHistory(
         is BaseResourceEvent.Error -> {
             NoSearchDoneYet(stringResource(id = R.string.search_dashboard_not_search_yet))
         }
+        else -> {}
     }
 }

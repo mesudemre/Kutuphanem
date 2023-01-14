@@ -6,18 +6,6 @@
     app:startDestination="@id/kitapListeFragment">
 
     <fragment
-        android:id="@+id/kitapListeFragment"
-        tools:layout="@layout/kitap_liste_fragment"
-        android:name="com.mesutemre.kutuphanem.kitap.liste.ui.KitapListeFragment"
-        android:label="KitapListeFragment" >
-        <action
-            android:id="@+id/action_kitapListeFragment_to_parametreFragment"
-            app:destination="@id/parametreFragment" />
-        <action
-            android:id="@+id/action_kitapListeFragment_to_kitapDetayFragment"
-            app:destination="@id/kitapDetayFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/profilIslemFragment"
         tools:layout="@layout/profil_islem_fragment"
         android:name="com.mesutemre.kutuphanem.auth.profil.ui.ProfilIslemFragment"
@@ -42,40 +30,6 @@
             app:destination="@id/exitFromApplicationDialogFragment" />
     </fragment>
 
-    <fragment
-        android:id="@+id/kitapEklemeFragment"
-        android:name="com.mesutemre.kutuphanem.kitap.ekleme.ui.KitapEklemeFragment"
-        android:label="KitapEklemeFragment"
-        />
-    <fragment
-        android:id="@+id/kitapDetayFragment"
-        android:name="com.mesutemre.kutuphanem.kitap.detay.ui.KitapDetayFragment"
-        android:label="KitapDetayFragment">
-        <argument
-            android:name="kitapObj"
-            app:argType="com.mesutemre.kutuphanem.kitap.liste.model.KitapModel" />
-        <argument
-            android:name="fromArsiv"
-            app:argType="boolean"/>
-        <action
-            android:id="@+id/action_kitapDetayFragment_to_kotlinKitapViewFooFragment"
-            app:destination="@id/kotlinKitapViewFooFragment" />
-        <action
-            android:id="@+id/action_kitapDetayFragment_to_kitapAciklamaBottomSheetDialogFragment"
-            app:destination="@id/kitapAciklamaBottomSheetDialogFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/kitapDetayDeepFragment"
-        android:name="com.mesutemre.kutuphanem.kitap.detay.ui.KitapDetayDeepFragment"
-        android:label="KitapDetayDeepFragment" >
-        <action
-            android:id="@+id/action_kitapDetayDeepFragment_to_anasayfaFragment"
-            app:destination="@id/anasayfaFragment" />
-        <deepLink
-            android:id="@+id/deepLinkKitapDetay"
-            app:uri="http://192.168.1.106:8080/KutuphaneSistemiWS/api/kitap/nesne?kitapId={kitapId}" />
-        <argument android:name="kitapId" app:argType="string"/>
-    </fragment>
 
     <fragment
         android:id="@+id/profilIslemAdSoyadEpostaFragment"
@@ -108,12 +62,6 @@
         <argument
             android:name="kullaniciObj"
             app:argType="com.mesutemre.kutuphanem.auth.profil.model.Kullanici" />
-    </fragment>
-    <fragment
-        android:id="@+id/kotlinKitapViewFooFragment"
-        android:name="com.mesutemre.kutuphanem.kitap.detay.ui.KotlinKitapViewFooFragment"
-        android:label="KotlinKitapViewFooFragment">
-        <argument android:name="fileInfo" app:argType="com.mesutemre.kutuphanem.kitap.detay.ui.FileDataModel"/>
     </fragment>
     <dialog
         android:id="@+id/kitapAciklamaBottomSheetDialogFragment"

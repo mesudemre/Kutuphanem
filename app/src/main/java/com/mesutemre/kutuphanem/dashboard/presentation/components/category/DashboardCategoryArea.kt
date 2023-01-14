@@ -42,6 +42,7 @@ fun DashboardCategoryArea(kategoriResource: BaseResourceEvent<List<DashboardKate
                         id = R.string.dashKategoriListeHata
                     ))
                 }
+                else -> {}
             }
         }
     }

@@ -72,5 +72,6 @@ fun PersonelInfoArea(kullaniciBilgi: BaseResourceEvent<DashboardKullaniciBilgiDa
                 )
             }
         }
+        else -> {}
     }
 }

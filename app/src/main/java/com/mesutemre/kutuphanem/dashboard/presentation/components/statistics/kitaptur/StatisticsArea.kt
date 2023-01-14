@@ -61,6 +61,7 @@ fun StatisticsArea(
                         )
                     )
                 }
+                else -> {}
             }
         }
     }

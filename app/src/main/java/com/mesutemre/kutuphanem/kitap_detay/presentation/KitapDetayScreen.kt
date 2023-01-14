@@ -128,6 +128,7 @@ fun KitapDetayScreen(
                         )
                     }
                 }
+                else -> {}
             }
 
             KitapDetayHeaderArea(
