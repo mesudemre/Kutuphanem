@@ -48,6 +48,7 @@ fun KitapDetayHeaderArea(
                         .fillMaxWidth()
                         .padding(top = 32.sdp, start = 16.sdp, end = 16.sdp)
                 ) {
+                    KitapDetayHeaderBar()
                     KitapDetayHeaderContent(
                         kitapResim = kitapDetayItemResource.data!!.kitapResim,
                         kitapAd = kitapDetayItemResource.data!!.kitapAd

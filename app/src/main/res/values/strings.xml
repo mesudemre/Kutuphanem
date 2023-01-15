@@ -215,6 +215,7 @@
     <string name="kitap_detay_kitap_puanYorum_bilgi_label">PUAN VE YORUMLAR</string>
     <string name="kitap_detay_ilkYorumTitle">Yorumlar</string>
     <string name="kitap_detay_noComment">Kitap hakkında hiçbir yorum yapılmamış. Dilerseniz ilk yorum yapan siz olun.</string>
+    <string name="kitap_detay_screen_title">Kitap Detayı</string>
 
     <string name="kitap_ekleme_kitapAdPlaceholder">Lütfen bir kitap adı giriniz...</string>
     <string name="kitap_ekleme_yazarAdPlaceholder">Lütfen bir yazar adı giriniz...</string>

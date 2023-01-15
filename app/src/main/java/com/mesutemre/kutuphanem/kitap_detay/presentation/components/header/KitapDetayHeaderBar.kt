@@ -1,6 +1,5 @@
 package com.mesutemre.kutuphanem.kitap_detay.presentation.components.header
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -23,9 +22,7 @@ fun KitapDetayHeaderBar(
 ) {
     Row(
         modifier = Modifier
-            .height(64.sdp)
-            .fillMaxWidth()
-            .background(color = MaterialTheme.colorPalette.lacivert),
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
