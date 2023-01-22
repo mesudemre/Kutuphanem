@@ -56,6 +56,8 @@ buildscript {
     ext.composeRatingBar = '1.2.4'
     ext.accompanist_permission = '0.28.0'
 
+    ext.mlkit_text_recognation = '18.0.2'
+
     repositories {
         google()
         jcenter()

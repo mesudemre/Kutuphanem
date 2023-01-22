@@ -227,4 +227,10 @@
     <string name="kitap_ekleme_kitapResimLabel">Kitap resmi eklemek için tıklayınız...</string>
     <string name="kitap_ekleme_onKameraLabel">Ön/Arka kamera</string>
     <string name="kitap_ekleme_cameraTitle">Kitabın resmini çekebilirsiniz</string>
+    <string name="kitap_ekleme_kitapAciklamaKameraIzin">İşlemi yapabilmeniz için kamera izni vermekniz gerekmektedir. Uygulama ayarlarına gitmek için devam etmek istiyor musunuz?</string>
+    <string name="kitap_ekleme_cropDialogTitle">Kitap Resmi</string>
+    <string name="kitap_ekleme_cropDialogDescription">Bu resmi eklemek istediğinize emin misiniz?</string>
+    <string name="kitap_ekleme_imageCropAreaContentDescription">Resim kırpma</string>
+    <string name="kitap_ekleme_croppedImageContentDescription">Kırpılan resim</string>
+    <string name="kitap_ekleme_removeCroppedImageContentDescription">Resmi kaldır</string>
 </resources>

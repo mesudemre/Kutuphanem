@@ -314,7 +314,6 @@ fun KutuphanemSelectableCard(
 ) {
     Card(
         modifier = modifier,
-        elevation = 4.sdp,
         backgroundColor = MaterialTheme.colorPalette.white,
         shape = MaterialTheme.shapes.medium,
         border = BorderStroke(

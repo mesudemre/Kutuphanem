@@ -3,12 +3,10 @@ package com.mesutemre.kutuphanem.kitap_ekleme.presentation.components
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
+import androidx.camera.core.UseCase
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -20,33 +18,25 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.view.size
 import com.mesutemre.kutuphanem.R
-import com.mesutemre.kutuphanem_ui.extensions.getCameraProvider
 import com.mesutemre.kutuphanem_ui.extensions.rippleClick
 import com.mesutemre.kutuphanem_ui.theme.colorPalette
 import com.mesutemre.kutuphanem_ui.theme.sdp
 import com.mesutemre.kutuphanem_ui.theme.smallUbuntuWhiteBold
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @Composable
 fun KitapResimCameraArea(
-    coroutineScope: CoroutineScope,
     scaleType: PreviewView.ScaleType = PreviewView.ScaleType.FILL_CENTER,
-    cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+    onUseCase: (UseCase) -> Unit = { },
+    onTakePicture: () -> Unit
 ) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val context = LocalContext.current
     Surface(
         modifier = Modifier
             .fillMaxSize(),
@@ -63,24 +53,14 @@ fun KitapResimCameraArea(
                         ViewGroup.LayoutParams.MATCH_PARENT
                     )
                 }
-                // CameraX Preview UseCase
-                val previewUseCase = Preview.Builder()
-                    .build()
-                    .also {
-                        it.setSurfaceProvider(previewView.surfaceProvider)
-                    }
-                coroutineScope.launch {
-                    val cameraProvider = context.getCameraProvider()
-                    try {
-                        // Must unbind the use-cases before rebinding them.
-                        cameraProvider.unbindAll()
-                        cameraProvider.bindToLifecycle(
-                            lifecycleOwner, cameraSelector, previewUseCase
-                        )
-                    } catch (ex: Exception) {
-                        Log.e("CameraPreview", "Use case binding failed", ex)
-                    }
-                }
+                onUseCase(
+                    Preview.Builder()
+                        .build()
+                        .also {
+                            Log.d("COORDINATES", "PreviewView Size : " + previewView.size)
+                            it.setSurfaceProvider(previewView.surfaceProvider)
+                        }
+                )
                 previewView
             })
         SoftwareLayerComposable(
@@ -90,7 +70,7 @@ fun KitapResimCameraArea(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(MaterialTheme.colorPalette.black.copy(alpha = 0.4f))
+                //.background(MaterialTheme.colorPalette.black.copy(alpha = 0.4f))
             )
             Box(
                 modifier = Modifier
@@ -100,14 +80,15 @@ fun KitapResimCameraArea(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .align(Alignment.Center),
+                        .padding(top = 48.sdp)
+                        .align(Alignment.TopCenter),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
                         text = stringResource(id = R.string.kitap_ekleme_cameraTitle),
                         style = MaterialTheme.typography.smallUbuntuWhiteBold
                     )
-                    Row(
+                    /*Row(
                         modifier = Modifier
                             .padding(top = 12.sdp)
                             .height(300.sdp)
@@ -128,7 +109,7 @@ fun KitapResimCameraArea(
                                 blendMode = BlendMode.Clear
                             )
                         }
-                    }
+                    }*/
                 }
 
                 Icon(
@@ -136,7 +117,10 @@ fun KitapResimCameraArea(
                     modifier = Modifier
                         .size(100.sdp)
                         .padding(bottom = 48.sdp)
-                        .align(Alignment.BottomCenter),
+                        .align(Alignment.BottomCenter)
+                        .rippleClick {
+                            onTakePicture()
+                        },
                     contentDescription = stringResource(id = R.string.kitapEklemeResimArea),
                     tint = MaterialTheme.colorPalette.white
                 )

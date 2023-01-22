@@ -16,6 +16,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -30,10 +32,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.mesutemre.kutuphanem.BuildConfig
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.kitap_detay.presentation.KitapEklemeEvent
-import com.mesutemre.kutuphanem.kitap_ekleme.presentation.components.KitapEklemeScreenTopBar
-import com.mesutemre.kutuphanem.kitap_ekleme.presentation.components.KitapResimCameraArea
-import com.mesutemre.kutuphanem.kitap_ekleme.presentation.components.KitapResimEklemeArea
-import com.mesutemre.kutuphanem.ui.theme.sdp
+import com.mesutemre.kutuphanem.kitap_ekleme.presentation.components.*
 import com.mesutemre.kutuphanem.ui.theme.smallUbuntuBlack
 import com.mesutemre.kutuphanem.ui.theme.smallUbuntuWhiteBold
 import com.mesutemre.kutuphanem.util.customcomponents.dialog.CustomKutuphanemDialog
@@ -42,7 +41,9 @@ import com.mesutemre.kutuphanem_base.util.MaskVisualTransformation
 import com.mesutemre.kutuphanem_ui.button.KutuphanemMainMaterialButton
 import com.mesutemre.kutuphanem_ui.card.KutuphanemSelectableCard
 import com.mesutemre.kutuphanem_ui.dialog.WARNING_DLG
+import com.mesutemre.kutuphanem_ui.extensions.rippleClick
 import com.mesutemre.kutuphanem_ui.theme.colorPalette
+import com.mesutemre.kutuphanem_ui.theme.sdp
 import com.mesutemre.kutuphanem_ui.theme.ssp
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalPermissionsApi::class)
@@ -63,7 +64,8 @@ fun KitapEklemeScreen(
     val context = LocalContext.current
     val systemUiController = rememberSystemUiController()
 
-    systemUiController.isStatusBarVisible = !state.value.openCamera
+    systemUiController.isStatusBarVisible =
+        (state.value.openCamera || state.value.showCropArea).not()
 
     val openCloseCamera = remember<(Boolean) -> Unit> {
         {
@@ -87,7 +89,7 @@ fun KitapEklemeScreen(
 
     BottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
-        topBar = if (state.value.openCamera.not()) {
+        topBar = if ((state.value.openCamera || state.value.showCropArea).not()) {
             {
                 KitapEklemeScreenTopBar(
                     pageTitle = stringResource(id = R.string.kitapEklemeTitle),
@@ -163,11 +165,50 @@ fun KitapEklemeScreen(
                 if (cameraPermissionState.status.isGranted) {
                     openCloseCamera(true)
                 } else if (cameraPermissionState.status == PermissionStatus.Denied(true)) {
-                    viewModel.showSettingsDialog()
+                    viewModel.showSettingsDialog(R.string.kitap_ekleme_kameraIzinDialogDescription)
                 } else {
                     viewModel.clickCameraPermission()
                     cameraPermissionState.launchPermissionRequest()
                 }
+            }
+        }
+
+        val onClickKitapAciklama = remember<() -> Unit> {
+            {
+                if (cameraPermissionState.status.isGranted) {
+                    //TODO : Kamera açılacak...
+                } else if (cameraPermissionState.status == PermissionStatus.Denied(true)) {
+                    viewModel.showSettingsDialog(R.string.kitap_ekleme_kitapAciklamaKameraIzin)
+                } else {
+                    viewModel.clickCameraPermission()
+                    cameraPermissionState.launchPermissionRequest()
+                }
+            }
+        }
+
+        val onCompleteKitapResimCrop = remember<(ImageBitmap) -> Unit> {
+            { croppedImage ->
+                viewModel.onKitapEklemeEvent(
+                    KitapEklemeEvent.OnKitapResimCropped(
+                        croppedImage
+                    )
+                )
+            }
+        }
+
+        val onCloseKitapResimCrop = remember<() -> Unit> {
+            {
+                viewModel.onKitapEklemeEvent(
+                    KitapEklemeEvent.OnKitapResimCropClose
+                )
+            }
+        }
+
+        val onRemoveCroppedResim = remember<() -> Unit> {
+            {
+                viewModel.onKitapEklemeEvent(
+                    KitapEklemeEvent.OnRemoveCroppedKitapResim
+                )
             }
         }
 
@@ -177,17 +218,34 @@ fun KitapEklemeScreen(
                 .background(color = MaterialTheme.colorPalette.loginBackColor)
         ) {
             if (state.value.openCamera) {
-                KitapResimCameraArea(coroutineScope = coroutineScope)
+                KitapResimCameraCaptureArea(
+                    onSuccessCaptured = {
+                        viewModel.setCapturedImage(it)
+                    }
+                )
             }
+            if (state.value.showCropArea) {
+                KitapResimCropArea(
+                    capturedImage = state.value.captureImageBitmap!!.asImageBitmap(),
+                    onCloseCrop = onCloseKitapResimCrop,
+                    onCompleteCrop = onCompleteKitapResimCrop
+                )
+            }
+
             Column(
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = 16.sdp, vertical = 24.sdp)
                     .verticalScroll(rememberScrollState())
             ) {
-                KitapResimEklemeArea(
-                    onClickResimEkleme = onClickResimEkleme
-                )
+                state.value.croppedImageBitMap?.let {
+                    CroppedKitapResimArea(croppedImage = it, onRemoveImage = onRemoveCroppedResim)
+                } ?: run {
+                    KitapResimEklemeArea(
+                        onClickResimEkleme = onClickResimEkleme
+                    )
+                }
+
                 KutuphanemOutlinedFormTextField(
                     text = state.value.kitapAd,
                     onChange = onChangeKitapAd,
@@ -249,7 +307,10 @@ fun KitapEklemeScreen(
                     trailingIcon = {
                         Icon(
                             Icons.Filled.PhotoCamera,
-                            contentDescription = stringResource(id = R.string.kitap_ekleme_kitapAciklamaPlaceHolder)
+                            contentDescription = stringResource(id = R.string.kitap_ekleme_kitapAciklamaPlaceHolder),
+                            modifier = Modifier.rippleClick {
+                                onClickKitapAciklama()
+                            }
                         )
                     }
                 )
@@ -290,6 +351,5 @@ fun KitapEklemeScreen(
             ) {
             }
         }
-
     }
 }

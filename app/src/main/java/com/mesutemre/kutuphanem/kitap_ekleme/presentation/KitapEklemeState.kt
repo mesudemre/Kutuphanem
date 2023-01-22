@@ -1,7 +1,10 @@
 package com.mesutemre.kutuphanem.kitap_ekleme.presentation
 
+import android.graphics.Bitmap
+import android.net.Uri
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Stable
+import androidx.compose.ui.graphics.ImageBitmap
 import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.KitapEklemeKitapTurModel
 import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.KitapEklemeYayinEviModel
 
@@ -21,5 +24,14 @@ data class KitapEklemeState(
     @StringRes val yayinEviError: Int? = null,
     val kitapAciklama: String = "",
     @StringRes val kitapAciklamaError: Int? = null,
-    val openCamera: Boolean = false
+    val openCamera: Boolean = false,
+    @StringRes val kameraAyarAciklama: Int? = null,
+    val capturedImage: Uri? = null,
+    val captureImageBitmap: Bitmap? = null,
+    val cropImage: Boolean = false,
+    val croppedImageBitMap: ImageBitmap? = null,
+    val isCapturedKitapImageCropping: Boolean = false,
+    val cropProcessCompleted: Boolean = false,
+    val showCroppedImage: Boolean = false,
+    val showCropArea: Boolean = false
 )

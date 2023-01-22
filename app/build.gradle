@@ -122,4 +122,6 @@ dependencies {
     implementation "androidx.datastore:datastore-preferences:$dataStoreVersion"
     implementation "com.github.a914-gowtham:compose-ratingbar:$composeRatingBar"
 
+    implementation "com.google.android.gms:play-services-mlkit-text-recognition:$mlkit_text_recognation"
+    implementation "com.github.SmartToolFactory:Compose-Cropper:0.2.4"
 }
