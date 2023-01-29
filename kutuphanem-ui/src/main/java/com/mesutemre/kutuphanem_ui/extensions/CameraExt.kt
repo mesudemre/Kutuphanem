@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.ImageProxy
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import kotlinx.coroutines.Dispatchers
@@ -45,6 +46,20 @@ suspend fun ImageCapture.kutuphanemTakePicture(executor: Executor, imageName: St
             override fun onError(ex: ImageCaptureException) {
                 Log.e("TakePicture", "Image capture failed", ex)
                 //continuation.resumeWithException(ex)
+            }
+        })
+    }
+}
+
+suspend fun ImageCapture.kutuphanemTakePictureForTextRecognation(executor: Executor): ImageProxy {
+    return suspendCoroutine { continuation ->
+        takePicture(executor, object : ImageCapture.OnImageCapturedCallback() {
+            override fun onCaptureSuccess(image: ImageProxy) {
+                continuation.resume(image)
+            }
+
+            override fun onError(exception: ImageCaptureException) {
+                super.onError(exception)
             }
         })
     }

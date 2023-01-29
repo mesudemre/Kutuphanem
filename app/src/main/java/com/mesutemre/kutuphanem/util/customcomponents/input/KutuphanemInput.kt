@@ -375,25 +375,19 @@ fun KutuphanemOutlinedFormTextField(
     placeHolder: String,
     placeHolderStyle: TextStyle = MaterialTheme.typography.smallUbuntuTransparent
 ) {
-
-    var textState by remember {
-        mutableStateOf(text)
-    }
-    val isError by remember {
-        mutableStateOf(errorMessage.isNullOrEmpty().not())
-    }
     Column {
+        val isError by remember {
+            mutableStateOf(errorMessage.isNullOrEmpty().not())
+        }
         OutlinedTextField(
             modifier = modifier,
-            value = textState,
+            value = text,
             onValueChange = { str ->
                 maxCharacter?.let {
                     if (str.length <= it) {
-                        textState = str
                         onChange(str)
                     }
                 } ?: run {
-                    textState = str
                     onChange(str)
                 }
             },
@@ -441,5 +435,5 @@ fun KutuphanemOutlinedFormTextField(
             )
         }
     }
-
 }
+

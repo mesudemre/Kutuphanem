@@ -233,4 +233,6 @@
     <string name="kitap_ekleme_imageCropAreaContentDescription">Resim kırpma</string>
     <string name="kitap_ekleme_croppedImageContentDescription">Kırpılan resim</string>
     <string name="kitap_ekleme_removeCroppedImageContentDescription">Resmi kaldır</string>
+    <string name="kitap_ekleme_text_read_title">Kameradan açıklama okuma</string>
+    <string name="kitap_ekleme_text_read_errorDescription">Yazı okunması esnasında hata meydana geldi!</string>
 </resources>

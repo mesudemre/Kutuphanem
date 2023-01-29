@@ -1,8 +1,11 @@
 package com.mesutemre.kutuphanem.kitap_ekleme.presentation
 
 import android.graphics.BitmapFactory
+import androidx.camera.core.ImageProxy
 import androidx.core.net.toUri
 import com.mesutemre.kutuphanem.kitap_detay.presentation.KitapEklemeEvent
+import com.mesutemre.kutuphanem.kitap_ekleme.data.CameraOpenType
+import com.mesutemre.kutuphanem.kitap_ekleme.domain.use_case.KitapAciklamaImageAnalyzer
 import com.mesutemre.kutuphanem_base.viewmodel.BaseViewModel
 import com.mesutemre.kutuphanem_ui.extensions.rotateBitmap
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +17,9 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class KitapEkleViewModel @Inject constructor() : BaseViewModel() {
+class KitapEkleViewModel @Inject constructor(
+    private val kitapAciklamaImageAnalyzer: KitapAciklamaImageAnalyzer
+) : BaseViewModel() {
 
     private val _state = MutableStateFlow(KitapEklemeState())
     val state: StateFlow<KitapEklemeState> = _state
@@ -58,7 +63,8 @@ class KitapEkleViewModel @Inject constructor() : BaseViewModel() {
             is KitapEklemeEvent.KitapResimEklemeOpenClose -> {
                 _state.update {
                     it.copy(
-                        openCamera = event.isOpen
+                        openCamera = event.isOpen,
+                        cameraOpenType = event.cameraOpenType
                     )
                 }
             }
@@ -93,10 +99,11 @@ class KitapEkleViewModel @Inject constructor() : BaseViewModel() {
         }
     }
 
-    fun clickCameraPermission() {
+    fun clickCameraPermission(cameraOpenType: CameraOpenType) {
         _state.update {
             it.copy(
-                isCameraPermissionClicked = true
+                isCameraPermissionClicked = true,
+                cameraOpenType = cameraOpenType
             )
         }
     }
@@ -128,6 +135,41 @@ class KitapEkleViewModel @Inject constructor() : BaseViewModel() {
                 openCamera = false,
                 cropImage = true,
                 showCropArea = true
+            )
+        }
+    }
+
+    fun setCapturedForImageTextRecognize(imageProxy: ImageProxy) {
+        kitapAciklamaImageAnalyzer(image = imageProxy, onReadText = { text ->
+            if (text.isNullOrEmpty()) {
+                _state.update {
+                    it.copy(
+                        kitapAciklamaTextRecognationErrorOccured = true
+                    )
+                }
+            } else {
+                _state.update {
+                    it.copy(
+                        kitapAciklama = text,
+                        kitapAciklamaError = null,
+                        openCamera = false
+                    )
+                }
+            }
+        }, onFailureReadText = { exception ->
+            _state.update {
+                it.copy(
+                    kitapAciklamaTextRecognationErrorOccured = true
+                )
+            }
+        })
+    }
+
+    fun dismissTextRecognationErrorDialog() {
+        _state.update {
+            it.copy(
+                kitapAciklamaTextRecognationErrorOccured = false,
+                openCamera = false
             )
         }
     }

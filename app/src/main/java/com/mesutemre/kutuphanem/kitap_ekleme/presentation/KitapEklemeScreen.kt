@@ -6,21 +6,22 @@ import android.net.Uri
 import android.provider.Settings
 import android.util.Log
 import androidx.activity.compose.BackHandler
+import androidx.camera.core.ImageProxy
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -32,6 +33,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.mesutemre.kutuphanem.BuildConfig
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.kitap_detay.presentation.KitapEklemeEvent
+import com.mesutemre.kutuphanem.kitap_ekleme.data.CameraOpenType
 import com.mesutemre.kutuphanem.kitap_ekleme.presentation.components.*
 import com.mesutemre.kutuphanem.ui.theme.smallUbuntuBlack
 import com.mesutemre.kutuphanem.ui.theme.smallUbuntuWhiteBold
@@ -40,11 +42,13 @@ import com.mesutemre.kutuphanem.util.customcomponents.input.KutuphanemOutlinedFo
 import com.mesutemre.kutuphanem_base.util.MaskVisualTransformation
 import com.mesutemre.kutuphanem_ui.button.KutuphanemMainMaterialButton
 import com.mesutemre.kutuphanem_ui.card.KutuphanemSelectableCard
+import com.mesutemre.kutuphanem_ui.dialog.ERROR_DLG
 import com.mesutemre.kutuphanem_ui.dialog.WARNING_DLG
 import com.mesutemre.kutuphanem_ui.extensions.rippleClick
 import com.mesutemre.kutuphanem_ui.theme.colorPalette
 import com.mesutemre.kutuphanem_ui.theme.sdp
 import com.mesutemre.kutuphanem_ui.theme.ssp
+import java.io.File
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalPermissionsApi::class)
 @Composable
@@ -67,9 +71,14 @@ fun KitapEklemeScreen(
     systemUiController.isStatusBarVisible =
         (state.value.openCamera || state.value.showCropArea).not()
 
-    val openCloseCamera = remember<(Boolean) -> Unit> {
-        {
-            viewModel.onKitapEklemeEvent(KitapEklemeEvent.KitapResimEklemeOpenClose(it))
+    val openCloseCamera = remember<(Boolean, CameraOpenType?) -> Unit> {
+        { isOpen, cameraOpenType ->
+            viewModel.onKitapEklemeEvent(
+                KitapEklemeEvent.KitapResimEklemeOpenClose(
+                    isOpen,
+                    cameraOpenType ?: CameraOpenType.KITAP_RESIM
+                )
+            )
         }
     }
 
@@ -81,7 +90,7 @@ fun KitapEklemeScreen(
 
     BackHandler {
         if (state.value.openCamera) {
-            openCloseCamera(false)
+            openCloseCamera(false, null)
         } else {
             popBack()
         }
@@ -129,7 +138,7 @@ fun KitapEklemeScreen(
             if (state.value.isCameraPermissionClicked) {
                 when (cameraPermissionState.status) {
                     PermissionStatus.Granted -> {
-                        openCloseCamera(true)
+                        openCloseCamera(true, state.value.cameraOpenType)
                     }
                     PermissionStatus.Denied(false) -> { //Kalıcı olarak red
                         Log.d("KUTUPHANEM_PERMISSION", "Kamera izni yok...")
@@ -160,14 +169,29 @@ fun KitapEklemeScreen(
             }
         }
 
+        if (state.value.kitapAciklamaTextRecognationErrorOccured) {
+            CustomKutuphanemDialog(
+                modifier = Modifier
+                    .height(220.sdp)
+                    .width(400.sdp),
+                type = ERROR_DLG,
+                title = stringResource(id = R.string.kitap_ekleme_text_read_title),
+                description = stringResource(id = R.string.kitap_ekleme_text_read_errorDescription),
+                onDismissDialog = {
+                    viewModel.dismissTextRecognationErrorDialog()
+                }) {
+                viewModel.dismissTextRecognationErrorDialog()
+            }
+        }
+
         val onClickResimEkleme = remember<() -> Unit> {
             {
                 if (cameraPermissionState.status.isGranted) {
-                    openCloseCamera(true)
+                    openCloseCamera(true, CameraOpenType.KITAP_RESIM)
                 } else if (cameraPermissionState.status == PermissionStatus.Denied(true)) {
                     viewModel.showSettingsDialog(R.string.kitap_ekleme_kameraIzinDialogDescription)
                 } else {
-                    viewModel.clickCameraPermission()
+                    viewModel.clickCameraPermission(CameraOpenType.KITAP_RESIM)
                     cameraPermissionState.launchPermissionRequest()
                 }
             }
@@ -176,11 +200,11 @@ fun KitapEklemeScreen(
         val onClickKitapAciklama = remember<() -> Unit> {
             {
                 if (cameraPermissionState.status.isGranted) {
-                    //TODO : Kamera açılacak...
+                    openCloseCamera(true, CameraOpenType.KITAP_ACIKLAMA_TEXT_RECOGNIZE)
                 } else if (cameraPermissionState.status == PermissionStatus.Denied(true)) {
                     viewModel.showSettingsDialog(R.string.kitap_ekleme_kitapAciklamaKameraIzin)
                 } else {
-                    viewModel.clickCameraPermission()
+                    viewModel.clickCameraPermission(CameraOpenType.KITAP_ACIKLAMA_TEXT_RECOGNIZE)
                     cameraPermissionState.launchPermissionRequest()
                 }
             }
@@ -212,6 +236,18 @@ fun KitapEklemeScreen(
             }
         }
 
+        val onSuccessCaptured = remember<(File) -> Unit> {
+            {
+                viewModel.setCapturedImage(it)
+            }
+        }
+
+        val onSuccessImageInfo = remember<(ImageProxy) -> Unit> {
+            {
+                viewModel.setCapturedForImageTextRecognize(it)
+            }
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -219,9 +255,9 @@ fun KitapEklemeScreen(
         ) {
             if (state.value.openCamera) {
                 KitapResimCameraCaptureArea(
-                    onSuccessCaptured = {
-                        viewModel.setCapturedImage(it)
-                    }
+                    cameraType = state.value.cameraOpenType,
+                    onSuccessCaptured = onSuccessCaptured,
+                    onSuccessImageInfo = onSuccessImageInfo
                 )
             }
             if (state.value.showCropArea) {
@@ -287,6 +323,7 @@ fun KitapEklemeScreen(
                     label = stringResource(id = R.string.alinmaTarLabelText),
                     placeHolder = stringResource(id = R.string.kitap_ekleme_alinmaTarPlaceholder)
                 )
+
                 KutuphanemOutlinedFormTextField(
                     text = state.value.kitapAciklama,
                     onChange = onChangeKitapAciklama,
@@ -306,14 +343,19 @@ fun KitapEklemeScreen(
                     placeHolder = stringResource(id = R.string.kitap_ekleme_kitapAciklamaPlaceHolder),
                     trailingIcon = {
                         Icon(
-                            Icons.Filled.PhotoCamera,
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_text_recognizer),
                             contentDescription = stringResource(id = R.string.kitap_ekleme_kitapAciklamaPlaceHolder),
-                            modifier = Modifier.rippleClick {
-                                onClickKitapAciklama()
-                            }
+                            modifier = Modifier
+                                .padding(end = 8.sdp)
+                                .size(24.sdp)
+                                .rippleClick {
+                                    onClickKitapAciklama()
+                                }
                         )
                     }
                 )
+
+
                 KutuphanemSelectableCard(
                     modifier = Modifier
                         .fillMaxWidth()

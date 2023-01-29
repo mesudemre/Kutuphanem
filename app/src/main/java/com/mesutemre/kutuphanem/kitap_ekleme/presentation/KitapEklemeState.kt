@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.ImageBitmap
+import com.mesutemre.kutuphanem.kitap_ekleme.data.CameraOpenType
 import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.KitapEklemeKitapTurModel
 import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.KitapEklemeYayinEviModel
 
@@ -33,5 +34,7 @@ data class KitapEklemeState(
     val isCapturedKitapImageCropping: Boolean = false,
     val cropProcessCompleted: Boolean = false,
     val showCroppedImage: Boolean = false,
-    val showCropArea: Boolean = false
+    val showCropArea: Boolean = false,
+    val cameraOpenType: CameraOpenType = CameraOpenType.KITAP_RESIM,
+    val kitapAciklamaTextRecognationErrorOccured: Boolean = false
 )
