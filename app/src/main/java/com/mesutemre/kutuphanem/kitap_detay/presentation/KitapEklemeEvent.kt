@@ -1,7 +1,10 @@
 package com.mesutemre.kutuphanem.kitap_detay.presentation
 
 import androidx.compose.ui.graphics.ImageBitmap
-import com.mesutemre.kutuphanem.kitap_ekleme.data.CameraOpenType
+import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.CameraOpenType
+import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.KitapEklemeBottomsheetType
+import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.KitapEklemeKitapTurItem
+import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.KitapEklemeYayinEviItem
 
 sealed class KitapEklemeEvent {
 
@@ -15,4 +18,12 @@ sealed class KitapEklemeEvent {
     data class OnKitapResimCropped(val croppedImage: ImageBitmap) : KitapEklemeEvent()
     object OnKitapResimCropClose : KitapEklemeEvent()
     object OnRemoveCroppedKitapResim : KitapEklemeEvent()
+    data class OnChangeBottomSheetType(val bottomsheetType: KitapEklemeBottomsheetType) :
+        KitapEklemeEvent()
+
+    data class OnSelectKitapTur(val kitapEklemeKitapTurItem: KitapEklemeKitapTurItem?) :
+        KitapEklemeEvent()
+
+    data class OnSelectYayinEvi(val kitapEklemeYayinEviItem: KitapEklemeYayinEviItem?) :
+        KitapEklemeEvent()
 }

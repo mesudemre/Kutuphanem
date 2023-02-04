@@ -7,7 +7,9 @@ import android.provider.Settings
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.camera.core.ImageProxy
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -33,8 +35,13 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.mesutemre.kutuphanem.BuildConfig
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.kitap_detay.presentation.KitapEklemeEvent
-import com.mesutemre.kutuphanem.kitap_ekleme.data.CameraOpenType
+import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.CameraOpenType
+import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.KitapEklemeBottomsheetType
+import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.KitapEklemeKitapTurItem
+import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.KitapEklemeYayinEviItem
 import com.mesutemre.kutuphanem.kitap_ekleme.presentation.components.*
+import com.mesutemre.kutuphanem.kitap_ekleme.presentation.components.bottomsheet.KitapEklemeKitapTurBottomSheetArea
+import com.mesutemre.kutuphanem.kitap_ekleme.presentation.components.bottomsheet.KitapEklemeYayinEviBottomSheetArea
 import com.mesutemre.kutuphanem.ui.theme.smallUbuntuBlack
 import com.mesutemre.kutuphanem.ui.theme.smallUbuntuWhiteBold
 import com.mesutemre.kutuphanem.util.customcomponents.dialog.CustomKutuphanemDialog
@@ -48,6 +55,7 @@ import com.mesutemre.kutuphanem_ui.extensions.rippleClick
 import com.mesutemre.kutuphanem_ui.theme.colorPalette
 import com.mesutemre.kutuphanem_ui.theme.sdp
 import com.mesutemre.kutuphanem_ui.theme.ssp
+import kotlinx.coroutines.launch
 import java.io.File
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalPermissionsApi::class)
@@ -57,19 +65,18 @@ fun KitapEklemeScreen(
     navController: NavController,
     viewModel: KitapEkleViewModel = hiltViewModel()
 ) {
-    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState =
-        BottomSheetState(BottomSheetValue.Collapsed)
-    )
-    val coroutineScope = rememberCoroutineScope()
-    val localFocusManager = LocalFocusManager.current
+    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState()
     val state = viewModel.state.collectAsState()
-    val cameraPermissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
-    val context = LocalContext.current
+
+    val localFocusManager = LocalFocusManager.current
     val systemUiController = rememberSystemUiController()
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val cameraPermissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
 
     systemUiController.isStatusBarVisible =
         (state.value.openCamera || state.value.showCropArea).not()
+
 
     val openCloseCamera = remember<(Boolean, CameraOpenType?) -> Unit> {
         { isOpen, cameraOpenType ->
@@ -82,9 +89,36 @@ fun KitapEklemeScreen(
         }
     }
 
+    val onChangeKitapAd = remember<(String) -> Unit> {
+        {
+            viewModel.onKitapEklemeEvent(KitapEklemeEvent.KitapAdTextChange(it))
+        }
+    }
+    val onChangeYazarAd = remember<(String) -> Unit> {
+        {
+            viewModel.onKitapEklemeEvent(KitapEklemeEvent.YazarAdTextChange(it))
+        }
+    }
+    val onChangeKitapAlinmaTar = remember<(String) -> Unit> {
+        {
+            viewModel.onKitapEklemeEvent(KitapEklemeEvent.KitapAlinmaTarTextChange(it))
+        }
+    }
+    val onChangeKitapAciklama = remember<(String) -> Unit> {
+        {
+            viewModel.onKitapEklemeEvent(KitapEklemeEvent.KitapAciklamaTextChange(it))
+        }
+    }
+
     val popBack = remember<() -> Unit> {
         {
             navController.popBackStack()
+        }
+    }
+
+    val onClickKitapTurYayinEvi = remember<(KitapEklemeBottomsheetType) -> Unit> {
+        {
+            viewModel.onKitapEklemeEvent(KitapEklemeEvent.OnChangeBottomSheetType(it))
         }
     }
 
@@ -96,163 +130,179 @@ fun KitapEklemeScreen(
         }
     }
 
+    val onSelectKitapTur = remember<(KitapEklemeKitapTurItem?) -> Unit> {
+        {
+            coroutineScope.launch {
+                viewModel.onKitapEklemeEvent(KitapEklemeEvent.OnSelectKitapTur(it))
+                bottomSheetScaffoldState.bottomSheetState.animateTo(
+                    BottomSheetValue.Collapsed,
+                    tween(500)
+                )
+            }
+        }
+    }
+
+    val onSelectYayinevi = remember<(KitapEklemeYayinEviItem?) -> Unit> {
+        {
+            coroutineScope.launch {
+                viewModel.onKitapEklemeEvent(KitapEklemeEvent.OnSelectYayinEvi(it))
+                bottomSheetScaffoldState.bottomSheetState.animateTo(
+                    BottomSheetValue.Collapsed,
+                    tween(500)
+                )
+            }
+        }
+    }
+
+    LaunchedEffect(cameraPermissionState.status) {
+        if (state.value.isCameraPermissionClicked) {
+            when (cameraPermissionState.status) {
+                PermissionStatus.Granted -> {
+                    openCloseCamera(true, state.value.cameraOpenType)
+                }
+                PermissionStatus.Denied(false) -> { //Kalıcı olarak red
+                    Log.d("KUTUPHANEM_PERMISSION", "Kamera izni yok...")
+                }
+                PermissionStatus.Denied(true) -> { //Ekrandan denied yaptık.
+                    Log.d("KUTUPHANEM_PERMISSION", "Store true Kamera izni yok..")
+                }
+                else -> {}
+            }
+        }
+    }
+
+    if (state.value.showSettingsDialog) {
+        CustomKutuphanemDialog(
+            modifier = Modifier
+                .height(220.sdp)
+                .width(400.sdp),
+            type = WARNING_DLG,
+            title = stringResource(id = R.string.kitap_ekleme_kameraIzinDialogTitle),
+            description = stringResource(id = R.string.kitap_ekleme_kameraIzinDialogDescription),
+            onDismissDialog = {
+                viewModel.dismissSettingsDialog()
+            }) {
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            intent.data = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
+            viewModel.dismissSettingsDialog()
+            context.startActivity(intent)
+        }
+    }
+
+    if (state.value.kitapAciklamaTextRecognationErrorOccured) {
+        CustomKutuphanemDialog(
+            modifier = Modifier
+                .height(220.sdp)
+                .width(400.sdp),
+            type = ERROR_DLG,
+            title = stringResource(id = R.string.kitap_ekleme_text_read_title),
+            description = stringResource(id = R.string.kitap_ekleme_text_read_errorDescription),
+            onDismissDialog = {
+                viewModel.dismissTextRecognationErrorDialog()
+            }) {
+            viewModel.dismissTextRecognationErrorDialog()
+        }
+    }
+
+    val onClickResimEkleme = remember<() -> Unit> {
+        {
+            if (cameraPermissionState.status.isGranted) {
+                openCloseCamera(true, CameraOpenType.KITAP_RESIM)
+            } else if (cameraPermissionState.status == PermissionStatus.Denied(true)) {
+                viewModel.showSettingsDialog(R.string.kitap_ekleme_kameraIzinDialogDescription)
+            } else {
+                viewModel.clickCameraPermission(CameraOpenType.KITAP_RESIM)
+                cameraPermissionState.launchPermissionRequest()
+            }
+        }
+    }
+
+    val onClickKitapAciklama = remember<() -> Unit> {
+        {
+            if (cameraPermissionState.status.isGranted) {
+                openCloseCamera(true, CameraOpenType.KITAP_ACIKLAMA_TEXT_RECOGNIZE)
+            } else if (cameraPermissionState.status == PermissionStatus.Denied(true)) {
+                viewModel.showSettingsDialog(R.string.kitap_ekleme_kitapAciklamaKameraIzin)
+            } else {
+                viewModel.clickCameraPermission(CameraOpenType.KITAP_ACIKLAMA_TEXT_RECOGNIZE)
+                cameraPermissionState.launchPermissionRequest()
+            }
+        }
+    }
+
+    val onCompleteKitapResimCrop = remember<(ImageBitmap) -> Unit> {
+        { croppedImage ->
+            viewModel.onKitapEklemeEvent(
+                KitapEklemeEvent.OnKitapResimCropped(
+                    croppedImage
+                )
+            )
+        }
+    }
+
+    val onCloseKitapResimCrop = remember<() -> Unit> {
+        {
+            viewModel.onKitapEklemeEvent(
+                KitapEklemeEvent.OnKitapResimCropClose
+            )
+        }
+    }
+
+    val onRemoveCroppedResim = remember<() -> Unit> {
+        {
+            viewModel.onKitapEklemeEvent(
+                KitapEklemeEvent.OnRemoveCroppedKitapResim
+            )
+        }
+    }
+
+    val onSuccessCaptured = remember<(File) -> Unit> {
+        {
+            viewModel.setCapturedImage(it)
+        }
+    }
+
+    val onSuccessImageInfo = remember<(ImageProxy) -> Unit> {
+        {
+            viewModel.setCapturedForImageTextRecognize(it)
+        }
+    }
+
     BottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
         topBar = if ((state.value.openCamera || state.value.showCropArea).not()) {
             {
                 KitapEklemeScreenTopBar(
                     pageTitle = stringResource(id = R.string.kitapEklemeTitle),
-                    onBackPress = popBack
+                    onBackPress = {
+                        navController.popBackStack()
+                    }
                 )
             }
         } else null,
         sheetContent = {
-            //TODO : Kitap tür ve yayınevi seçilecek shhetler açılacak...
+            if (state.value.bottomsheetScreen == KitapEklemeBottomsheetType.KITAP_TUR) {
+                KitapEklemeKitapTurBottomSheetArea(
+                    kitapTurListResponse = state.value.kitapTurListResponse,
+                    onSelectKitapTur = onSelectKitapTur
+                )
+            } else if (state.value.bottomsheetScreen == KitapEklemeBottomsheetType.YAYIN_EVI) {
+                KitapEklemeYayinEviBottomSheetArea(
+                    yayinEviListResponse = state.value.yayinEviListResponse,
+                    onSelectYayinEvi = onSelectYayinevi
+                )
+            }
         },
         sheetBackgroundColor = MaterialTheme.colorPalette.white,
         sheetContentColor = MaterialTheme.colorPalette.loginBackColor,
         sheetPeekHeight = (-50).sdp
     ) {
-        val onChangeKitapAd = remember<(String) -> Unit> {
-            {
-                viewModel.onKitapEklemeEvent(KitapEklemeEvent.KitapAdTextChange(it))
-            }
-        }
-        val onChangeYazarAd = remember<(String) -> Unit> {
-            {
-                viewModel.onKitapEklemeEvent(KitapEklemeEvent.YazarAdTextChange(it))
-            }
-        }
-        val onChangeKitapAlinmaTar = remember<(String) -> Unit> {
-            {
-                viewModel.onKitapEklemeEvent(KitapEklemeEvent.KitapAlinmaTarTextChange(it))
-            }
-        }
-        val onChangeKitapAciklama = remember<(String) -> Unit> {
-            {
-                viewModel.onKitapEklemeEvent(KitapEklemeEvent.KitapAciklamaTextChange(it))
-            }
-        }
-
-        LaunchedEffect(cameraPermissionState.status) {
-            if (state.value.isCameraPermissionClicked) {
-                when (cameraPermissionState.status) {
-                    PermissionStatus.Granted -> {
-                        openCloseCamera(true, state.value.cameraOpenType)
-                    }
-                    PermissionStatus.Denied(false) -> { //Kalıcı olarak red
-                        Log.d("KUTUPHANEM_PERMISSION", "Kamera izni yok...")
-                    }
-                    PermissionStatus.Denied(true) -> { //Ekrandan denied yaptık.
-                        Log.d("KUTUPHANEM_PERMISSION", "Store true Kamera izni yok..")
-                    }
-                    else -> {}
-                }
-            }
-        }
-
-        if (state.value.showSettingsDialog) {
-            CustomKutuphanemDialog(
-                modifier = Modifier
-                    .height(220.sdp)
-                    .width(400.sdp),
-                type = WARNING_DLG,
-                title = stringResource(id = R.string.kitap_ekleme_kameraIzinDialogTitle),
-                description = stringResource(id = R.string.kitap_ekleme_kameraIzinDialogDescription),
-                onDismissDialog = {
-                    viewModel.dismissSettingsDialog()
-                }) {
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                intent.data = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
-                viewModel.dismissSettingsDialog()
-                context.startActivity(intent)
-            }
-        }
-
-        if (state.value.kitapAciklamaTextRecognationErrorOccured) {
-            CustomKutuphanemDialog(
-                modifier = Modifier
-                    .height(220.sdp)
-                    .width(400.sdp),
-                type = ERROR_DLG,
-                title = stringResource(id = R.string.kitap_ekleme_text_read_title),
-                description = stringResource(id = R.string.kitap_ekleme_text_read_errorDescription),
-                onDismissDialog = {
-                    viewModel.dismissTextRecognationErrorDialog()
-                }) {
-                viewModel.dismissTextRecognationErrorDialog()
-            }
-        }
-
-        val onClickResimEkleme = remember<() -> Unit> {
-            {
-                if (cameraPermissionState.status.isGranted) {
-                    openCloseCamera(true, CameraOpenType.KITAP_RESIM)
-                } else if (cameraPermissionState.status == PermissionStatus.Denied(true)) {
-                    viewModel.showSettingsDialog(R.string.kitap_ekleme_kameraIzinDialogDescription)
-                } else {
-                    viewModel.clickCameraPermission(CameraOpenType.KITAP_RESIM)
-                    cameraPermissionState.launchPermissionRequest()
-                }
-            }
-        }
-
-        val onClickKitapAciklama = remember<() -> Unit> {
-            {
-                if (cameraPermissionState.status.isGranted) {
-                    openCloseCamera(true, CameraOpenType.KITAP_ACIKLAMA_TEXT_RECOGNIZE)
-                } else if (cameraPermissionState.status == PermissionStatus.Denied(true)) {
-                    viewModel.showSettingsDialog(R.string.kitap_ekleme_kitapAciklamaKameraIzin)
-                } else {
-                    viewModel.clickCameraPermission(CameraOpenType.KITAP_ACIKLAMA_TEXT_RECOGNIZE)
-                    cameraPermissionState.launchPermissionRequest()
-                }
-            }
-        }
-
-        val onCompleteKitapResimCrop = remember<(ImageBitmap) -> Unit> {
-            { croppedImage ->
-                viewModel.onKitapEklemeEvent(
-                    KitapEklemeEvent.OnKitapResimCropped(
-                        croppedImage
-                    )
-                )
-            }
-        }
-
-        val onCloseKitapResimCrop = remember<() -> Unit> {
-            {
-                viewModel.onKitapEklemeEvent(
-                    KitapEklemeEvent.OnKitapResimCropClose
-                )
-            }
-        }
-
-        val onRemoveCroppedResim = remember<() -> Unit> {
-            {
-                viewModel.onKitapEklemeEvent(
-                    KitapEklemeEvent.OnRemoveCroppedKitapResim
-                )
-            }
-        }
-
-        val onSuccessCaptured = remember<(File) -> Unit> {
-            {
-                viewModel.setCapturedImage(it)
-            }
-        }
-
-        val onSuccessImageInfo = remember<(ImageProxy) -> Unit> {
-            {
-                viewModel.setCapturedForImageTextRecognize(it)
-            }
-        }
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = MaterialTheme.colorPalette.loginBackColor)
         ) {
+
             if (state.value.openCamera) {
                 KitapResimCameraCaptureArea(
                     cameraType = state.value.cameraOpenType,
@@ -359,7 +409,20 @@ fun KitapEklemeScreen(
                 KutuphanemSelectableCard(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 12.sdp),
+                        .padding(top = 12.sdp)
+                        .clickable {
+                            coroutineScope
+                                .launch {
+                                    onClickKitapTurYayinEvi(KitapEklemeBottomsheetType.KITAP_TUR)
+                                    bottomSheetScaffoldState.bottomSheetState.animateTo(
+                                        BottomSheetValue.Expanded,
+                                        tween(500)
+                                    )
+                                }
+                                .invokeOnCompletion {
+                                    viewModel.initKitapTurList()
+                                }
+                        },
                     title = state.value.selectedKitapTur?.let {
                         it.kitapTurAciklama
                     } ?: run {
@@ -373,7 +436,20 @@ fun KitapEklemeScreen(
                 KutuphanemSelectableCard(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 12.sdp),
+                        .padding(top = 12.sdp)
+                        .clickable {
+                            coroutineScope
+                                .launch {
+                                    onClickKitapTurYayinEvi(KitapEklemeBottomsheetType.YAYIN_EVI)
+                                    bottomSheetScaffoldState.bottomSheetState.animateTo(
+                                        BottomSheetValue.Expanded,
+                                        tween(500)
+                                    )
+                                }
+                                .invokeOnCompletion {
+                                    viewModel.initYayinEviList()
+                                }
+                        },
                     title = state.value.selectedYayinEvi?.let {
                         it.yayinEviAciklama
                     } ?: run {

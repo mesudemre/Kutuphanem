@@ -3,22 +3,28 @@ package com.mesutemre.kutuphanem.kitap_ekleme.presentation
 import android.graphics.BitmapFactory
 import androidx.camera.core.ImageProxy
 import androidx.core.net.toUri
+import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.kitap_detay.presentation.KitapEklemeEvent
-import com.mesutemre.kutuphanem.kitap_ekleme.data.CameraOpenType
+import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.CameraOpenType
 import com.mesutemre.kutuphanem.kitap_ekleme.domain.use_case.KitapAciklamaImageAnalyzer
+import com.mesutemre.kutuphanem.kitap_ekleme.domain.use_case.KitapEklemeKitapTurListUseCase
+import com.mesutemre.kutuphanem.kitap_ekleme.domain.use_case.KitapEklemeYayinEviListUseCase
 import com.mesutemre.kutuphanem_base.viewmodel.BaseViewModel
 import com.mesutemre.kutuphanem_ui.extensions.rotateBitmap
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
 
 
 @HiltViewModel
 class KitapEkleViewModel @Inject constructor(
-    private val kitapAciklamaImageAnalyzer: KitapAciklamaImageAnalyzer
+    private val kitapAciklamaImageAnalyzer: KitapAciklamaImageAnalyzer,
+    private val getKitapTurListUseCase: KitapEklemeKitapTurListUseCase,
+    private val getYayinEviListUseCase: KitapEklemeYayinEviListUseCase
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow(KitapEklemeState())
@@ -93,6 +99,27 @@ class KitapEkleViewModel @Inject constructor(
                 _state.update {
                     it.copy(
                         croppedImageBitMap = null
+                    )
+                }
+            }
+            is KitapEklemeEvent.OnChangeBottomSheetType -> {
+                _state.update {
+                    it.copy(
+                        bottomsheetScreen = event.bottomsheetType
+                    )
+                }
+            }
+            is KitapEklemeEvent.OnSelectKitapTur -> {
+                _state.update {
+                    it.copy(
+                        selectedKitapTur = event.kitapEklemeKitapTurItem
+                    )
+                }
+            }
+            is KitapEklemeEvent.OnSelectYayinEvi -> {
+                _state.update {
+                    it.copy(
+                        selectedYayinEvi = event.kitapEklemeYayinEviItem
                     )
                 }
             }
@@ -172,5 +199,21 @@ class KitapEkleViewModel @Inject constructor(
                 openCamera = false
             )
         }
+    }
+
+    fun initKitapTurList() {
+        viewModelScope.launch {
+            getKitapTurListUseCase().collect { response ->
+                _state.update {
+                    it.copy(
+                        kitapTurListResponse = response
+                    )
+                }
+            }
+        }
+    }
+
+    fun initYayinEviList() {
+
     }
 }

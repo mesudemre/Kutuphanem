@@ -235,4 +235,10 @@
     <string name="kitap_ekleme_removeCroppedImageContentDescription">Resmi kaldır</string>
     <string name="kitap_ekleme_text_read_title">Kameradan açıklama okuma</string>
     <string name="kitap_ekleme_text_read_errorDescription">Yazı okunması esnasında hata meydana geldi!</string>
+    <string name="kitap_ekleme_bottomSheet_kitapTurTitle">Kitap Türleri</string>
+    <string name="kitap_ekleme_bottomSheet_kitapTur_searchFilterHint">Kitap türü ara...</string>
+    <string name="kitap_ekleme_bottomSheet_kitapTur_searchNotFound">Aramanızla eşleşen bir kitap türü bulunamadı</string>
+    <string name="kitap_ekleme_bottomSheet_yayinEviTitle">Yayın Evleri</string>
+    <string name="kitap_ekleme_bottomSheet_yayinEvi_searchFilterHint">Yayınevi ara...</string>
+    <string name="kitap_ekleme_bottomSheet_yayinEvi_searchNotFound">Aramanızla eşleşen bir yayınevi bulunamadı</string>
 </resources>

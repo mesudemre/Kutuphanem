@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import com.mesutemre.kutuphanem.kitap_ekleme.data.CameraOpenType
+import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.CameraOpenType
 import com.mesutemre.kutuphanem_ui.extensions.executor
 import com.mesutemre.kutuphanem_ui.extensions.getCameraProvider
 import com.mesutemre.kutuphanem_ui.extensions.kutuphanemTakePicture

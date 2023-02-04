@@ -5,9 +5,11 @@ import android.net.Uri
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.ImageBitmap
-import com.mesutemre.kutuphanem.kitap_ekleme.data.CameraOpenType
-import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.KitapEklemeKitapTurModel
-import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.KitapEklemeYayinEviModel
+import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.CameraOpenType
+import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.KitapEklemeBottomsheetType
+import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.KitapEklemeKitapTurItem
+import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.KitapEklemeYayinEviItem
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 
 @Stable
 data class KitapEklemeState(
@@ -19,9 +21,9 @@ data class KitapEklemeState(
     @StringRes val alinmaTarError: Int? = null,
     val isCameraPermissionClicked: Boolean = false,
     val showSettingsDialog: Boolean = false,
-    val selectedKitapTur: KitapEklemeKitapTurModel? = null,
+    val selectedKitapTur: KitapEklemeKitapTurItem? = null,
     @StringRes val kitapTurError: Int? = null,
-    val selectedYayinEvi: KitapEklemeYayinEviModel? = null,
+    val selectedYayinEvi: KitapEklemeYayinEviItem? = null,
     @StringRes val yayinEviError: Int? = null,
     val kitapAciklama: String = "",
     @StringRes val kitapAciklamaError: Int? = null,
@@ -36,5 +38,8 @@ data class KitapEklemeState(
     val showCroppedImage: Boolean = false,
     val showCropArea: Boolean = false,
     val cameraOpenType: CameraOpenType = CameraOpenType.KITAP_RESIM,
-    val kitapAciklamaTextRecognationErrorOccured: Boolean = false
+    val kitapAciklamaTextRecognationErrorOccured: Boolean = false,
+    val bottomsheetScreen: KitapEklemeBottomsheetType = KitapEklemeBottomsheetType.NONE,
+    val kitapTurListResponse: BaseResourceEvent<List<KitapEklemeKitapTurItem>> = BaseResourceEvent.Loading(),
+    val yayinEviListResponse: BaseResourceEvent<List<KitapEklemeYayinEviItem>> = BaseResourceEvent.Loading()
 )
