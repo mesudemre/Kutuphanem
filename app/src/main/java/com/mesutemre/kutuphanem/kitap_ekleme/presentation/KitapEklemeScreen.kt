@@ -42,10 +42,13 @@ import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.KitapEklemeYayinEviIte
 import com.mesutemre.kutuphanem.kitap_ekleme.presentation.components.*
 import com.mesutemre.kutuphanem.kitap_ekleme.presentation.components.bottomsheet.KitapEklemeKitapTurBottomSheetArea
 import com.mesutemre.kutuphanem.kitap_ekleme.presentation.components.bottomsheet.KitapEklemeYayinEviBottomSheetArea
+import com.mesutemre.kutuphanem.model.ERROR
+import com.mesutemre.kutuphanem.model.SUCCESS
 import com.mesutemre.kutuphanem.ui.theme.smallUbuntuBlack
 import com.mesutemre.kutuphanem.ui.theme.smallUbuntuWhiteBold
 import com.mesutemre.kutuphanem.util.customcomponents.dialog.CustomKutuphanemDialog
 import com.mesutemre.kutuphanem.util.customcomponents.input.KutuphanemOutlinedFormTextField
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import com.mesutemre.kutuphanem_base.util.MaskVisualTransformation
 import com.mesutemre.kutuphanem_ui.button.KutuphanemMainMaterialButton
 import com.mesutemre.kutuphanem_ui.card.KutuphanemSelectableCard
@@ -171,6 +174,50 @@ fun KitapEklemeScreen(
         }
     }
 
+    when(state.value.kitapKaydetResourceEvent) {
+        is BaseResourceEvent.Success -> {
+            LaunchedEffect(key1 = Unit) {
+                showSnackbar(
+                   "Kitap kaydı başarıyla yapıldı.",
+                    SnackbarDuration.Short,
+                    SUCCESS
+                )
+            }
+        }
+        is BaseResourceEvent.Error -> {
+            LaunchedEffect(key1 = Unit) {
+                showSnackbar(
+                    state.value.kitapKaydetResourceEvent.message ?: "",
+                    SnackbarDuration.Short,
+                    ERROR
+                )
+            }
+        }
+        else -> Unit
+    }
+
+    when(state.value.kitapResimYukleResourceEvent) {
+        is BaseResourceEvent.Success -> {
+            LaunchedEffect(key1 = Unit) {
+                showSnackbar(
+                    state.value.kitapResimYukleResourceEvent.data?.statusMessage ?: "",
+                    SnackbarDuration.Short,
+                    SUCCESS
+                )
+            }
+        }
+        is BaseResourceEvent.Error -> {
+            LaunchedEffect(key1 = Unit) {
+                showSnackbar(
+                    state.value.kitapResimYukleResourceEvent.message ?: "",
+                    SnackbarDuration.Short,
+                    ERROR
+                )
+            }
+        }
+        else -> Unit
+    }
+
     if (state.value.showSettingsDialog) {
         CustomKutuphanemDialog(
             modifier = Modifier
@@ -230,11 +277,11 @@ fun KitapEklemeScreen(
         }
     }
 
-    val onCompleteKitapResimCrop = remember<(ImageBitmap) -> Unit> {
-        { croppedImage ->
+    val onCompleteKitapResimCrop = remember<(ImageBitmap,File?) -> Unit> {
+        { croppedImage,croppedFile ->
             viewModel.onKitapEklemeEvent(
                 KitapEklemeEvent.OnKitapResimCropped(
-                    croppedImage
+                    croppedImage,croppedFile
                 )
             )
         }
@@ -265,6 +312,12 @@ fun KitapEklemeScreen(
     val onSuccessImageInfo = remember<(ImageProxy) -> Unit> {
         {
             viewModel.setCapturedForImageTextRecognize(it)
+        }
+    }
+
+    val onClickKaydetButton = remember<() -> Unit> {
+        {
+            viewModel.onKitapEklemeEvent(KitapEklemeEvent.OnSaveKitap)
         }
     }
 
@@ -465,9 +518,9 @@ fun KitapEklemeScreen(
                     .padding(start = 16.sdp, end = 16.sdp, bottom = 24.sdp)
                     .fillMaxWidth(),
                 text = stringResource(id = R.string.kaydet),
-                textStyle = MaterialTheme.typography.smallUbuntuWhiteBold
-            ) {
-            }
+                textStyle = MaterialTheme.typography.smallUbuntuWhiteBold,
+                onClick = onClickKaydetButton
+            )
         }
     }
 }

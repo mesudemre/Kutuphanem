@@ -13,6 +13,9 @@ import com.mesutemre.kutuphanem.kitap_detay.data.dao.IKitapDetayDao
 import com.mesutemre.kutuphanem.kitap_detay.data.remote.IKitapYorumApi
 import com.mesutemre.kutuphanem.kitap_detay.data.repository.KitapDetayRepository
 import com.mesutemre.kutuphanem.kitap_detay.domain.repository.KitapDetayRepositoryImpl
+import com.mesutemre.kutuphanem.kitap_ekleme.data.remote.IKitapEkleApi
+import com.mesutemre.kutuphanem.kitap_ekleme.data.repository.KitapEklemeRepository
+import com.mesutemre.kutuphanem.kitap_ekleme.domain.repository.KitapEklemeRepositoryImpl
 import com.mesutemre.kutuphanem.kitap_liste.data.dao.IKitapDao
 import com.mesutemre.kutuphanem.kitap_liste.data.remote.IKitapApi
 import com.mesutemre.kutuphanem.kitap_liste.data.repository.KitapListeRepository
@@ -111,5 +114,13 @@ class KutuphanemRepositoryModule {
         dataStore: DataStore<Preferences>
     ): KitapDetayRepository {
         return KitapDetayRepositoryImpl(api, dao, yorumApi, dataStore)
+    }
+
+    @Singleton
+    @Provides
+    fun provideKitapEklemeRepository(
+        api: IKitapEkleApi
+    ): KitapEklemeRepository {
+        return KitapEklemeRepositoryImpl(api)
     }
 }

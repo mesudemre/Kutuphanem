@@ -9,7 +9,9 @@ import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.CameraOpenType
 import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.KitapEklemeBottomsheetType
 import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.KitapEklemeKitapTurItem
 import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.KitapEklemeYayinEviItem
+import com.mesutemre.kutuphanem.model.ResponseStatusModel
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
+import java.io.File
 
 @Stable
 data class KitapEklemeState(
@@ -41,5 +43,8 @@ data class KitapEklemeState(
     val kitapAciklamaTextRecognationErrorOccured: Boolean = false,
     val bottomsheetScreen: KitapEklemeBottomsheetType = KitapEklemeBottomsheetType.NONE,
     val kitapTurListResponse: BaseResourceEvent<List<KitapEklemeKitapTurItem>> = BaseResourceEvent.Loading(),
-    val yayinEviListResponse: BaseResourceEvent<List<KitapEklemeYayinEviItem>> = BaseResourceEvent.Loading()
+    val yayinEviListResponse: BaseResourceEvent<List<KitapEklemeYayinEviItem>> = BaseResourceEvent.Loading(),
+    val kitapKaydetResourceEvent: BaseResourceEvent<ResponseStatusModel?> = BaseResourceEvent.Nothing(),
+    val croppedImageFile: File? = null,
+    val kitapResimYukleResourceEvent: BaseResourceEvent<ResponseStatusModel?> = BaseResourceEvent.Nothing(),
 )

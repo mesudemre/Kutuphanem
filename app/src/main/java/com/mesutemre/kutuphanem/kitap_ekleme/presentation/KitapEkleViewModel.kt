@@ -6,14 +6,15 @@ import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.kitap_detay.presentation.KitapEklemeEvent
 import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.CameraOpenType
-import com.mesutemre.kutuphanem.kitap_ekleme.domain.use_case.KitapAciklamaImageAnalyzer
-import com.mesutemre.kutuphanem.kitap_ekleme.domain.use_case.KitapEklemeKitapTurListUseCase
-import com.mesutemre.kutuphanem.kitap_ekleme.domain.use_case.KitapEklemeYayinEviListUseCase
+import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.KitapEklemeKitapModel
+import com.mesutemre.kutuphanem.kitap_ekleme.domain.use_case.*
+import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import com.mesutemre.kutuphanem_base.viewmodel.BaseViewModel
 import com.mesutemre.kutuphanem_ui.extensions.rotateBitmap
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.File
@@ -24,7 +25,9 @@ import javax.inject.Inject
 class KitapEkleViewModel @Inject constructor(
     private val kitapAciklamaImageAnalyzer: KitapAciklamaImageAnalyzer,
     private val getKitapTurListUseCase: KitapEklemeKitapTurListUseCase,
-    private val getYayinEviListUseCase: KitapEklemeYayinEviListUseCase
+    private val getYayinEviListUseCase: KitapEklemeYayinEviListUseCase,
+    private val kitapKaydetUseCase: KitapKaydetUseCase,
+    private val kitapResimYukleUseCase: KitapResimYukleUseCase
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow(KitapEklemeState())
@@ -78,7 +81,8 @@ class KitapEkleViewModel @Inject constructor(
                 _state.update {
                     it.copy(
                         croppedImageBitMap = event.croppedImage,
-                        showCropArea = false
+                        showCropArea = false,
+                        croppedImageFile = event.croppedImageFile
                     )
                 }
             }
@@ -122,6 +126,9 @@ class KitapEkleViewModel @Inject constructor(
                         selectedYayinEvi = event.kitapEklemeYayinEviItem
                     )
                 }
+            }
+            is KitapEklemeEvent.OnSaveKitap -> {
+                validateKitapEklemeForm()
             }
         }
     }
@@ -214,6 +221,56 @@ class KitapEkleViewModel @Inject constructor(
     }
 
     fun initYayinEviList() {
-
+        viewModelScope.launch {
+            getYayinEviListUseCase().collect { response ->
+                _state.update {
+                    it.copy(
+                        yayinEviListResponse = response
+                    )
+                }
+            }
+        }
     }
+
+    private fun validateKitapEklemeForm() {
+        viewModelScope.launch {
+            kitapKaydet()
+        }
+    }
+
+    private suspend fun kitapKaydet() {
+        kitapKaydetUseCase(
+            kitap = KitapEklemeKitapModel(
+                kitapAd = _state.value.kitapAd,
+                yazarAd = _state.value.yazarAd,
+                kitapAciklama = _state.value.kitapAciklama,
+                alinmaTar = "02.07.2022",//_state.value.alinmaTar,
+                kitapTurItem = _state.value.selectedKitapTur
+                    ?: throw NullPointerException("Kitap türü boş olamaz!"),
+                yayinEviItem = _state.value.selectedYayinEvi
+                    ?: throw NullPointerException("Yayınevi boş olamaz!")
+            )
+        ).collectLatest { response ->
+            _state.update {
+                it.copy(
+                    kitapKaydetResourceEvent = response
+                )
+            }
+            if (response is BaseResourceEvent.Success) {
+                kitapResimYukleUseCase(
+                    selectedFile = _state.value.croppedImageFile
+                        ?: throw NullPointerException("Lütfen bir resim yükleyiniz"),
+                    kitapId = response.data?.statusMessage
+                        ?: throw NullPointerException("Kitap kaydı yapılamamış..."),
+                ).collectLatest { resimYuklemeResponse ->
+                    _state.update {
+                        it.copy(
+                            kitapResimYukleResourceEvent = resimYuklemeResponse
+                        )
+                    }
+                }
+            }
+        }
+    }
+
 }

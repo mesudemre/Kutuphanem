@@ -29,7 +29,7 @@ class GetYayinEviListUseCase @Inject constructor(
     private val storeYayinEviParametre: StoreYayinEviParametre
 ) : IServiceCall by ServiceCallUseCase(), IDbCall by DbCallUseCase() {
 
-    operator suspend fun invoke(isSwipeRefresh: Boolean): Flow<BaseResourceEvent<List<YayinEviItem>>> {
+    suspend operator fun invoke(isSwipeRefresh: Boolean): Flow<BaseResourceEvent<List<YayinEviItem>>> {
         val isDbKayit = yayinEviRepository.checkYayinEviDbKayit(PARAM_YAYINEVI_DB_KEY)
         if (isSwipeRefresh || !isDbKayit) {
             val serviceListEvent = serviceCall {
