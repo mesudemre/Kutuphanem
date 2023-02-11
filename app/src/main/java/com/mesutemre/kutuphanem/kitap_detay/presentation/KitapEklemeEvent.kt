@@ -16,7 +16,9 @@ sealed class KitapEklemeEvent {
     data class KitapResimEklemeOpenClose(val isOpen: Boolean, val cameraOpenType: CameraOpenType) :
         KitapEklemeEvent()
 
-    data class OnKitapResimCropped(val croppedImage: ImageBitmap,val croppedImageFile: File?) : KitapEklemeEvent()
+    data class OnKitapResimCropped(val croppedImage: ImageBitmap, val croppedImageFile: File?) :
+        KitapEklemeEvent()
+
     object OnKitapResimCropClose : KitapEklemeEvent()
     object OnRemoveCroppedKitapResim : KitapEklemeEvent()
     data class OnChangeBottomSheetType(val bottomsheetType: KitapEklemeBottomsheetType) :
@@ -29,4 +31,6 @@ sealed class KitapEklemeEvent {
         KitapEklemeEvent()
 
     object OnSaveKitap : KitapEklemeEvent()
+    data class KitapResimEklemePermissionClicked(val kitapResimEklemeClicked: Boolean) :
+        KitapEklemeEvent()
 }

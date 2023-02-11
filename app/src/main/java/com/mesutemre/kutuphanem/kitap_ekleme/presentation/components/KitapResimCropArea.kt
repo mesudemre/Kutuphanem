@@ -1,7 +1,6 @@
 package com.mesutemre.kutuphanem.kitap_ekleme.presentation.components
 
 import android.content.Context
-import android.graphics.Bitmap
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
@@ -16,12 +15,11 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.core.net.toFile
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.model.QA_DLG
 import com.mesutemre.kutuphanem.util.customcomponents.dialog.CustomKutuphanemDialog
 import com.mesutemre.kutuphanem_ui.extensions.rippleClick
-import com.mesutemre.kutuphanem_ui.extensions.saveImage
+import com.mesutemre.kutuphanem_ui.extensions.saveImageToFile
 import com.mesutemre.kutuphanem_ui.theme.colorPalette
 import com.mesutemre.kutuphanem_ui.theme.sdp
 import com.smarttoolfactory.cropper.ImageCropper
@@ -29,15 +27,20 @@ import com.smarttoolfactory.cropper.model.OutlineType
 import com.smarttoolfactory.cropper.model.RectCropShape
 import com.smarttoolfactory.cropper.settings.CropDefaults
 import com.smarttoolfactory.cropper.settings.CropOutlineProperty
+import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.default
+import id.zelory.compressor.constraint.destination
+import kotlinx.coroutines.launch
 import java.io.File
 
 @Composable
 fun KitapResimCropArea(
     capturedImage: ImageBitmap,
     onCloseCrop: () -> Unit,
-    onCompleteCrop: (ImageBitmap,File?) -> Unit
+    onCompleteCrop: (ImageBitmap, File?) -> Unit
 ) {
     val context: Context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     var cropProperties by remember {
         mutableStateOf(
             CropDefaults.properties(
@@ -69,7 +72,17 @@ fun KitapResimCropArea(
             croppedImage?.let {
                 isDialogShow = false
                 croppedImage = null
-                onCompleteCrop(it,File(context.saveImage(it.asAndroidBitmap())?.path))
+                val imageFile = context.saveImageToFile(it.asAndroidBitmap())
+                imageFile?.let { file ->
+                    coroutineScope.launch {
+                        onCompleteCrop(it, Compressor.compress(
+                            context, file
+                        ) {
+                            default()
+                            destination(file)
+                        })
+                    }
+                }
             }
         }
     }

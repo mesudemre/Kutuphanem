@@ -1,5 +1,6 @@
 package com.mesutemre.kutuphanem.kitap_ekleme.presentation
 
+import android.Manifest
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.annotation.StringRes
@@ -47,4 +48,9 @@ data class KitapEklemeState(
     val kitapKaydetResourceEvent: BaseResourceEvent<ResponseStatusModel?> = BaseResourceEvent.Nothing(),
     val croppedImageFile: File? = null,
     val kitapResimYukleResourceEvent: BaseResourceEvent<ResponseStatusModel?> = BaseResourceEvent.Nothing(),
+    val isKitapResimEklemePermissionClicked: Boolean = false,
+    val kitapResimEklemePermissionList: List<String> = listOf(
+        Manifest.permission.CAMERA,
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    )
 )

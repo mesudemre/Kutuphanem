@@ -1,5 +1,6 @@
 package com.mesutemre.kutuphanem.kitap_ekleme.presentation
 
+import android.Manifest
 import android.graphics.BitmapFactory
 import androidx.camera.core.ImageProxy
 import androidx.core.net.toUri
@@ -8,6 +9,7 @@ import com.mesutemre.kutuphanem.kitap_detay.presentation.KitapEklemeEvent
 import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.CameraOpenType
 import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.KitapEklemeKitapModel
 import com.mesutemre.kutuphanem.kitap_ekleme.domain.use_case.*
+import com.mesutemre.kutuphanem.util.isMinSdk29
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import com.mesutemre.kutuphanem_base.viewmodel.BaseViewModel
 import com.mesutemre.kutuphanem_ui.extensions.rotateBitmap
@@ -34,6 +36,20 @@ class KitapEkleViewModel @Inject constructor(
     val state: StateFlow<KitapEklemeState> = _state
 
     private var capturedImageFile: File? = null
+
+    init {
+        if (isMinSdk29().not()) {
+            _state.update {
+                it.copy(
+                    kitapResimEklemePermissionList = listOf(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    )
+                )
+            }
+        }
+    }
 
     fun onKitapEklemeEvent(event: KitapEklemeEvent) {
         when (event) {
@@ -124,6 +140,14 @@ class KitapEkleViewModel @Inject constructor(
                 _state.update {
                     it.copy(
                         selectedYayinEvi = event.kitapEklemeYayinEviItem
+                    )
+                }
+            }
+            is KitapEklemeEvent.KitapResimEklemePermissionClicked -> {
+                _state.update {
+                    it.copy(
+                        isKitapResimEklemePermissionClicked = event.kitapResimEklemeClicked,
+                        cameraOpenType = CameraOpenType.KITAP_RESIM
                     )
                 }
             }
@@ -244,7 +268,7 @@ class KitapEkleViewModel @Inject constructor(
                 kitapAd = _state.value.kitapAd,
                 yazarAd = _state.value.yazarAd,
                 kitapAciklama = _state.value.kitapAciklama,
-                alinmaTar = "02.07.2022",//_state.value.alinmaTar,
+                alinmaTar = _state.value.alinmaTar,
                 kitapTurItem = _state.value.selectedKitapTur
                     ?: throw NullPointerException("Kitap türü boş olamaz!"),
                 yayinEviItem = _state.value.selectedYayinEvi
@@ -263,6 +287,11 @@ class KitapEkleViewModel @Inject constructor(
                     kitapId = response.data?.statusMessage
                         ?: throw NullPointerException("Kitap kaydı yapılamamış..."),
                 ).collectLatest { resimYuklemeResponse ->
+                    if (resimYuklemeResponse is BaseResourceEvent.Success) {
+                        _state.value.croppedImageFile?.let {
+                            it.delete()
+                        }
+                    }
                     _state.update {
                         it.copy(
                             kitapResimYukleResourceEvent = resimYuklemeResponse

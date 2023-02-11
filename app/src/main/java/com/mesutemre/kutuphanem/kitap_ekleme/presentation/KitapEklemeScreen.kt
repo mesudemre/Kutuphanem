@@ -27,10 +27,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionStatus
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.mesutemre.kutuphanem.BuildConfig
 import com.mesutemre.kutuphanem.R
@@ -76,6 +73,9 @@ fun KitapEklemeScreen(
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     val cameraPermissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
+    val kitapEklemePermissionState = rememberMultiplePermissionsState(
+        permissions = state.value.kitapResimEklemePermissionList
+    )
 
     systemUiController.isStatusBarVisible =
         (state.value.openCamera || state.value.showCropArea).not()
@@ -174,11 +174,37 @@ fun KitapEklemeScreen(
         }
     }
 
-    when(state.value.kitapKaydetResourceEvent) {
+    LaunchedEffect(Unit) {
+        if (state.value.isKitapResimEklemePermissionClicked) {
+            if (kitapEklemePermissionState.allPermissionsGranted) {
+                viewModel.onKitapEklemeEvent(
+                    KitapEklemeEvent.KitapResimEklemePermissionClicked(
+                        false
+                    )
+                )
+                openCloseCamera(true, state.value.cameraOpenType)
+            } else {
+                kitapEklemePermissionState.revokedPermissions.forEach {
+                    if (it.status == PermissionStatus.Denied(shouldShowRationale = false))
+                        Log.d(
+                            "KUTUPHANEM_PERMISSION",
+                            it.permission + " izni yok! Kalıcı olarak reddedilmiş!!!"
+                        )
+                    else if (it.status == PermissionStatus.Denied(shouldShowRationale = true))
+                        Log.d(
+                            "KUTUPHANEM_PERMISSION",
+                            it.permission + " izni yok! Manuel reddedilmiş!!!"
+                        )
+                }
+            }
+        }
+    }
+
+    when (state.value.kitapKaydetResourceEvent) {
         is BaseResourceEvent.Success -> {
             LaunchedEffect(key1 = Unit) {
                 showSnackbar(
-                   "Kitap kaydı başarıyla yapıldı.",
+                    "Kitap kaydı başarıyla yapıldı.",
                     SnackbarDuration.Short,
                     SUCCESS
                 )
@@ -196,7 +222,7 @@ fun KitapEklemeScreen(
         else -> Unit
     }
 
-    when(state.value.kitapResimYukleResourceEvent) {
+    when (state.value.kitapResimYukleResourceEvent) {
         is BaseResourceEvent.Success -> {
             LaunchedEffect(key1 = Unit) {
                 showSnackbar(
@@ -253,13 +279,20 @@ fun KitapEklemeScreen(
 
     val onClickResimEkleme = remember<() -> Unit> {
         {
-            if (cameraPermissionState.status.isGranted) {
+            if (kitapEklemePermissionState.allPermissionsGranted) {
+                viewModel.onKitapEklemeEvent(KitapEklemeEvent.KitapResimEklemePermissionClicked(true))
                 openCloseCamera(true, CameraOpenType.KITAP_RESIM)
-            } else if (cameraPermissionState.status == PermissionStatus.Denied(true)) {
-                viewModel.showSettingsDialog(R.string.kitap_ekleme_kameraIzinDialogDescription)
             } else {
-                viewModel.clickCameraPermission(CameraOpenType.KITAP_RESIM)
-                cameraPermissionState.launchPermissionRequest()
+                if (kitapEklemePermissionState.shouldShowRationale) {
+                    viewModel.showSettingsDialog(R.string.kitap_ekleme_kameraIzinDialogDescription)
+                } else {
+                    viewModel.onKitapEklemeEvent(
+                        KitapEklemeEvent.KitapResimEklemePermissionClicked(
+                            true
+                        )
+                    )
+                    kitapEklemePermissionState.launchMultiplePermissionRequest()
+                }
             }
         }
     }
@@ -277,11 +310,11 @@ fun KitapEklemeScreen(
         }
     }
 
-    val onCompleteKitapResimCrop = remember<(ImageBitmap,File?) -> Unit> {
-        { croppedImage,croppedFile ->
+    val onCompleteKitapResimCrop = remember<(ImageBitmap, File?) -> Unit> {
+        { croppedImage, croppedFile ->
             viewModel.onKitapEklemeEvent(
                 KitapEklemeEvent.OnKitapResimCropped(
-                    croppedImage,croppedFile
+                    croppedImage, croppedFile
                 )
             )
         }

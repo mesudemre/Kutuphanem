@@ -123,5 +123,6 @@ dependencies {
     implementation "com.github.a914-gowtham:compose-ratingbar:$composeRatingBar"
 
     implementation "com.google.android.gms:play-services-mlkit-text-recognition:$mlkit_text_recognation"
-    implementation "com.github.SmartToolFactory:Compose-Cropper:0.2.4"
+    implementation "com.github.SmartToolFactory:Compose-Cropper:$smart_factory_compose_cropper"
+    implementation "id.zelory:compressor:$zelory_compressor"
 }

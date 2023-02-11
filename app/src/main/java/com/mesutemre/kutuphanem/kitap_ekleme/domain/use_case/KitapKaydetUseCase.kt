@@ -14,7 +14,6 @@ import com.mesutemre.kutuphanem_base.util.convertStringToDate
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class KitapKaydetUseCase @Inject constructor(
@@ -24,16 +23,17 @@ class KitapKaydetUseCase @Inject constructor(
 
     operator fun invoke(kitap: KitapEklemeKitapModel): Flow<BaseResourceEvent<ResponseStatusModel?>> {
         val alinmaTar =
-            kitap.alinmaTar.split(".")[2] + "-" + kitap.alinmaTar.split(".")[1] + "-" + kitap.alinmaTar.split(
-                "."
-            )[0]
+            kitap.alinmaTar.subSequence(0, 2).toString() + "." + kitap.alinmaTar.subSequence(
+                2,
+                4
+            ) + "." + kitap.alinmaTar.subSequence(4, 8)
         return serviceCall {
             kitapEklemeRepository.kitapKaydet(
                 KitapDto(
                     kitapAd = kitap.kitapAd,
                     yazarAd = kitap.yazarAd,
                     kitapAciklama = kitap.kitapAciklama,
-                    alinmaTar = kitap.alinmaTar.convertStringToDate(),
+                    alinmaTar = alinmaTar.convertStringToDate(),
                     kitapTur = KitapTurDto(
                         id = kitap.kitapTurItem.kitapTurId,
                         aciklama = kitap.kitapTurItem.kitapTurAciklama

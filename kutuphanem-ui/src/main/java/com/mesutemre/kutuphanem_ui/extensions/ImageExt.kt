@@ -2,12 +2,14 @@ package com.mesutemre.kutuphanem_ui.extensions
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.provider.DocumentsContract
 import android.provider.MediaStore
 import java.io.File
 import java.io.IOException
@@ -54,10 +56,10 @@ fun Bitmap.rotateBitmap(fileName: String): Bitmap {
     return this
 }
 
-fun Context.saveImage(bitmap: Bitmap): Uri? {
+fun Context.saveImageToFile(bitmap: Bitmap): File? {
     var uri: Uri? = null
     try {
-        val fileName = System.nanoTime().toString() + ".jpeg"
+        val fileName = System.nanoTime().toString() + ".jpg"
         val values = ContentValues().apply {
             put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
             put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
@@ -85,12 +87,46 @@ fun Context.saveImage(bitmap: Bitmap): Uri? {
                 contentResolver.update(uri, values, null, null)
             }
         }
-        return uri
-    }catch (e: java.lang.Exception) {
+        return File(this.getRealPathFromURI(uri))
+    } catch (e: java.lang.Exception) {
         if (uri != null) {
-            // Don't leave an orphan entry in the MediaStore
             contentResolver.delete(uri, null, null)
         }
         throw e
+    }
+}
+
+fun Context.getRealPathFromURI_API19(uri: Uri?): String? {
+    var filePath = ""
+    val wholeID = DocumentsContract.getDocumentId(uri)
+    val id = wholeID.split(":").toTypedArray()[1]
+    val column = arrayOf(MediaStore.Images.Media.DATA)
+
+    // where id is equal to
+    val sel = MediaStore.Images.Media._ID + "=?"
+    val cursor: Cursor? = this.contentResolver.query(
+        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+        column, sel, arrayOf(id), null
+    )
+    val columnIndex: Int = cursor!!.getColumnIndex(column[0])
+    if (cursor.moveToFirst()) {
+        filePath = cursor.getString(columnIndex)
+    }
+    cursor.close()
+    return filePath
+}
+
+fun Context.getRealPathFromURI(contentUri: Uri?): String? {
+    var cursor: Cursor? = null
+    return try {
+        val proj =
+            arrayOf(MediaStore.Images.Media.DATA)
+        cursor = this.contentResolver.query(contentUri!!, proj, null, null, null)
+        cursor!!.moveToFirst()
+        val column_index = cursor.getColumnIndex(proj[0])
+
+        cursor.getString(column_index)
+    } finally {
+        cursor?.close()
     }
 }

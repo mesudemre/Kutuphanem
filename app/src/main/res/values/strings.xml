@@ -241,4 +241,6 @@
     <string name="kitap_ekleme_bottomSheet_yayinEviTitle">Yayın Evleri</string>
     <string name="kitap_ekleme_bottomSheet_yayinEvi_searchFilterHint">Yayınevi ara...</string>
     <string name="kitap_ekleme_bottomSheet_yayinEvi_searchNotFound">Aramanızla eşleşen bir yayınevi bulunamadı</string>
+    <string name="kitap_ekleme_writeReadIzinDialogTitle">Okuma / Yazma İzni</string>
+    <string name="kitap_ekleme_writeReadIzinDialogDescription">Bu işlemi gerçekleştirebilmeniz için Okuma / Yazma İzni vermeniz gerkemektedir. Uygulama ayarlarına gitmek için devam etmek istiyor musunuz?</string>
 </resources>
