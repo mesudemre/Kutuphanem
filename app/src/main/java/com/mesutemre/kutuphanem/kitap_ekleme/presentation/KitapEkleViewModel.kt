@@ -35,19 +35,24 @@ class KitapEkleViewModel @Inject constructor(
     private val _state = MutableStateFlow(KitapEklemeState())
     val state: StateFlow<KitapEklemeState> = _state
 
+    private var isCameraPermissionGranted: Boolean = false
+    private var isReadExternalPermissionGranted: Boolean = false
+    private var isWriteExternalPermissionGranted: Boolean = false
+
     private var capturedImageFile: File? = null
+
+    var kitapResimEklemePermissionList: List<String> = listOf(
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.CAMERA
+    )
 
     init {
         if (isMinSdk29().not()) {
-            _state.update {
-                it.copy(
-                    kitapResimEklemePermissionList = listOf(
-                        Manifest.permission.CAMERA,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                    )
-                )
-            }
+            kitapResimEklemePermissionList = listOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA
+            )
         }
     }
 
@@ -143,43 +148,57 @@ class KitapEkleViewModel @Inject constructor(
                     )
                 }
             }
-            is KitapEklemeEvent.KitapResimEklemePermissionClicked -> {
+            is KitapEklemeEvent.OpenCameraPermissionWarning -> {
                 _state.update {
                     it.copy(
-                        isKitapResimEklemePermissionClicked = event.kitapResimEklemeClicked,
-                        cameraOpenType = CameraOpenType.KITAP_RESIM
+                        cameraPermissionDeniedDialog = event.isOpen,
+                        cameraPermissionDeniedPermanently = event.isPermanentlyDenied
+                    )
+                }
+            }
+            is KitapEklemeEvent.CloseCameraPermissionWarning -> {
+                _state.update {
+                    it.copy(
+                        cameraPermissionDeniedDialog = false,
+                        cameraPermissionDeniedPermanently = false
+                    )
+                }
+            }
+            is KitapEklemeEvent.OpenReadExternalStoragePermissionWarning -> {
+                _state.update {
+                    it.copy(
+                        readExternalStoragePermissionDeniedDialog = event.isOpen,
+                        readExternalStoragePermissionDeniedPermanently = event.isPermanentlyDenied
+                    )
+                }
+            }
+            is KitapEklemeEvent.CloseReadExternalStoragePermissionWarning -> {
+                _state.update {
+                    it.copy(
+                        readExternalStoragePermissionDeniedDialog = false,
+                        readExternalStoragePermissionDeniedPermanently = false
+                    )
+                }
+            }
+            is KitapEklemeEvent.OpenWriteExternalStoragePermissionWarning -> {
+                _state.update {
+                    it.copy(
+                        writeExternalStoragePermissionDeniedDialog = event.isOpen,
+                        writeExternalStoragePermissionDeniedPermanently = event.isPermanentlyDenied
+                    )
+                }
+            }
+            is KitapEklemeEvent.CloseWriteExternalStoragePermissionWarning -> {
+                _state.update {
+                    it.copy(
+                        writeExternalStoragePermissionDeniedDialog = false,
+                        writeExternalStoragePermissionDeniedPermanently = false
                     )
                 }
             }
             is KitapEklemeEvent.OnSaveKitap -> {
                 validateKitapEklemeForm()
             }
-        }
-    }
-
-    fun clickCameraPermission(cameraOpenType: CameraOpenType) {
-        _state.update {
-            it.copy(
-                isCameraPermissionClicked = true,
-                cameraOpenType = cameraOpenType
-            )
-        }
-    }
-
-    fun showSettingsDialog(aciklama: Int) {
-        _state.update {
-            it.copy(
-                showSettingsDialog = true,
-                kameraAyarAciklama = aciklama
-            )
-        }
-    }
-
-    fun dismissSettingsDialog() {
-        _state.update {
-            it.copy(
-                showSettingsDialog = false
-            )
         }
     }
 
@@ -302,4 +321,89 @@ class KitapEkleViewModel @Inject constructor(
         }
     }
 
+    fun onCameraPermissionResult(
+        isGranted: Boolean,
+        isPermanantlyDenied: Boolean,
+        cameraOpenType: CameraOpenType
+    ) {
+        if (isGranted) {
+            onKitapEklemeEvent(
+                KitapEklemeEvent.KitapResimEklemeOpenClose(
+                    isOpen = true,
+                    cameraOpenType = cameraOpenType
+                )
+            )
+        } else {
+            handlePermanantlyCameraPermission(isPermanantlyDenied)
+        }
+    }
+
+    private fun handlePermanantlyCameraPermission(isPermanantlyDenied: Boolean) {
+        onKitapEklemeEvent(
+            KitapEklemeEvent.OpenCameraPermissionWarning(
+                isPermanentlyDenied = isPermanantlyDenied,
+                isOpen = true
+            )
+        )
+    }
+
+    fun onMultiplePermissionResult(
+        permission: String,
+        isGranted: Boolean,
+        isPermanantlyDenied: Boolean
+    ) {
+        if (permission == Manifest.permission.CAMERA) {
+            isCameraPermissionGranted = isGranted
+        }
+        if (permission == Manifest.permission.READ_EXTERNAL_STORAGE) {
+            controlReadExternalStoragePermission(
+                isGranted = isGranted,
+                isPermanantlyDenied = isPermanantlyDenied
+            )
+        }
+        if (permission == Manifest.permission.WRITE_EXTERNAL_STORAGE) {
+            controlWriteExternalStoragePermission(
+                isGranted = isGranted,
+                isPermanantlyDenied = isPermanantlyDenied
+            )
+        }
+
+        val canOpenCamera =
+            isCameraPermissionGranted && isReadExternalPermissionGranted && if (isMinSdk29().not()) isWriteExternalPermissionGranted else true
+
+        if (canOpenCamera)
+            onCameraPermissionResult(
+                isGranted = true,
+                isPermanantlyDenied = false,
+                cameraOpenType = CameraOpenType.KITAP_RESIM
+            )
+    }
+
+    private fun controlReadExternalStoragePermission(
+        isGranted: Boolean,
+        isPermanantlyDenied: Boolean
+    ) {
+        isReadExternalPermissionGranted = isGranted
+        if (isGranted.not())
+            onKitapEklemeEvent(
+                KitapEklemeEvent.OpenReadExternalStoragePermissionWarning(
+                    isPermanentlyDenied = isPermanantlyDenied,
+                    isOpen = true
+                )
+            )
+    }
+
+    private fun controlWriteExternalStoragePermission(
+        isGranted: Boolean,
+        isPermanantlyDenied: Boolean
+    ) {
+        isWriteExternalPermissionGranted = isGranted
+        if (isGranted.not())
+            onKitapEklemeEvent(
+                KitapEklemeEvent.OpenWriteExternalStoragePermissionWarning(
+                    isPermanentlyDenied = isPermanantlyDenied,
+                    isOpen = true
+                )
+            )
+    }
 }

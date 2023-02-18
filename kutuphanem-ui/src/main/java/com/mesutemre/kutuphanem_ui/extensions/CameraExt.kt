@@ -6,7 +6,6 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.content.ContextCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -22,9 +21,6 @@ suspend fun Context.getCameraProvider(): ProcessCameraProvider = suspendCoroutin
         }, executor)
     }
 }
-
-val Context.executor: Executor
-    get() = ContextCompat.getMainExecutor(this)
 
 suspend fun ImageCapture.kutuphanemTakePicture(executor: Executor, imageName: String): File {
     val photoFile = withContext(Dispatchers.IO) {

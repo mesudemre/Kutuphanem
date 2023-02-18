@@ -14,6 +14,10 @@
     <string name="noNetworkConnection">İnternet bağlantınız bulunmamaktadır!</string>
     <string name="vazgecLabel">Vazgeç</string>
     <string name="begenLabel">Beğen</string>
+    <string name="kutuphanem_camera_permission_transaction">Bu işlemi gerçekleştirebilmeniz için kamera izni vermeniz gerekmektedir.</string>
+    <string name="kutuphanem_camera_permission_settings">Bu işlemi gerçekleştirebilmeniz için cihazınızın ayarlarından kamera izni vermeniz gerekmektedir.</string>
+    <string name="kutuphanem_read_permission_transaction">Bu işlemi gerçekleştirebilmeniz için Okuma İzni vermeniz gerkemektedir.</string>
+    <string name="kutuphanem_read_permission_settings">Bu işlemi gerçekleştirebilmeniz için cihazınızın ayarlarından okuma izni vermeniz gerekmektedir.</string>
 
     <!--Bottom Navigation Menu -->
     <string name="anasayfaItem">Anasayfa</string>
@@ -227,7 +231,6 @@
     <string name="kitap_ekleme_kitapResimLabel">Kitap resmi eklemek için tıklayınız...</string>
     <string name="kitap_ekleme_onKameraLabel">Ön/Arka kamera</string>
     <string name="kitap_ekleme_cameraTitle">Kitabın resmini çekebilirsiniz</string>
-    <string name="kitap_ekleme_kitapAciklamaKameraIzin">İşlemi yapabilmeniz için kamera izni vermekniz gerekmektedir. Uygulama ayarlarına gitmek için devam etmek istiyor musunuz?</string>
     <string name="kitap_ekleme_cropDialogTitle">Kitap Resmi</string>
     <string name="kitap_ekleme_cropDialogDescription">Bu resmi eklemek istediğinize emin misiniz?</string>
     <string name="kitap_ekleme_imageCropAreaContentDescription">Resim kırpma</string>
@@ -242,5 +245,4 @@
     <string name="kitap_ekleme_bottomSheet_yayinEvi_searchFilterHint">Yayınevi ara...</string>
     <string name="kitap_ekleme_bottomSheet_yayinEvi_searchNotFound">Aramanızla eşleşen bir yayınevi bulunamadı</string>
     <string name="kitap_ekleme_writeReadIzinDialogTitle">Okuma / Yazma İzni</string>
-    <string name="kitap_ekleme_writeReadIzinDialogDescription">Bu işlemi gerçekleştirebilmeniz için Okuma / Yazma İzni vermeniz gerkemektedir. Uygulama ayarlarına gitmek için devam etmek istiyor musunuz?</string>
 </resources>

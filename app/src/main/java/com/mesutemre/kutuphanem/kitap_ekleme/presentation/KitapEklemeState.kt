@@ -23,7 +23,6 @@ data class KitapEklemeState(
     val alinmaTar: String = "",
     @StringRes val alinmaTarError: Int? = null,
     val isCameraPermissionClicked: Boolean = false,
-    val showSettingsDialog: Boolean = false,
     val selectedKitapTur: KitapEklemeKitapTurItem? = null,
     @StringRes val kitapTurError: Int? = null,
     val selectedYayinEvi: KitapEklemeYayinEviItem? = null,
@@ -36,9 +35,6 @@ data class KitapEklemeState(
     val captureImageBitmap: Bitmap? = null,
     val cropImage: Boolean = false,
     val croppedImageBitMap: ImageBitmap? = null,
-    val isCapturedKitapImageCropping: Boolean = false,
-    val cropProcessCompleted: Boolean = false,
-    val showCroppedImage: Boolean = false,
     val showCropArea: Boolean = false,
     val cameraOpenType: CameraOpenType = CameraOpenType.KITAP_RESIM,
     val kitapAciklamaTextRecognationErrorOccured: Boolean = false,
@@ -48,9 +44,13 @@ data class KitapEklemeState(
     val kitapKaydetResourceEvent: BaseResourceEvent<ResponseStatusModel?> = BaseResourceEvent.Nothing(),
     val croppedImageFile: File? = null,
     val kitapResimYukleResourceEvent: BaseResourceEvent<ResponseStatusModel?> = BaseResourceEvent.Nothing(),
-    val isKitapResimEklemePermissionClicked: Boolean = false,
-    val kitapResimEklemePermissionList: List<String> = listOf(
-        Manifest.permission.CAMERA,
-        Manifest.permission.READ_EXTERNAL_STORAGE
-    )
+    val cameraPermissionDeniedPermanently: Boolean = false,
+    val cameraPermissionDeniedDialog: Boolean = false,
+    val readExternalStoragePermissionDeniedPermanently: Boolean = false,
+    val readExternalStoragePermissionDeniedDialog: Boolean = false,
+    val writeExternalStoragePermissionDeniedPermanently: Boolean = false,
+    val writeExternalStoragePermissionDeniedDialog: Boolean = false,
+    val kitapEklemeCameraPermissionDeniedPermanently: Boolean = false,
+    val kitapEklemeCameraPermissionDeniedDialog: Boolean = false
+
 )

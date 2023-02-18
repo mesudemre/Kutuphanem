@@ -3,10 +3,10 @@ package com.mesutemre.kutuphanem
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.viewModelScope
-import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.util.APP_TOKEN_KEY
 import com.mesutemre.kutuphanem.util.readString
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
+import com.mesutemre.kutuphanem_base.viewmodel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

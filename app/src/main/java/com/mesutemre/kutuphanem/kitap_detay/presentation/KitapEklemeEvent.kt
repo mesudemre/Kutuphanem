@@ -31,6 +31,23 @@ sealed class KitapEklemeEvent {
         KitapEklemeEvent()
 
     object OnSaveKitap : KitapEklemeEvent()
-    data class KitapResimEklemePermissionClicked(val kitapResimEklemeClicked: Boolean) :
+
+    data class OpenCameraPermissionWarning(val isPermanentlyDenied: Boolean, val isOpen: Boolean) :
         KitapEklemeEvent()
+
+    object CloseCameraPermissionWarning : KitapEklemeEvent()
+
+    data class OpenReadExternalStoragePermissionWarning(
+        val isPermanentlyDenied: Boolean,
+        val isOpen: Boolean
+    ) : KitapEklemeEvent()
+
+    data class OpenWriteExternalStoragePermissionWarning(
+        val isPermanentlyDenied: Boolean,
+        val isOpen: Boolean
+    ) : KitapEklemeEvent()
+
+    object CloseReadExternalStoragePermissionWarning : KitapEklemeEvent()
+
+    object CloseWriteExternalStoragePermissionWarning : KitapEklemeEvent()
 }

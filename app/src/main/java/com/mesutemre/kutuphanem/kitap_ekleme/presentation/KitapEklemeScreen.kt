@@ -6,6 +6,8 @@ import android.net.Uri
 import android.provider.Settings
 import android.util.Log
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.ImageProxy
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -27,7 +29,9 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.google.accompanist.permissions.*
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionStatus
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.mesutemre.kutuphanem.BuildConfig
 import com.mesutemre.kutuphanem.R
@@ -45,12 +49,14 @@ import com.mesutemre.kutuphanem.ui.theme.smallUbuntuBlack
 import com.mesutemre.kutuphanem.ui.theme.smallUbuntuWhiteBold
 import com.mesutemre.kutuphanem.util.customcomponents.dialog.CustomKutuphanemDialog
 import com.mesutemre.kutuphanem.util.customcomponents.input.KutuphanemOutlinedFormTextField
+import com.mesutemre.kutuphanem.util.isMinSdk29
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import com.mesutemre.kutuphanem_base.util.MaskVisualTransformation
 import com.mesutemre.kutuphanem_ui.button.KutuphanemMainMaterialButton
 import com.mesutemre.kutuphanem_ui.card.KutuphanemSelectableCard
 import com.mesutemre.kutuphanem_ui.dialog.ERROR_DLG
-import com.mesutemre.kutuphanem_ui.dialog.WARNING_DLG
+import com.mesutemre.kutuphanem_ui.dialog.KutuphanemPermissionDialog
+import com.mesutemre.kutuphanem_ui.extensions.findActivity
 import com.mesutemre.kutuphanem_ui.extensions.rippleClick
 import com.mesutemre.kutuphanem_ui.theme.colorPalette
 import com.mesutemre.kutuphanem_ui.theme.sdp
@@ -72,10 +78,31 @@ fun KitapEklemeScreen(
     val systemUiController = rememberSystemUiController()
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
-    val cameraPermissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
-    val kitapEklemePermissionState = rememberMultiplePermissionsState(
-        permissions = state.value.kitapResimEklemePermissionList
-    )
+
+    val camPermissionState =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission(),
+            onResult = { isGranted ->
+                viewModel.onCameraPermissionResult(
+                    isGranted = isGranted,
+                    isPermanantlyDenied = context.findActivity()
+                        .shouldShowRequestPermissionRationale(Manifest.permission.CAMERA),
+                    cameraOpenType = CameraOpenType.KITAP_ACIKLAMA_TEXT_RECOGNIZE
+                )
+            })
+
+    val kitapEklemePermissionState =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestMultiplePermissions(),
+            onResult = { perms ->
+                perms.keys.forEach { permission ->
+
+                    viewModel.onMultiplePermissionResult(
+                        permission = permission,
+                        isGranted = perms[permission] == true,
+                        isPermanantlyDenied = context.findActivity()
+                            .shouldShowRequestPermissionRationale(permission)
+                    )
+                }
+            })
 
     systemUiController.isStatusBarVisible =
         (state.value.openCamera || state.value.showCropArea).not()
@@ -85,8 +112,7 @@ fun KitapEklemeScreen(
         { isOpen, cameraOpenType ->
             viewModel.onKitapEklemeEvent(
                 KitapEklemeEvent.KitapResimEklemeOpenClose(
-                    isOpen,
-                    cameraOpenType ?: CameraOpenType.KITAP_RESIM
+                    isOpen, cameraOpenType ?: CameraOpenType.KITAP_RESIM
                 )
             )
         }
@@ -138,8 +164,7 @@ fun KitapEklemeScreen(
             coroutineScope.launch {
                 viewModel.onKitapEklemeEvent(KitapEklemeEvent.OnSelectKitapTur(it))
                 bottomSheetScaffoldState.bottomSheetState.animateTo(
-                    BottomSheetValue.Collapsed,
-                    tween(500)
+                    BottomSheetValue.Collapsed, tween(500)
                 )
             }
         }
@@ -150,52 +175,8 @@ fun KitapEklemeScreen(
             coroutineScope.launch {
                 viewModel.onKitapEklemeEvent(KitapEklemeEvent.OnSelectYayinEvi(it))
                 bottomSheetScaffoldState.bottomSheetState.animateTo(
-                    BottomSheetValue.Collapsed,
-                    tween(500)
+                    BottomSheetValue.Collapsed, tween(500)
                 )
-            }
-        }
-    }
-
-    LaunchedEffect(cameraPermissionState.status) {
-        if (state.value.isCameraPermissionClicked) {
-            when (cameraPermissionState.status) {
-                PermissionStatus.Granted -> {
-                    openCloseCamera(true, state.value.cameraOpenType)
-                }
-                PermissionStatus.Denied(false) -> { //Kalıcı olarak red
-                    Log.d("KUTUPHANEM_PERMISSION", "Kamera izni yok...")
-                }
-                PermissionStatus.Denied(true) -> { //Ekrandan denied yaptık.
-                    Log.d("KUTUPHANEM_PERMISSION", "Store true Kamera izni yok..")
-                }
-                else -> {}
-            }
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        if (state.value.isKitapResimEklemePermissionClicked) {
-            if (kitapEklemePermissionState.allPermissionsGranted) {
-                viewModel.onKitapEklemeEvent(
-                    KitapEklemeEvent.KitapResimEklemePermissionClicked(
-                        false
-                    )
-                )
-                openCloseCamera(true, state.value.cameraOpenType)
-            } else {
-                kitapEklemePermissionState.revokedPermissions.forEach {
-                    if (it.status == PermissionStatus.Denied(shouldShowRationale = false))
-                        Log.d(
-                            "KUTUPHANEM_PERMISSION",
-                            it.permission + " izni yok! Kalıcı olarak reddedilmiş!!!"
-                        )
-                    else if (it.status == PermissionStatus.Denied(shouldShowRationale = true))
-                        Log.d(
-                            "KUTUPHANEM_PERMISSION",
-                            it.permission + " izni yok! Manuel reddedilmiş!!!"
-                        )
-                }
             }
         }
     }
@@ -204,9 +185,7 @@ fun KitapEklemeScreen(
         is BaseResourceEvent.Success -> {
             LaunchedEffect(key1 = Unit) {
                 showSnackbar(
-                    "Kitap kaydı başarıyla yapıldı.",
-                    SnackbarDuration.Short,
-                    SUCCESS
+                    "Kitap kaydı başarıyla yapıldı.", SnackbarDuration.Short, SUCCESS
                 )
             }
         }
@@ -244,29 +223,52 @@ fun KitapEklemeScreen(
         else -> Unit
     }
 
-    if (state.value.showSettingsDialog) {
-        CustomKutuphanemDialog(
-            modifier = Modifier
-                .height(220.sdp)
-                .width(400.sdp),
-            type = WARNING_DLG,
-            title = stringResource(id = R.string.kitap_ekleme_kameraIzinDialogTitle),
-            description = stringResource(id = R.string.kitap_ekleme_kameraIzinDialogDescription),
-            onDismissDialog = {
-                viewModel.dismissSettingsDialog()
-            }) {
-            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-            intent.data = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
-            viewModel.dismissSettingsDialog()
-            context.startActivity(intent)
-        }
+    if (state.value.cameraPermissionDeniedDialog) {
+        KutuphanemPermissionDialog(modifier = Modifier
+            .height(220.sdp)
+            .width(400.sdp),
+            permission = stringResource(id = R.string.kitap_ekleme_kameraIzinDialogTitle),
+            description = stringResource(id = if (state.value.cameraPermissionDeniedPermanently) R.string.kutuphanem_camera_permission_transaction else R.string.kutuphanem_camera_permission_settings),
+            confirmButtonText = stringResource(id = R.string.ayarlaLabel),
+            onOkClick = {
+                viewModel.onKitapEklemeEvent(KitapEklemeEvent.CloseCameraPermissionWarning)
+                if (state.value.cameraPermissionDeniedPermanently) {
+                    camPermissionState.launch(
+                        Manifest.permission.CAMERA
+                    )
+                } else {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    intent.data = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
+                    context.startActivity(intent)
+                }
+            })
+    }
+
+    if (state.value.readExternalStoragePermissionDeniedDialog) {
+        KutuphanemPermissionDialog(modifier = Modifier
+            .height(220.sdp)
+            .width(400.sdp),
+            permission = stringResource(id = R.string.kitap_ekleme_writeReadIzinDialogTitle),
+            description = stringResource(id = if (state.value.readExternalStoragePermissionDeniedPermanently) R.string.kutuphanem_read_permission_transaction else R.string.kutuphanem_read_permission_settings),
+            confirmButtonText = stringResource(id = R.string.ayarlaLabel),
+            onOkClick = {
+                viewModel.onKitapEklemeEvent(KitapEklemeEvent.CloseReadExternalStoragePermissionWarning)
+                if (state.value.readExternalStoragePermissionDeniedPermanently) {
+                    kitapEklemePermissionState.launch(
+                        viewModel.kitapResimEklemePermissionList.toTypedArray()
+                    )
+                } else {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    intent.data = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
+                    context.startActivity(intent)
+                }
+            })
     }
 
     if (state.value.kitapAciklamaTextRecognationErrorOccured) {
-        CustomKutuphanemDialog(
-            modifier = Modifier
-                .height(220.sdp)
-                .width(400.sdp),
+        CustomKutuphanemDialog(modifier = Modifier
+            .height(220.sdp)
+            .width(400.sdp),
             type = ERROR_DLG,
             title = stringResource(id = R.string.kitap_ekleme_text_read_title),
             description = stringResource(id = R.string.kitap_ekleme_text_read_errorDescription),
@@ -279,34 +281,17 @@ fun KitapEklemeScreen(
 
     val onClickResimEkleme = remember<() -> Unit> {
         {
-            if (kitapEklemePermissionState.allPermissionsGranted) {
-                viewModel.onKitapEklemeEvent(KitapEklemeEvent.KitapResimEklemePermissionClicked(true))
-                openCloseCamera(true, CameraOpenType.KITAP_RESIM)
-            } else {
-                if (kitapEklemePermissionState.shouldShowRationale) {
-                    viewModel.showSettingsDialog(R.string.kitap_ekleme_kameraIzinDialogDescription)
-                } else {
-                    viewModel.onKitapEklemeEvent(
-                        KitapEklemeEvent.KitapResimEklemePermissionClicked(
-                            true
-                        )
-                    )
-                    kitapEklemePermissionState.launchMultiplePermissionRequest()
-                }
-            }
+            kitapEklemePermissionState.launch(
+                viewModel.kitapResimEklemePermissionList.toTypedArray()
+            )
         }
     }
 
     val onClickKitapAciklama = remember<() -> Unit> {
         {
-            if (cameraPermissionState.status.isGranted) {
-                openCloseCamera(true, CameraOpenType.KITAP_ACIKLAMA_TEXT_RECOGNIZE)
-            } else if (cameraPermissionState.status == PermissionStatus.Denied(true)) {
-                viewModel.showSettingsDialog(R.string.kitap_ekleme_kitapAciklamaKameraIzin)
-            } else {
-                viewModel.clickCameraPermission(CameraOpenType.KITAP_ACIKLAMA_TEXT_RECOGNIZE)
-                cameraPermissionState.launchPermissionRequest()
-            }
+            camPermissionState.launch(
+                Manifest.permission.CAMERA
+            )
         }
     }
 
@@ -354,16 +339,13 @@ fun KitapEklemeScreen(
         }
     }
 
-    BottomSheetScaffold(
-        scaffoldState = bottomSheetScaffoldState,
+    BottomSheetScaffold(scaffoldState = bottomSheetScaffoldState,
         topBar = if ((state.value.openCamera || state.value.showCropArea).not()) {
             {
-                KitapEklemeScreenTopBar(
-                    pageTitle = stringResource(id = R.string.kitapEklemeTitle),
+                KitapEklemeScreenTopBar(pageTitle = stringResource(id = R.string.kitapEklemeTitle),
                     onBackPress = {
                         navController.popBackStack()
-                    }
-                )
+                    })
             }
         } else null,
         sheetContent = {
@@ -418,8 +400,7 @@ fun KitapEklemeScreen(
                     )
                 }
 
-                KutuphanemOutlinedFormTextField(
-                    text = state.value.kitapAd,
+                KutuphanemOutlinedFormTextField(text = state.value.kitapAd,
                     onChange = onChangeKitapAd,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -428,11 +409,9 @@ fun KitapEklemeScreen(
                         stringResource(id = it)
                     } ?: null,
                     label = stringResource(id = R.string.kitapAdLabelText),
-                    placeHolder = stringResource(id = R.string.kitap_ekleme_kitapAdPlaceholder)
-                )
+                    placeHolder = stringResource(id = R.string.kitap_ekleme_kitapAdPlaceholder))
 
-                KutuphanemOutlinedFormTextField(
-                    text = state.value.yazarAd,
+                KutuphanemOutlinedFormTextField(text = state.value.yazarAd,
                     onChange = onChangeYazarAd,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -441,11 +420,9 @@ fun KitapEklemeScreen(
                         stringResource(id = it)
                     } ?: null,
                     label = stringResource(id = R.string.yazarAdLabelText),
-                    placeHolder = stringResource(id = R.string.kitap_ekleme_yazarAdPlaceholder)
-                )
+                    placeHolder = stringResource(id = R.string.kitap_ekleme_yazarAdPlaceholder))
 
-                KutuphanemOutlinedFormTextField(
-                    text = state.value.alinmaTar,
+                KutuphanemOutlinedFormTextField(text = state.value.alinmaTar,
                     onChange = onChangeKitapAlinmaTar,
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                     visualTransformation = MaskVisualTransformation("##.##.####"),
@@ -457,11 +434,9 @@ fun KitapEklemeScreen(
                         stringResource(id = it)
                     } ?: null,
                     label = stringResource(id = R.string.alinmaTarLabelText),
-                    placeHolder = stringResource(id = R.string.kitap_ekleme_alinmaTarPlaceholder)
-                )
+                    placeHolder = stringResource(id = R.string.kitap_ekleme_alinmaTarPlaceholder))
 
-                KutuphanemOutlinedFormTextField(
-                    text = state.value.kitapAciklama,
+                KutuphanemOutlinedFormTextField(text = state.value.kitapAciklama,
                     onChange = onChangeKitapAciklama,
                     textStyle = MaterialTheme.typography.smallUbuntuBlack.copy(
                         lineHeight = 14.ssp
@@ -478,73 +453,60 @@ fun KitapEklemeScreen(
                     label = stringResource(id = R.string.kitap_ekleme_kitapAciklamaLabel),
                     placeHolder = stringResource(id = R.string.kitap_ekleme_kitapAciklamaPlaceHolder),
                     trailingIcon = {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_text_recognizer),
+                        Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_text_recognizer),
                             contentDescription = stringResource(id = R.string.kitap_ekleme_kitapAciklamaPlaceHolder),
                             modifier = Modifier
                                 .padding(end = 8.sdp)
                                 .size(24.sdp)
                                 .rippleClick {
                                     onClickKitapAciklama()
-                                }
-                        )
-                    }
-                )
+                                })
+                    })
 
 
-                KutuphanemSelectableCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 12.sdp)
-                        .clickable {
-                            coroutineScope
-                                .launch {
-                                    onClickKitapTurYayinEvi(KitapEklemeBottomsheetType.KITAP_TUR)
-                                    bottomSheetScaffoldState.bottomSheetState.animateTo(
-                                        BottomSheetValue.Expanded,
-                                        tween(500)
-                                    )
-                                }
-                                .invokeOnCompletion {
-                                    viewModel.initKitapTurList()
-                                }
-                        },
-                    title = state.value.selectedKitapTur?.let {
-                        it.kitapTurAciklama
-                    } ?: run {
-                        stringResource(id = R.string.kitapTurLabel)
-                    },
-                    errorStr = state.value.kitapTurError?.let {
-                        stringResource(id = it)
-                    }
-                )
+                KutuphanemSelectableCard(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 12.sdp)
+                    .clickable {
+                        coroutineScope
+                            .launch {
+                                onClickKitapTurYayinEvi(KitapEklemeBottomsheetType.KITAP_TUR)
+                                bottomSheetScaffoldState.bottomSheetState.animateTo(
+                                    BottomSheetValue.Expanded, tween(500)
+                                )
+                            }
+                            .invokeOnCompletion {
+                                viewModel.initKitapTurList()
+                            }
+                    }, title = state.value.selectedKitapTur?.let {
+                    it.kitapTurAciklama
+                } ?: run {
+                    stringResource(id = R.string.kitapTurLabel)
+                }, errorStr = state.value.kitapTurError?.let {
+                    stringResource(id = it)
+                })
 
-                KutuphanemSelectableCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 12.sdp)
-                        .clickable {
-                            coroutineScope
-                                .launch {
-                                    onClickKitapTurYayinEvi(KitapEklemeBottomsheetType.YAYIN_EVI)
-                                    bottomSheetScaffoldState.bottomSheetState.animateTo(
-                                        BottomSheetValue.Expanded,
-                                        tween(500)
-                                    )
-                                }
-                                .invokeOnCompletion {
-                                    viewModel.initYayinEviList()
-                                }
-                        },
-                    title = state.value.selectedYayinEvi?.let {
-                        it.yayinEviAciklama
-                    } ?: run {
-                        stringResource(id = R.string.yayinEviLabel)
-                    },
-                    errorStr = state.value.yayinEviError?.let {
-                        stringResource(id = it)
-                    }
-                )
+                KutuphanemSelectableCard(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 12.sdp)
+                    .clickable {
+                        coroutineScope
+                            .launch {
+                                onClickKitapTurYayinEvi(KitapEklemeBottomsheetType.YAYIN_EVI)
+                                bottomSheetScaffoldState.bottomSheetState.animateTo(
+                                    BottomSheetValue.Expanded, tween(500)
+                                )
+                            }
+                            .invokeOnCompletion {
+                                viewModel.initYayinEviList()
+                            }
+                    }, title = state.value.selectedYayinEvi?.let {
+                    it.yayinEviAciklama
+                } ?: run {
+                    stringResource(id = R.string.yayinEviLabel)
+                }, errorStr = state.value.yayinEviError?.let {
+                    stringResource(id = it)
+                })
             }
             KutuphanemMainMaterialButton(
                 modifier = Modifier
