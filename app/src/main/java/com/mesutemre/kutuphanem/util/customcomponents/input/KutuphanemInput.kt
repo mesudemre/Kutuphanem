@@ -376,9 +376,6 @@ fun KutuphanemOutlinedFormTextField(
     placeHolderStyle: TextStyle = MaterialTheme.typography.smallUbuntuTransparent
 ) {
     Column {
-        val isError by remember {
-            mutableStateOf(errorMessage.isNullOrEmpty().not())
-        }
         OutlinedTextField(
             modifier = modifier,
             value = text,
@@ -391,7 +388,9 @@ fun KutuphanemOutlinedFormTextField(
                     onChange(str)
                 }
             },
-            isError = isError,
+            isError = errorMessage?.let {
+                                        it.isNullOrEmpty().not()
+            } ?: false,
             readOnly = readOnly,
             enabled = enabled,
             singleLine = singleLine,
@@ -401,7 +400,7 @@ fun KutuphanemOutlinedFormTextField(
                 Text(text = label, style = labelStyle)
             },
             trailingIcon = {
-                when (isError) {
+                when (errorMessage?.isNullOrEmpty()?.not() ?: false) {
                     true -> {
                         Icon(
                             Icons.Filled.Error, contentDescription = errorMessage,
@@ -425,7 +424,7 @@ fun KutuphanemOutlinedFormTextField(
             keyboardActions = keyboardActions
         )
 
-        if (isError) {
+        if (errorMessage?.isNullOrEmpty()?.not() == true) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()

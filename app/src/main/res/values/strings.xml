@@ -139,7 +139,7 @@
     <string name="aciklamaHintText">Kitap Hakkında</string>
     <string name="kitapAdErrorText">Lütfen kitap adını giriniz!</string>
     <string name="yazarAdErrorText">Lütfen yazar adını giriniz!</string>
-    <string name="alinmaTarErrorText">Lütfen alınma tarihini seçiniz!</string>
+    <string name="alinmaTarErrorText">Lütfen alınma tarihi giriniz!</string>
     <string name="kitapAciklamaErrorText">Lütfen kitap açıklamasını giriniz!</string>
     <string name="kitapResimErrorText">Lütfen kitap resmi ekleyiniz!</string>
     <string name="kitapTurErrorText">Lütfen kitap türü seçiniz!</string>
@@ -245,4 +245,9 @@
     <string name="kitap_ekleme_bottomSheet_yayinEvi_searchFilterHint">Yayınevi ara...</string>
     <string name="kitap_ekleme_bottomSheet_yayinEvi_searchNotFound">Aramanızla eşleşen bir yayınevi bulunamadı</string>
     <string name="kitap_ekleme_writeReadIzinDialogTitle">Okuma / Yazma İzni</string>
+    <string name="alinmaTarDayErrorText">Alınan gün 0-31 arasında olmalıdır!</string>
+    <string name="alinmaTarMonthErrorText">Alınan ay 1-12 arasında olmalıdır!</string>
+    <string name="alinmaTarYearErrorText">Alınan yıl 1900 ile şu anki yıl aralığında olmalıdır!</string>
+    <string name="kitap_ekleme_alinmaTar_zero_value_error">Gün,ay ya da yıl 0 olamaz!</string>
+    <string name="kitap_ekleme_minCharacterKitapAciklamaError">En az 5 karakter giriniz!</string>
 </resources>

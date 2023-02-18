@@ -398,6 +398,9 @@ fun KitapEklemeScreen(
                     CroppedKitapResimArea(croppedImage = it, onRemoveImage = onRemoveCroppedResim)
                 } ?: run {
                     KitapResimEklemeArea(
+                        errorValidationMessage = state.value.kitapResimError?.let {
+                            stringResource(id = it)
+                        },
                         onClickResimEkleme = onClickResimEkleme
                     )
                 }

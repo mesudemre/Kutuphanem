@@ -29,7 +29,8 @@ class KitapEkleViewModel @Inject constructor(
     private val getKitapTurListUseCase: KitapEklemeKitapTurListUseCase,
     private val getYayinEviListUseCase: KitapEklemeYayinEviListUseCase,
     private val kitapKaydetUseCase: KitapKaydetUseCase,
-    private val kitapResimYukleUseCase: KitapResimYukleUseCase
+    private val kitapResimYukleUseCase: KitapResimYukleUseCase,
+    private val kitapEklemeFormValidationUseCase: KitapEklemeFormValidationUseCase
 ) : BaseViewModel() {
 
     private val _state = MutableStateFlow(KitapEklemeState())
@@ -103,7 +104,8 @@ class KitapEkleViewModel @Inject constructor(
                     it.copy(
                         croppedImageBitMap = event.croppedImage,
                         showCropArea = false,
-                        croppedImageFile = event.croppedImageFile
+                        croppedImageFile = event.croppedImageFile,
+                        kitapResimError = null
                     )
                 }
             }
@@ -137,14 +139,16 @@ class KitapEkleViewModel @Inject constructor(
             is KitapEklemeEvent.OnSelectKitapTur -> {
                 _state.update {
                     it.copy(
-                        selectedKitapTur = event.kitapEklemeKitapTurItem
+                        selectedKitapTur = event.kitapEklemeKitapTurItem,
+                        kitapTurError = null
                     )
                 }
             }
             is KitapEklemeEvent.OnSelectYayinEvi -> {
                 _state.update {
                     it.copy(
-                        selectedYayinEvi = event.kitapEklemeYayinEviItem
+                        selectedYayinEvi = event.kitapEklemeYayinEviItem,
+                        yayinEviError = null
                     )
                 }
             }
@@ -276,8 +280,70 @@ class KitapEkleViewModel @Inject constructor(
     }
 
     private fun validateKitapEklemeForm() {
-        viewModelScope.launch {
-            kitapKaydet()
+        val state = _state.value
+        val kitapAdValidationResult = kitapEklemeFormValidationUseCase(
+            KitapEklemeEvent.KitapAdTextChange(
+                state.kitapAd
+            )
+        )
+        val yazarAdValidationResult = kitapEklemeFormValidationUseCase(
+            KitapEklemeEvent.YazarAdTextChange(state.yazarAd)
+        )
+        val alinmaTarvalidationResult = kitapEklemeFormValidationUseCase(
+            KitapEklemeEvent.KitapAlinmaTarTextChange(
+                state.alinmaTar
+            )
+        )
+        val kitapAciklamaValidationResult = kitapEklemeFormValidationUseCase(
+            KitapEklemeEvent.KitapAciklamaTextChange(
+                state.kitapAciklama
+            )
+        )
+        val kitapTurValidationResult = kitapEklemeFormValidationUseCase(
+            KitapEklemeEvent.OnSelectKitapTur(
+                state.selectedKitapTur
+            )
+        )
+        val yayinEviValidationResult = kitapEklemeFormValidationUseCase(
+            KitapEklemeEvent.OnSelectYayinEvi(
+                state.selectedYayinEvi
+            )
+        )
+        val kitapResimValidationResult = kitapEklemeFormValidationUseCase(
+            KitapEklemeEvent.OnKitapResimCropped(
+                state.croppedImageBitMap,
+                state.croppedImageFile
+            )
+        )
+
+        val hasError = listOf(
+            kitapAdValidationResult,
+            yazarAdValidationResult,
+            alinmaTarvalidationResult,
+            kitapAciklamaValidationResult,
+            kitapTurValidationResult,
+            yayinEviValidationResult,
+            kitapResimValidationResult
+        ).any {
+            !it.successfullValidate
+        }
+
+        if (hasError) {
+            _state.update {
+                it.copy(
+                    kitapAdError = kitapAdValidationResult.messageResId,
+                    yazarAdError = yazarAdValidationResult.messageResId,
+                    alinmaTarError = alinmaTarvalidationResult.messageResId,
+                    kitapAciklamaError = kitapAciklamaValidationResult.messageResId,
+                    kitapTurError = kitapTurValidationResult.messageResId,
+                    yayinEviError = yayinEviValidationResult.messageResId,
+                    kitapResimError = kitapResimValidationResult.messageResId
+                )
+            }
+        } else {
+            viewModelScope.launch {
+                kitapKaydet()
+            }
         }
     }
 

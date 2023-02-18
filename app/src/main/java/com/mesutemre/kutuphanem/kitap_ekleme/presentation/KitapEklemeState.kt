@@ -1,6 +1,5 @@
 package com.mesutemre.kutuphanem.kitap_ekleme.presentation
 
-import android.Manifest
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.annotation.StringRes
@@ -51,6 +50,6 @@ data class KitapEklemeState(
     val writeExternalStoragePermissionDeniedPermanently: Boolean = false,
     val writeExternalStoragePermissionDeniedDialog: Boolean = false,
     val kitapEklemeCameraPermissionDeniedPermanently: Boolean = false,
-    val kitapEklemeCameraPermissionDeniedDialog: Boolean = false
-
+    val kitapEklemeCameraPermissionDeniedDialog: Boolean = false,
+    @StringRes val kitapResimError: Int? = null
 )
