@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -310,6 +311,7 @@ fun KitapDetayInfoCard(
 fun KutuphanemSelectableCard(
     modifier: Modifier,
     title: String,
+    titleStyle: TextStyle? = null,
     errorStr: String? = null
 ) {
     Card(
@@ -339,7 +341,11 @@ fun KutuphanemSelectableCard(
             ) {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.smallUbuntuTransparent,
+                    style = titleStyle?.let {
+                        it
+                    } ?: run {
+                        MaterialTheme.typography.smallUbuntuTransparent
+                    },
                     modifier = Modifier.weight(1f)
                 )
                 Icon(

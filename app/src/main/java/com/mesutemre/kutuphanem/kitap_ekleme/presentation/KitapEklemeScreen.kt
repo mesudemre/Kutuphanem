@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -29,9 +28,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionStatus
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.mesutemre.kutuphanem.BuildConfig
 import com.mesutemre.kutuphanem.R
@@ -49,7 +45,6 @@ import com.mesutemre.kutuphanem.ui.theme.smallUbuntuBlack
 import com.mesutemre.kutuphanem.ui.theme.smallUbuntuWhiteBold
 import com.mesutemre.kutuphanem.util.customcomponents.dialog.CustomKutuphanemDialog
 import com.mesutemre.kutuphanem.util.customcomponents.input.KutuphanemOutlinedFormTextField
-import com.mesutemre.kutuphanem.util.isMinSdk29
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import com.mesutemre.kutuphanem_base.util.MaskVisualTransformation
 import com.mesutemre.kutuphanem_ui.button.KutuphanemMainMaterialButton
@@ -64,7 +59,7 @@ import com.mesutemre.kutuphanem_ui.theme.ssp
 import kotlinx.coroutines.launch
 import java.io.File
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun KitapEklemeScreen(
     showSnackbar: (String, SnackbarDuration, Int) -> Unit,
@@ -154,6 +149,13 @@ fun KitapEklemeScreen(
     BackHandler {
         if (state.value.openCamera) {
             openCloseCamera(false, null)
+        } else if (bottomSheetScaffoldState.bottomSheetState.isExpanded) {
+            coroutineScope.launch {
+                bottomSheetScaffoldState.bottomSheetState.animateTo(
+                    BottomSheetValue.Collapsed,
+                    tween(500)
+                )
+            }
         } else {
             popBack()
         }
@@ -478,13 +480,17 @@ fun KitapEklemeScreen(
                             .invokeOnCompletion {
                                 viewModel.initKitapTurList()
                             }
-                    }, title = state.value.selectedKitapTur?.let {
-                    it.kitapTurAciklama
-                } ?: run {
-                    stringResource(id = R.string.kitapTurLabel)
-                }, errorStr = state.value.kitapTurError?.let {
-                    stringResource(id = it)
-                })
+                    },
+                    titleStyle = state.value.selectedKitapTur?.let {
+                        MaterialTheme.typography.smallUbuntuBlack
+                    },
+                    title = state.value.selectedKitapTur?.let {
+                        it.kitapTurAciklama
+                    } ?: run {
+                        stringResource(id = R.string.kitapTurLabel)
+                    }, errorStr = state.value.kitapTurError?.let {
+                        stringResource(id = it)
+                    })
 
                 KutuphanemSelectableCard(modifier = Modifier
                     .fillMaxWidth()
@@ -500,13 +506,17 @@ fun KitapEklemeScreen(
                             .invokeOnCompletion {
                                 viewModel.initYayinEviList()
                             }
-                    }, title = state.value.selectedYayinEvi?.let {
-                    it.yayinEviAciklama
-                } ?: run {
-                    stringResource(id = R.string.yayinEviLabel)
-                }, errorStr = state.value.yayinEviError?.let {
-                    stringResource(id = it)
-                })
+                    },
+                    titleStyle = state.value.selectedYayinEvi?.let {
+                        MaterialTheme.typography.smallUbuntuBlack
+                    },
+                    title = state.value.selectedYayinEvi?.let {
+                        it.yayinEviAciklama
+                    } ?: run {
+                        stringResource(id = R.string.yayinEviLabel)
+                    }, errorStr = state.value.yayinEviError?.let {
+                        stringResource(id = it)
+                    })
             }
             KutuphanemMainMaterialButton(
                 modifier = Modifier

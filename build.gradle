@@ -54,7 +54,6 @@ buildscript {
     ext.roomPaging = '2.4.3'
     ext.dataStoreVersion = '1.0.0'
     ext.composeRatingBar = '1.2.4'
-    ext.accompanist_permission = '0.28.0'
 
     ext.mlkit_text_recognation = '18.0.2'
     ext.smart_factory_compose_cropper = '0.2.4'
