@@ -1,50 +1,47 @@
 package com.mesutemre.kutuphanem.dashboard.presentation.components.statistics
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import com.mesutemre.kutuphanem.dashboard.domain.model.DashboardKitapTurIstatistikItem
+import androidx.compose.ui.text.style.TextAlign
+import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
-import com.mesutemre.kutuphanem.ui.theme.smallUbuntuTransparentBold
-import com.mesutemre.kutuphanem.util.getColorListForPieChart
+import com.mesutemre.kutuphanem_ui.theme.smallAllegraBlackBold
 
 @Composable
 fun StatisticsDescriptionArea(
-    list: List<DashboardKitapTurIstatistikItem>
+    description: String,
+    modifier: Modifier
 ) {
-    LazyRow(modifier = Modifier.fillMaxSize().padding(horizontal = 16.sdp)) {
-        itemsIndexed(list) { index, item ->
-            StatisticsDescriptionAreaItem(
-                color = getColorListForPieChart()[index],
-                aciklama = item.aciklama
+    Column(
+        modifier = modifier
+            .background(
+                color = MaterialTheme.colorPalette.white,
+                shape = RoundedCornerShape(bottomStart = 6.sdp, bottomEnd = 6.sdp)
             )
-        }
-    }
-}
+            .clip(shape = RoundedCornerShape(bottomStart = 6.sdp, bottomEnd = 6.sdp))
 
-@Composable
-fun StatisticsDescriptionAreaItem(color: Color, aciklama: String) {
-    Row(modifier = Modifier.fillMaxWidth().padding(start = 4.sdp),verticalAlignment = Alignment.CenterVertically) {
-        Box(
-            modifier = Modifier
-                .width(16.sdp)
-                .height(12.sdp)
-                .clip(shape = RoundedCornerShape(2.sdp))
-                .background(color = color)
+    ) {
+        Divider(
+            modifier = Modifier.padding(vertical = 4.sdp),
+            thickness = 1.sdp,
+            color = MaterialTheme.colorPalette.otherGrayLight
         )
         Text(
-            text = aciklama,
-            style = MaterialTheme.typography.smallUbuntuTransparentBold,
-            modifier = Modifier.padding(start = 4.sdp)
+            text = description,
+            style = MaterialTheme.typography.smallAllegraBlackBold,
+            textAlign = TextAlign.End,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.sdp)
         )
     }
 }
