@@ -1,5 +1,6 @@
 package com.mesutemre.kutuphanem.dashboard.presentation.components.statistics
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -8,11 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.dashboard.domain.model.DashboardKitapTurIstatistikItem
@@ -25,9 +22,11 @@ import com.mesutemre.kutuphanem_ui.card.KutuphanemCardTitle
 import com.mesutemre.kutuphanem_ui.chart.KutuphanemPieChart
 import com.mesutemre.kutuphanem_ui.chart.KutuphanemPieChartInput
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun StatisticsArea(
-    kitapTurIstatistikResource: BaseResourceEvent<List<DashboardKitapTurIstatistikItem>>
+    kitapTurIstatistikResource: BaseResourceEvent<List<DashboardKitapTurIstatistikItem>>,
+    kitapTurIstatistikList: List<KutuphanemPieChartInput>
 ) {
     Card(
         modifier = Modifier
@@ -45,25 +44,9 @@ fun StatisticsArea(
                     KutuphanemShimmerArea(height = 180)
                 }
                 is BaseResourceEvent.Success -> {
-                    val chartInputList = remember {
-                        derivedStateOf {
-                            mutableStateOf(
-                                kitapTurIstatistikResource.data?.sortedByDescending {
-                                    it.adet
-                                }?.map {
-                                    KutuphanemPieChartInput(
-                                        value = it.adet.toInt(),
-                                        description = it.aciklama,
-                                        color = Color((Math.random() * 16777215).toInt() or (0xFF shl 24))
-                                    )
-                                }?.take(5)
-                            )
-                        }.value
-                    }
-
                     KutuphanemPieChart(
                         modifier = Modifier.fillMaxWidth(),
-                        input = chartInputList.value!!
+                        input = kitapTurIstatistikList
                     )
                 }
                 is BaseResourceEvent.Error -> {

@@ -1,6 +1,8 @@
 package com.mesutemre.kutuphanem_ui.chart
 
 import android.graphics.Paint
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,6 +29,25 @@ fun KutuphanemPieChart(
         mutableStateOf(input)
     }
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
+        val pathPortion = remember {
+            androidx.compose.animation.core.Animatable(initialValue = 0f)
+        }
+        LaunchedEffect(key1 = true) {
+            pathPortion.animateTo(
+                1f, animationSpec = tween(1000)
+            )
+        }
+        val percentagePoriton = remember {
+            androidx.compose.animation.core.Animatable(initialValue = 0f)
+        }
+        LaunchedEffect(key1 = true) {
+            percentagePoriton.animateTo(
+                1f, animationSpec = tween(
+                    durationMillis = 1500,
+                    easing = FastOutLinearInEasing
+                )
+            )
+        }
         Canvas(
             modifier = Modifier
                 .fillMaxSize()
@@ -40,7 +61,7 @@ fun KutuphanemPieChart(
             val anglePerValue = 360f / totalValue
             var currentStartAngle = 0f
             inputList.forEach { pieChartInput ->
-                val angleToDraw = pieChartInput.value * anglePerValue
+                val angleToDraw = pieChartInput.value * anglePerValue * pathPortion.value
                 val circleCenter = Offset(x = width / 2f, y = height / 2f)
                 scale(1f) {
                     drawArc(
@@ -73,7 +94,7 @@ fun KutuphanemPieChart(
                             drawText(
                                 "% $percentage",
                                 circleCenter.x,
-                                circleCenter.y + (radius - (radius - 250f) / 1.2f) * factor,
+                                (circleCenter.y + (radius - (radius - 250f) / 1.2f) * factor) * percentagePoriton.value,
                                 Paint().apply {
                                     textSize = 14.sp.toPx()
                                     textAlign = Paint.Align.CENTER

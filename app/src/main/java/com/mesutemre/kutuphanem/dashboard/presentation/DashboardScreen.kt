@@ -56,7 +56,10 @@ fun DashboardScreen(
             PersonelInfoArea(dashBoardState.kullaniciBilgi)
             IntroductionPagerArea(dashBoardState.introductionList)
             DashboardCategoryArea(dashBoardState.kategoriListeResource)
-            StatisticsArea(dashBoardState.kitapTurIstatistikResource)
+            StatisticsArea(
+                dashBoardState.kitapTurIstatistikResource,
+                dashBoardState.kitapTurIstatistikList
+            )
             StatisticsDescriptionArea(
                 description = stringResource(id = R.string.dasboard_category_statistics_info),
                 modifier = Modifier
