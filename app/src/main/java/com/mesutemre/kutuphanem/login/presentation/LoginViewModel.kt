@@ -122,6 +122,7 @@ class LoginViewModel @Inject constructor(
                             )
                         )
                     }
+                    else -> {}
                 }
                 _state.update {
                     it.copy(isLoading = isLoading, isSuccess = isSuccess)

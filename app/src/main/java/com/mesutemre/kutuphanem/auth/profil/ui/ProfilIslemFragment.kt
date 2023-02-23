@@ -112,6 +112,7 @@ class ProfilIslemFragment() :BaseFragment<ProfilIslemFragmentBinding>() {
                     getFragmentView().showComponents(binding.profilBilgiLayoutId,binding.profilResimLayout,binding.profilIslemlerItems)
                     showSnackBar(getFragmentView(),it.data!!.statusMessage,SUCCESS)
                 }
+                else -> {}
             }
         })
     }
@@ -134,6 +135,7 @@ class ProfilIslemFragment() :BaseFragment<ProfilIslemFragmentBinding>() {
                     binding.profilResimImage.getCircleImageFromUrl(kullanici.resim,
                         binding.profilResimImage)
                 }
+                else -> {}
             }
         })
     }

@@ -71,4 +71,8 @@ sealed class KutuphanemNavigationItem(
     object KitapDetayScreen : KutuphanemNavigationItem(
         screenRoute = "kutuphanem_kitap_detay?kitapId={kitapId}&isArsiv={isFromArsiv}"
     )
+
+    object KitapEklemeScreen : KutuphanemNavigationItem(
+        screenRoute = "kutuphanem_kitap_ekleme"
+    )
 }

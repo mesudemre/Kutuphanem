@@ -91,11 +91,12 @@ fun KitapDetayInfoBodyArea(
         is BaseResourceEvent.Error -> {
 
         }
+        else -> {}
     }
 }
 
 @Composable
-private fun KitapAciklamaText(
+fun KitapAciklamaText(
     label: String,
     aciklama: String,
     onClickTextDetailIcon: () -> Unit

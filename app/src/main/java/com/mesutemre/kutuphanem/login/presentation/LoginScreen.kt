@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.SnackbarDuration
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
@@ -19,7 +18,6 @@ import com.mesutemre.kutuphanem.ui.theme.sdp
 
 @Composable
 fun LoginScreen(
-    showSnackbar: (String, SnackbarDuration, Int) -> Unit,
     navController: NavController
 ) {
     Box(
@@ -33,7 +31,7 @@ fun LoginScreen(
                 .padding(top = 108.sdp)
                 .verticalScroll(rememberScrollState())
         ) {
-            LoginForm(showSnackbar = showSnackbar, navController = navController)
+            LoginForm(navController = navController)
         }
     }
 }

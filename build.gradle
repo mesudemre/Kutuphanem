@@ -1,34 +1,37 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     ext.appId = "com.mesutemre.kutuphanem"
-    ext.kotlin_version = "1.6.10"
+    ext.kotlin_version = "1.7.20"
     ext.lifeCycleExtensionVersion = "1.1.1"
     ext.retrofitVersion = "2.6.0"
     ext.glideVersion = "4.10.0"
     ext.roomVersion = "2.4.0"
     ext.navVersion = "2.4.1"
     ext.preferencesVersion = "1.1.1"
-    ext.hilt_version = '2.37'
-    ext.camerax_version = '1.0.0-beta12'
+    ext.hilt_version = '2.42'
+    ext.camerax_version = '1.2.0'
+    ext.camera_lifecycle_version = '1.2.0'
+    ext.camerax_camera_view_version = '1.2.0'
 
-    ext.compose_ui_version = '1.1.1'
-    ext.compose_tooling_version = '1.1.1'
-    ext.compose_foundation_version = '1.1.1'
+    ext.compose_ui_version = '1.3.3'
+    ext.compose_tooling_version = '1.3.3'
+    ext.compose_foundation_version = '1.3.1'
     ext.compose_material_version = '1.1.1'
     ext.compose_material_icon_version_core = '1.1.1'
     ext.compose_material_icon_extended = '1.1.1'
-    ext.compose_activity_version = '1.3.1'
-    ext.compose_view_model_version = '2.4.1'
-    ext.compose_live_data_version = '1.1.1'
-    ext.compose_rxjava_version = '1.1.1'
-    ext.compose_junit_version = '1.1.1'
-    ext.compose_nav_version = '2.4.1'
+    ext.compose_activity_version = '1.6.1'
+    ext.compose_view_model_version = '2.5.1'
+    ext.compose_live_data_version = '1.3.3'
+    ext.compose_rxjava_version = '1.3.3'
+    ext.compose_junit_version = '1.3.3'
+    ext.compose_nav_version = '2.5.3'
     ext.compose_hilt_version = '1.0.0'
-    ext.compose_constraint_layout = '1.0.0-beta02'
+    ext.compose_constraint_layout = '1.0.1'
+    ext.compose_compiler_version = '1.3.2'
 
     ext.google_service_version = '4.3.10'
     ext.PROD_API_URL = ''
-    ext.DEV_ALPHA_BETA_API_URL = 'http://192.168.1.106:8080/KutuphaneSistemiWS/'
+    ext.DEV_ALPHA_BETA_API_URL = 'http://192.168.1.107:8080/KutuphaneSistemiWS/'
     ext.okhttpLogging_version = '4.9.2'
     ext.work_manager_version = '2.7.0'
     ext.work_manager_hilt_version = '1.0.0'
@@ -51,6 +54,10 @@ buildscript {
     ext.roomPaging = '2.4.3'
     ext.dataStoreVersion = '1.0.0'
     ext.composeRatingBar = '1.2.4'
+
+    ext.mlkit_text_recognation = '18.0.2'
+    ext.smart_factory_compose_cropper = '0.2.4'
+    ext.zelory_compressor = '3.0.1'
 
     repositories {
         google()

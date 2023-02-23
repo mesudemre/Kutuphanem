@@ -13,6 +13,11 @@
     <string name="archiveLabel">Arşivle</string>
     <string name="noNetworkConnection">İnternet bağlantınız bulunmamaktadır!</string>
     <string name="vazgecLabel">Vazgeç</string>
+    <string name="begenLabel">Beğen</string>
+    <string name="kutuphanem_camera_permission_transaction">Bu işlemi gerçekleştirebilmeniz için kamera izni vermeniz gerekmektedir.</string>
+    <string name="kutuphanem_camera_permission_settings">Bu işlemi gerçekleştirebilmeniz için cihazınızın ayarlarından kamera izni vermeniz gerekmektedir.</string>
+    <string name="kutuphanem_read_permission_transaction">Bu işlemi gerçekleştirebilmeniz için Okuma İzni vermeniz gerkemektedir.</string>
+    <string name="kutuphanem_read_permission_settings">Bu işlemi gerçekleştirebilmeniz için cihazınızın ayarlarından okuma izni vermeniz gerekmektedir.</string>
 
     <!--Bottom Navigation Menu -->
     <string name="anasayfaItem">Anasayfa</string>
@@ -134,7 +139,7 @@
     <string name="aciklamaHintText">Kitap Hakkında</string>
     <string name="kitapAdErrorText">Lütfen kitap adını giriniz!</string>
     <string name="yazarAdErrorText">Lütfen yazar adını giriniz!</string>
-    <string name="alinmaTarErrorText">Lütfen alınma tarihini seçiniz!</string>
+    <string name="alinmaTarErrorText">Lütfen alınma tarihi giriniz!</string>
     <string name="kitapAciklamaErrorText">Lütfen kitap açıklamasını giriniz!</string>
     <string name="kitapResimErrorText">Lütfen kitap resmi ekleyiniz!</string>
     <string name="kitapTurErrorText">Lütfen kitap türü seçiniz!</string>
@@ -148,6 +153,7 @@
     <string name="yayinEviSecinizText">Yayınevi seçiniz...</string>
     <string name="yayinEviNotFounCriteria">Aradığınız isimde bir yayınevi bulunmamaktadır...</string>
     <string name="kitapTurNotFounCriteria">Aradığınız isimde bir kitap türü bulunmamaktadır...</string>
+    <string name="kitapEklemeResimArea">Kitap resim ekleme</string>
 
     <!--KitapDetayFragment -->
     <string name="kitapAdLabelText">Kitap Adı</string>
@@ -206,6 +212,7 @@
     <string name="search_dashboard_searchHistoryTitle">Arama Geçmişi</string>
     <string name="search_dashboard_searchHistoryClear">Temizle</string>
     <string name="kitap_liste_share_content">Merhaba! %1$s yazarına ait %2$s adlı kitabı paylaşıyorum...</string>
+    <string name="dasboard_category_statistics_info">En fazla bulunan 5 kategori</string>
 
     <string name="floating_action_menu_barcode">Barkod ile Tara</string>
     <string name="kitap_detay_kitap_bilgi_label">KİTAP BİLGİSİ</string>
@@ -213,4 +220,35 @@
     <string name="kitap_detay_kitap_puanYorum_bilgi_label">PUAN VE YORUMLAR</string>
     <string name="kitap_detay_ilkYorumTitle">Yorumlar</string>
     <string name="kitap_detay_noComment">Kitap hakkında hiçbir yorum yapılmamış. Dilerseniz ilk yorum yapan siz olun.</string>
+    <string name="kitap_detay_screen_title">Kitap Detayı</string>
+
+    <string name="kitap_ekleme_kitapAdPlaceholder">Lütfen bir kitap adı giriniz...</string>
+    <string name="kitap_ekleme_yazarAdPlaceholder">Lütfen bir yazar adı giriniz...</string>
+    <string name="kitap_ekleme_alinmaTarPlaceholder">GG.AA.YYYY</string>
+    <string name="kitap_ekleme_kameraIzinDialogTitle">Kamera İzni</string>
+    <string name="kitap_ekleme_kameraIzinDialogDescription">Kitap resmi eklemek için kamera izninizin olması gerekmektedir. Uygulama ayarlarına gitmek için devam etmek istiyor musunuz?</string>
+    <string name="kitap_ekleme_kitapAciklamaPlaceHolder">Lütfen kitap hakkında kısa da olsa bir açıklama giriniz...</string>
+    <string name="kitap_ekleme_kitapAciklamaLabel">Kitap Hakkında</string>
+    <string name="kitap_ekleme_kitapResimLabel">Kitap resmi eklemek için tıklayınız...</string>
+    <string name="kitap_ekleme_onKameraLabel">Ön/Arka kamera</string>
+    <string name="kitap_ekleme_cameraTitle">Kitabın resmini çekebilirsiniz</string>
+    <string name="kitap_ekleme_cropDialogTitle">Kitap Resmi</string>
+    <string name="kitap_ekleme_cropDialogDescription">Bu resmi eklemek istediğinize emin misiniz?</string>
+    <string name="kitap_ekleme_imageCropAreaContentDescription">Resim kırpma</string>
+    <string name="kitap_ekleme_croppedImageContentDescription">Kırpılan resim</string>
+    <string name="kitap_ekleme_removeCroppedImageContentDescription">Resmi kaldır</string>
+    <string name="kitap_ekleme_text_read_title">Kameradan açıklama okuma</string>
+    <string name="kitap_ekleme_text_read_errorDescription">Yazı okunması esnasında hata meydana geldi!</string>
+    <string name="kitap_ekleme_bottomSheet_kitapTurTitle">Kitap Türleri</string>
+    <string name="kitap_ekleme_bottomSheet_kitapTur_searchFilterHint">Kitap türü ara...</string>
+    <string name="kitap_ekleme_bottomSheet_kitapTur_searchNotFound">Aramanızla eşleşen bir kitap türü bulunamadı</string>
+    <string name="kitap_ekleme_bottomSheet_yayinEviTitle">Yayın Evleri</string>
+    <string name="kitap_ekleme_bottomSheet_yayinEvi_searchFilterHint">Yayınevi ara...</string>
+    <string name="kitap_ekleme_bottomSheet_yayinEvi_searchNotFound">Aramanızla eşleşen bir yayınevi bulunamadı</string>
+    <string name="kitap_ekleme_writeReadIzinDialogTitle">Okuma / Yazma İzni</string>
+    <string name="alinmaTarDayErrorText">Alınan gün 0-31 arasında olmalıdır!</string>
+    <string name="alinmaTarMonthErrorText">Alınan ay 1-12 arasında olmalıdır!</string>
+    <string name="alinmaTarYearErrorText">Alınan yıl 1900 ile şu anki yıl aralığında olmalıdır!</string>
+    <string name="kitap_ekleme_alinmaTar_zero_value_error">Gün,ay ya da yıl 0 olamaz!</string>
+    <string name="kitap_ekleme_minCharacterKitapAciklamaError">En az 5 karakter giriniz!</string>
 </resources>

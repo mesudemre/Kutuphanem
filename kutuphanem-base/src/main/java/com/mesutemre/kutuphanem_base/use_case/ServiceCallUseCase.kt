@@ -11,7 +11,7 @@ import retrofit2.Response
  */
 class ServiceCallUseCase : IServiceCall {
 
-    override fun <T : Any> serviceCall(call: suspend () -> Response<T>): Flow<BaseResourceEvent<T?>> =
+    override inline fun <T : Any> serviceCall(crossinline call: suspend () -> Response<T>): Flow<BaseResourceEvent<T?>> =
         flow {
             emit(BaseResourceEvent.Loading())
             var response: Response<T>? = null

@@ -1,9 +1,12 @@
 package com.mesutemre.kutuphanem.dashboard.presentation
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
 import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.dashboard.domain.use_case.*
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
+import com.mesutemre.kutuphanem_ui.chart.KutuphanemPieChartInput
+import com.mesutemre.kutuphanem_ui.theme.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -70,10 +73,30 @@ class DashboardViewModel @Inject constructor(
     }
 
     private suspend fun fillKitapTurIstatistik() {
+        val colorList = listOf<Color>(
+            etonBlue,
+            morningBlue,
+            spaceCadet,
+            acikMor,
+            aero
+        )
         getKitapTurIstatistik().collectLatest { response ->
+            var kitapTurIstatistikList = listOf<KutuphanemPieChartInput>()
+            if (response is BaseResourceEvent.Success) {
+                kitapTurIstatistikList = response.data?.sortedByDescending {
+                    it.adet
+                }?.take(5)?.mapIndexed { index, dashboardKitapTurIstatistikItem ->
+                    KutuphanemPieChartInput(
+                        value = dashboardKitapTurIstatistikItem.adet.toInt(),
+                        description = dashboardKitapTurIstatistikItem.aciklama,
+                        color = colorList[index]
+                    )
+                } ?: emptyList()
+            }
             _dashboardState.update {
                 it.copy(
-                    kitapTurIstatistikResource = response
+                    kitapTurIstatistikResource = response,
+                    kitapTurIstatistikList = kitapTurIstatistikList
                 )
             }
         }

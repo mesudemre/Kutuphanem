@@ -55,6 +55,7 @@ fun KitapDetayHeaderArea(
                     )
                 }
             }
+            else -> {}
         }
     }
 }

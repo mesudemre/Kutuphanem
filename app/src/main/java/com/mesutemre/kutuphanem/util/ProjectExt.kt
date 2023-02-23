@@ -506,3 +506,7 @@ fun RandomComposeColor(): Color {
 fun Date.convertDate2String(pattern: String = "dd.MM.yyyy"): String {
     return SimpleDateFormat(pattern).format(this);
 }
+
+fun isMinSdk29(): Boolean {
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+}

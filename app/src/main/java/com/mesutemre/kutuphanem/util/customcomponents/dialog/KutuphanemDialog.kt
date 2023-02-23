@@ -27,6 +27,7 @@ import com.mesutemre.kutuphanem.ui.theme.normalUbuntuBlack
 import com.mesutemre.kutuphanem.ui.theme.sdp
 import com.mesutemre.kutuphanem_ui.button.KutuphanemMainMaterialButton
 import com.mesutemre.kutuphanem_ui.button.KutuphanemTerritaryButton
+import com.mesutemre.kutuphanem_ui.theme.ssp
 
 @Composable
 fun CustomKutuphanemDialog(
@@ -141,7 +142,9 @@ fun CustomKutuphanemDialog(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(start = 16.sdp, end = 16.sdp, top = 8.sdp),
-                        style = MaterialTheme.typography.normalUbuntuBlack,
+                        style = MaterialTheme.typography.normalUbuntuBlack.copy(
+                            lineHeight = 16.ssp
+                        ),
                         textAlign = TextAlign.Center
                     )
 

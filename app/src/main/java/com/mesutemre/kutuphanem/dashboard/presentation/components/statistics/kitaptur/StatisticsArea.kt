@@ -1,9 +1,11 @@
 package com.mesutemre.kutuphanem.dashboard.presentation.components.statistics
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -13,43 +15,39 @@ import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.dashboard.domain.model.DashboardKitapTurIstatistikItem
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
-import com.mesutemre.kutuphanem.util.customcomponents.chart.KutuphanemPieChart
 import com.mesutemre.kutuphanem.util.customcomponents.error.KutuphanemErrorView
 import com.mesutemre.kutuphanem.util.customcomponents.progressbar.KutuphanemShimmerArea
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import com.mesutemre.kutuphanem_ui.card.KutuphanemCardTitle
+import com.mesutemre.kutuphanem_ui.chart.KutuphanemPieChart
+import com.mesutemre.kutuphanem_ui.chart.KutuphanemPieChartInput
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun StatisticsArea(
-    kitapTurIstatistikResource: BaseResourceEvent<List<DashboardKitapTurIstatistikItem>>
+    kitapTurIstatistikResource: BaseResourceEvent<List<DashboardKitapTurIstatistikItem>>,
+    kitapTurIstatistikList: List<KutuphanemPieChartInput>
 ) {
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(320.sdp)
-            .padding(horizontal = 16.sdp, vertical = 16.sdp),
-        shape = MaterialTheme.shapes.medium,
+            .height(270.sdp)
+            .padding(start = 16.sdp, end = 16.sdp, top = 8.sdp),
+        shape = RoundedCornerShape(topStart = 6.sdp, topEnd = 6.sdp),
         backgroundColor = MaterialTheme.colorPalette.white,
         elevation = 8.sdp
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             KutuphanemCardTitle(title = R.string.dasboard_category_statistics_title)
-            when(kitapTurIstatistikResource) {
+            when (kitapTurIstatistikResource) {
                 is BaseResourceEvent.Loading -> {
                     KutuphanemShimmerArea(height = 180)
                 }
                 is BaseResourceEvent.Success -> {
-                    Column(modifier = Modifier.fillMaxWidth()) {
-                        KutuphanemPieChart(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 4.sdp),
-                            pointList = kitapTurIstatistikResource.data!!.map {
-                                it.adet
-                            })
-                        StatisticsDescriptionArea(list = kitapTurIstatistikResource.data!!)
-                    }
+                    KutuphanemPieChart(
+                        modifier = Modifier.fillMaxWidth(),
+                        input = kitapTurIstatistikList
+                    )
                 }
                 is BaseResourceEvent.Error -> {
                     KutuphanemErrorView(
@@ -61,6 +59,7 @@ fun StatisticsArea(
                         )
                     )
                 }
+                else -> {}
             }
         }
     }

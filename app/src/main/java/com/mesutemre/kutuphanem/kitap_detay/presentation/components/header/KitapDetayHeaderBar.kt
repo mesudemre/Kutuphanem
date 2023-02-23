@@ -10,9 +10,9 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
 import com.mesutemre.kutuphanem_ui.extensions.rippleClick
-import com.mesutemre.kutuphanem_ui.theme.colorPalette
 
 @Composable
 fun KitapDetayHeaderBar(
@@ -23,7 +23,7 @@ fun KitapDetayHeaderBar(
     Row(
         modifier = Modifier
             .fillMaxWidth(),
-        verticalAlignment = Alignment.Top
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
             imageVector = Icons.Filled.ArrowBack,

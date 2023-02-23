@@ -32,23 +32,24 @@ import com.mesutemre.kutuphanem.login.presentation.LoginViewModel
 import com.mesutemre.kutuphanem.navigation.KutuphanemNavigationItem
 import com.mesutemre.kutuphanem.navigation.popUpToTop
 import com.mesutemre.kutuphanem.ui.theme.*
-import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemBaseInput
+import com.mesutemre.kutuphanem.util.customcomponents.input.KutuphanemBaseInput
 import com.mesutemre.kutuphanem.util.customcomponents.progressbar.KutuphanemLoader
+import com.mesutemre.kutuphanem.util.rememberKutuphanemAppState
 import com.mesutemre.kutuphanem_ui.button.KutuphanemMainMaterialButton
 
 @Composable
 fun LoginForm(
-    showSnackbar: (String, SnackbarDuration, Int) -> Unit,
     loginViewModel: LoginViewModel = hiltViewModel(),
     navController: NavController
 ) {
+    val kutuphanemAppState = rememberKutuphanemAppState()
     val loginState = loginViewModel.state.collectAsState().value
     val context = LocalContext.current
     val localFocusManager = LocalFocusManager.current
 
     LaunchedEffect(key1 = Unit) {
         loginViewModel.loginErrorMessage.collect {
-            showSnackbar(
+            kutuphanemAppState.showSnackbar(
                 it.message
                     ?: context.getString(
                         it.messageId ?: R.string.app_name

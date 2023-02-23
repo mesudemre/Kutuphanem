@@ -7,15 +7,13 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -175,7 +174,7 @@ private fun KitapInfo(kitapImage: String, kitapAd: String, yazarAd: String, acik
                 .height(150.sdp)
                 .clip(shape = MaterialTheme.shapes.medium)
                 .border(
-                    (1/2).sdp,
+                    (1 / 2).sdp,
                     MaterialTheme.colorPalette.secondaryGray,
                     MaterialTheme.shapes.medium
                 ),
@@ -283,12 +282,18 @@ fun KitapDetayInfoCard(
     value: String
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 4.sdp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.sdp, horizontal = 0.sdp),
         shape = MaterialTheme.shapes.small,
         backgroundColor = MaterialTheme.colorPalette.white,
         elevation = 4.sdp
     ) {
-        Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.sdp, vertical = 8.sdp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.sdp, vertical = 8.sdp)
+        ) {
             Text(
                 text = label,
                 maxLines = 1,
@@ -302,6 +307,78 @@ fun KitapDetayInfoCard(
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.smallUbuntuTransparent.copy(lineHeight = 12.ssp)
             )
+        }
+    }
+}
+
+@Composable
+fun KutuphanemSelectableCard(
+    modifier: Modifier,
+    title: String,
+    titleStyle: TextStyle? = null,
+    errorStr: String? = null
+) {
+    Card(
+        modifier = modifier,
+        backgroundColor = MaterialTheme.colorPalette.white,
+        shape = MaterialTheme.shapes.medium,
+        border = BorderStroke(
+            width = (1 / 2).sdp,
+            color = errorStr?.let {
+                MaterialTheme.colorPalette.kirmizi
+            } ?: run {
+                MaterialTheme.colorPalette.transparent
+            }
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = errorStr?.let { 0.sdp } ?: 4.sdp),
+            verticalArrangement = Arrangement.Center
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.sdp, vertical = 8.sdp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = title,
+                    style = titleStyle?.let {
+                        it
+                    } ?: run {
+                        MaterialTheme.typography.smallUbuntuTransparent
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+                Icon(
+                    Icons.Filled.ChevronRight,
+                    contentDescription = title,
+                    tint = MaterialTheme.colorPalette.lacivert
+                )
+            }
+            errorStr?.let {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(color = MaterialTheme.colorPalette.kirmizi)
+                        .padding(top = 4.sdp, start = 8.sdp)
+                        .clip(shape = RoundedCornerShape(bottomStart = 4.sdp, bottomEnd = 4.sdp)),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        Icons.Filled.Error,
+                        contentDescription = title,
+                        tint = MaterialTheme.colorPalette.white
+                    )
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.smallUbuntuWhite,
+                        modifier = Modifier.padding(start = 8.sdp)
+                    )
+                }
+            }
         }
     }
 }

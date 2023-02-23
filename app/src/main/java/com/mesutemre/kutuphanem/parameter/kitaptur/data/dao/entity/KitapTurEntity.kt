@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.mesutemre.kutuphanem.dashboard.domain.model.DashboardKategoriItem
+import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.KitapEklemeKitapTurItem
 import com.mesutemre.kutuphanem.parameter.kitaptur.domain.model.KitapTurItem
 
 @Entity
@@ -25,4 +26,11 @@ fun KitapTurEntity.toKitapTurItem(): KitapTurItem {
 
 fun KitapTurEntity.toDashboardKategoriItem(): DashboardKategoriItem {
     return DashboardKategoriItem(aciklama = this.aciklama ?: "", resim = this.resim ?: "")
+}
+
+fun KitapTurEntity.toKitapEklemeKitapTurItem(): KitapEklemeKitapTurItem {
+    return KitapEklemeKitapTurItem(
+        kitapTurId = this.kitapTurId ?: 0,
+        kitapTurAciklama = this.aciklama ?: ""
+    )
 }

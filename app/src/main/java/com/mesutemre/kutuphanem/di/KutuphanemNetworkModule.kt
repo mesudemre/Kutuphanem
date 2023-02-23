@@ -3,6 +3,7 @@ package com.mesutemre.kutuphanem.di
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import com.google.gson.GsonBuilder
 import com.mesutemre.kutuphanem.BuildConfig
 import com.mesutemre.kutuphanem.auth.service.KullaniciService
 import com.mesutemre.kutuphanem.dashboard.data.remote.IDashBoardApi
@@ -10,6 +11,7 @@ import com.mesutemre.kutuphanem.interceptors.HeaderInterceptor
 import com.mesutemre.kutuphanem.interceptors.NetworkConnectionInterceptor
 import com.mesutemre.kutuphanem.kitap.service.IKitapService
 import com.mesutemre.kutuphanem.kitap_detay.data.remote.IKitapYorumApi
+import com.mesutemre.kutuphanem.kitap_ekleme.data.remote.IKitapEkleApi
 import com.mesutemre.kutuphanem.kitap_liste.data.remote.IKitapApi
 import com.mesutemre.kutuphanem.login.data.remote.LoginService
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.remote.dto.IKitapTurApi
@@ -36,6 +38,10 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class KutuphanemNetworkModule {
 
+    val baseUrl by lazy {
+        BuildConfig.API_URL
+    }
+
     private val loggingInterceptor = run {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
         httpLoggingInterceptor.apply {
@@ -49,9 +55,11 @@ class KutuphanemNetworkModule {
     @Provides
     fun provideRetrofit(client: OkHttpClient): Retrofit =
         Retrofit.Builder()
-            .baseUrl(BuildConfig.API_URL)
+            .baseUrl(baseUrl)
             .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(
+                GsonBuilder().setDateFormat("yyyy-MM-dd").create()
+            ))
             .client(client)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build();
@@ -116,5 +124,10 @@ class KutuphanemNetworkModule {
     @Provides
     fun providerKitapYorumAPI(retrofit: Retrofit): IKitapYorumApi =
         retrofit.create(IKitapYorumApi::class.java)
+
+    @Singleton
+    @Provides
+    fun providerKitapEkleAPI(retrofit: Retrofit): IKitapEkleApi =
+        retrofit.create(IKitapEkleApi::class.java)
 
 }

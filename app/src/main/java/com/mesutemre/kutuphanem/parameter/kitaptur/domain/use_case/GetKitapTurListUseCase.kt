@@ -30,7 +30,7 @@ class GetKitapTurListUseCase @Inject constructor(
     private val storeKitapTurParametre: StoreKitapTurParametre
 ) : IServiceCall by ServiceCallUseCase(), IDbCall by DbCallUseCase() {
 
-    operator suspend fun invoke(isSwipeRefresh: Boolean): Flow<BaseResourceEvent<List<KitapTurItem>>> {
+    suspend operator fun invoke(isSwipeRefresh: Boolean): Flow<BaseResourceEvent<List<KitapTurItem>>> {
         val isDbKayit = kitapTurRepository.checkKitapTurDbKayit(PARAM_KITAPTUR_DB_KEY)
         var kitapTurDtoList: List<KitapTurDto>? = null
         if (isSwipeRefresh || !isDbKayit) {

@@ -20,3 +20,4 @@ fun LazyListState.isScrollingUp(): Boolean {
         }
     }.value
 }
+

@@ -52,6 +52,7 @@ fun KitapArsivListe(
             }
             is BaseResourceEvent.Error -> {
             }
+            else -> {}
         }
     }
 

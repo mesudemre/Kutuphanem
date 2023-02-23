@@ -26,7 +26,7 @@ import com.mesutemre.kutuphanem.parameter.components.ParametreRowItem
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.sdp
 import com.mesutemre.kutuphanem.util.customcomponents.progressbar.KutuphanemLoader
-import com.mesutemre.kutuphanem.util.customcomponents.KutuphanemSearchInput
+import com.mesutemre.kutuphanem.util.customcomponents.input.KutuphanemSearchInput
 import com.mesutemre.kutuphanem.util.customcomponents.dialog.CustomKutuphanemDialog
 import com.mesutemre.kutuphanem.util.customcomponents.error.KutuphanemErrorView
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
@@ -58,6 +58,7 @@ fun ParametreYayinEviScreen(
                 )
             }
         }
+        else -> {}
     }
 
     if (state.isPopUpShow) {
@@ -174,6 +175,7 @@ fun ParametreYayinEviScreen(
                         }
                     }
                 }
+                else -> {}
             }
         }
     }

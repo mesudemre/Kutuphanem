@@ -1,4 +1,4 @@
-package com.mesutemre.kutuphanem.util.customcomponents
+package com.mesutemre.kutuphanem.util.customcomponents.input
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
@@ -27,6 +27,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem.ui.theme.*
+import com.mesutemre.kutuphanem_ui.theme.colorPalette
+import com.mesutemre.kutuphanem_ui.theme.sdp
+import com.mesutemre.kutuphanem_ui.theme.smallUbuntuError
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -340,3 +343,96 @@ fun KutuphanemFormInput(
         }
     }
 }
+
+@Composable
+fun KutuphanemOutlinedFormTextField(
+    text: String,
+    onChange: (String) -> Unit,
+    modifier: Modifier,
+    maxLine: Int = 1,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    textStyle: TextStyle = Typography.smallUbuntuBlack,
+    colors: TextFieldColors = TextFieldDefaults.textFieldColors(
+        focusedIndicatorColor = MaterialTheme.colorPalette.secondaryGray,
+        unfocusedIndicatorColor = MaterialTheme.colorPalette.secondaryGray,
+        trailingIconColor = MaterialTheme.colorPalette.secondaryGray,
+        errorIndicatorColor = MaterialTheme.colorPalette.kirmizi,
+        cursorColor = MaterialTheme.colorPalette.secondaryGray,
+        errorCursorColor = MaterialTheme.colorPalette.kirmizi,
+        backgroundColor = MaterialTheme.colorPalette.white
+    ),
+    singleLine: Boolean = true,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
+    errorMessage: String? = null,
+    maxCharacter: Int? = null,
+    label: String,
+    labelStyle: TextStyle = MaterialTheme.typography.smallUbuntuTransparent,
+    placeHolder: String,
+    placeHolderStyle: TextStyle = MaterialTheme.typography.smallUbuntuTransparent
+) {
+    Column {
+        OutlinedTextField(
+            modifier = modifier,
+            value = text,
+            onValueChange = { str ->
+                maxCharacter?.let {
+                    if (str.length <= it) {
+                        onChange(str)
+                    }
+                } ?: run {
+                    onChange(str)
+                }
+            },
+            isError = errorMessage?.let {
+                                        it.isNullOrEmpty().not()
+            } ?: false,
+            readOnly = readOnly,
+            enabled = enabled,
+            singleLine = singleLine,
+            visualTransformation = visualTransformation,
+            maxLines = maxLine,
+            label = {
+                Text(text = label, style = labelStyle)
+            },
+            trailingIcon = {
+                when (errorMessage?.isNullOrEmpty()?.not() ?: false) {
+                    true -> {
+                        Icon(
+                            Icons.Filled.Error, contentDescription = errorMessage,
+                            tint = MaterialTheme.colorPalette.kirmizi
+                        )
+                    }
+                    false -> {
+                        trailingIcon?.let {
+                            trailingIcon()
+                        }
+                    }
+                }
+            },
+            leadingIcon = leadingIcon,
+            placeholder = {
+                Text(text = placeHolder, style = placeHolderStyle)
+            },
+            textStyle = textStyle,
+            colors = colors,
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions
+        )
+
+        if (errorMessage?.isNullOrEmpty()?.not() == true) {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.sdp),
+                text = errorMessage ?: "",
+                style = MaterialTheme.typography.smallUbuntuError
+            )
+        }
+    }
+}
+
