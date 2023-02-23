@@ -7,7 +7,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
@@ -330,7 +334,7 @@ fun KutuphanemSelectableCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 4.sdp),
+                .padding(vertical = errorStr?.let { 0.sdp } ?: 4.sdp),
             verticalArrangement = Arrangement.Center
         ) {
             Row(
@@ -355,18 +359,12 @@ fun KutuphanemSelectableCard(
                 )
             }
             errorStr?.let {
-                Divider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 2.sdp),
-                    thickness = 1.sdp,
-                    color = MaterialTheme.colorPalette.transparent
-                )
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(color = MaterialTheme.colorPalette.kirmizi)
-                        .padding(top = 4.sdp, start = 8.sdp),
+                        .padding(top = 4.sdp, start = 8.sdp)
+                        .clip(shape = RoundedCornerShape(bottomStart = 4.sdp, bottomEnd = 4.sdp)),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(

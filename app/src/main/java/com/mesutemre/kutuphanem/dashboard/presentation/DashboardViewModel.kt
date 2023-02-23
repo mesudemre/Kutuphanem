@@ -6,6 +6,7 @@ import com.mesutemre.kutuphanem.base.BaseViewModel
 import com.mesutemre.kutuphanem.dashboard.domain.use_case.*
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import com.mesutemre.kutuphanem_ui.chart.KutuphanemPieChartInput
+import com.mesutemre.kutuphanem_ui.theme.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -73,24 +74,24 @@ class DashboardViewModel @Inject constructor(
 
     private suspend fun fillKitapTurIstatistik() {
         val colorList = listOf<Color>(
-            Color((Math.random() * 16777215).toInt() or (0xFF shl 24)),
-            Color((Math.random() * 16777215).toInt() or (0xFF shl 24)),
-            Color((Math.random() * 16777215).toInt() or (0xFF shl 24)),
-            Color((Math.random() * 16777215).toInt() or (0xFF shl 24)),
-            Color((Math.random() * 16777215).toInt() or (0xFF shl 24))
+            etonBlue,
+            morningBlue,
+            spaceCadet,
+            acikMor,
+            aero
         )
         getKitapTurIstatistik().collectLatest { response ->
             var kitapTurIstatistikList = listOf<KutuphanemPieChartInput>()
             if (response is BaseResourceEvent.Success) {
                 kitapTurIstatistikList = response.data?.sortedByDescending {
                     it.adet
-                }?.map {
+                }?.take(5)?.mapIndexed { index, dashboardKitapTurIstatistikItem ->
                     KutuphanemPieChartInput(
-                        value = it.adet.toInt(),
-                        description = it.aciklama,
-                        color = Color((Math.random() * 16777215).toInt() or (0xFF shl 24))
+                        value = dashboardKitapTurIstatistikItem.adet.toInt(),
+                        description = dashboardKitapTurIstatistikItem.aciklama,
+                        color = colorList[index]
                     )
-                }?.take(5) ?: emptyList()
+                } ?: emptyList()
             }
             _dashboardState.update {
                 it.copy(

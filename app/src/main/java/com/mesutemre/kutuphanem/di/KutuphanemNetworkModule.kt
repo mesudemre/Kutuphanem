@@ -38,6 +38,10 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class KutuphanemNetworkModule {
 
+    val baseUrl by lazy {
+        BuildConfig.API_URL
+    }
+
     private val loggingInterceptor = run {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
         httpLoggingInterceptor.apply {
@@ -51,7 +55,7 @@ class KutuphanemNetworkModule {
     @Provides
     fun provideRetrofit(client: OkHttpClient): Retrofit =
         Retrofit.Builder()
-            .baseUrl(BuildConfig.API_URL)
+            .baseUrl(baseUrl)
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(
                 GsonBuilder().setDateFormat("yyyy-MM-dd").create()
