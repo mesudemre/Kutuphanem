@@ -66,7 +66,10 @@ fun DashboardScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.sdp)
             )
-            KitapYilStatisticsArea(dashBoardState.kitapYilIstatistikResource)
+            KitapYilStatisticsArea(
+                dashBoardState.kitapYilIstatistikResource,
+                dashBoardState.kitapYilIstatistikList
+            )
         }
     }
 }

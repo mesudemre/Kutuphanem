@@ -4,20 +4,17 @@ import android.graphics.Paint
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.scale
-import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.sp
-import com.mesutemre.kutuphanem_ui.theme.black
-import com.mesutemre.kutuphanem_ui.theme.white
+import com.mesutemre.kutuphanem_ui.theme.*
 
 @Composable
 fun KutuphanemPieChart(
@@ -120,6 +117,128 @@ fun KutuphanemPieChart(
                             }
                         )
                     }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun Kutuphanem3dBarChart(
+    modifier: Modifier = Modifier,
+    inputList: List<KutuphanemBarChartInput>
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.Bottom,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        val listSum by remember {
+            mutableStateOf(
+                inputList.sumOf {
+                    it.value
+                }
+            )
+        }
+        val pathPortion = remember {
+            androidx.compose.animation.core.Animatable(initialValue = 0f)
+        }
+        LaunchedEffect(key1 = true) {
+            pathPortion.animateTo(
+                1f, animationSpec = tween(1000)
+            )
+        }
+        inputList.forEach { item ->
+            val percentage = item.value / listSum.toFloat()
+            KutuphanemBarChartItem(
+                modifier = Modifier
+                    .height(40.sdp * pathPortion.value * percentage * inputList.size)
+                    .width(40.sdp),
+                primaryColor = item.color, value = item.value, description = item.description
+            )
+        }
+    }
+}
+
+@Composable
+private fun KutuphanemBarChartItem(
+    modifier: Modifier = Modifier,
+    primaryColor: Color,
+    value: Int,
+    description: String
+) {
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            val width = size.width
+            val height = size.height
+            val barWidth = width / 5 * 3
+            val barHeight = height / 8 * 7
+            val barHeight3dPart = height - barHeight
+            val barWidth3dPart = (width - barWidth) * (height * 0.002f)
+
+            var path = Path().apply {
+                moveTo(0f, height)
+                lineTo(barWidth, height)
+                lineTo(barWidth, height - barHeight)
+                lineTo(0f, height - barHeight)
+                close()
+            }
+            drawPath(
+                path,
+                brush = Brush.linearGradient(
+                    colors = listOf(googleDarkGray, primaryColor)
+                )
+            )
+            path = Path().apply {
+                moveTo(barWidth, height - barHeight)
+                lineTo(barWidth3dPart + barWidth, 0f)
+                lineTo(barWidth3dPart + barWidth, barHeight)
+                lineTo(barWidth, height)
+                close()
+            }
+            drawPath(
+                path,
+                brush = Brush.linearGradient(
+                    colors = listOf(primaryColor, googleDarkGray)
+                )
+            )
+            path = Path().apply {
+                moveTo(0f,barHeight3dPart)
+                lineTo(barWidth,barHeight3dPart)
+                lineTo(barWidth+barWidth3dPart,0f)
+                lineTo(barWidth3dPart,0f)
+                close()
+            }
+            drawPath(
+                path,
+                brush = Brush.linearGradient(
+                    colors = listOf(googleDarkGray,primaryColor )
+                )
+            )
+            drawContext.canvas.nativeCanvas.apply {
+                drawText(
+                    "${value}",
+                    barWidth/5f,
+                    height + 55f,
+                    android.graphics.Paint().apply {
+                        color = black.toArgb()
+                        textSize = 10.sdp.toPx()
+                    }
+                )
+            }
+
+            drawContext.canvas.nativeCanvas.apply {
+                rotate(-50f, pivot = Offset(barWidth3dPart-5,0f)) {
+                    drawText(
+                        description,
+                        0f,
+                        0f,
+                        android.graphics.Paint().apply {
+                            color = black.toArgb()
+                            textSize = 8.sdp.toPx()
+                            isFakeBoldText = true
+                        }
+                    )
                 }
             }
         }
