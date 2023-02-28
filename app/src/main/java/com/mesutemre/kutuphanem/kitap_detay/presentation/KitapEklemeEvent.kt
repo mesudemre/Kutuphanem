@@ -50,4 +50,6 @@ sealed class KitapEklemeEvent {
     object CloseReadExternalStoragePermissionWarning : KitapEklemeEvent()
 
     object CloseWriteExternalStoragePermissionWarning : KitapEklemeEvent()
+
+    object SetDefaultMustScroll: KitapEklemeEvent()
 }

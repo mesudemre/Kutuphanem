@@ -13,18 +13,25 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.scale
-import androidx.compose.ui.unit.sp
-import com.mesutemre.kutuphanem_ui.theme.*
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.core.content.res.ResourcesCompat
+import com.mesutemre.kutuphanem_ui.R
+import com.mesutemre.kutuphanem_ui.theme.black
+import com.mesutemre.kutuphanem_ui.theme.googleDarkGray
+import com.mesutemre.kutuphanem_ui.theme.sdp
+import com.mesutemre.kutuphanem_ui.theme.white
 
 @Composable
 fun KutuphanemPieChart(
     modifier: Modifier = Modifier,
-    radius: Float = 400f,
+    radius: Float = 250.sdp.value,
     input: List<KutuphanemPieChartInput>
 ) {
     var inputList by remember {
         mutableStateOf(input)
     }
+    val customTypeFace = ResourcesCompat.getFont(LocalContext.current, R.font.ubuntu)
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         val pathPortion = remember {
             androidx.compose.animation.core.Animatable(initialValue = 0f)
@@ -44,6 +51,9 @@ fun KutuphanemPieChart(
                     easing = FastOutLinearInEasing
                 )
             )
+        }
+        val fontSize = with(LocalDensity.current) {
+            12.sdp.toSp()
         }
         Canvas(
             modifier = Modifier
@@ -91,9 +101,10 @@ fun KutuphanemPieChart(
                             drawText(
                                 "% $percentage",
                                 circleCenter.x,
-                                (circleCenter.y + (radius - (radius - 250f) / 1.2f) * factor) * percentagePoriton.value,
+                                (circleCenter.y + (radius - (radius - 200f) / 0.9f) * factor) * percentagePoriton.value,
                                 Paint().apply {
-                                    textSize = 14.sp.toPx()
+                                    textSize = fontSize.toPx()
+                                    //textSize = 14.sp.toPx()
                                     textAlign = Paint.Align.CENTER
                                     color = white.toArgb()
                                     isFakeBoldText = true
@@ -103,6 +114,7 @@ fun KutuphanemPieChart(
                     }
                 }
 
+
                 rotate(rotateAngle) {
                     drawContext.canvas.nativeCanvas.apply {
                         drawText(
@@ -110,10 +122,10 @@ fun KutuphanemPieChart(
                             circleCenter.x,
                             circleCenter.y + radius * 0.85f * factor,
                             Paint().apply {
-                                textSize = 14.sp.toPx()
+                                textSize = fontSize.toPx()
+                                typeface = customTypeFace
                                 textAlign = Paint.Align.CENTER
                                 color = black.toArgb()
-                                isFakeBoldText = true
                             }
                         )
                     }
@@ -203,22 +215,22 @@ private fun KutuphanemBarChartItem(
                 )
             )
             path = Path().apply {
-                moveTo(0f,barHeight3dPart)
-                lineTo(barWidth,barHeight3dPart)
-                lineTo(barWidth+barWidth3dPart,0f)
-                lineTo(barWidth3dPart,0f)
+                moveTo(0f, barHeight3dPart)
+                lineTo(barWidth, barHeight3dPart)
+                lineTo(barWidth + barWidth3dPart, 0f)
+                lineTo(barWidth3dPart, 0f)
                 close()
             }
             drawPath(
                 path,
                 brush = Brush.linearGradient(
-                    colors = listOf(googleDarkGray,primaryColor )
+                    colors = listOf(googleDarkGray, primaryColor)
                 )
             )
             drawContext.canvas.nativeCanvas.apply {
                 drawText(
                     "${value}",
-                    barWidth/5f,
+                    barWidth / 5f,
                     height + 55f,
                     android.graphics.Paint().apply {
                         color = black.toArgb()
@@ -228,7 +240,7 @@ private fun KutuphanemBarChartItem(
             }
 
             drawContext.canvas.nativeCanvas.apply {
-                rotate(-50f, pivot = Offset(barWidth3dPart-5,0f)) {
+                rotate(-50f, pivot = Offset(barWidth3dPart - 5, 0f)) {
                     drawText(
                         description,
                         0f,

@@ -1,6 +1,5 @@
-package com.mesutemre.kutuphanem.dashboard.presentation.components.statistics
+package com.mesutemre.kutuphanem.dashboard.presentation.components.statistics.kitaptur
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,7 +21,6 @@ import com.mesutemre.kutuphanem_ui.card.KutuphanemCardTitle
 import com.mesutemre.kutuphanem_ui.chart.KutuphanemPieChart
 import com.mesutemre.kutuphanem_ui.chart.KutuphanemPieChartInput
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun StatisticsArea(
     kitapTurIstatistikResource: BaseResourceEvent<List<DashboardKitapTurIstatistikItem>>,

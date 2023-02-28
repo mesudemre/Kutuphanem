@@ -68,7 +68,7 @@ fun KitapEklemeScreen(
 ) {
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState()
     val state = viewModel.state.collectAsState()
-
+    val scrollState = rememberScrollState()
     val localFocusManager = LocalFocusManager.current
     val systemUiController = rememberSystemUiController()
     val coroutineScope = rememberCoroutineScope()
@@ -341,6 +341,16 @@ fun KitapEklemeScreen(
         }
     }
 
+    SideEffect {
+        if (state.value.mustScrollForValidation) {
+            coroutineScope.launch {
+                scrollState.animateScrollTo(scrollState.maxValue)
+                viewModel.onKitapEklemeEvent(KitapEklemeEvent.SetDefaultMustScroll)
+            }
+        }
+    }
+
+
     BottomSheetScaffold(scaffoldState = bottomSheetScaffoldState,
         topBar = if ((state.value.openCamera || state.value.showCropArea).not()) {
             {
@@ -392,7 +402,7 @@ fun KitapEklemeScreen(
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = 16.sdp, vertical = 24.sdp)
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(scrollState)
             ) {
                 state.value.croppedImageBitMap?.let {
                     CroppedKitapResimArea(croppedImage = it, onRemoveImage = onRemoveCroppedResim)

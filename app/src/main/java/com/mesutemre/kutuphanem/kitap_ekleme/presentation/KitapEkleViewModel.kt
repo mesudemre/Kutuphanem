@@ -203,6 +203,13 @@ class KitapEkleViewModel @Inject constructor(
             is KitapEklemeEvent.OnSaveKitap -> {
                 validateKitapEklemeForm()
             }
+            is KitapEklemeEvent.SetDefaultMustScroll -> {
+                _state.update {
+                    it.copy(
+                        mustScrollForValidation = false
+                    )
+                }
+            }
         }
     }
 
@@ -328,6 +335,17 @@ class KitapEkleViewModel @Inject constructor(
             !it.successfullValidate
         }
 
+        val mustScrollToKitapTurYayinevi =
+            kitapResimValidationResult.successfullValidate
+                    &&
+                    kitapAdValidationResult.successfullValidate
+                    &&
+                    yazarAdValidationResult.successfullValidate
+                    &&
+                    alinmaTarvalidationResult.successfullValidate
+                    &&
+                    (kitapTurValidationResult.successfullValidate.not() || yayinEviValidationResult.successfullValidate.not())
+
         if (hasError) {
             _state.update {
                 it.copy(
@@ -337,7 +355,8 @@ class KitapEkleViewModel @Inject constructor(
                     kitapAciklamaError = kitapAciklamaValidationResult.messageResId,
                     kitapTurError = kitapTurValidationResult.messageResId,
                     yayinEviError = yayinEviValidationResult.messageResId,
-                    kitapResimError = kitapResimValidationResult.messageResId
+                    kitapResimError = kitapResimValidationResult.messageResId,
+                    mustScrollForValidation = mustScrollToKitapTurYayinevi
                 )
             }
         } else {
