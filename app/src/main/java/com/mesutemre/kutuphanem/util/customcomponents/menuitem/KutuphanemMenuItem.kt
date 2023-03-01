@@ -1,6 +1,7 @@
 package com.mesutemre.kutuphanem.util.customcomponents.menuitem
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,9 +13,13 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.Role
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.mesutemre.kutuphanem.ui.theme.colorPalette
 import com.mesutemre.kutuphanem.ui.theme.normalUbuntuBlack
@@ -26,14 +31,20 @@ fun KutuphanemMenuItem(
     label: String,
     onItemClick: () -> Unit
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(50.sdp)
             .padding(horizontal = 16.sdp)
-            .clickable {
-                onItemClick.invoke()
-            },
+            .clickable(
+                interactionSource = interactionSource,
+                indication = rememberRipple(
+                    color = Color.Black
+                ),
+                role = Role.Button,
+                onClick = onItemClick
+            ),
         backgroundColor = MaterialTheme.colorPalette.white,
         shape = MaterialTheme.shapes.medium,
         elevation = 2.sdp

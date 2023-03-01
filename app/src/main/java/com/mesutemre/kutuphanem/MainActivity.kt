@@ -104,7 +104,8 @@ class MainActivity : ComponentActivity() {
                                 KutuphanemTopBar(
                                     navController = kutuphanemAppState.navController,
                                     pageTitle = stringResource(
-                                        id = currentPage?.pageTitle ?: R.string.anasayfaItem
+                                        id = currentPage?.pageTitle
+                                            ?: R.string.kutuphanem_empty_string
                                     )
                                 )
                             }

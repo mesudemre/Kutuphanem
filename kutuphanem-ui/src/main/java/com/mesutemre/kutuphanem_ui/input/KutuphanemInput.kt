@@ -35,12 +35,12 @@ fun KutuphanemSearchInput(
             )
         },
         textStyle = MaterialTheme.typography.smallUbuntuBlack.copy(
-            lineHeight = 12.ssp
+            lineHeight = 10.ssp
         ),
         singleLine = true,
         modifier = modifier
             .fillMaxWidth()
-            .height(38.sdp)
+            .height(42.sdp)
             .clip(shape = MaterialTheme.shapes.medium)
             .background(color = MaterialTheme.colorPalette.white)
             .border(

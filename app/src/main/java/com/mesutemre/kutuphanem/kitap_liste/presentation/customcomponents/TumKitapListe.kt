@@ -110,7 +110,9 @@ fun TumKitapListe(
 
 
         LazyColumn(modifier = Modifier.padding(bottom = 20.sdp), state = listState) {
-            items(kitapServiceListeSource) { kitapModel ->
+            items(kitapServiceListeSource, key = {
+                it.kitapId
+            }) { kitapModel ->
                 val kitapArsiv: (Int, String, String, String) -> Unit =
                     { kitapId, kitapAd, yazarAd, aciklama ->
                         viewModel.kitapArsivle(

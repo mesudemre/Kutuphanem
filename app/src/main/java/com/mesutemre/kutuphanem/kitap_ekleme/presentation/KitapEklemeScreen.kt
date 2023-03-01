@@ -9,12 +9,9 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.ImageProxy
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -481,8 +478,18 @@ fun KitapEklemeScreen(
 
                 KutuphanemSelectableCard(modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 12.sdp)
-                    .clickable {
+                    .padding(top = 12.sdp),
+                    titleStyle = state.value.selectedKitapTur?.let {
+                        MaterialTheme.typography.smallUbuntuBlack
+                    },
+                    title = state.value.selectedKitapTur?.let {
+                        it.kitapTurAciklama
+                    } ?: run {
+                        stringResource(id = R.string.kitapTurLabel)
+                    }, errorStr = state.value.kitapTurError?.let {
+                        stringResource(id = it)
+                    },
+                    onClick = {
                         coroutineScope
                             .launch {
                                 onClickKitapTurYayinEvi(KitapEklemeBottomsheetType.KITAP_TUR)
@@ -493,22 +500,12 @@ fun KitapEklemeScreen(
                             .invokeOnCompletion {
                                 viewModel.initKitapTurList()
                             }
-                    },
-                    titleStyle = state.value.selectedKitapTur?.let {
-                        MaterialTheme.typography.smallUbuntuBlack
-                    },
-                    title = state.value.selectedKitapTur?.let {
-                        it.kitapTurAciklama
-                    } ?: run {
-                        stringResource(id = R.string.kitapTurLabel)
-                    }, errorStr = state.value.kitapTurError?.let {
-                        stringResource(id = it)
                     })
 
                 KutuphanemSelectableCard(modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 12.sdp)
-                    .clickable {
+                    .padding(top = 12.sdp),
+                    onClick = {
                         coroutineScope
                             .launch {
                                 onClickKitapTurYayinEvi(KitapEklemeBottomsheetType.YAYIN_EVI)

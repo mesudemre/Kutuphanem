@@ -251,4 +251,6 @@
     <string name="alinmaTarYearErrorText">Alınan yıl 1900 ile şu anki yıl aralığında olmalıdır!</string>
     <string name="kitap_ekleme_alinmaTar_zero_value_error">Gün,ay ya da yıl 0 olamaz!</string>
     <string name="kitap_ekleme_minCharacterKitapAciklamaError">En az 5 karakter giriniz!</string>
+
+    <string name="kutuphanem_empty_string"></string>
 </resources>
