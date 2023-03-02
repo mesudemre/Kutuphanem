@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -23,6 +25,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -42,6 +45,7 @@ import com.mesutemre.kutuphanem.ui.theme.smallUbuntuBlack
 import com.mesutemre.kutuphanem.ui.theme.smallUbuntuWhiteBold
 import com.mesutemre.kutuphanem.util.customcomponents.dialog.CustomKutuphanemDialog
 import com.mesutemre.kutuphanem.util.customcomponents.input.KutuphanemOutlinedFormTextField
+import com.mesutemre.kutuphanem.util.customcomponents.progressbar.KutuphanemLoader
 import com.mesutemre.kutuphanem_base.model.BaseResourceEvent
 import com.mesutemre.kutuphanem_base.util.MaskVisualTransformation
 import com.mesutemre.kutuphanem_ui.button.KutuphanemMainMaterialButton
@@ -49,6 +53,7 @@ import com.mesutemre.kutuphanem_ui.card.KutuphanemSelectableCard
 import com.mesutemre.kutuphanem_ui.dialog.ERROR_DLG
 import com.mesutemre.kutuphanem_ui.dialog.KutuphanemPermissionDialog
 import com.mesutemre.kutuphanem_ui.extensions.findActivity
+import com.mesutemre.kutuphanem_ui.extensions.gesturesDisabled
 import com.mesutemre.kutuphanem_ui.extensions.rippleClick
 import com.mesutemre.kutuphanem_ui.theme.colorPalette
 import com.mesutemre.kutuphanem_ui.theme.sdp
@@ -71,30 +76,30 @@ fun KitapEklemeScreen(
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    val camPermissionState =
-        rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission(),
-            onResult = { isGranted ->
-                viewModel.onCameraPermissionResult(
-                    isGranted = isGranted,
+    val camPermissionState = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            viewModel.onCameraPermissionResult(
+                isGranted = isGranted,
+                isPermanantlyDenied = context.findActivity()
+                    .shouldShowRequestPermissionRationale(Manifest.permission.CAMERA),
+                cameraOpenType = CameraOpenType.KITAP_ACIKLAMA_TEXT_RECOGNIZE
+            )
+        })
+
+    val kitapEklemePermissionState = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions(),
+        onResult = { perms ->
+            perms.keys.forEach { permission ->
+
+                viewModel.onMultiplePermissionResult(
+                    permission = permission,
+                    isGranted = perms[permission] == true,
                     isPermanantlyDenied = context.findActivity()
-                        .shouldShowRequestPermissionRationale(Manifest.permission.CAMERA),
-                    cameraOpenType = CameraOpenType.KITAP_ACIKLAMA_TEXT_RECOGNIZE
+                        .shouldShowRequestPermissionRationale(permission)
                 )
-            })
-
-    val kitapEklemePermissionState =
-        rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestMultiplePermissions(),
-            onResult = { perms ->
-                perms.keys.forEach { permission ->
-
-                    viewModel.onMultiplePermissionResult(
-                        permission = permission,
-                        isGranted = perms[permission] == true,
-                        isPermanantlyDenied = context.findActivity()
-                            .shouldShowRequestPermissionRationale(permission)
-                    )
-                }
-            })
+            }
+        })
 
     systemUiController.isStatusBarVisible =
         (state.value.openCamera || state.value.showCropArea).not()
@@ -149,8 +154,7 @@ fun KitapEklemeScreen(
         } else if (bottomSheetScaffoldState.bottomSheetState.isExpanded) {
             coroutineScope.launch {
                 bottomSheetScaffoldState.bottomSheetState.animateTo(
-                    BottomSheetValue.Collapsed,
-                    tween(500)
+                    BottomSheetValue.Collapsed, tween(500)
                 )
             }
         } else {
@@ -351,7 +355,8 @@ fun KitapEklemeScreen(
     BottomSheetScaffold(scaffoldState = bottomSheetScaffoldState,
         topBar = if ((state.value.openCamera || state.value.showCropArea).not()) {
             {
-                KitapEklemeScreenTopBar(pageTitle = stringResource(id = R.string.kitapEklemeTitle),
+                KitapEklemeScreenTopBar(
+                    pageTitle = stringResource(id = R.string.kitapEklemeTitle),
                     onBackPress = {
                         navController.popBackStack()
                     })
@@ -374,168 +379,185 @@ fun KitapEklemeScreen(
         sheetContentColor = MaterialTheme.colorPalette.loginBackColor,
         sheetPeekHeight = (-50).sdp
     ) {
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = MaterialTheme.colorPalette.loginBackColor)
+                .gesturesDisabled(disabled = state.value.kitapKaydetResourceEvent is BaseResourceEvent.Loading || state.value.kitapResimYukleResourceEvent is BaseResourceEvent.Loading)
         ) {
-
-            if (state.value.openCamera) {
-                KitapResimCameraCaptureArea(
-                    cameraType = state.value.cameraOpenType,
-                    onSuccessCaptured = onSuccessCaptured,
-                    onSuccessImageInfo = onSuccessImageInfo
+            if (state.value.kitapKaydetResourceEvent is BaseResourceEvent.Loading || state.value.kitapResimYukleResourceEvent is BaseResourceEvent.Loading) {
+                KutuphanemLoader(
+                    modifier = Modifier
+                        .width(220.sdp)
+                        .height(220.sdp)
+                        .zIndex(1f)
+                        .align(Alignment.Center)
                 )
             }
-            if (state.value.showCropArea) {
-                KitapResimCropArea(
-                    capturedImage = state.value.captureImageBitmap!!.asImageBitmap(),
-                    onCloseCrop = onCloseKitapResimCrop,
-                    onCompleteCrop = onCompleteKitapResimCrop
-                )
-            }
-
             Column(
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 16.sdp, vertical = 24.sdp)
-                    .verticalScroll(scrollState)
+                    .fillMaxSize()
+                    .alpha(if (state.value.kitapKaydetResourceEvent is BaseResourceEvent.Loading || state.value.kitapResimYukleResourceEvent is BaseResourceEvent.Loading) 0.4f else 1f)
             ) {
-                state.value.croppedImageBitMap?.let {
-                    CroppedKitapResimArea(croppedImage = it, onRemoveImage = onRemoveCroppedResim)
-                } ?: run {
-                    KitapResimEklemeArea(
-                        errorValidationMessage = state.value.kitapResimError?.let {
-                            stringResource(id = it)
-                        },
-                        onClickResimEkleme = onClickResimEkleme
+
+                if (state.value.openCamera) {
+                    KitapResimCameraCaptureArea(
+                        cameraType = state.value.cameraOpenType,
+                        onSuccessCaptured = onSuccessCaptured,
+                        onSuccessImageInfo = onSuccessImageInfo
+                    )
+                }
+                if (state.value.showCropArea) {
+                    KitapResimCropArea(
+                        capturedImage = state.value.captureImageBitmap!!.asImageBitmap(),
+                        onCloseCrop = onCloseKitapResimCrop,
+                        onCompleteCrop = onCompleteKitapResimCrop
                     )
                 }
 
-                KutuphanemOutlinedFormTextField(text = state.value.kitapAd,
-                    onChange = onChangeKitapAd,
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 12.sdp),
-                    errorMessage = state.value.kitapAdError?.let {
-                        stringResource(id = it)
-                    } ?: null,
-                    label = stringResource(id = R.string.kitapAdLabelText),
-                    placeHolder = stringResource(id = R.string.kitap_ekleme_kitapAdPlaceholder))
-
-                KutuphanemOutlinedFormTextField(text = state.value.yazarAd,
-                    onChange = onChangeYazarAd,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 12.sdp),
-                    errorMessage = state.value.yazarAdError?.let {
-                        stringResource(id = it)
-                    } ?: null,
-                    label = stringResource(id = R.string.yazarAdLabelText),
-                    placeHolder = stringResource(id = R.string.kitap_ekleme_yazarAdPlaceholder))
-
-                KutuphanemOutlinedFormTextField(text = state.value.alinmaTar,
-                    onChange = onChangeKitapAlinmaTar,
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                    visualTransformation = MaskVisualTransformation("##.##.####"),
-                    maxCharacter = 8,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 12.sdp),
-                    errorMessage = state.value.alinmaTarError?.let {
-                        stringResource(id = it)
-                    } ?: null,
-                    label = stringResource(id = R.string.alinmaTarLabelText),
-                    placeHolder = stringResource(id = R.string.kitap_ekleme_alinmaTarPlaceholder))
-
-                KutuphanemOutlinedFormTextField(text = state.value.kitapAciklama,
-                    onChange = onChangeKitapAciklama,
-                    textStyle = MaterialTheme.typography.smallUbuntuBlack.copy(
-                        lineHeight = 14.ssp
-                    ),
-                    maxLine = 4,
-                    singleLine = false,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(80.sdp)
-                        .padding(top = 12.sdp),
-                    errorMessage = state.value.kitapAciklamaError?.let {
-                        stringResource(id = it)
-                    } ?: null,
-                    label = stringResource(id = R.string.kitap_ekleme_kitapAciklamaLabel),
-                    placeHolder = stringResource(id = R.string.kitap_ekleme_kitapAciklamaPlaceHolder),
-                    trailingIcon = {
-                        Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_text_recognizer),
-                            contentDescription = stringResource(id = R.string.kitap_ekleme_kitapAciklamaPlaceHolder),
-                            modifier = Modifier
-                                .padding(end = 8.sdp)
-                                .size(24.sdp)
-                                .rippleClick {
-                                    onClickKitapAciklama()
-                                })
-                    })
-
-
-                KutuphanemSelectableCard(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 12.sdp),
-                    titleStyle = state.value.selectedKitapTur?.let {
-                        MaterialTheme.typography.smallUbuntuBlack
-                    },
-                    title = state.value.selectedKitapTur?.let {
-                        it.kitapTurAciklama
+                        .weight(1f)
+                        .padding(horizontal = 16.sdp, vertical = 24.sdp)
+                        .verticalScroll(scrollState)
+                ) {
+                    state.value.croppedImageBitMap?.let {
+                        CroppedKitapResimArea(
+                            croppedImage = it,
+                            onRemoveImage = onRemoveCroppedResim
+                        )
                     } ?: run {
-                        stringResource(id = R.string.kitapTurLabel)
-                    }, errorStr = state.value.kitapTurError?.let {
-                        stringResource(id = it)
-                    },
-                    onClick = {
-                        coroutineScope
-                            .launch {
+                        KitapResimEklemeArea(
+                            errorValidationMessage = state.value.kitapResimError?.let {
+                                stringResource(id = it)
+                            }, onClickResimEkleme = onClickResimEkleme
+                        )
+                    }
+
+                    KutuphanemOutlinedFormTextField(text = state.value.kitapAd,
+                        onChange = onChangeKitapAd,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 12.sdp),
+                        errorMessage = state.value.kitapAdError?.let {
+                            stringResource(id = it)
+                        } ?: null,
+                        label = stringResource(id = R.string.kitapAdLabelText),
+                        placeHolder = stringResource(id = R.string.kitap_ekleme_kitapAdPlaceholder))
+
+                    KutuphanemOutlinedFormTextField(text = state.value.yazarAd,
+                        onChange = onChangeYazarAd,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 12.sdp),
+                        errorMessage = state.value.yazarAdError?.let {
+                            stringResource(id = it)
+                        } ?: null,
+                        label = stringResource(id = R.string.yazarAdLabelText),
+                        placeHolder = stringResource(id = R.string.kitap_ekleme_yazarAdPlaceholder))
+
+                    KutuphanemOutlinedFormTextField(text = state.value.alinmaTar,
+                        onChange = onChangeKitapAlinmaTar,
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                        visualTransformation = MaskVisualTransformation("##.##.####"),
+                        maxCharacter = 8,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 12.sdp),
+                        errorMessage = state.value.alinmaTarError?.let {
+                            stringResource(id = it)
+                        } ?: null,
+                        label = stringResource(id = R.string.alinmaTarLabelText),
+                        placeHolder = stringResource(id = R.string.kitap_ekleme_alinmaTarPlaceholder))
+
+                    KutuphanemOutlinedFormTextField(text = state.value.kitapAciklama,
+                        onChange = onChangeKitapAciklama,
+                        textStyle = MaterialTheme.typography.smallUbuntuBlack.copy(
+                            lineHeight = 14.ssp
+                        ),
+                        maxLine = 4,
+                        singleLine = false,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(80.sdp)
+                            .padding(top = 12.sdp),
+                        errorMessage = state.value.kitapAciklamaError?.let {
+                            stringResource(id = it)
+                        } ?: null,
+                        label = stringResource(id = R.string.kitap_ekleme_kitapAciklamaLabel),
+                        placeHolder = stringResource(id = R.string.kitap_ekleme_kitapAciklamaPlaceHolder),
+                        trailingIcon = {
+                            Icon(imageVector = ImageVector.vectorResource(id = R.drawable.ic_text_recognizer),
+                                contentDescription = stringResource(id = R.string.kitap_ekleme_kitapAciklamaPlaceHolder),
+                                modifier = Modifier
+                                    .padding(end = 8.sdp)
+                                    .size(24.sdp)
+                                    .rippleClick {
+                                        onClickKitapAciklama()
+                                    })
+                        })
+
+
+                    KutuphanemSelectableCard(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.sdp),
+                        titleStyle = state.value.selectedKitapTur?.let {
+                            MaterialTheme.typography.smallUbuntuBlack
+                        },
+                        title = state.value.selectedKitapTur?.let {
+                            it.kitapTurAciklama
+                        } ?: run {
+                            stringResource(id = R.string.kitapTurLabel)
+                        },
+                        errorStr = state.value.kitapTurError?.let {
+                            stringResource(id = it)
+                        },
+                        onClick = {
+                            coroutineScope.launch {
                                 onClickKitapTurYayinEvi(KitapEklemeBottomsheetType.KITAP_TUR)
                                 bottomSheetScaffoldState.bottomSheetState.animateTo(
                                     BottomSheetValue.Expanded, tween(500)
                                 )
-                            }
-                            .invokeOnCompletion {
+                            }.invokeOnCompletion {
                                 viewModel.initKitapTurList()
                             }
-                    })
+                        })
 
-                KutuphanemSelectableCard(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 12.sdp),
-                    onClick = {
-                        coroutineScope
-                            .launch {
+                    KutuphanemSelectableCard(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.sdp),
+                        onClick = {
+                            coroutineScope.launch {
                                 onClickKitapTurYayinEvi(KitapEklemeBottomsheetType.YAYIN_EVI)
                                 bottomSheetScaffoldState.bottomSheetState.animateTo(
                                     BottomSheetValue.Expanded, tween(500)
                                 )
-                            }
-                            .invokeOnCompletion {
+                            }.invokeOnCompletion {
                                 viewModel.initYayinEviList()
                             }
-                    },
-                    titleStyle = state.value.selectedYayinEvi?.let {
-                        MaterialTheme.typography.smallUbuntuBlack
-                    },
-                    title = state.value.selectedYayinEvi?.let {
-                        it.yayinEviAciklama
-                    } ?: run {
-                        stringResource(id = R.string.yayinEviLabel)
-                    }, errorStr = state.value.yayinEviError?.let {
-                        stringResource(id = it)
-                    })
+                        },
+                        titleStyle = state.value.selectedYayinEvi?.let {
+                            MaterialTheme.typography.smallUbuntuBlack
+                        },
+                        title = state.value.selectedYayinEvi?.let {
+                            it.yayinEviAciklama
+                        } ?: run {
+                            stringResource(id = R.string.yayinEviLabel)
+                        },
+                        errorStr = state.value.yayinEviError?.let {
+                            stringResource(id = it)
+                        })
+                }
+                KutuphanemMainMaterialButton(
+                    modifier = Modifier
+                        .padding(start = 16.sdp, end = 16.sdp, bottom = 24.sdp)
+                        .fillMaxWidth(),
+                    text = stringResource(id = R.string.kaydet),
+                    textStyle = MaterialTheme.typography.smallUbuntuWhiteBold,
+                    onClick = onClickKaydetButton
+                )
             }
-            KutuphanemMainMaterialButton(
-                modifier = Modifier
-                    .padding(start = 16.sdp, end = 16.sdp, bottom = 24.sdp)
-                    .fillMaxWidth(),
-                text = stringResource(id = R.string.kaydet),
-                textStyle = MaterialTheme.typography.smallUbuntuWhiteBold,
-                onClick = onClickKaydetButton
-            )
         }
+
     }
 }
