@@ -51,5 +51,6 @@ data class KitapEklemeState(
     val writeExternalStoragePermissionDeniedDialog: Boolean = false,
     val kitapEklemeCameraPermissionDeniedPermanently: Boolean = false,
     val kitapEklemeCameraPermissionDeniedDialog: Boolean = false,
-    @StringRes val kitapResimError: Int? = null
+    @StringRes val kitapResimError: Int? = null,
+    val mustScrollForValidation: Boolean = false
 )

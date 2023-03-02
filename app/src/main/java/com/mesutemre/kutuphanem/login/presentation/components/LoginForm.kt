@@ -36,6 +36,7 @@ import com.mesutemre.kutuphanem.util.customcomponents.input.KutuphanemBaseInput
 import com.mesutemre.kutuphanem.util.customcomponents.progressbar.KutuphanemLoader
 import com.mesutemre.kutuphanem.util.rememberKutuphanemAppState
 import com.mesutemre.kutuphanem_ui.button.KutuphanemMainMaterialButton
+import com.mesutemre.kutuphanem_ui.extensions.gesturesDisabled
 
 @Composable
 fun LoginForm(
@@ -70,6 +71,7 @@ fun LoginForm(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(start = 20.sdp, end = 20.sdp)
+                .gesturesDisabled(disabled = loginState.isLoading)
         ) {
 
             if (loginState.isLoading) {

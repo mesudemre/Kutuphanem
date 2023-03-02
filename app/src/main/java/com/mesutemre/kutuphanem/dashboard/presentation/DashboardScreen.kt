@@ -22,7 +22,7 @@ import com.mesutemre.kutuphanem.dashboard.presentation.components.DashBoardSearc
 import com.mesutemre.kutuphanem.dashboard.presentation.components.IntroductionPagerArea
 import com.mesutemre.kutuphanem.dashboard.presentation.components.PersonelInfoArea
 import com.mesutemre.kutuphanem.dashboard.presentation.components.category.DashboardCategoryArea
-import com.mesutemre.kutuphanem.dashboard.presentation.components.statistics.StatisticsArea
+import com.mesutemre.kutuphanem.dashboard.presentation.components.statistics.kitaptur.StatisticsArea
 import com.mesutemre.kutuphanem.dashboard.presentation.components.statistics.StatisticsDescriptionArea
 import com.mesutemre.kutuphanem.dashboard.presentation.components.statistics.kitapyil.KitapYilStatisticsArea
 import com.mesutemre.kutuphanem.navigation.KutuphanemNavigationItem
@@ -66,7 +66,10 @@ fun DashboardScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.sdp)
             )
-            KitapYilStatisticsArea(dashBoardState.kitapYilIstatistikResource)
+            KitapYilStatisticsArea(
+                dashBoardState.kitapYilIstatistikResource,
+                dashBoardState.kitapYilIstatistikList
+            )
         }
     }
 }

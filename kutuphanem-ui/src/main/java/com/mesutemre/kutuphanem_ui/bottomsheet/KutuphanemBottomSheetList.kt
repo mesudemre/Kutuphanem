@@ -101,7 +101,10 @@ fun KutuphanemBottomSheetList(
                 .fillMaxWidth()
                 .padding(top = if (hasFilter) 4.sdp else 12.sdp)
         ) {
-            itemsIndexed(filteredList.value) { index, item ->
+
+            itemsIndexed(filteredList.value, key = { index, item ->
+                index
+            }) { index, item ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
