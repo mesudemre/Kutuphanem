@@ -20,6 +20,7 @@ import com.mesutemre.kutuphanem.parameter.ParametreScreen
 import com.mesutemre.kutuphanem.parameter.ekleme.presentation.ParametreEklemeScreen
 import com.mesutemre.kutuphanem.parameter.kitaptur.presentation.ParametreKitapTurScreen
 import com.mesutemre.kutuphanem.parameter.yayinevi.presentation.ParametreYayinEviScreen
+import com.mesutemre.kutuphanem.profile.presentation.ProfileScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -176,6 +177,22 @@ fun KutuphanemNavigation(
                 )
             }) {
             KitapEklemeScreen(showSnackbar = showSnackbar, navController = navController)
+        }
+
+        composable(route = KutuphanemNavigationItem.ProfileScreen.screenRoute,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(200)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Right,
+                    animationSpec = tween(200)
+                )
+            }) {
+            ProfileScreen(showSnackbar = showSnackbar, navController = navController)
         }
     }
 }

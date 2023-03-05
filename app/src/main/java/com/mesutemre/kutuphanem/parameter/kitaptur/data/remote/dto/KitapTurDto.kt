@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName
 import com.mesutemre.kutuphanem.dashboard.domain.model.DashboardKategoriItem
 import com.mesutemre.kutuphanem.kitap_ekleme.domain.model.KitapEklemeKitapTurItem
 import com.mesutemre.kutuphanem.parameter.kitaptur.domain.model.KitapTurItem
+import com.mesutemre.kutuphanem.profile.domain.model.KullaniciIlgiAlanModel
 import java.io.Serializable
 
 data class KitapTurDto(
@@ -37,5 +38,13 @@ fun KitapTurDto.toKitapEklemeKitapTurItem(): KitapEklemeKitapTurItem {
     return KitapEklemeKitapTurItem(
         kitapTurId = this.id ?: 0,
         kitapTurAciklama = this.aciklama ?: ""
+    )
+}
+
+fun KitapTurDto.toKullaniciIlgiAlan(): KullaniciIlgiAlanModel {
+    return KullaniciIlgiAlanModel(
+        id = this.id ?: 0,
+        ilgiAlan = this.aciklama ?: "",
+        resim = this.resim ?: ""
     )
 }

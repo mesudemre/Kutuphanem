@@ -68,4 +68,8 @@ class KutuphanemDBModule {
     @Singleton
     @Provides
     fun provideKitapDetayDao(database: KutuphanemDatabase) = database.getKitapDetayDao()
+
+    @Singleton
+    @Provides
+    fun provideProfilBilgiDao(database: KutuphanemDatabase) = database.getProfilDao()
 }

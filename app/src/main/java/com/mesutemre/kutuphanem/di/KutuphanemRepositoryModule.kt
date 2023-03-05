@@ -31,6 +31,7 @@ import com.mesutemre.kutuphanem.parameter.yayinevi.data.dao.entity.IYayinEviDao
 import com.mesutemre.kutuphanem.parameter.yayinevi.data.remote.dto.IYayinEviApi
 import com.mesutemre.kutuphanem.parameter.yayinevi.data.repository.YayinEviRepositoryImpl
 import com.mesutemre.kutuphanem.parameter.yayinevi.domain.repository.YayinEviRepository
+import com.mesutemre.kutuphanem.profile.data.dao.IKullaniciDao
 import com.mesutemre.kutuphanem.profile.data.remote.IKullaniciApi
 import com.mesutemre.kutuphanem.profile.data.repository.KullaniciRepository
 import com.mesutemre.kutuphanem.profile.domain.repository.KullaniciRepositoryImpl
@@ -76,8 +77,12 @@ class KutuphanemRepositoryModule {
 
     @Singleton
     @Provides
-    fun provideKullaniciRepository(api: IKullaniciApi): KullaniciRepository {
-        return KullaniciRepositoryImpl(api)
+    fun provideKullaniciRepository(
+        api: IKullaniciApi,
+        dataStore: DataStore<Preferences>,
+        dao: IKullaniciDao
+    ): KullaniciRepository {
+        return KullaniciRepositoryImpl(api, dataStore, dao)
     }
 
     @Singleton

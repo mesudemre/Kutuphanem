@@ -1,7 +1,5 @@
 package com.mesutemre.kutuphanem.dashboard.domain.use_case
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import com.mesutemre.kutuphanem.dashboard.domain.model.DashboardKullaniciBilgiData
 import com.mesutemre.kutuphanem.di.IoDispatcher
 import com.mesutemre.kutuphanem.profile.data.remote.dto.toDashBoardKullaniciBilgi
@@ -22,7 +20,6 @@ import javax.inject.Inject
  */
 class GetDasboardKullaniciBilgi @Inject constructor(
     private val kullaniciRepository: KullaniciRepository,
-    private val dataStore: DataStore<Preferences>,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : IServiceCall by ServiceCallUseCase() {
 

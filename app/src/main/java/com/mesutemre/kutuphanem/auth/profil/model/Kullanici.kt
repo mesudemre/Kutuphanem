@@ -6,7 +6,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import com.mesutemre.kutuphanem.profile.data.remote.dto.CinsiyetModel
 import java.io.Serializable
 import java.util.*
 
@@ -18,32 +17,32 @@ data class Kullanici(
     @ColumnInfo(name = "username")
     @SerializedName("username")
     @Expose
-    var username:String,
+    var username: String,
 
     @SerializedName("ad")
     @ColumnInfo(name = "ad")
     @Expose
-    var ad:String,
+    var ad: String,
 
     @SerializedName("soyad")
     @ColumnInfo(name = "soyad")
     @Expose
-    var soyad:String,
+    var soyad: String,
 
     @SerializedName("dogumTarihi")
     @ColumnInfo(name = "dogumTarihi")
     @Expose
-    var dogumTarihi:Date,
+    var dogumTarihi: Date,
 
     @SerializedName("resim")
     @ColumnInfo(name = "resim")
     @Expose
-    var resim:String,
+    var resim: String,
 
     @SerializedName("eposta")
     @ColumnInfo(name = "eposta")
     @Expose
-    var eposta:String,
+    var eposta: String,
 
     @SerializedName("cinsiyet")
     @ColumnInfo(name = "cinsiyet")
@@ -53,8 +52,8 @@ data class Kullanici(
     @SerializedName("haberdarmi")
     @ColumnInfo(name = "haberdarmi")
     @Expose
-    var haberdarmi:Boolean
-): Serializable {
+    var haberdarmi: Boolean
+) : Serializable {
     /*@Ignore
     @SerializedName("ilgiAlanlari")
     @Expose
