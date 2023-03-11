@@ -1,6 +1,7 @@
 package com.mesutemre.kutuphanem.profile.presentation.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
@@ -12,8 +13,11 @@ import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
+import com.mesutemre.kutuphanem.R
 import com.mesutemre.kutuphanem_ui.theme.colorPalette
 import com.mesutemre.kutuphanem_ui.theme.sdp
 import com.mesutemre.kutuphanem_ui.theme.smallUbuntuTransparentBold
@@ -53,7 +57,7 @@ fun ProfileItemCard(
                 Icon(
                     imageVector = icon,
                     contentDescription = title,
-                    tint = MaterialTheme.colorPalette.acikMor,
+                    tint = Color.Unspecified,
                     modifier = Modifier.size(24.sdp)
                 )
                 Text(
