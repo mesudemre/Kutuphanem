@@ -112,6 +112,9 @@
     <string name="profilGuncellemeIlgiAlanlariLabel">İlgi Alanlarım</string>
     <string name="profilGuncellemeTercihlerLabel">Uygulama Tercihlerim</string>
     <string name="cinsiyetLabel">Cinsiyetiniz</string>
+    <string name="profilBilgiKisiselBilgiler">Kişisel Bilgilerim</string>
+    <string name="profilBilgiHakkinda">Hakkında</string>
+    <string name="profilOrnekHakkinda">1991 yılında Erzurum da dünyaya geldi. Yıldız Teknik Üniversitesi Matematik mühendisliği bölümünü bitiren Mesut Emre Çelenk evli ve 1 çocuk babasıdır. Kendisi B sınıfı ehliyete sahiptir. Boş zamanı pek olmaz. Kendisi sıkı bir çay tiryakisi olup günde en az 10 bardak çay içer. Aynı zamanda sıkı bir okur olan Mesut Emre Çelenk bol bol kitapta okur. Şu an Halkbank ta çalışmakta olup 5 yıl Java yazan bu şahıs son 2 yıldır daha çok mobil tarafta android projelerinde görev almaktadır. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ornare massa ut ante vehicula, non egestas massa eleifend. Donec ac imperdiet sem. Sed tincidunt ipsum lacus. Praesent elementum venenatis dictum. Pellentesque interdum purus nec sem facilisis suscipit. Aenean finibus augue condimentum massa consectetur, nec sollicitudin massa tempor. Nullam a egestas dui. Donec pellentesque tincidunt magna, interdum consequat augue dignissim lobortis. Donec dignissim, augue et varius consequat, dolor enim vulputate justo, a condimentum purus odio id neque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam pulvinar ut nisl sed auctor. Pellentesque egestas ultrices purus varius sodales. </string>
 
     <string name="itemPhotoCamera">Kamera</string>
     <string name="itemPhotoLocalStorage">Galeri</string>

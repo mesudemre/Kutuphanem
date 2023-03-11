@@ -1,0 +1,88 @@
+{
+  ConstraintSets: {
+    start : {
+      header_box: {
+        width: 'spread',
+        height: 320,
+        start: ['parent', 'start'],
+        end: ['parent', 'end'],
+        top: ['parent', 'top'],
+        custom: {
+          cornerValue: 24
+        }
+      },
+      header_box_row : {
+        width: 'spread',
+        start: ['parent', 'start',16],
+        end: ['parent', 'end'],
+        top: ['parent', 'top',48]
+      },
+      header_box_userimage: {
+        width: 160,
+        height: 160,
+        start: ['parent', 'start'],
+        end: ['parent', 'end'],
+        top: ['header_box', 'bottom',80],
+        bottom: ['header_box', 'bottom'],
+        custom : {
+          imageCornerValue : 8
+        }
+      },
+      header_box_username : {
+        top: ['header_box_userimage', 'bottom',16],
+        start: ['parent', 'start'],
+        end: ['parent', 'end'],
+        bottom: ['parent', 'bottom'],
+      },
+      header_box_logout_icon: {
+        end: ['parent', 'end',16],
+        top: ['parent', 'top',48]
+      }
+    },
+    end : {
+      header_box: {
+        width: 'spread',
+        height: 120,
+        start: ['parent', 'start'],
+        end: ['parent', 'end'],
+        top: ['parent', 'top'],
+
+      },
+      header_box_row : {
+        start: ['parent', 'start',16],
+        top: ['parent', 'top',32],
+        bottom: ['parent', 'bottom'],
+        centerVertically: 'header_box'
+      },
+      header_box_userimage: {
+        width: 50,
+        height: 50,
+        end: ['parent', 'end',16],
+        top: ['parent', 'top',32],
+        bottom: ['parent', 'bottom'],
+        centerVertically: 'header_box',
+      },
+      header_box_username : {
+        visibility: 'gone'
+      },
+      header_box_logout_icon: {
+        visibility: 'gone',
+      }
+    }
+  },
+  Transitions : {
+    default: {
+      from: 'start',
+      to : 'end',
+      pathMotionArc: 'startVertical',
+      KeyFrames : {
+        KeyAttributes : [
+          {
+            target: ['header_box_userimage'],
+            frames : [0,50,100]
+          }
+        ]
+      }
+    }
+  }
+}
