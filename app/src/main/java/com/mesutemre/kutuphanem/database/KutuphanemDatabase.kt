@@ -21,10 +21,14 @@ import com.mesutemre.kutuphanem.parameter.kitaptur.data.dao.IKitapTurDao
 import com.mesutemre.kutuphanem.parameter.kitaptur.data.dao.entity.KitapTurEntity
 import com.mesutemre.kutuphanem.parameter.yayinevi.data.dao.entity.IYayinEviDao
 import com.mesutemre.kutuphanem.parameter.yayinevi.data.dao.entity.YayinEviEntity
+import com.mesutemre.kutuphanem.profile.data.dao.IKullaniciDao
+import com.mesutemre.kutuphanem.profile.data.dao.entity.KullaniciBilgiEntity
+import com.mesutemre.kutuphanem.profile.data.dao.entity.KullaniciCinsiyetEntity
+import com.mesutemre.kutuphanem.profile.data.dao.entity.KullaniciIlgiAlanEntity
 import com.mesutemre.kutuphanem.util.converters.Converters
 
 @Database(
-    version = 2_4,
+    version = 2_5,
     entities = arrayOf(
         Kullanici::class,
         KullaniciKitapTurModel::class,
@@ -34,7 +38,10 @@ import com.mesutemre.kutuphanem.util.converters.Converters
         KitapTurEntity::class,
         KitapYilIstatistikEntity::class,
         DashBoardSearchHistoryEntity::class,
-        KitapEntity::class
+        KitapEntity::class,
+        KullaniciBilgiEntity::class,
+        KullaniciCinsiyetEntity::class,
+        KullaniciIlgiAlanEntity::class
     ),
     exportSchema = false
 )
@@ -50,4 +57,5 @@ abstract class KutuphanemDatabase : RoomDatabase() {
     abstract fun getDashBoardSearchHistoryDao(): IDashBoardSearchHistoryDao
     abstract fun getKitapListeDao(): IKitapDao
     abstract fun getKitapDetayDao(): IKitapDetayDao
+    abstract fun getProfilDao(): IKullaniciDao
 }

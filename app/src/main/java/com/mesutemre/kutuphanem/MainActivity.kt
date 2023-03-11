@@ -11,6 +11,7 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -23,9 +24,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.BlurredEdgeTreatment
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -55,6 +59,7 @@ import com.mesutemre.kutuphanem_ui.theme.sdp
 import com.mesutemre.kutuphanem_ui.theme.smallUbuntuBlackBold
 import com.mesutemre.kutuphanem_ui.theme.ssp
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -125,16 +130,31 @@ class MainActivity : ComponentActivity() {
                             is BaseResourceEvent.Success -> {
                                 mainActivityState.value.tokenResourceEvent.data?.let {
                                     if (it.isNotEmpty()) {
-                                        Box(modifier = Modifier.fillMaxSize()) {
-                                            KutuphanemNavigation(navController = kutuphanemAppState.navController,
-                                                startDestinition = KutuphanemNavigationItem.DashboardScreen,
-                                                showSnackbar = { message, duration, type ->
-                                                    kutuphanemAppState.showSnackbar(
-                                                        message = message,
-                                                        duration = duration,
-                                                        type = type
-                                                    )
-                                                })
+                                        Box(
+                                            modifier = Modifier.fillMaxSize()
+                                        ) {
+                                            Box(modifier = Modifier
+                                                .fillMaxWidth()
+                                                .pointerInput(Unit) {
+                                                    detectTapGestures {
+                                                        if (mainActivityState.value.animateMenuVisibility)
+                                                            viewModel.closeFastTransactionMenu()
+                                                    }
+                                                }
+                                                .blur(
+                                                    radius = if (mainActivityState.value.animateMenuVisibility) 2.sdp else 0.sdp,
+                                                    edgeTreatment = BlurredEdgeTreatment.Unbounded
+                                                )) {
+                                                KutuphanemNavigation(navController = kutuphanemAppState.navController,
+                                                    startDestinition = KutuphanemNavigationItem.DashboardScreen,
+                                                    showSnackbar = { message, duration, type ->
+                                                        kutuphanemAppState.showSnackbar(
+                                                            message = message,
+                                                            duration = duration,
+                                                            type = type
+                                                        )
+                                                    })
+                                            }
                                             Box(
                                                 modifier = Modifier
                                                     .fillMaxWidth()

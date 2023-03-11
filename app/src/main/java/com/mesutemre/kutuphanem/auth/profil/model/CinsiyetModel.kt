@@ -1,4 +1,4 @@
-package com.mesutemre.kutuphanem.profile.data.remote.dto
+package com.mesutemre.kutuphanem.auth.profil.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
@@ -7,11 +7,11 @@ data class CinsiyetModel(
 
     @SerializedName("value")
     @Expose
-    var value:String?,
+    var value: String?,
 
     @SerializedName("label")
     @Expose
-    var label:String?
+    var label: String?
 ) {
     override fun toString(): String {
         return this.value!!;
